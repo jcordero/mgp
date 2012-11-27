@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:com>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+        <meta http-equiv="content-language" content="es" />
+        <title><com:title/></title>
+    	<com:security/>
+   	 	<com:jsincludes/>
+    	<link href="/mgp/var/commsys.css" media="screen,print" type="text/css" rel="stylesheet" />
+	</head>
+
+	<body onLoad="onPageLoad()" class="homepage">
+	    <div id="head">
+       		<div id="head_center">
+           	<a href="/mgp/index.php"><img src="/mgp/images/mdq.png" class="logo"></a>
+               <com:homepage.comp.mpfwho/>
+            </div>
+            <div id="head_nav">
+               <div id="appmenu"></div>
+            </div>
+        </div>
+	    
+	    <div id="payload">
+	            <div id="headSpacer"></div>
+			    <com:errormsg/>
+	            <com:maincontent/>
+	    </div>
+	    <div class="footer">
+	        <div id="versionNumber"><com:homepage.comp.soft_version/></div>
+	    </div>
+	</body>
+</html>

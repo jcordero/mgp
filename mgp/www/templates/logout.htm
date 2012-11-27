@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:com>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="content-language" content="es" />
+    <title><com:title/></title>
+    <com:security/>
+    <com:jsincludes/>
+    <link href="/mgp/var/commsys.css" media="screen,print" type="text/css" rel="stylesheet" />
+	<style>
+	#payload {width:100%;}
+	</style>
+<script>
+function iniciar()
+{
+	setTimeout('irAHome()',10000);
+}
+</script>
+</head>
+<body onLoad="iniciar()">
+<div id="payload">
+    <div style="margin:auto;width:500px;padding:20px;border:1px solid #888;border-radius:10px;margin-top:50px;background:#eee;">
+	    <h3 style="text-align:center;">Cerrar sesion de trabajo</h3>
+	    <table >
+	    <tr>
+	        <td style="vertical-align:middle;">
+	            <img src="/mgp/images/default/gdm.gif"/>
+	        </td>
+	        <td style="padding:20px;">
+	            Ha finalizado su sesion de trabajo. En un instante será enviado a la pagina de ingreso.<br/><br/>
+	            Muchas gracias.<br/>
+	            <p align="right"><button onclick="irAHome()">Continuar</button></p>
+	        </td>
+	    </tr>
+	    </table>    
+	</div>
+</div>
+</body>
+</html>

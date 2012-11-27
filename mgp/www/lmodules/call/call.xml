@@ -1,0 +1,814 @@
+<ayaxphpclass>
+
+<!-- CLASE COLA DE CALL -->
+<make object="class"> 
+	<build out_file="ccal_queue.php" classname="ccal_queue" classlabel="Cola del call">
+		<parse in_file="call.sql" tablename="cal_queue"/>	
+		<method objfactoryquerysuffix="order by cqu_tel_movil,cqu_tel_fijo"/>
+		<field name="tmp_mapa" type="int"/>
+			
+		<build classname="ccal_to_do" classlabel="Pendientes">
+			<parse in_file="call.sql" tablename="cal_to_do"/>
+			<key parent="cqu_codigo" child="cqu_codigo"/>
+			<field name="cto_codigo" sequence="cal_to_do"/>
+		</build>	
+
+		<!--BLOQUE PARA ARCHIVOS ADJUNTOS-->
+		<build classname="cfile" classlabel="Adjuntos" classtype="file" fileid="call_queue">
+			<field name="std_code" label="Codigo remito" type="varchar" size="50"/>	
+			<field name="doc_code" label="Codigo" type="varchar" size="50"/>
+			<field name="doc_name" label="Archivo" type="varchar" size="200"/>
+			<field name="doc_tstamp" label="Fecha" type="DATETIME" />
+			<field name="doc_mime" label="Clase" type="varchar" size="50"/>
+			<field name="doc_size" label="Tamaño" type="int" />
+			<field name="doc_storage" label="URI" type="varchar" size="200"/>
+			<field name="doc_note" label="Nota" type="varchar" size="200"/>
+		</build>	
+	</build>
+</make>
+
+<!-- CLASE LISTADO DE TAREAS PENDIENTES -->
+<make object="class"> 
+	<build out_file="ccal_to_do_small.php" classname="ccal_to_do_small" classlabel="Tareas pendientes">
+		<parse in_file="call.sql" tablename="cal_to_do"/>	
+	</build>
+</make>
+
+
+<!--BUSCAR LLAMADAS -->
+<make object="search_and_list">
+	<build out_file="colallamadas.php" classname="ccal_queue" title="Consulta de cola de llamadas" >
+		
+		<searchfield name="cqu_contacto" presentation="TEXT" label="Contacto"/>
+		<searchfield name="cqu_estado" presentation="CALL_ESTADO" label="Estado llamada" initialvalue="PENDIENTE"/>
+		<searchfield name="cqu_estado_contacto" presentation="TEXT" label="Estado contacto"/>
+		<searchfield name="cqu_tipo" presentation="TIPOCONTACTO" label="Tipo"/>
+		<searchfield name="cqu_prestacion" presentation="TEXT" label="Prestacion"/>
+		<searchfield name="cqu_rubro" presentation="TEXT" label="Rubro"/>
+		<searchfield name="cqu_con_ingreso_fecha" presentation="DATERANGE" label="Ingresado" initialvalue=" "/>
+		<searchfield name="cqu_tel_fijo" presentation="PHONE" label="Telefono" />
+		<searchfield name="cqu_tel_movil" presentation="PHONE" label="Celular" />
+		<searchfield name="cqu_nombre" presentation="TEXT" label="Reclamante" />
+		<searchfield name="use_code" presentation="USER" label="Operador" initialvalue=" "/>
+		<searchfield name="cqu_barrio" presentation="BARRIOS" label="Barrio" />
+		<searchfield name="cqu_cgpc" presentation="CGPC_COMUNA" label="Comuna" />
+		<searchfield name="cqu_bloqueado" presentation="DATERANGE" label="Bloqueada" />
+		
+		<listfield name="cqu_codigo" presentation="INT" label="Codigo"/>
+		<listfield name="cqu_contacto" presentation="TEXT" label="Contacto"/>
+		<listfield name="cqu_estado_contacto" presentation="TEXT" label="Estado contacto"/>
+		<listfield name="cqu_tipo" presentation="TIPOCONTACTO" label="Tipo"/>
+		<listfield name="cqu_estado" presentation="CALL_ESTADO" label="Estado llamada"/>
+		<listfield name="cqu_prestacion" presentation="TEXT" label="Prestacion"/>
+		<listfield name="cqu_rubro" presentation="TEXT" label="Rubro"/>
+		<listfield name="cqu_nombre" presentation="TEXT" label="Reclamante"/>
+		<listfield name="cqu_tel_fijo" presentation="TEXT" label="Teléfono fijo"/>
+		<listfield name="cqu_tel_movil" presentation="TEXT" label="Teléfono movil"/>
+		<listfield name="cqu_calle" presentation="TEXT" label="Calle"/>
+		<listfield name="cqu_altura" presentation="INT" label="Altura"/>
+		<listfield name="cqu_con_ingreso_fecha" presentation="DATERANGE" label="Ingresado"/>
+		<listfield name="cqu_barrio" presentation="BARRIOS" label="Barrio" />
+		<listfield name="cqu_cgpc" presentation="CGPC_COMUNA" label="Comuna" />
+		<listfield name="cqu_bloqueado" presentation="DATERANGE" label="Bloqueada" />
+			
+		<action label="ver" target="llamada_maint_b.php?OP=V" operation="V">
+			<sendfield classname="ccal_queue" name="cqu_codigo"/>
+		</action>
+	</build>
+</make>
+
+<!--  Consulta de una llamada -->
+<make object="table_maint"> 
+	<build out_file="llamada_maint_b.php" classname="ccal_queue" title="Registro de una llamada" next="colallamadas.php?last=1&amp;OP=L" >
+		<include file="llamada_maint_v.css"/>
+		<group title="Reclamo" id="asunto">
+			<field name="cqu_contacto" presentation="TEXT" label="Contacto" readonly="true"/>
+			<field name="cqu_tipo" presentation="TIPOCONTACTO" label="Contacto" readonly="true"/>
+			<field name="cqu_rubro" presentation="TEXT" label="Rubro" readonly="true"/>
+			<field name="cqu_prestacion" presentation="TEXT" label="Prestacion" readonly="true"/>
+			<field name="cqu_estado_contacto" presentation="TEXT" label="Estado contacto" readonly="true"/>
+			<field name="cqu_con_ingreso_fecha" presentation="DATETIME" label="Iniciado" readonly="true"/>
+			<field name="cqu_con_cumplido_fecha" presentation="DATETIME" label="Cumplido" readonly="true"/>
+		</group>
+		
+		<group title="Ubicación" id="ubicacion">
+			<field name="tmp_mapa" presentation="MAPA" classparams="cqu_x|cqu_y" label="Ubicación"/>
+			<field name="cqu_calle" presentation="TEXT" label="Calle" readonly="true"/>
+			<field name="cqu_altura" presentation="INT" label="Altura" readonly="true"/>
+			<field name="cqu_barrio" presentation="TEXT" label="Barrio" readonly="true"/>
+			<field name="cqu_cgpc" presentation="TEXT" label="Comuna" readonly="true"/>
+			<field name="cqu_x" presentation="TEXT" label="Mapa X" readonly="true" isvisible="false"/>
+			<field name="cqu_y" presentation="TEXT" label="Mapa Y" readonly="true" isvisible="false"/>
+		</group>
+		
+		<group title="Trabajo realizado" id="tareas">
+			<field name="cqu_responsable" presentation="TEXT" label="Responsable" readonly="true"/>
+			<field name="cqu_historia" presentation="HISTORIA" label="Responsable" readonly="true" classparams="decode"/>
+			<field name="cqu_con_cumplido_nota" presentation="TEXT" label="Nota de cierre" readonly="true"/>
+		</group>>
+		
+		<group title="Reclamante" id="reclamante">
+			<field name="cqu_nombre" presentation="TEXT" label="Reclamante" readonly="true"/>
+			<field name="cqu_tel_fijo" presentation="PHONE" label="Telefono" readonly="false"/>
+			<field name="cqu_tel_movil" presentation="PHONE" label="Celular" readonly="false"/>
+			<field name="cqu_email" presentation="EMAIL" label="EMail" readonly="false"/>
+		</group>
+		
+		<group title="Estado" id="estado">
+			<field name="cqu_codigo" presentation="INT" label="Cod.Llamada" readonly="true"/>
+			<field name="cqu_actitud" presentation="CALL_ACTITUD" label="Actitud"  initialvalue="NEUTRAL"  readonly="true"/>
+			<field name="cqu_estado" presentation="CALL_ESTADO" label="Estado"  readonly="true"/>
+			<field name="cqu_resultado" presentation="CALL_RESULTADO" label="Resultado"  readonly="true"/>
+			<field name="cqu_motivo_no_conforme" presentation="CALL_NOCONFORME"  label="Motivo no conforme"  readonly="true"/>
+			<field name="cqu_reabrir_contacto" presentation="SINO" label="Reabrir contacto?"  readonly="true"/>
+			<field name="cqu_seguir" presentation="SINO" label="Hacer seguimiento?"  readonly="true"/>
+			
+			<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" />
+			<field name="cqu_ingreso_fecha" presentation="DATETIME" label="Ingresada"  readonly="true"/>
+			<field name="cqu_egreso_fecha" presentation="DATETIME" label="Cursada" readonly="true"/>
+			<field name="cqu_nota" presentation="TEXTAREA" cols="50" rows="4" label="Observación"  readonly="true"/>
+		</group>
+		
+		<!-- Tareas realizadas -->
+		<table relationclass="" classname="ccal_to_do" title="Tareas pendientes" add="true" update="true">
+			<column title="Estado" order="1">
+				<field name="cto_codigo" isvisible="false"/>
+				<field name="cqu_codigo" isvisible="false"/>
+				<field name="cto_estado" presentation="CALL_TODO_ESTADO" label="Estado" ismandatory="true" initialvalue="PENDIENTE"/>
+			</column>
+			<column title="Tarea" order="2">	
+				<field name="cto_descripcion" presentation="TEXTAREA" cols="50" rows="4" label="Tarea"  ismandatory="true"/>
+			</column>	
+			<column title="Operador" order="3">	
+				<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" classparams="force"/>
+				<field name="cto_ingreso_fecha" presentation="DATETIME" label="Ingresado" classparams="force" readonly="true"/>
+				<field name="cto_salida_fecha" presentation="DATETIME" label="Cerrado" readonly="true" isvisible="false"/>
+			</column>
+		</table>
+		
+		<!-- BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+		<table relationclass="" classname="cfile" title="Archivos adjuntos" add="true" delete="true" isfile="true">
+			<column title="Archivo" order="1">
+				<field name="doc_code" isvisible="false"/>
+				<field name="doc_name" label="Archivo" presentation="TEXT"/>
+				<field name="doc_storage" label="Archivo" presentation="FILE" isvisible="false"/>
+			</column>
+			<column title="Tipo" order="2">
+				<field name="doc_tstamp" label="Fecha" presentation="DATETIME" isvisible="false"/>
+				<field name="doc_mime" label="Clase" presentation="TEXT" cols="50"/>
+			</column>
+			<column title="Medida" order="3">
+				<field name="doc_size" label="Medida" presentation="TEXT" />
+			</column>
+			<column title="Nota" order="4">
+				<field name="doc_note" label="Nota" cols="50" rows="5" presentation="TEXTAREA"/>
+			</column>
+		</table>
+		<!-- FIN BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+
+		<!-- Botones de accion para redireccionar después de salvar la página -->
+		<action operation="L" label="Listado de llamadas" target="colallamadas.php?last=1&amp;OP=L" note="Listado de llamadas"/>		
+		
+		
+	</build>
+</make>
+
+
+
+<!-- Modificacion de una llamada -->
+<make object="table_maint"> 
+	<build out_file="llamada_maint.php" classname="ccal_queue" title="Registro de una llamada" next="/index.php" >
+		<include file="llamada_maint.js"/>
+		<group title="Contacto" id="asunto">
+			<field name="cqu_contacto" presentation="TEXT" label="Contacto" readonly="true"/>
+			<field name="cqu_tipo" presentation="TIPOCONTACTO" label="Contacto" readonly="true"/>
+			<field name="cqu_rubro" presentation="TEXT" label="Rubro" readonly="true"/>
+			<field name="cqu_prestacion" presentation="TEXT" label="Prestacion" readonly="true"/>
+			<field name="cqu_estado_contacto" presentation="TEXT" label="Estado contacto" readonly="true"/>
+			<field name="cqu_con_ingreso_fecha" presentation="DATETIME" label="Iniciado" readonly="true"/>
+			<field name="cqu_con_cumplido_fecha" presentation="DATETIME" label="Cumplido" readonly="true"/>
+		</group>
+		
+		<group title="Ubicación" id="ubicacion">
+			<field name="tmp_mapa" presentation="MAPA" classparams="cqu_x|cqu_y" label="Ubicación"/>
+			<field name="cqu_calle" presentation="TEXT" label="Calle" readonly="true"/>
+			<field name="cqu_altura" presentation="INT" label="Altura" readonly="true"/>
+			<field name="cqu_barrio" presentation="TEXT" label="Barrio" readonly="true"/>
+			<field name="cqu_cgpc" presentation="TEXT" label="Comuna" readonly="true"/>
+			<field name="cqu_x" presentation="TEXT" label="Mapa X" readonly="true" isvisible="false"/>
+			<field name="cqu_y" presentation="TEXT" label="Mapa Y" readonly="true" isvisible="false"/>
+		</group>
+		
+		<group title="Trabajo realizado" id="tareas">
+			<field name="cqu_responsable" presentation="TEXT" label="Responsable" readonly="true"/>
+			<field name="cqu_historia" presentation="HISTORIA" label="Responsable" readonly="true" classparams="decode"/>
+			<field name="cqu_con_cumplido_nota" presentation="TEXT" label="Nota de cierre" readonly="true"/>
+		</group>>
+		
+		<group title="Reclamante" id="reclamante">
+			<field name="cqu_nombre" presentation="TEXT" label="Reclamante" readonly="true"/>
+			<field name="cqu_tel_fijo" presentation="PHONE" label="Telefono" readonly="false"/>
+			<field name="cqu_tel_movil" presentation="PHONE" label="Celular" readonly="false"/>
+			<field name="cqu_email" presentation="EMAIL" label="EMail" readonly="false"/>
+		</group>
+		
+		<group title="Resultado" id="resultado">			
+			<!-- El estado de la llamada solo puede ser EN CURSO o CANCELADA o COMPLETADA o SIN RESPUESTA -->
+			<field name="cqu_estado" presentation="CALL_ESTADO2" label="Estado" ismandatory="true"/>
+			<field name="cqu_resuelto" presentation="SINO" label="Problema resuelto?" ismandatory="true" js_click="call_resuelto_change(this)"/>
+			<field name="cqu_resultado" presentation="CALL_RESULTADO" label="Resultado" ismandatory="true"/>
+			<field name="cqu_motivo_no_conforme" presentation="CALL_NOCONFORME"  label="Motivo no conforme" ismandatory="true" initialvalue="NO APLICA"/>
+			<field name="cqu_actitud" presentation="CALL_ACTITUD" label="Actitud" ismandatory="false" initialvalue="NEUTRAL"/>
+			<field name="cqu_reabrir_contacto" presentation="SINO" label="Reabrir contacto?" ismandatory="false" initialvalue="NO" isvisible="false"/>
+			<field name="cqu_seguir" presentation="SINO" label="Hacer seguimiento?" ismandatory="true" initialvalue="NO" />
+			<field name="cqu_nota" presentation="TEXTAREA" cols="50" rows="4" label="Observación"/>
+		</group>
+			
+		<group title="Estado" id="estado">
+			<field name="cqu_codigo" presentation="INT" label="Cod.Llamada" readonly="true"/>
+			
+			<!-- Auditoria de la llamada -->
+			<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" classparams="force"/>
+			<field name="cqu_ingreso_fecha" presentation="DATETIME" label="Ingresada" isvisible="false"/>
+			<field name="cqu_egreso_fecha" presentation="DATETIME" label="Cursada" classparams="force" readonly="true"/>
+		</group>
+		
+		<!-- Tareas realizadas -->
+		<table relationclass="" classname="ccal_to_do" title="Tareas pendientes" add="true" delete="true" update="true">
+			<column title="Estado" order="1">
+				<field name="cto_codigo" isvisible="false"/>
+				<field name="cqu_codigo" isvisible="false"/>
+				<field name="cto_estado" presentation="CALL_TODO_ESTADO" label="Estado" ismandatory="true" js_initial="literal('PENDIENTE')"/>
+			</column>
+			<column title="Tarea" order="2">	
+				<field name="cto_descripcion" presentation="TEXTAREA" cols="50" rows="4" label="Tarea"  ismandatory="true"/>
+			</column>	
+			<column title="Operador" order="3">	
+				<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" classparams="force"/>
+				<field name="cto_ingreso_fecha" presentation="DATETIME" label="Ingresado" classparams="force" readonly="true"/>
+				<field name="cto_salida_fecha" presentation="DATETIME" label="Cerrado" readonly="true" isvisible="false"/>
+			</column>
+		</table>
+		
+		<!-- BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+		<table relationclass="" classname="cfile" title="Archivos adjuntos" add="true" delete="true" isfile="true">
+			<column title="Archivo" order="1">
+				<field name="doc_code" isvisible="false"/>
+				<field name="doc_name" label="Archivo" presentation="TEXT"/>
+				<field name="doc_storage" label="Archivo" presentation="FILE" isvisible="false"/>
+			</column>
+			<column title="Tipo" order="2">
+				<field name="doc_tstamp" label="Fecha" presentation="DATETIME" isvisible="false"/>
+				<field name="doc_mime" label="Clase" presentation="TEXT" cols="50"/>
+			</column>
+			<column title="Medida" order="3">
+				<field name="doc_size" label="Medida" presentation="TEXT" />
+			</column>
+			<column title="Nota" order="4">
+				<field name="doc_note" label="Nota" cols="50" rows="5" presentation="TEXTAREA"/>
+			</column>
+		</table>
+		<!-- FIN BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+
+		<!-- Botones de accion para redireccionar después de salvar la página -->
+		<!--  <action operation="L" label="Listado de llamadas" target="colallamadas.php?last=1&amp;OP=L" note="Listado de llamadas"/> -->		
+		
+	</build>
+</make>
+
+
+
+
+<!--BUSCAR LLAMADAS ADMINISTRADOR -->
+<make object="search_and_list">
+	<build out_file="colallamadasadm.php" classname="ccal_queue" title="Contactos realizados"  >
+		
+		<searchfield name="cqu_codigo" presentation="TEXT" label="Codigo"/>
+		<searchfield name="cqu_contacto" presentation="TEXT" label="Contacto"/>
+		<searchfield name="cqu_tipo" presentation="TIPOCONTACTO" label="Tipo"/>
+		<searchfield name="cqu_estado" presentation="CALL_ESTADO" label="Estado llamada" initialvalue="COMPLETADA"/>
+		<searchfield name="cqu_estado_contacto" presentation="TEXT" label="Estado contacto"/>
+		<searchfield name="cqu_prestacion" presentation="PRESTACION" label="Prestacion"/>
+		<searchfield name="cqu_ingreso_fecha" presentation="DATERANGE" label="Ingresado" initialvalue=" "/>
+		<searchfield name="cqu_tel_fijo" presentation="PHONE" label="Telefono" />
+		<searchfield name="cqu_tel_movil" presentation="PHONE" label="Celular" />
+		<searchfield name="cqu_nombre" presentation="TEXT" label="Reclamante" />
+		<searchfield name="use_code" presentation="USER" label="Operador" initialvalue=" "/>
+		<searchfield name="cqu_resultado" presentation="CALL_RESULTADO"  label="Resultado" />
+		<searchfield name="cqu_actitud" presentation="CALL_ACTITUD"  label="Actitud" />
+		<searchfield name="cqu_egreso_fecha" presentation="DATERANGE" label="Cursada" initialvalue=" " />
+			
+		<listfield name="cqu_codigo" presentation="INT" label="Cod."/>
+		<listfield name="cqu_contacto" presentation="TEXT" label="Contacto"/>
+		<listfield name="cqu_tipo" presentation="TIPOCONTACTO" label="Tipo"/>
+		<listfield name="cqu_estado_contacto" presentation="TEXT" label="Estado contacto"/>
+		<listfield name="cqu_estado" presentation="TEXT" label="Estado llamada"/>
+		<listfield name="cqu_prestacion" presentation="TEXT" label="Prestacion"/>
+		<listfield name="cqu_rubro" presentation="TEXT" label="Rubro"/>
+		<listfield name="cqu_nombre" presentation="TEXT" label="Reclamante"/>
+		<listfield name="cqu_calle" presentation="TEXT" label="Calle"/>
+		<listfield name="cqu_altura" presentation="INT" label="Altura"/>
+		<listfield name="cqu_ingreso_fecha" presentation="DATERANGE" label="Ingresado"/>
+		<listfield name="use_code" presentation="USER" label="Operador" />
+		<listfield name="cqu_resultado" presentation="CALL_RESULTADO" label="Resultado" />
+		<listfield name="cqu_actitud" presentation="CALL_ACTITUD" label="Actitud" />
+		<listfield name="cqu_egreso_fecha" presentation="DATERANGE" label="Cursada"/>
+	
+		<action label="Ver llamada" target="llamada_maint_v.php?OP=V" operation="V">
+			<sendfield classname="ccal_queue" name="cqu_codigo" />
+		</action>
+	</build>
+</make>
+
+
+
+<!--  Consulta de una llamada -->
+<make object="table_maint"> 
+	<build out_file="llamada_maint_v.php" classname="ccal_queue" title="Registro de una llamada" next="colallamadasadm.php?last=1&amp;OP=L" >
+		<include file="llamada_maint_v.css"/>
+		<group title="Reclamo" id="asunto">
+			<field name="cqu_contacto" presentation="TEXT" label="Contacto" readonly="true"/>
+			<field name="cqu_tipo" presentation="TIPOCONTACTO" label="Contacto" readonly="true"/>
+			<field name="cqu_rubro" presentation="TEXT" label="Rubro" readonly="true"/>
+			<field name="cqu_prestacion" presentation="TEXT" label="Prestacion" readonly="true"/>
+			<field name="cqu_estado_contacto" presentation="TEXT" label="Estado contacto" readonly="true"/>
+			<field name="cqu_con_ingreso_fecha" presentation="DATETIME" label="Iniciado" readonly="true"/>
+			<field name="cqu_con_cumplido_fecha" presentation="DATETIME" label="Cumplido" readonly="true"/>
+		</group>
+		
+		<group title="Ubicación" id="ubicacion">
+			<field name="tmp_mapa" presentation="MAPA" classparams="cqu_x|cqu_y" label="Ubicación"/>
+			<field name="cqu_calle" presentation="TEXT" label="Calle" readonly="true"/>
+			<field name="cqu_altura" presentation="INT" label="Altura" readonly="true"/>
+			<field name="cqu_barrio" presentation="TEXT" label="Barrio" readonly="true"/>
+			<field name="cqu_cgpc" presentation="TEXT" label="Comuna" readonly="true"/>
+			<field name="cqu_x" presentation="TEXT" label="Mapa X" readonly="true" isvisible="false"/>
+			<field name="cqu_y" presentation="TEXT" label="Mapa Y" readonly="true" isvisible="false"/>
+		</group>
+		
+		<group title="Trabajo realizado" id="tareas">
+			<field name="cqu_responsable" presentation="TEXT" label="Responsable" readonly="true"/>
+			<field name="cqu_historia" presentation="HISTORIA" label="Responsable" readonly="true" classparams="decode"/>
+			<field name="cqu_con_cumplido_nota" presentation="TEXT" label="Nota de cierre" readonly="true"/>
+		</group>>
+		
+		<group title="Reclamante" id="reclamante">
+			<field name="cqu_nombre" presentation="TEXT" label="Reclamante" readonly="true"/>
+			<field name="cqu_tel_fijo" presentation="PHONE" label="Telefono" readonly="false"/>
+			<field name="cqu_tel_movil" presentation="PHONE" label="Celular" readonly="false"/>
+			<field name="cqu_email" presentation="EMAIL" label="EMail" readonly="false"/>
+		</group>
+		
+		<group title="Estado" id="estado">
+			<field name="cqu_codigo" presentation="INT" label="Cod.Llamada" readonly="true"/>
+			<field name="cqu_actitud" presentation="CALL_ACTITUD" label="Actitud"  initialvalue="NEUTRAL"  readonly="true"/>
+			<field name="cqu_estado" presentation="CALL_ESTADO" label="Estado"  readonly="true"/>
+			<field name="cqu_resultado" presentation="CALL_RESULTADO" label="Resultado"  readonly="true"/>
+			<field name="cqu_motivo_no_conforme" presentation="CALL_NOCONFORME"  label="Motivo no conforme"  readonly="true"/>
+			<field name="cqu_reabrir_contacto" presentation="SINO" label="Reabrir contacto?"  readonly="true"/>
+			<field name="cqu_seguir" presentation="SINO" label="Hacer seguimiento?"  readonly="true"/>
+			
+			<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" />
+			<field name="cqu_ingreso_fecha" presentation="DATETIME" label="Ingresada"  readonly="true"/>
+			<field name="cqu_egreso_fecha" presentation="DATETIME" label="Cursada" readonly="true"/>
+			<field name="cqu_nota" presentation="TEXTAREA" cols="50" rows="4" label="Observación"  readonly="true"/>
+		</group>
+		
+		<!-- Tareas realizadas -->
+		<table relationclass="" classname="ccal_to_do" title="Tareas pendientes" add="true" update="true">
+			<column title="Estado" order="1">
+				<field name="cto_codigo" isvisible="false"/>
+				<field name="cqu_codigo" isvisible="false"/>
+				<field name="cto_estado" presentation="CALL_TODO_ESTADO" label="Estado" ismandatory="true" initialvalue="PENDIENTE"/>
+			</column>
+			<column title="Tarea" order="2">	
+				<field name="cto_descripcion" presentation="TEXTAREA" cols="50" rows="4" label="Tarea"  ismandatory="true"/>
+			</column>	
+			<column title="Operador" order="3">	
+				<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" classparams="force"/>
+				<field name="cto_ingreso_fecha" presentation="DATETIME" label="Ingresado" classparams="force" readonly="true"/>
+				<field name="cto_salida_fecha" presentation="DATETIME" label="Cerrado" readonly="true" isvisible="false"/>
+			</column>
+		</table>
+		
+		<!-- BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+		<table relationclass="" classname="cfile" title="Archivos adjuntos" add="true" delete="true" isfile="true">
+			<column title="Archivo" order="1">
+				<field name="doc_code" isvisible="false"/>
+				<field name="doc_name" label="Archivo" presentation="TEXT"/>
+				<field name="doc_storage" label="Archivo" presentation="FILE" isvisible="false"/>
+			</column>
+			<column title="Tipo" order="2">
+				<field name="doc_tstamp" label="Fecha" presentation="DATETIME" isvisible="false"/>
+				<field name="doc_mime" label="Clase" presentation="TEXT" cols="50"/>
+			</column>
+			<column title="Medida" order="3">
+				<field name="doc_size" label="Medida" presentation="TEXT" />
+			</column>
+			<column title="Nota" order="4">
+				<field name="doc_note" label="Nota" cols="50" rows="5" presentation="TEXTAREA"/>
+			</column>
+		</table>
+		<!-- FIN BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+
+		<!-- Botones de accion para redireccionar después de salvar la página -->
+		<action operation="L" label="Listado de llamadas" target="colallamadas.php?last=1&amp;OP=L" note="Listado de llamadas"/>		
+		
+		
+	</build>
+</make>
+
+
+
+
+
+
+<!--BUSCAR PENDIENTES -->
+<make object="search_and_list">
+	<build out_file="pendientes.php" classname="ccal_to_do_small" title="Consulta de tareas pendientes"  >
+		
+		<searchfield name="cto_codigo" presentation="INT" label="Ticket"/>
+		<searchfield name="cto_estado" presentation="CALL_TODO_ESTADO" label="Estado" initialvalue="PENDIENTE"/>
+		<searchfield name="cto_ingreso_fecha" presentation="DATERANGE" label="Ingresado"/>
+		
+		<listfield name="cto_codigo" presentation="INT" label="Codigo"/>
+		<listfield name="cto_estado" presentation="TEXT" label="Estado"/>
+		<listfield name="cto_descripcion" presentation="TEXT" label="Tarea"/>
+		<listfield name="cto_nota" presentation="TEXT" label="Nota"/>
+		<listfield name="cto_ingreso_fecha" presentation="DATERANGE" label="Ingresado"/>
+	
+		<action label="ver" target="tarea_maint.php?OP=V" >
+			<sendfield classname="ccal_to_do_small" name="cto_codigo"/>
+		</action>
+	
+		<action label="modificar" target="tarea_maint.php?OP=M" >
+			<sendfield classname="ccal_to_do_small" name="cto_codigo" />
+		</action>
+	</build>
+</make>
+
+<!-- Modificacion de una llamada -->
+<make object="table_maint"> 
+	<build out_file="tarea_maint.php" classname="ccal_to_do_small" title="Tarea pendiente" next="pendientes.php?last=1&amp;OP=L"  >
+		
+		<group title="Tarea" id="asunto">
+			<field name="cto_descripcion" presentation="TEXT" label="Tarea" readonly="true"/>
+		</group>
+		
+		<group title="Observaciones" id="obs">
+			<field name="cto_nota" presentation="TEXTAREA" rows="4" cols="50" label="Observaciones" />
+		</group>
+		
+		<group title="Estado" id="estado">
+			<field name="cto_codigo" presentation="INT" label="Ticket" readonly="true"/>
+			<field name="cqu_codigo" presentation="INT" label="Ticket" isvisible="false"/>
+			
+			<field name="cto_estado" presentation="CALL_TODO_ESTADO" label="Estado" ismandatory="true"/>
+			
+			<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true"/>
+			<field name="cto_ingreso_fecha" presentation="DATETIME" label="Fecha de ingreso" readonly="true" classparams=""/>
+			<field name="cto_salida_fecha" presentation="DATETIME" label="Fecha de act." readonly="true" classparams="force"/>
+		
+		</group>
+		
+		<!-- Botones de accion para redireccionar después de salvar la página -->
+		<action operation="L" label="Listado de tareas" target="pendientes.php?last=1&amp;OP=L"  note="Listado de tareas"/>		
+		
+	</build>
+</make>
+
+<!-- Reporte por OPERADOR -->
+<make object="class"> 
+	<build out_file="crep_operador.php" classname="crep_operador" classlabel="Reporte operador">
+		<parse tablename="rep_operador"/>
+		<method objfactoryquery="SELECT qu.use_code,
+	use_name as operador,
+	count(*) as totales, 
+	sum(if(qu.cqu_resultado in ('CONFORME',''),1,0)) as conforme,
+	sum(if(qu.cqu_resultado='NO CONFORME',1,0)) as noconforme, 
+	sum(if(qu.cqu_resultado='NO SABE',1,0)) as nosabe,
+	sum(if(qu.cqu_actitud='POSITIVA',1,0)) as positiva,
+	sum(if(qu.cqu_actitud='NEGATIVA',1,0)) as negativa,
+	sum(if(qu.cqu_actitud in ('NEUTRAL',''),1,0)) as neutral 
+FROM cal_queue qu JOIN sec_users us ON qu.use_code=us.use_code
+where qu.cqu_estado='COMPLETADA' 
+	and (cqu_egreso_fecha between STR_TO_DATE('#fecha_inicio#','%d/%m/%Y %k:%i:%s') and STR_TO_DATE('#fecha_fin#','%d/%m/%Y %k:%i:%s') or ('#fecha_inicio#'='' and '#fecha_fin#'=''))
+group by qu.use_code"/>
+		<method savedbtotalquery=" "/>
+		<field name="fecha_inicio" type="datetime" label="Fecha inicio" presentation="DATE" />
+		<field name="fecha_fin" type="datetime" label="Fecha fin" presentation="DATE"/>
+		
+		<field name="operador" type="varchar" size="100" label="Operador" presentation="TEXT" isfordb="true"/>
+		<field name="totales" type="int" label="Cont.Totales" presentation="INT" isfordb="true" total="true"/>
+		<field name="conforme" type="int" label="Res.Conforme" presentation="INT" isfordb="true" total="true"/>
+		<field name="noconforme" type="int" label="Res.No Conforme" presentation="INT" isfordb="true" total="true"/>
+		<field name="nosabe" type="int" label="Res.No Sabe" presentation="INT" isfordb="true" total="true"/>
+		<field name="positiva" type="int" label="Act.Positiva" presentation="INT" isfordb="true" total="true"/>
+		<field name="negativa" type="int" label="Act.Negativa" presentation="INT" isfordb="true" total="true"/>
+		<field name="neutral" type="int" label="Act.Neutral" presentation="INT" isfordb="true" total="true"/>
+		
+		<field name="tmp_graph" type="int" />
+	</build>
+</make>
+
+<make object="table_maint">
+	<build out_file="rep_operador.php" classname="crep_operador" title="Reporte por operador" default_operation="M"  >
+		<include file="rep_operador.js"/>
+		<group title="Filtro" id="filter">
+			<field name="fecha_inicio" initialvalue=" "/>
+			<field name="fecha_fin" />
+		</group>
+		
+		<group title="Tarea" id="report">
+			<field name="tmp_graph" label="Resultado" readonly="true"/>
+		</group>
+	</build>
+</make>
+
+<!-- Reporte por BARRIO -->
+<make object="class"> 
+	<build out_file="crep_barrio.php" classname="crep_barrio" classlabel="Reporte por Barrio">
+		<parse tablename="rep_barrio"/>
+		<method objfactoryquery="SELECT 
+	qu.cqu_barrio as barrio,
+	count(*) as totales, 
+	sum(if(qu.cqu_resultado in ('CONFORME',''),1,0)) as conforme,
+	sum(if(qu.cqu_resultado='NO CONFORME',1,0)) as noconforme, 	
+	sum(if(qu.cqu_resultado='NO SABE',1,0)) as nosabe,
+	sum(if(qu.cqu_actitud='POSITIVA',1,0)) as positiva,
+	sum(if(qu.cqu_actitud='NEGATIVA',1,0)) as negativa,
+	sum(if(qu.cqu_actitud in ('NEUTRAL',''),1,0)) as neutral 
+FROM cal_queue qu 
+WHERE qu.cqu_estado='COMPLETADA' 
+	and (cqu_egreso_fecha between STR_TO_DATE('#fecha_inicio#','%d/%m/%Y %k:%i:%s') and STR_TO_DATE('#fecha_fin#','%d/%m/%Y %k:%i:%s') or ('#fecha_inicio#'='' and '#fecha_fin#'=''))
+group by qu.cqu_barrio"/>
+		<method savedbtotalquery=" "/>
+		<field name="fecha_inicio" type="datetime" label="Fecha inicio" presentation="DATE"/>
+		<field name="fecha_fin" type="datetime" label="Fecha fin" presentation="DATE"/>		
+		<field name="barrio" type="varchar" size="100" isfordb="true" label="Barrio"/>
+		
+		<field name="totales" type="int" label="Totales" presentation="INT" isfordb="true" total="true"/>
+		<field name="conforme" type="int" label="Conforme" presentation="INT" isfordb="true" total="true"/>
+		<field name="noconforme" type="int" label="No Conforme" presentation="INT" isfordb="true" total="true"/>
+		<field name="nosabe" type="int" label="No Sabe" presentation="INT" isfordb="true" total="true"/>
+		<field name="positiva" type="int" label="Positiva" presentation="INT" isfordb="true" total="true"/>
+		<field name="negativa" type="int" label="Negativa" presentation="INT" isfordb="true" total="true"/>
+		<field name="neutral" type="int" label="Neutral" presentation="INT" isfordb="true" total="true"/>
+		
+		<field name="tmp_graph" type="int" />
+	</build>
+</make>
+
+<make object="table_maint">
+	<build out_file="rep_barrio.php" classname="crep_barrio" title="Reporte por barrio" default_operation="M">		
+		<include file="rep_barrio.js"/>
+		<group title="Filtro" id="filter">
+			<field name="fecha_inicio" initialvalue=" "/>
+			<field name="fecha_fin" />
+		</group>
+		
+		<group title="Tarea" id="report">
+			<field name="tmp_graph" label="Resultado" readonly="true"/>
+		</group>
+		
+	</build>
+</make>
+
+
+<!-- Reporte por PRESTACION -->
+<make object="class"> 
+	<build out_file="crep_prestacion.php" classname="crep_prestacion" classlabel="Reporte por Prestacion">
+		<parse tablename="rep_prestacion"/>
+		<method objfactoryquery="SELECT qu.cqu_prestacion as prestacion,
+	count(*) as totales, 
+	sum(if(qu.cqu_resultado in ('CONFORME',''),1,0)) as conforme,
+	sum(if(qu.cqu_resultado='NO CONFORME',1,0)) as noconforme, 
+	sum(if(qu.cqu_resultado='NO SABE',1,0)) as nosabe,
+	sum(if(qu.cqu_actitud='POSITIVA',1,0)) as positiva,
+	sum(if(qu.cqu_actitud='NEGATIVA',1,0)) as negativa,	
+	sum(if(qu.cqu_actitud in ('NEUTRAL',''),1,0)) as neutral 
+FROM cal_queue qu where qu.cqu_estado='COMPLETADA' 
+	and (cqu_egreso_fecha between STR_TO_DATE('#fecha_inicio#','%d/%m/%Y %k:%i:%s') and STR_TO_DATE('#fecha_fin#','%d/%m/%Y %k:%i:%s') or ('#fecha_inicio#'='' and '#fecha_fin#'=''))
+group by qu.cqu_prestacion"/>
+ 		<method savedbtotalquery=" "/>
+		<field name="fecha_inicio" type="datetime" label="Fecha inicio" presentation="DATE"/>
+		<field name="fecha_fin" type="datetime" label="Fecha fin" presentation="DATE"/>
+		
+		<field name="prestacion" type="varchar" size="100" isfordb="true" label="Prestacion"/>
+		
+		<field name="totales" type="int" label="Con.Tot." presentation="INT" isfordb="true" total="true"/>
+		<field name="conforme" type="int" label="Res.Conforme" presentation="INT" isfordb="true" total="true"/>
+		<field name="noconforme" type="int" label="Res.No Conforme" presentation="INT" isfordb="true" total="true"/>
+		<field name="nosabe" type="int" label="Res.No Sabe" presentation="INT" isfordb="true" total="true"/>
+		<field name="positiva" type="int" label="Act.Positiva" presentation="INT" isfordb="true" total="true"/>
+		<field name="negativa" type="int" label="Act.Negativa" presentation="INT" isfordb="true" total="true"/>
+		<field name="neutral" type="int" label="Act.Neutral" presentation="INT" isfordb="true" total="true"/>
+		<field name="tmp_graph" type="int" />
+	</build>
+</make>
+
+<make object="table_maint">
+	<build out_file="rep_prestacion.php" classname="crep_prestacion" title="Reporte por prestacion" default_operation="M"  >
+		
+		<include file="rep_prestacion.js"/>
+		<group title="Filtro" id="filter">
+			<field name="fecha_inicio" initialvalue=" "/>
+			<field name="fecha_fin" />
+		</group>
+		
+		<group title="Tarea" id="report">
+			<field name="tmp_graph" label="Resultado" readonly="true"/>
+		</group>
+	</build>
+</make>
+
+
+<!-- Reporte por HORARIO -->
+<make object="class"> 
+	<build out_file="crep_horario.php" classname="crep_horario" classlabel="Reporte por Horario">
+		<parse tablename="rep_horario"/>
+		<method objfactoryquery="SELECT HOUR(cqu_egreso_fecha) as hora,
+	count(*) as totales, 
+	sum(if(qu.cqu_resultado in ('CONFORME',''),1,0)) as conforme,
+	sum(if(qu.cqu_resultado='NO CONFORME',1,0)) as noconforme, 
+	sum(if(qu.cqu_resultado='NO SABE',1,0)) as nosabe,
+	sum(if(qu.cqu_actitud='POSITIVA',1,0)) as positiva,
+	sum(if(qu.cqu_actitud='NEGATIVA',1,0)) as negativa,
+	sum(if(qu.cqu_actitud in ('NEUTRAL',''),1,0)) as neutral 
+FROM cal_queue qu where qu.cqu_estado='COMPLETADA' 
+	and (cqu_egreso_fecha between STR_TO_DATE('#fecha_inicio#','%d/%m/%Y %k:%i:%s') and STR_TO_DATE('#fecha_fin#','%d/%m/%Y %k:%i:%s') or ('#fecha_inicio#'='' and '#fecha_fin#'='')) 
+group by HOUR(cqu_egreso_fecha) ORDER BY 1"/>
+
+		<method savedbtotalquery=" "/>
+		<field name="fecha_inicio" type="datetime" label="Fecha inicio" presentation="DATE" />
+		<field name="fecha_fin" type="datetime" label="Fecha fin" presentation="DATE" />
+		
+		<field name="hora" type="varchar" size="20" isfordb="true" label="Hora"/>	
+		
+		<field name="totales" type="int" label="Con.Totales" presentation="INT" isfordb="true" total="true"/>
+		<field name="conforme" type="int" label="Res.Conforme" presentation="INT" isfordb="true" total="true"/>
+		<field name="noconforme" type="int" label="Res.No Conforme" presentation="INT" isfordb="true" total="true"/>
+		<field name="nosabe" type="int" label="Res.No Sabe" presentation="INT" isfordb="true" total="true"/>
+		<field name="positiva" type="int" label="Act.Positiva" presentation="INT" isfordb="true" total="true"/>
+		<field name="negativa" type="int" label="Act.Negativa" presentation="INT" isfordb="true" total="true"/>
+		<field name="neutral" type="int" label="Act.Neutral" presentation="INT" isfordb="true" total="true"/>
+		<field name="tmp_graph" type="int" />
+	</build>
+</make>
+
+<make object="table_maint">
+	<build out_file="rep_horario.php" classname="crep_horario" title="Reporte por horas" default_operation="M" >
+		
+		<include file="rep_horario.js"/>
+		<group title="Filtro" id="filter">
+			<field name="fecha_inicio" initialvalue=" "/>
+			<field name="fecha_fin" />
+		</group>
+		
+		<group title="Tarea" id="report">
+			<field name="tmp_graph" label="Resultado" readonly="true"/>
+		</group>
+	</build>
+</make>
+
+
+
+
+
+<!-- CLASE SKILLS -->
+<make object="class"> 
+	<build out_file="class_sho_ingresos.php" classname="class_sho_ingresos" classlabel="Skills de operador">
+		<parse in_file="call.sql" tablename="sho_ingresos"/>	
+	
+		<build classname="class_sho_atajos" classlabel="Atajos a mostrar al operador">
+			<parse in_file="call.sql" tablename="sho_atajos"/>
+			<key parent="sin_code" child="sin_code"/>
+			<field name="sat_code" sequence="sho_atajos"/>
+		</build>	
+	</build>
+</make>
+
+<!-- BUSCAR SKILLS -->
+<make object="search_and_list">
+	<build out_file="skills.php" classname="class_sho_ingresos" title="Consulta de skills" >	
+		<searchfield name="sin_code" label="Código" presentation="INT"/>
+		<searchfield name="sin_descripcion" label="Descripción" />
+		<searchfield name="sin_estado" label="Estado" presentation="ACTIVO" />
+		
+		<listfield name="sin_code" />
+		<listfield name="sin_descripcion" />
+		<listfield name="sin_estado" />
+		<listfield name="use_code" label="Operador" presentation="USER" />
+		<listfield name="sin_tstamp" label="Actualizado" presentation="DATETIME"/>
+		
+		<action label="ver" target="skill_maint.php?OP=V" operation="V" >
+			<sendfield classname="class_sho_ingresos" name="sin_code" />
+		</action>
+	
+		<action label="Modificar" target="skill_maint.php?OP=M" operation="M" >
+			<sendfield classname="class_sho_ingresos" name="sin_code" />
+		</action>
+	</build>
+</make>
+
+<!-- MODIFICAR UN SKILL -->
+<make object="table_maint"> 
+	<build out_file="skill_maint.php" classname="class_sho_ingresos" title="Skill" next="skills.php?last=1&amp;OP=L">
+		
+		<group title="Skill" id="asunto">	
+			<field name="sin_code" presentation="INT" label="Código" ismandatory="true"/>
+			<field name="sin_descripcion" presentation="TEXT" label="Descripción" ismandatory="true"/>
+		</group>
+		
+		
+		<group title="Estado" id="estado">
+			<field name="sin_estado" presentation="ACTIVO" label="Estado" ismandatory="true" initialvalue="ACTIVO"/>
+			<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true"/>
+			<field name="sin_tstamp" presentation="DATETIME" label="Fecha de act." readonly="true" classparams="force"/>
+		
+		</group>
+		
+		<table relationclass="" classname="class_sho_atajos" title="Atajos" add="true" delete="true" update="true">
+			<column title="URL" order="1">
+				<field name="sat_code" isvisible="false"/>
+				<field name="sin_code" isvisible="false"/>
+				<field name="sat_url" presentation="TEXT" label="URL" ismandatory="true"/>
+			</column>
+			<column title="Descripción" order="2">
+				<field name="sat_descripcion" presentation="TEXT" label="Descripción" ismandatory="true"/>
+			</column>
+			<column title="Nota" order="3">
+				<field name="sat_nota" presentation="TEXTAREA" label="Nota" cols="60" rows="5"/>
+			</column>
+			<column title="Actualizado" order="4">
+				<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" classparams="force"/>
+				<field name="sat_tstamp" presentation="DATETIME" label="Fecha" classparams="force" readonly="true"/>
+			</column>
+		</table>	
+		
+		<!-- Botones de accion para redireccionar después de salvar la página -->
+		<action operation="L" label="Listado de skills" target="skills.php?last=1&amp;OP=L"  note="Listado de skills"/>		
+		
+	</build>
+</make>
+
+<!-- CLASE AJUSTES DE LA CAMPAÑA -->
+<make object="class"> 
+	<build out_file="class_campania.php" classname="class_campania" classlabel="Ajustes de campaña">
+		<parse tablename="sec_parameters"/>
+		<method loaddbquery=" "/>	
+		<field name="tmp_cgpc" type="varchar" size="50" />
+		<field name="tmp_barrio" type="varchar" size="50" />
+		<field name="tmp_tipo" type="varchar" size="50" />
+		<field name="tmp_estado" type="varchar" size="50"/>
+		<field name="tmp_fecha" type="datetime" presentation="DATERANGE" />
+	</build>
+</make>
+
+<!-- CAMBIOS DE LA CAMPAÑA -->
+<make object="table_maint"> 
+	<build out_file="ajustes.php" classname="class_campania" title="Ajustes de la campaña" default_operation="M">		
+		<group title="Ajustes" id="ajustes">	
+			<field name="tmp_cgpc" presentation="CGPC" label="Comuna" ismandatory="false"/>
+			<field name="tmp_barrio" presentation="BARRIOS" label="Barrio" ismandatory="false"/>
+			<field name="tmp_tipo" presentation="TIPOCONTACTO" label="Tipo de contacto" ismandatory="false"/>
+			<field name="tmp_estado" presentation="TEXT" label="Estado" ismandatory="false"/>
+			<field name="tmp_fecha" presentation="DATERANGE" label="Fecha ingreso" ismandatory="false"/>
+		</group>
+ 	</build>
+</make>
+
+<!-- CLASE LISTA DE NUMEROS YA CONTACTADOS -->
+<make object="class"> 
+	<build out_file="cal_llamados.class.php" classname="ccal_llamados" classlabel="Llamados realizados">
+		<parse in_file="call.sql" tablename="cal_llamados"/>	
+	</build>
+</make>
+
+<!-- BUSCAR NUMEROS YA CONTACTADOS -->
+<make object="search_and_list">
+	<build out_file="llamados.php" classname="ccal_llamados" title="Llamados realizados" >	
+		<searchfield name="cqu_tel_fijo" label="Tel. Fijo" presentation="PHONE"/>
+		<searchfield name="cqu_tel_movil" label="Tel. Móvil" presentation="PHONE" />
+		<searchfield name="use_code" label="Operador" presentation="USER" />
+		<searchfield name="cll_fecha" label="Fecha" presentation="DATERANGE" />
+		<searchfield name="cqu_nombre" label="Nombre" presentation="TEXT" />
+		
+		<listfield name="cqu_nombre" label="Nombre" presentation="TEXT"/>
+		<listfield name="cqu_tel_fijo" label="Tel. Fijo" presentation="PHONE"/>
+		<listfield name="cqu_tel_movil" label="Tel. Móvil" presentation="PHONE" />
+		<listfield name="use_code" label="Operador" presentation="USER" />
+		<listfield name="cll_fecha" label="Fecha" presentation="DATERANGE"/>
+		
+	</build>
+</make>
+
+<!-- REPORTES -->
+<make object="table_maint"> 
+	<build out_file="reportes.php" classname="class_campania" title="Reportes" template_html="reportes.htm">		
+		
+ 	</build>
+</make>
+
+</ayaxphpclass>
+

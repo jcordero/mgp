@@ -1,0 +1,15 @@
+﻿
+<module name="Ciudadanos" version="1.0" release="4/12/2008">
+
+<right name="menu.archivo.ciudadanos" note="Permiso para usar modulo de Ciudadanos"/>
+
+<menu language="spa">
+
+<menuitem name="Ciudadanos" order="2" pda="false" right="menu.archivo.ciudadanos">
+	<menuitem name="Ciudadanos" action="/lmodules/ciudadanos/ciudadanos.php?OP=V" order="1" right="menu.archivo.ciudadanos"/>
+	<menuitem name="Nuevo Ciudadano" action="/lmodules/ciudadanos/ciudadanos_maint_n.php?OP=N" order="1"/>
+	  
+</menuitem>
+</menu>
+
+</module>

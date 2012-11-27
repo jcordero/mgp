@@ -1,0 +1,160 @@
+@CHARSET "UTF-8";
+
+/* INICIAL */
+body {
+	background:#fff;
+	margin:0px;
+	padding:0px;
+	color:#000;
+	font:12px Helvetica,Arial;
+}
+
+button {
+	border:solid 1px #888;
+	background: #eee;
+	font:bold 12px Helvetica,Arial,Sans-serif;
+	border-radius:5px;
+	color: #1C94C4;
+	cursor:pointer;
+	padding:5px;
+	margin-right:10px;
+}
+
+button:hover {
+	color: #EB8F00;
+}
+
+.submitbutton_top {float:right;margin-right: 20px;margin-top: -30px;display:none;}
+
+
+#ui-datepicker-div {display:none;}
+
+.thumb {position:relative}
+.thumb button {margin-left:100px;}
+.thumb img {cursor:pointer;}
+
+.bajo_tabla {
+	background:#F7F7F7;
+	border:solid 1px #ccc;
+	padding:5px;
+	border-radius:5px;
+	display:none;
+	margin-top:20px;
+}
+
+/* MENU DE LA APP */
+#appmenu {float:left;height:32px;margin-top:0px;}
+#appmenu #menu {background:transparent!important;border:none;color:#ddd;margin-top:5px;font-weight:bold;}
+
+/* MARCO DE LA APP */
+#contenido {width:auto; padding:10px;min-height: 800px;}
+.version {font:9px Helvetica,Arial; margin-top:5px;color: #22B;	}
+
+/* Usuario logeado */
+#who {float:right;width:380px;padding-top: 5px;font: 10px bold Helvetiva,Arial;}
+#who #userAvatar {float:right;}
+#who #userAvatar img {width:48px;height:48px;}
+#who #userName {font: 12px bold Helvetica,Arial;color: #888;}
+
+/* Formularios */
+.bloque {margin-top:30px;margin-bottom:5px;}
+.bloque .titulo {margin-top:30px;margin-bottom:5px;font:22px Helvetica,Arial,Sans-Serif;border-bottom:solid 1px #888; color:#888;height:35px;}
+.bloque .titulo .titulo_texto {padding-left:10px;float:left;text-shadow: #DDD 2px 2px;}
+.bloque .titulo .titulo_imagen {float:left;margin-left:15px;}
+
+.contenido {position:relative;}
+#contenido_domicilio {height:350px;}
+#contenido_domicilio #mapa {position: absolute;top: 14px;left: 549px;}
+
+.itm {width:100%;margin-top:3px;clear:both;}
+.desc {width:150px;float:left;font-style:italic;}
+.fld, .fldro, .fldm {width: 650px;margin-left: 0px;min-height:20px;}
+.fldm input[type=text], .fldm select,.fldm textarea {background:#F7F8B9;}
+.itm table, .bloque table, .reporte table {border-spacing: 0;border-collapse: collapse;}
+.itm th,.caja2 th, .bloque th, .reporte th {background:#6199DF;color:#fff;border: 1px solid #4D90F0;padding: 6px 10px;}
+.itm td,.caja2 td, .bloque td, .reporte td {border: 1px solid #BBB;vertical-align: top;padding: 6px 10px;}
+.fldl {font-weight:bold;}
+	
+.caja2 {background:#fff;overflow:scroll;width:100%;min-width:958px;border-spacing: 0;border-collapse: collapse;}
+.caja2 tbody {min-height:20px;}
+.cuernito {width: 35px;
+height: 20px;
+position: relative;
+margin-top: -20px;
+background: url(/call/images/default/cuernito.png) no-repeat;
+margin-left: -10px;}
+
+.editor {display:none;}
+.acciones_tit {width:55px;}
+.acciones {margin-left:8px;/* white-space: nowrap; */}
+.cajadato_del {background:#ECC6C6;}
+
+/* Search and list */
+#sl_buscar {margin:5px;}
+.searchpars {
+	border:solid 1px #444;
+	border-radius:5px;
+}
+.searchpars h3 {padding-left:10px;color:#555;min-height:50px;font:bold 18px Helvetica,Arial;cursor:pointer;}
+h3 #arrow {float:left;}
+h3 #sp_mensajes {margin-left:75px;}
+h3 #sp_title {margin-bottom:5px;}
+h3 #sp_filter {font-weight:normal;font:italic 10px Helvetica,Arial;vertical-align: top;}
+.submitoptions {
+	background: #CCC;
+	text-align: right;
+	color: #444;
+	padding: 3px;}
+.submitbutton {
+	text-align:right;
+	padding-right:30px;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+#bloque_parametros {padding:5px;}
+.pag {height:30px;}
+.pag .nro {font:bold 12px Helvetica,Arial;width:200px;float:left;margin-top: 8px;}
+.nav {width:350px;float:right;text-align:right;}
+.saltarPagina {float:left;padding-top: 4px;}
+
+.listado {margin-top:20px;}
+.listado .cajadato_par {background:#eee;}
+.listado table {margin-top:10px;margin-bottom:10px;}
+#resultado {overflow-x: auto;width:100%;}
+
+.btn_ver {background:#eee url(/call/images/icons/View.png) no-repeat 0 0;padding-left:20px;}
+.btn_modificar {background:#eee url(/call/images/icons/Edit.png) no-repeat 0 0;padding-left:20px;}
+.btn_imprimir {background:#eee url(/call/images/icons/Print.png) no-repeat 0 0;padding-left:20px;}
+.btn_borrar {background:#eee url(/call/images/icons/Delete.png) no-repeat 0 0;padding-left:20px;}
+
+.submitbutton_top {float:right;margin-right: 20px;margin-top: -30px;display:none;}
+
+/* BARRA DE NAVEGACION */
+ #main {width:100%;height:33px;margin:0px;background:#000;color:#fff;}
+ #main .logo {float:left;background:url(/call/images/default/home.gif) no-repeat;width:30px;height:30px;margin-left:5px;margin-right:5px;margin-top:3px;}
+ #main #user {float:right;height:30px;}
+ #userAvatarSmall img {height:27px;width:27px;}
+ #userName {display:none;}
+ #userAvatarSmall {float:left;padding:3px;}
+ #gestionadora {float:right;padding: 5px;font: 15px verdana;margin-right:10px;}
+ #main #tools {width:400px;height:auto;border:1px solid #888; border-radius:5px;display:none;position:absolute;top:32px;padding:10px;background:#f2f2f2;}
+ #gestionadora_sidebar {color:#222;}
+ #who #userName {padding:0px;width:280px;color:#222;font-weight:bold;}
+ #who #userGroup {color:#777;}
+ 
+ /* LAYOUT */
+ #home_operator {margin-top:35px;}
+ #talk {height:auto;min-height:130px;padding:10px;margin-right:220px;background:#eee;border-radius:5px;}
+ #talk .itm {width: 200px;margin-top: 3px;clear: none;}
+ #talk .desc {width: 50px;}
+ #talk .fld {width: 200px;margin-left: 50px;min-height: 20px;}
+ #talk_actions button {margin:10px;}
+ #botones_turnos {float:right;}
+ #talk_search button {margin-left:146px;margin-top:10px;}
+ #shortcuts {float:right;width:190px;border:solid 1px #eee; border-radius:5px;padding:5px;background:#e9e9e9;}
+ #shortcuts .titulo_texto {text-align:center;font:bold 14px Helvetica,Arial;padding:5px;border-bottom:solid 1px #888;}
+ .link {height:20px;}
+ .link img {padding-left: 4px;vertical-align: top;}
+ #indicadores {float: right;width: 130px;text-align: center;}
+ #indicadores div {padding:5px;margin-bottom:10px;border:solid 1px #888;border-radius:3px;}
+ #talk_nominal h3 {margin:0px;margin-bottom:5px;}

@@ -1,0 +1,91 @@
+<module name="Tickets" version="1.0" release="21/05/2009">
+
+<right name="menu.archivo.tickets" note="Permiso para usar funciones de tickets"/>
+<right name="menu.archivo.tickets.nuevo" note="Permiso para ingresar nuevos tickets"/>
+<right name="menu.archivo.tickets.admin" note="Permiso para modificar configuracion"/>
+<right name="menu.archivo.tickets.proceso" note="Permiso para modificar estados"/>
+
+<right name="menu.archivo.denuncias" note="Permiso para procesar denuncias"/>
+<right name="menu.archivo.denuncias.adm" note="Permiso para administrar denuncias"/>
+<right name="menu.archivo.denuncias.lote" note="Permiso para procesar denuncias en lote"/>
+
+<right name="menu.archivo.reclamos" note="Permiso para procesar reclamos"/>
+<right name="menu.archivo.reclamos.adm" note="Permiso para administrar reclamos"/>
+
+<right name="menu.archivo.solicitudes" note="Permiso para procesar solicitudes"/>
+
+<right name="menu.archivo.quejas" note="Permiso para procesar quejas"/>
+
+
+<menu language="spa">
+
+	<menuitem name="Tickets" order="8"  right="menu.archivo.tickets">
+		<menuitem name="Nuevo ticket" action="/lmodules/tickets/tickets_maint_n.php?OP=N" right="menu.archivo.tickets.nuevo" order="1" />
+		<menuitem name="Búsqueda de tickets" action="/lmodules/tickets/tickets.php?OP=V" order="2" />
+	<!--  <menuitem name="Búsqueda de reclamos" action="/lmodules/tickets/reclamos.php?OP=V" order="2" /> -->	
+	
+	    <menuitem name="Prestaciones" right="menu.archivo.tickets.admin" order="3" >
+	    	<menuitem name="Listar prestaciones" action="/lmodules/tickets/prestaciones.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
+	        <menuitem name="Nueva prestacion" action="/lmodules/tickets/prest_maint_n.php?OP=N" order="2"/>
+		</menuitem>
+		<menuitem name="Organismos"  right="menu.archivo.tickets.admin" order="4" >
+			<menuitem name="Listar organismos" action="/lmodules/tickets/organismos.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
+	        <menuitem name="Nuevo organismo" action="/lmodules/tickets/organ_maint_n.php?OP=N" order="2"/>
+		</menuitem>
+		<menuitem name="Rubros"  right="menu.archivo.tickets.admin" order="5" >
+			<menuitem name="Listar rubros" action="/lmodules/tickets/rubros.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
+	        <menuitem name="Nuevo rubro" action="/lmodules/tickets/rubro_maint_n.php?OP=N" order="2"/>
+		</menuitem>
+		<menuitem name="Georeferencias" right="menu.archivo.tickets.admin" order="6" >
+			<menuitem name="Listar georeferencias" action="/lmodules/tickets/georefs.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
+	        <menuitem name="Nueva georeferencia" action="/lmodules/tickets/georef_maint.php?OP=N"  order="2"/>
+		</menuitem>
+	
+	</menuitem>
+
+
+
+
+	<menuitem name="Denuncias" order="9"  right="menu.archivo.denuncias">
+		<menuitem name="Consulta de novedades" action="/lmodules/tickets/dennovedades.php?OP=V" order="1" />
+		<menuitem name="Consulta de denuncias" action="/lmodules/tickets/denabiertas.php?OP=V" order="2" />
+		
+	    <menuitem name="Prestaciones" right="menu.archivo.denuncias.adm" order="5" >
+		    <menuitem name="Listar prestaciones" action="/lmodules/tickets/denprestaciones.php?OP=V" right="menu.archivo.denuncias.adm" order="1"/>
+	        <menuitem name="Nueva prestación" action="/lmodules/tickets/denprest_maint_n.php?OP=N" order="2" />
+		</menuitem>
+		<menuitem name="Rubros" right="menu.archivo.denuncias.adm" order="6" >
+	    	<menuitem name="Listar rubros" action="/lmodules/tickets/rubros.php?OP=V" right="menu.archivo.denuncias.adm" order="1"/>
+	        <menuitem name="Nuevo rubro" action="/lmodules/tickets/rubro_maint_n.php?OP=N" order="2"/>
+		</menuitem>
+	</menuitem>
+	
+	
+	
+	<menuitem name="Reclamos" order="10"  right="menu.archivo.reclamos">
+		<menuitem name="Consulta de novedades" action="/lmodules/tickets/recnovedades.php?OP=V" order="1" />
+		<menuitem name="Consulta de reclamos" action="/lmodules/tickets/recabiertos.php?OP=V" order="2" />
+		
+	    <menuitem name="Prestaciones"  right="menu.archivo.denuncias.adm" order="5" >
+	    	<menuitem name="Listar prestaciones" action="/lmodules/tickets/recprestaciones.php?OP=V" right="menu.archivo.denuncias.adm" order="1"/>
+	        <menuitem name="Nueva prestacion" action="/lmodules/tickets/recprest_maint_n.php?OP=N" order="2"/>
+		</menuitem>
+	</menuitem>
+
+
+	 
+	<menuitem name="Solicitudes" order="11"  right="menu.archivo.solicitudes">
+		<menuitem name="Consulta de novedades" action="/lmodules/tickets/solnovedades.php?OP=V" order="1" />
+		<menuitem name="Consulta de solicitudes" action="/lmodules/tickets/solabiertas.php?OP=V" order="2" />
+	</menuitem>
+
+
+
+	<menuitem name="Quejas" order="12"  right="menu.archivo.quejas">
+		<menuitem name="Consulta de novedades" action="/lmodules/tickets/quenovedades.php?OP=V" order="1" />
+		<menuitem name="Consulta de quejas" action="/lmodules/tickets/queabiertas.php?OP=V" order="2" />
+	</menuitem>
+
+
+</menu>
+</module>

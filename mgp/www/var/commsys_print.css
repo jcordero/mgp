@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+#main, #enviar_todo {display:none;}
+
+#tmp_graph .fld {margin-left:0px;}
+#tmp_graph .desc {display:none;}

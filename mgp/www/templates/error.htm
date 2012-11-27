@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<!-- Fragmento de pagina html que indica la falla de una operacion -->
+<div id="pageError" style="display:none" xmlns:com="http://www.commsys.com.ar/templates">
+	<div style="width: 600px; min-height: 100px;padding: 10px;margin-left:200px;margin-top:10px;margin-bottom:10px;" class="ui-widget ui-widget-content ui-corner-all"> 
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td><img src="/mgp/images/default/error-grande.png"/></td>
+				<td style="width:20px;"></td>
+				<td>
+					<strong>Error!<br />Por favor verifique los errores a continuaci&oacute;n:</strong>
+					<br /><br /><com:msgerror/>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript">
+$("#appmenu").ready(function() {							 
+	$("#pageError").hide().delay(100).slideDown("medium");
+});
+</script>
+
+
+

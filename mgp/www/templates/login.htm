@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:com>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+        <meta http-equiv="content-language" content="es" />
+        <title>Reclamos Municipalidad de General Pueyrredón</title>
+    <com:security/>
+    <link href="/mgp/var/commsys.css" media="screen,print" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/mgp/common/jquery/jquery-1.7.2.min.js"></script>
+    <style>
+    .explicacion {text-align:left;}
+    #cols_container {display:table-row;}
+    #col1, #col2 {display:table-cell;}
+    #col1 {width:500px;}
+    #loginBoxSombra {margin-left:20px;position:relative; background:#efefef;padding:15px;border:solid 1px #eee; border-radius:5px;}
+    #loginBox {margin:none!important;}
+    
+    </style>
+</head>
+
+<body class="homepage">
+	<div id="head">
+		<div id="head_center">
+			<a href="/mgp/index.php"><img src="/mgp/images/mdq.png" class="logo"></a>    
+        	<com:homepage.comp.mpfwho/>
+        </div>
+		<div id="head_nav">
+	        <div id="appmenu"></div>
+	    </div> 
+    </div>
+	<div id="payload">
+        <div id="headSpacer"></div>
+            
+		<div id="cols_container">
+			<div id="col1">
+				<div class="explicacion">
+					<div class="legend1">
+						<h2>Reclamos Municipalidad de General Pueyrredón</h2>
+						<p>Este es el sistema de reclamos. Si requiere acceso al sistema, por favor comunicarse con 
+						___________________ de ____________________ al teléfono: __________________</p>
+					</div>
+			   
+			    <script type="text/javascript">
+			        $(document).ready(function() {
+			            $('[name="login"]').focus();
+			            $("input:visible").keypress(function(e){
+			                if(e.which==13) {
+			                    var form = $(this).parents('form:first');
+			                    form.submit();
+			                }
+			            });
+			        });
+			    </script>
+			</div>
+			<div id="col2">
+		
+			    <!-- cuadro de login-->
+			        <div id="loginBoxSombra">
+			        	<h3>Ingreso al sistema de reclamos</h3>
+			            <div id="loginBox">
+			                <com:form_begin/>         
+			                <div> <label>Usuario:</label> <com:login/></div>                
+			                <div class="password"><label>Clave:</label> <com:password/> <input type="image" 
+			                	src="/mgp/images/default/login-ingresar.png" id="loginIngresarButton" 
+			                	onMouseOver="this.src='/mgp/images/default/login-ingresar-over.png'" 
+			                	onMouseOut="this.src='/mgp/images/default/login-ingresar.png'"></div>
+			                <com:error/>
+			              
+			              	<p>Si ha perdido su clave de ingreso <a href="/mgp/modules/security/pass_reset.php"> haga click aquí </a></p>  
+			                <com:form_end/>
+			            </div>	
+			        </div>
+			</div>
+		</div>
+	</div>
+</div>	    
+</body>
+</html>

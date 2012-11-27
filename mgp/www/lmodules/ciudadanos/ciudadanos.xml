@@ -1,0 +1,274 @@
+<ayaxphpclass>
+
+	<!-- Clase Ciudadanos_n-  -->
+	<make object="class">
+		<build out_file="ciu_ciudadanos_n.php" classname="ciu_ciudadanos_n" classlabel="ciudadanos">
+			<parse in_file="ciudadanos.sql" tablename="ciu_ciudadanos" />
+
+			<field name="tmp_mapa" type="varchar" size="50" isfordb="false" />
+			<field name="tmp_cod_calle" type="int" isfordb="false" />
+
+             <!-- Parte para el historialdel ciudadano -->
+			<build classname="ciu_historial_contactos" classlabel="historial">
+				<parse in_file="ciudadanos.sql" tablename="ciu_historial_contactos" />
+				<key parent="ciu_code" child="ciu_code" />
+				<field name="chi_code" sequence="ciu_historial_contactos" />
+			</build>
+			
+		</build>
+	</make>
+
+
+  <!-- Consulta Ciudadanos -->
+	<make object="search_and_list">
+		<build out_file="ciudadanos.php" classname="ciu_ciudadanos_n" title="Ciudadanos">
+			
+			<!-- Consulta Ciudadanos - Campos de Busqueda -->
+			<searchfield name="CIU_CODE" presentation="INT" label="Codigo" />
+			<searchfield name="CIU_NOMBRES" presentation="TEXT" label="Nombre" />
+			<searchfield name="CIU_APELLIDO" presentation="TEXT" label="Apellido" />
+			<searchfield name="CIU_DOC_NRO" presentation="DNI" label="Dni" />
+
+			<!-- Consulta Ciudadanos - Campos de Resultados -->
+			<listfield name="CIU_CODE" presentation="INT" label="Codigo" />
+			<listfield name="CIU_NOMBRES" presentation="TEXT" label="Nombre" />
+			<listfield name="CIU_APELLIDO" presentation="TEXT" label="Apellido" />
+			<listfield name="CIU_DOC_NRO" presentation="DNI" label="Nro Documento" />
+			<listfield name="CIU_SEXO" presentation="SEXO" label="Sexo" />
+			<listfield name="CIU_TEL_FIJO" presentation="PHONE" label="Tel.Fijo" />
+			<listfield name="CIU_TEL_MOVIL" presentation="PHONE" label="Tel.Movil" />
+			<listfield name="CIU_EMAIL" presentation="EMAIL" label="Email" />
+
+			<!-- Consulta Ciudadanos - Acciones (ver-modificar-imprimir) -->
+			<action operation="V" label="ver" 	target="ciudadanos_maint.php?OP=V" >
+				<sendfield classname="ciu_ciudadanos_n" name="ciu_code" />
+			</action>
+
+			<action operation="M" label="modificar" target="ciudadanos_maint.php?OP=M" >
+				<sendfield classname="ciu_ciudadanos_n" name="ciu_code" />
+			</action>
+
+			<action operation="P" label="imprimir" target="ciudadanos_maint.php?OP=P" >
+				<sendfield name="ciu_code" classname="ciu_ciudadanos_n" />
+			</action>
+		</build>
+	</make>
+
+
+  <!-- Formulario Ver/Impresion Ciudadanos-->
+	<make object="table_maint">
+		<build out_file="ciudadanos_maint.php" classname="ciu_ciudadanos_n" title="Ciudadano" next="ciudadanos.php?OP=L&amp;last=1">
+			<include file="ciudadanos.css"/>
+			
+			<!-- Datos personales -->
+			<group title="Datos personales" id="datos_personales" render_html="block">
+				<field name="ciu_code" presentation="INT" label="Cod.ciudadano" readonly="true" />
+				<field name="ciu_tipo_persona" presentation="TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
+				<field name="ciu_nombres" presentation="TEXT" label="Nombre" ismandatory="true" />
+				<field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
+				<field name="ciu_sexo" presentation="SEXO" label="Sexo"  ismandatory="true" />
+				<field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
+				<field name="ciu_doc_nro" presentation="DOCID" label="Doc." ismandatory="true" classparams="no_search" />
+                <field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" initialvalue="Argentina"/>
+                <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
+                <field name="ciu_email" presentation="EMAIL" label="E-Mail" />
+			</group>
+
+			<!-- Datos personales - Domicilio-->
+			<group title="Su dirección" id="direccion" 	render_html="block">
+				<field name="tmp_mapa" presentation="MAPA" classparams="ciu_coord_x|ciu_coord_y" />	
+				<field name="tmp_cod_calle" presentation="INT" label="Codigo calle" isvisible="false" />	
+				<field name="ciu_dir_calle" presentation="CALLE" label="Calle" ismandatory="false" classparams="ciu_dir_nro|ciu_coord_x|ciu_coord_y|ciu_barrio|ciu_cgpc|ilu|reco|tmp_mapa|ciu_dir_calle|tmp_cod_calle"/>
+				<field name="ciu_dir_nro" presentation="ALTURA" label="Altura" ismandatory="false" cols="10" classparams="ciu_dir_calle" />
+				<field name="ciu_dir_piso" presentation="TEXT" label="Piso" ismandatory="false" cols="10" />
+				<field name="ciu_dir_dpto" presentation="TEXT" label="Departamento" ismandatory="false" cols="10" />
+				<field name="ciu_cod_postal" presentation="TEXT" label="Codigo Postal" ismandatory="false" />
+				<field name="ciu_localidad" presentation="TEXT" label="Localidad" cols="20" initialvalue="Mar del plata"/>
+				<field name="ciu_provincia" presentation="TEXT" label="Provincia" cols="20" initialvalue="BUENOS AIRES"/>
+				<field name="ciu_pais" presentation="TEXT" label="Pais" ismandatory="false" cols="20" initialvalue="ARGENTINA"/>
+				<field name="ciu_barrio" presentation="BARRIOS" label="Barrio" ismandatory="false" cols="20" />
+<!--  				<field name="ciu_cgpc" presentation="CGPC" label="Comuna" ismandatory="false" cols="20" /> -->
+				
+				<!-- Campos Invisibles-->
+				<field name="ciu_coord_x" presentation="TEXT" label="coordenada x" ismandatory="false" isvisible="false" />
+				<field name="ciu_coord_y" presentation="TEXT" label="coordenada y" ismandatory="false" isvisible="false" />
+			</group>
+
+			<!-- Datos personales - Contacto-->
+			<group title="Contacto" id="contacto" render_html="block">
+				<field name="ciu_no_email" presentation="SINO" 	label="Contactar por mail?" initialvalue="NO"/>
+				<field name="ciu_no_llamar" presentation="SINO"  label="Contactar por teléfono?" initialvalue="NO"/>
+				<field name="ciu_tel_fijo" presentation="PHONE" label="Telefono fijo" />
+				<field name="ciu_tel_movil" presentation="PHONE" label="Telefono móvil" />
+				<field name="ciu_horario_cont" presentation="TEXT" label="Horario de contacto" />
+			</group>
+
+			<!-- Informacion adicional laboral/estudios -->
+			<group title="Informacion Laboral/Estudios" id="laboral" render_html="block">
+				<field name="ciu_trabaja" presentation="SINO" label="Trabaja" />
+				<field name="ciu_nivel_estudio" presentation="NIVEL_ESTUDIO" label="Nivel de Estudios" />
+                <field name="ciu_profesion" presentation="TEXT" label="Profesion" />
+            </group>
+
+			<!-- Auditoria -->
+			<group title="Auditoria" id="audit" render_html="block">
+				<field name="ciu_tstamp" presentation="DATETIME" label="Fecha de ingreso" isvisible="true" readonly="true" />
+				<field name="ciu_canal_ingreso" presentation="CANALDEINGRESO" label="Canal de Ingreso" ismandatory="false" isvisible="true" readonly="true"/>
+				<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" ismandatory="false" isvisible="true" />
+				<field name="ciu_estado" presentation="ESTADO_CIUDADANO" label="Estado" ismandatory="false" isvisible="false" />
+			</group>
+
+		</build>
+	</make>
+
+	<!-- Formulario Ingreso de Ciudadanos -->
+	<make object="table_maint">
+		<build out_file="ciudadanos_maint_n.php" classname="ciu_ciudadanos_n" title="Ciudadano" public="false">
+			<include file="ciudadanos.css"/>
+			
+			<!-- Datos personales -->
+			<group title="Datos identificatorios" id="datos_personales" render_html="block">
+				<field name="ciu_code" presentation="SEQUENCE" label="Cod.ciudadano" cols="20" classparams="ciu_ciudadanos" readonly="true" />
+				<field name="ciu_tipo_persona" presentation="TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
+				<field name="ciu_nombres" presentation="TEXT" label="Nombre" ismandatory="true" />
+				<field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
+				<field name="ciu_sexo" presentation="SEXO" label="Sexo"  ismandatory="true" />
+				<field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
+				<field name="ciu_doc_nro" presentation="DOCID" label="Doc." ismandatory="true" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_dir_calle|ciu_dir_nro|ciu_dir_piso|ciu_dir_dpto|ciu_localidad|ciu_cod_postal|ciu_tipo_persona|ciu_sexo|ciu_profesion|ciu_nacionalidad" />
+                <field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" />
+                <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
+                <field name="ciu_email" presentation="EMAIL" label="E-Mail" />
+			</group>
+
+			<!-- Datos personales - Domicilio-->
+			<group title="Dirección" id="direccion" 	render_html="block">
+				<field name="tmp_mapa" presentation="MAPA" classparams="ciu_coord_x|ciu_coord_y" />	
+				<field name="ciu_dir_calle" presentation="CALLE" label="Calle" ismandatory="false" classparams="ciu_dir_nro|ciu_coord_x|ciu_coord_y|ciu_barrio|ciu_cgpc|ilu|reco|tmp_mapa|ciu_dir_calle"/>
+				<field name="ciu_dir_nro" presentation="ALTURA" label="Altura" ismandatory="false" cols="10"  classparams="ciu_dir_calle"/>
+				<field name="ciu_dir_piso" presentation="TEXT" label="Piso" ismandatory="false" cols="10" />
+				<field name="ciu_dir_dpto" presentation="TEXT" label="Departamento" ismandatory="false" cols="10" />
+				<field name="ciu_cod_postal" presentation="TEXT" label="Codigo Postal" ismandatory="false" />
+				<field name="ciu_localidad" presentation="TEXT" label="Localidad" cols="20" initialvalue="Mar del Plata"/>
+				<field name="ciu_provincia" presentation="TEXT" label="Provincia" cols="20" initialvalue="BUENOS AIRES"/>
+				<field name="ciu_pais" presentation="TEXT" label="Pais" ismandatory="false" cols="20" initialvalue="ARGENTINA"/>
+				<field name="ciu_barrio" presentation="BARRIOS" label="Barrio" ismandatory="false" cols="20" />
+		<!-- 		<field name="ciu_cgpc" presentation="CGPC" label="Comuna" ismandatory="false" cols="20" />  -->
+				<!-- Campos Invisibles-->
+				<field name="ciu_coord_x" presentation="TEXT" label="coordenada x" ismandatory="false" isvisible="false" />
+				<field name="ciu_coord_y" presentation="TEXT" label="coordenada y" ismandatory="false" isvisible="false" />
+			</group>
+
+			<!-- Datos personales - Contacto-->
+			<group title="Datos de contacto" id="contacto" render_html="block">
+				<field name="ciu_no_email" presentation="SINO" 	label="Contacto por mail?" initialvalue="NO"/>
+				<field name="ciu_no_llamar" presentation="SINO"  label="Contacto por teléfono?" initialvalue="NO"/>
+				<field name="ciu_tel_fijo" presentation="PHONE" label="Telefono Fijo" />
+				<field name="ciu_tel_movil" presentation="PHONE" label="Telefono Movil" />
+				<field name="ciu_horario_cont" presentation="TEXT" label="Horario de Contacto" />
+			</group>
+
+			<!-- Informacion adicional laboral/estudios -->
+			<group title="Información Laboral/Estudios" id="laboral" render_html="block">
+				<field name="ciu_trabaja" presentation="SINO" label="Trabaja" />
+				<field name="ciu_nivel_estudio" presentation="NIVEL_ESTUDIO" label="Nivel de Estudios" />
+                <field name="ciu_profesion" presentation="TEXT" label="Profesion" />
+            </group>
+
+			<!-- Auditoria -->
+			<group title="Auditoría" id="audit" render_html="block">
+				<field name="ciu_tstamp" presentation="DATETIME" label="Fecha de ingreso" cols="20" isvisible="true" readonly="true" classparams="force" />
+				<field name="ciu_canal_ingreso" presentation="CANALDEINGRESO" label="Canal de Ingreso" ismandatory="false" cols="20" isvisible="true" initialvalue="CALL" readonly="true"/>
+				<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" ismandatory="false" cols="20" isvisible="true" />
+				<field name="ciu_estado" presentation="ESTADO_CIUDADANO" label="Estado" ismandatory="false" cols="20" initialvalue="ACTIVO" isvisible="false" />
+			</group>
+
+		</build>
+	</make>
+
+
+
+
+
+
+	<!-- Actividad en una sesion -->
+	<make object="class">
+		<build out_file="class_ciu_sesiones_ver.php" classname="class_ciu_sesiones_ver" classlabel="sesiones ciudadanos">
+			<parse in_file="ciudadanos.sql" tablename="ciu_sesiones" />
+
+            <build classname="class_ciu_historial_contactos" classlabel="detalle sesiones">
+                <parse in_file="ciudadanos.sql" tablename="ciu_historial_contactos" />
+                <key parent="cse_code" child="cse_code" />
+            </build>
+		</build>
+	</make>
+
+    <make object="table_maint">
+		<build out_file="sesion_maint.php" classname="class_ciu_sesiones_ver" title="Historia de la sesión" public="false" next="/index.php">
+
+			<!-- Datos Sesion -->
+			<group title="Datos identificatorios" id="datos_personales" render_html="block">
+                <field name="cse_code" presentation="INT" label="Cod.Sesion" readonly="true" />
+				<field name="ciu_code" presentation="CIUDADANO" label="Cod.ciudadano" readonly="true" />
+                <field name="cse_tstamp" presentation="DATETIME" label="Fecha" readonly="true" />
+                <field name="cse_duracion" presentation="DURACION" label="Duracion (seg)" readonly="true" />
+                <field name="use_code" presentation="USER" label="Operador" readonly="true" />
+                <field name="cse_ani" presentation="TEXT" label="Teléfono" readonly="true" />
+                <field name="cse_call_id" presentation="TEXT" label="Nro. Ref. Llamada" readonly="true" />
+                <field name="cse_skill" presentation="TEXT" label="Opción ingreso" readonly="true" />
+			</group>
+			
+			<!-- Nota final -->
+            <group title="Nota de cierre" id="cierre" render_html="block">
+                <field name="cse_derivado" presentation="EMERGENCIAS" label="Derivado a" />
+                <field name="cse_nota" presentation="TEXTAREA" label="Nota" cols="50" rows="5" />
+            </group>
+
+            <!-- Actividad de la Sesion -->
+			<table relationclass="" classname="class_ciu_historial_contactos" title="Actividad" add="false" delete="false" update="false">
+                <column title="Fecha" order="1">
+                    <field name="chi_code" isvisible="false"/>
+                    <field name="ciu_code" isvisible="false"/>
+                    <field name="cse_code" isvisible="false"/>
+                    <field name="chi_fecha" presentation="DATETIME" label="Fecha y hora" />
+                </column>
+                <column title="Actividad" order="2">
+                    <field name="chi_motivo" presentation="TEXT" label="Actividad"/>
+                </column>
+            </table>
+        </build>
+	</make>
+
+    <!-- CLASE SESIONES -->
+    <make object="class">
+        <build out_file="class_ciu_sesiones.php" classname="class_ciu_sesiones" classlabel="Sesiones">
+            <parse in_file="ciudadanos.sql" tablename="ciu_sesiones"/>
+        </build>
+    </make>
+
+    <!-- FORMULARIO DE CIERRE DE SESION -->
+    <make object="table_maint">
+        <build out_file="sesion_cierre.php" classname="class_ciu_sesiones" title="Cierre de una sesión"
+        template_html="default.htm" default_operation="M" >
+
+            <!-- Sesion en cierre -->
+            <group title="Sesión" id="sesion" render_html="block">
+                <field name="cse_code" presentation="INT" label="Código" readonly="true" />
+                <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano" readonly="true" />
+                <field name="cse_tstamp" presentation="DATETIME" label="Inicio" readonly="true" />
+                <field name="cse_duracion" presentation="DURACION" label="Duración" readonly="true" />
+                <field name="use_code" presentation="USER" label="Operador" readonly="true" />
+                <field name="cse_ani" presentation="TEXT" label="Teléfono" readonly="true" />
+                <field name="cse_call_id" presentation="TEXT" label="Nro. Ref. Llamada" readonly="true" />
+                <field name="cse_skill" presentation="TEXT" label="Opción ingreso" readonly="true" />
+                <field name="cse_estado" presentation="TEXT" label="Estado" readonly="true" />
+            </group>
+
+            <!-- Nota final -->
+            <group title="Nota de cierre" id="cierre" render_html="block">
+                <field name="cse_derivado" presentation="EMERGENCIAS" label="Derivado a" />
+                <field name="cse_nota" presentation="TEXTAREA" label="Nota" cols="50" rows="5" />
+            </group>
+        </build>
+    </make>
+
+</ayaxphpclass>

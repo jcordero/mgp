@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:com>
+	<head>
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    	<meta http-equiv="content-language" content="es" />
+    	<title><com:title/></title>
+    	<com:security/>
+    	<com:jsincludes/>
+    	<link href="/mgp/var/commsys.css" media="screen,print" type="text/css" rel="stylesheet" />
+    	<style>
+	    	.botones .boton {float:left;margin-left:10px; height:25px;display:table-cell; vertical-align:middle;width:130px;text-align: center;color: #888;position:relative;}
+    		.boton {display:none;}
+    		.notificacion {position:absolute;min-width:20px;height:20px;background:#f00;color:#fff;border-radius:10px;left:100px;padding:2px;border:solid 1px #888;display:none;}
+    	</style>
+        <script type="text/javascript">
+    
+            $(document).ready(function(){
+                // Funciones para animar los iconos cuando carga el home
+                function doAnimation(image) {
+                    image.fadeIn(150, function() {
+                        // wait until animation is done and recurse if there are more animations
+                        if(animations.length > 0) doAnimation(animations.shift());
+                    });
+                }
+        
+                var animations = new Array();
+        
+                $(".boton").each(function() {
+                    animations.push($(this));
+                });
+                if(animations.length>0) doAnimation(animations.shift());
+            });
+        </script>
+    </head>
+
+	<body onLoad="onPageLoad()" class="homepage">
+       	<div id="head">
+       		<div id="head_center">
+           	<a href="/mgp/index.php"><img src="/mgp/images/mdq.png" class="logo"></a>
+               <com:homepage.comp.mpfwho/>
+            </div>
+            <div id="head_nav">
+               <div id="appmenu"></div>
+            </div>
+        </div>
+
+		<div id="payload">
+            <div id="headSpacer"></div>
+	
+			<div id="watermark"></div>
+
+			<div id="homepageCenter">
+				<div id="AccionesBotones">
+                    <com:homepage.comp.dynhome/>
+                </div>
+			</div>
+		</div>	
+		
+		<div class="footer">
+			<div id="versionNumber"><com:homepage.comp.soft_version/> </div>
+		</div>
+ 
+	</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns:com="http://www.commsys.com.ar">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="content-language" content="es" />
+    <title><com:title/></title>
+    <com:security/>
+    <com:jsincludes/>
+    <script type="text/javascript" src="/mgp/includes/home_call.js"></script>
+    <link href="/mgp/var/commsys.css" media="screen,print" type="text/css" rel="stylesheet" />
+    <script type="text/javascript">
+    $(document).ready(function(){
+    	$("#user").click(function(){
+    		$("#tools").slideToggle();
+    		var w = $(window).width();
+    		$("#tools").css("left",w-432);
+    	});
+    	$("#tools").click(function(){
+    		$("#tools").slideUp();
+    	});
+    });
+    </script>
+</head>
+<body onload="onPageLoad()">
+	<div id="main">	
+		<a class="logo" href="/mgp/index.php"></a>
+        <div id="appmenu"></div>
+        
+        <div id="user"><com:homepage.comp.mini_who/></div>
+			
+		<div id="tools">
+          <com:homepage.comp.who_servi/>
+          <div class="version"><com:includes.homepage.comp.soft_version/></div>
+      	</div>
+  	</div>
+	
+	<div id="contenido">
+		<com:homepage.comp.shortcuts/>	           
+		<com:homepage.comp.talk/>	           
+
+        <div style="background: #BABABA;text-align:center;margin:5px;padding:5px">
+        	<div style="color:red;font: bold 14px Sans-Serif;">Confirme con el ciudadano que este sea el reclamo que desea reiterar.</div>
+        	<div style="font: 12px Sans-Serif;">Complete la observación y presione el botón salvar al final de la página.</div>
+        </div>
+        <com:errormsg/>
+        <com:maincontent/> 
+    </div>
+    
+</body>
+</html>

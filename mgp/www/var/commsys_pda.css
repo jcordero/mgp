@@ -1,0 +1,16 @@
+BODY {font: 8px Sans-Serif;}
+.m1 {background:#89A;width:220px;}
+.m2 {margin-left:5px;} 
+.m3 {margin-left:10px;}
+.m4 {margin-left:15px;}
+#translist {width:220px;}
+#translist .paginas {background:#89A;}
+#translist .paginas A {display:inline}
+#translist .paginas #pag {display:inline}
+#translist #trans #hoy{margin-top:2px;padding-left:2px;padding-bottom:2px;background:#E9A;}
+#translist #listado{width:100%;}
+#translist #listado .trans{margin-bottom:4px;border:1px solid;clear:none}
+#translist #listado .trans .owner{font: bold 8px Sans-Serif;}
+#translist #listado .trans .vencido{color:#ff4444;}
+#translist #listado .trans .sG{background:#44FF44;}
+#translist #listado .trans .sB{background:#AAAAFF;}
