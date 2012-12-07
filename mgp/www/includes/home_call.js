@@ -35,7 +35,7 @@ function armar_home_page() {
 		if(person_status=="IDENTIFICADO")
 		{
 			esperar();
-		    boton_buscar_turnos();
+		    //boton_buscar_turnos();
 			//buscar_orientacion();
 			
 		    //Busco los contactos (sesiones anteriores)
@@ -89,7 +89,7 @@ function armar_panel() {
     	var ciu_nombres = $("#m_person_nombres").val();
     	var tipo_doc = $("#am_person_doc").val();
     	var nro_doc = $("#bm_person_doc").val();
-    	var cops_id = $("#m_cops_id").val();
+    	//var cops_id = $("#m_cops_id").val();
     	var sexo = $("#m_sexo").val();
     	var edad = $("#m_edad").val();
     	var pais = $("#m_person_pais").val();
@@ -100,14 +100,14 @@ function armar_panel() {
 		b+="<br/><br/>ID: <b>"+id+"</b>";
     	
     	//Es afiliado a COPS?
-    	if(cops_id!=0)
+/*    	if(cops_id!=0)
     	{
     		b+="<br/><br/>Afiliado COPS: <b>"+cops_id+"</b>";
     	}
     	else
     	{
     		$('#nuevo_turno_cops').hide();
-    	}
+    	}*/
     	b+="<br/>Sexo: <b>"+sexo+"</b><br/>Edad: <b>"+edad+" años</b>";
     	
     	$("#talk_nominal").html(b);
@@ -168,7 +168,7 @@ function boton_buscar()
 	//Identificador compuesto del DOC
 	var doc = doc_tipo + " " + doc_nro;
     var params = doc + '|' + nombres + '|' + apellido + '|' + ani + '|' + session + '|' + pais;
-    var json = rem_request(this,function(obj,json){
+    new rem_request(this,function(obj,json){
     	listo();
     	var jdata = eval('(' + json + ')');
     	if(!jdata)
@@ -216,7 +216,7 @@ function boton_iniciar()
     var session = $('#m_user_session').val();
     var ani = $('#m_talk_ani').val();
     var params = ani + '|' + session + "| ";
-    var j = new rem_request(this,function(obj,json){
+    new rem_request(this,function(obj,json){
     	if(json=="")
         {
             alert_box("Iniciar no retorna resultados", "ERROR");
@@ -251,7 +251,7 @@ function boton_iniciar()
 function boton_terminar()
 {
     var session = $('#m_user_session').val();
-    var j = new rem_request(this,function(obj,json){
+    new rem_request(this,function(obj,json){
     	if(json=="")
         {
             alert_box("Terminar no retorna resultados", "ERROR");
@@ -268,7 +268,7 @@ function boton_terminar()
 function boton_anonimo()
 {
     var session = document.getElementById('m_user_session');
-    var json = rem_request(this,function(obj,json){
+    new rem_request(this,function(obj,json){
     	if(json=="")
         {
             alert_box("doAnonimo no retorna resultados", "ERROR");
@@ -287,7 +287,7 @@ function boton_modificar()
     var session = $('#m_user_session').val();
     var doc = $('#m_person_id').val();
     var pars = session + "|" + doc;
-    var j = new rem_request(this,function(obj,json){
+    new rem_request(this,function(obj,json){
     	if(json=="")
         {
             alert_box("doModificar no retorna resultados", "ERROR");
@@ -312,7 +312,7 @@ function buscar_ani(ani,entry_point,call_id,skill)
 {
     var session = $('#m_user_session').val();
     var params =  ani + '|' + entry_point + '|' + session + '|' + call_id + '|' + skill;
-    var j = new rem_request(this,function(obj,json){
+    new rem_request(this,function(obj,json){
     	if(json=="")
         {
             alert_box("BuscarContactos no retorna resultados", "ERROR");
@@ -374,7 +374,7 @@ function boton_buscar_contactos()
     var session = $('#m_user_session').val();
     
     var params =  id + '|' + fecha_desde + '|' + fecha_hasta + '|' + session;
-    var j = new rem_request(this,function(obj,json) {
+    new rem_request(this,function(obj,json) {
     	if(json=="")
         {
             alert_box("BuscarContactos no retorna resultados", "ERROR");
@@ -395,7 +395,7 @@ function boton_buscar_tickets()
     var anio = document.getElementById('m_tickets_anio');
     
     var params =  nro.value + '|' + anio.value;
-    var j = new rem_request(this,function(obj,json){
+    new rem_request(this,function(obj,json){
     	if(json=="")
         {
             alert_box("BuscarTickets no retorna resultados", "ERROR");
@@ -419,7 +419,7 @@ function boton_buscar_turnos()
   }
 
   var session = $('#m_user_session').val();  
-  var j = new rem_request(this,function(obj,json)
+  new rem_request(this,function(obj,json)
   {
 	  if(json=="")
 	  {
@@ -443,7 +443,7 @@ function buscar_tickets_ciudadano()
     	completar_tabla_tickets(null);
     	return;
     }
-    var j = new rem_request(this, function(obj,json){
+    new rem_request(this, function(obj,json){
     	if(json=="")
         {
             alert_box("BuscarTickets no retorna resultados","ERROR");
@@ -460,7 +460,7 @@ function buscar_tickets_ciudadano()
 function boton_nuevo_ticket()
 {
 	var session = $('#m_user_session').val();
-    var j = new rem_request(this,function(obj,json){
+    new rem_request(this,function(obj,json){
     	if(json=="")
         {
             alert_box("doNuevoTicket no retorna resultados","ERROR");
@@ -529,6 +529,9 @@ function completar_tabla_tickets(datos)
 	b+="</tbody></table>";
 	
 	$("#tickets_tbl").html(b);		
+	$("#tickets_tbl table").kendoGrid({
+        height: 250
+    });
 }
 
 
@@ -626,6 +629,9 @@ function completar_tabla_contactos(datos)
 	b+="</tbody></table>";
 	
 	$("#calls_tbl").html(b);
+	$("#calls_tbl table").kendoGrid({
+        height: 250
+    });
 }
 
 function completar_tabla_turnos(datos)
@@ -668,6 +674,9 @@ function completar_tabla_turnos(datos)
 	b+="</tbody></table>";
 	
 	$("#turnos_tbl").html(b);	
+	$("#turnos_tbl table").kendoGrid({
+        height: 250
+    });
 }
 
 
@@ -716,6 +725,9 @@ function completar_tabla_ani(datos)
 	b+="</tbody></table>";
 	
 	$("#ciudadanos_tbl").html(b);	
+	$("#ciudadanos_tbl table").kendoGrid({
+        height: 250
+    });
 }
 
 //ix = ciudadano
@@ -735,7 +747,7 @@ function tabla_ani_click2(id)
 function boton_nueva_orientacion()
 {
 	var session = $('#m_user_session').val();
-    var j = new rem_request(this,function(obj,json){
+    new rem_request(this,function(obj,json){
     	if(json=="")
         {
             alert_box("doNuevaOrientacion no retorna resultados","ERROR");
@@ -758,7 +770,7 @@ function buscar_orientacion()
   }
 
   var session = $('#m_user_session').val();  
-  var j = new rem_request(this, function(obj,json){
+  new rem_request(this, function(obj,json){
 	  if(json=="")
 	  {
 	      alert_box("doBuscarOrientacion no retorna resultados","ERROR");
@@ -802,4 +814,7 @@ function completar_tabla_orientacion(datos)
 	b+="</tbody></table>";
 	
 	$("#orientacion_tbl").html(b);	
+	$("#orientacion_tbl table").kendoGrid({
+        height: 250
+    });
 }

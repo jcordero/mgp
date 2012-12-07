@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://ws.usig.gcba.gov.ar" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://ws.usig.gcba.gov.ar">
+<types>
+<xsd:schema targetNamespace="http://ws.usig.gcba.gov.ar"
+>
+ <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+ <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+ <xsd:complexType name="ConsultaDelimitacion">
+  <xsd:all>
+   <xsd:element name="Delimitacion" type="xsd:string"/>
+   <xsd:element name="Resultado" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="ConsultasDelimitaciones">
+  <xsd:complexContent>
+   <xsd:restriction base="SOAP-ENC:Array">
+    <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ConsultaDelimitacion[]"/>
+   </xsd:restriction>
+  </xsd:complexContent>
+ </xsd:complexType>
+ <xsd:complexType name="DireccionCalleAltura">
+  <xsd:all>
+   <xsd:element name="CodigoCalle" type="xsd:int"/>
+   <xsd:element name="Calle" type="xsd:string"/>
+   <xsd:element name="Altura" type="xsd:int"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="DireccionesCalleAltura">
+  <xsd:complexContent>
+   <xsd:restriction base="SOAP-ENC:Array">
+    <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:DireccionCalleAltura[]"/>
+   </xsd:restriction>
+  </xsd:complexContent>
+ </xsd:complexType>
+ <xsd:complexType name="Delimitaciones">
+  <xsd:complexContent>
+   <xsd:restriction base="SOAP-ENC:Array">
+    <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string"/>
+   </xsd:restriction>
+  </xsd:complexContent>
+ </xsd:complexType>
+ <xsd:complexType name="DireccionCalleCalle">
+  <xsd:all>
+   <xsd:element name="CodigoCalle1" type="xsd:int"/>
+   <xsd:element name="Calle1" type="xsd:string"/>
+   <xsd:element name="CodigoCalle2" type="xsd:int"/>
+   <xsd:element name="Calle2" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="DireccionesCalleCalle">
+  <xsd:complexContent>
+   <xsd:restriction base="SOAP-ENC:Array">
+    <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:DireccionCalleCalle[]"/>
+   </xsd:restriction>
+  </xsd:complexContent>
+ </xsd:complexType>
+ <xsd:complexType name="Normalizacion">
+  <xsd:all>
+   <xsd:element name="TipoResultado" type="tns:ResultadoNormalizacion"/>
+   <xsd:element name="DireccionesCalleAltura" type="tns:DireccionesCalleAltura"/>
+   <xsd:element name="DireccionesCalleCalle" type="tns:DireccionesCalleCalle"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="ResultadoConsultaDelimitacionesPorDireccion">
+  <xsd:all>
+   <xsd:element name="Normalizacion" type="tns:Normalizacion"/>
+   <xsd:element name="GeoCodificacion" type="tns:Punto"/>
+   <xsd:element name="ConsultasDelimitaciones" type="tns:ConsultasDelimitaciones"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="NormalizacionYGeoCodificacion">
+  <xsd:all>
+   <xsd:element name="Normalizacion" type="tns:Normalizacion"/>
+   <xsd:element name="GeoCodificacion" type="tns:Punto"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="Punto">
+  <xsd:all>
+   <xsd:element name="x" type="xsd:float"/>
+   <xsd:element name="y" type="xsd:float"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:simpleType name="ResultadoNormalizacion">
+  <xsd:restriction base="xsd:string">
+  <xsd:enumeration value="DireccionNormalizada"/>
+  <xsd:enumeration value="Ambiguedad"/>
+  <xsd:enumeration value="ErrorCalleInexistente"/>
+  <xsd:enumeration value="ErrorCalleInexistenteAEsaAltura"/>
+  <xsd:enumeration value="ErrorCruceInexistente"/>
+  </xsd:restriction>
+ </xsd:simpleType></xsd:schema>
+</types>
+<message name="delimitacionesDisponiblesRequest"></message>
+<message name="delimitacionesDisponiblesResponse">
+  <part name="return" type="tns:Delimitaciones" /></message>
+<message name="consultarDelimitacionRequest">
+  <part name="delimitacion" type="xsd:string" />
+  <part name="x" type="xsd:float" />
+  <part name="y" type="xsd:float" /></message>
+<message name="consultarDelimitacionResponse">
+  <part name="return" type="xsd:string" /></message>
+<message name="consultarCalleRequest">
+  <part name="codigo" type="xsd:int" /></message>
+<message name="consultarCalleResponse">
+  <part name="return" type="xsd:string" /></message>
+<message name="consultarDelimitacionesRequest">
+  <part name="x" type="xsd:float" />
+  <part name="y" type="xsd:float" />
+  <part name="delimitaciones" type="xsd:string" /></message>
+<message name="consultarDelimitacionesResponse">
+  <part name="return" type="tns:ConsultasDelimitaciones" /></message>
+<message name="normalizarCalleAlturaRequest">
+  <part name="calle" type="xsd:string" />
+  <part name="altura" type="xsd:string" /></message>
+<message name="normalizarCalleAlturaResponse">
+  <part name="return" type="tns:Normalizacion" /></message>
+<message name="normalizarYGeoCodificarCalleAlturaRequest">
+  <part name="calle" type="xsd:string" />
+  <part name="altura" type="xsd:string" /></message>
+<message name="normalizarYGeoCodificarCalleAlturaResponse">
+  <part name="return" type="tns:NormalizacionYGeoCodificacion" /></message>
+<message name="consultarDelimitacionesPorDireccionRequest">
+  <part name="calle" type="xsd:string" />
+  <part name="altura" type="xsd:string" />
+  <part name="delimitaciones" type="xsd:string" /></message>
+<message name="consultarDelimitacionesPorDireccionResponse">
+  <part name="return" type="tns:ResultadoConsultaDelimitacionesPorDireccion" /></message>
+<message name="obtenerIdCuadraPorDireccionRequest">
+  <part name="calle" type="xsd:string" />
+  <part name="altura" type="xsd:string" /></message>
+<message name="obtenerIdCuadraPorDireccionResponse">
+  <part name="return" type="xsd:string" /></message>
+<message name="obtenerIdCuadraPorCodCalleAlturaRequest">
+  <part name="codCalle" type="xsd:int" />
+  <part name="altura" type="xsd:int" /></message>
+<message name="obtenerIdCuadraPorCodCalleAlturaResponse">
+  <part name="return" type="xsd:string" /></message>
+<message name="geoCodificarPorCodigoCalleAlturaRequest">
+  <part name="codCalle" type="xsd:int" />
+  <part name="altura" type="xsd:int" /></message>
+<message name="geoCodificarPorCodigoCalleAlturaResponse">
+  <part name="return" type="tns:Punto" /></message>
+<message name="geoCodificarPor2CodigosDeCalleRequest">
+  <part name="codCalle1" type="xsd:int" />
+  <part name="codCalle2" type="xsd:int" /></message>
+<message name="geoCodificarPor2CodigosDeCalleResponse">
+  <part name="return" type="tns:Punto" /></message>
+<portType name="USIGPortType">
+  <operation name="delimitacionesDisponibles">
+    <input message="tns:delimitacionesDisponiblesRequest"/>
+    <output message="tns:delimitacionesDisponiblesResponse"/>
+  </operation>
+  <operation name="consultarDelimitacion">
+    <input message="tns:consultarDelimitacionRequest"/>
+    <output message="tns:consultarDelimitacionResponse"/>
+  </operation>
+  <operation name="consultarCalle">
+    <input message="tns:consultarCalleRequest"/>
+    <output message="tns:consultarCalleResponse"/>
+  </operation>
+  <operation name="consultarDelimitaciones">
+    <input message="tns:consultarDelimitacionesRequest"/>
+    <output message="tns:consultarDelimitacionesResponse"/>
+  </operation>
+  <operation name="normalizarCalleAltura">
+    <input message="tns:normalizarCalleAlturaRequest"/>
+    <output message="tns:normalizarCalleAlturaResponse"/>
+  </operation>
+  <operation name="normalizarYGeoCodificarCalleAltura">
+    <input message="tns:normalizarYGeoCodificarCalleAlturaRequest"/>
+    <output message="tns:normalizarYGeoCodificarCalleAlturaResponse"/>
+  </operation>
+  <operation name="consultarDelimitacionesPorDireccion">
+    <input message="tns:consultarDelimitacionesPorDireccionRequest"/>
+    <output message="tns:consultarDelimitacionesPorDireccionResponse"/>
+  </operation>
+  <operation name="obtenerIdCuadraPorDireccion">
+    <input message="tns:obtenerIdCuadraPorDireccionRequest"/>
+    <output message="tns:obtenerIdCuadraPorDireccionResponse"/>
+  </operation>
+  <operation name="obtenerIdCuadraPorCodCalleAltura">
+    <input message="tns:obtenerIdCuadraPorCodCalleAlturaRequest"/>
+    <output message="tns:obtenerIdCuadraPorCodCalleAlturaResponse"/>
+  </operation>
+  <operation name="geoCodificarPorCodigoCalleAltura">
+    <input message="tns:geoCodificarPorCodigoCalleAlturaRequest"/>
+    <output message="tns:geoCodificarPorCodigoCalleAlturaResponse"/>
+  </operation>
+  <operation name="geoCodificarPor2CodigosDeCalle">
+    <input message="tns:geoCodificarPor2CodigosDeCalleRequest"/>
+    <output message="tns:geoCodificarPor2CodigosDeCalleResponse"/>
+  </operation>
+</portType>
+<binding name="USIGBinding" type="tns:USIGPortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="delimitacionesDisponibles">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/delimitacionesDisponibles" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="consultarDelimitacion">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/consultarDelimitacion" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="consultarCalle">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/consultarCalle" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="consultarDelimitaciones">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/consultarDelimitaciones" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="normalizarCalleAltura">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/normalizarCalleAltura" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="normalizarYGeoCodificarCalleAltura">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/normalizarYGeoCodificarCalleAltura" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="consultarDelimitacionesPorDireccion">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/consultarDelimitacionesPorDireccion" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="obtenerIdCuadraPorDireccion">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/obtenerIdCuadraPorDireccion" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="obtenerIdCuadraPorCodCalleAltura">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/obtenerIdCuadraPorCodCalleAltura" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="geoCodificarPorCodigoCalleAltura">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/geoCodificarPorCodigoCalleAltura" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+  <operation name="geoCodificarPor2CodigosDeCalle">
+    <soap:operation soapAction="http://ws.usig.gcba.gov.ar/server.php/geoCodificarPor2CodigosDeCalle" style="rpc"/>
+    <input><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="http://ws.usig.gcba.gov.ar" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+</binding>
+<service name="USIG">
+  <port name="USIGPort" binding="tns:USIGBinding">
+    <soap:address location="http://ws.usig.gcba.gov.ar/server.php"/>
+  </port>
+</service>
+</definitions>

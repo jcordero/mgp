@@ -15,49 +15,17 @@
  *
  */
 include_once 'homepage/comp/talk.php';
+include_once "common/cfield.php";
 
 if(!class_exists('home_operator'))
 {
-    include_once "common/cfield.php";
-
 	class home_operator
 	{
 		public function Render($context)
 		{
 			global $sess,$primary_db;
 			$nl = "\n";
-            
-            
-//Consulta de turnos                        
-         	$tab1 = "<div class=\"bloque\" id=\"turnos\">".$nl;
-			
-         	            	
-            //Botones de turnos
-            $boton_general		= $sess->encodeURL(WEB_PATH."/lmodules/sigehos/nuevoturno.php?OP=N");
-            $boton_servicio		= $sess->encodeURL(WEB_PATH."/lmodules/sigehos/nuevoturno_servicio.php?OP=N");
-            $boton_cops			= $sess->encodeURL(WEB_PATH."/lmodules/sigehos/nuevoturno_cops.php?OP=N");
-            $boton_profesional	= $sess->encodeURL(WEB_PATH."/lmodules/sigehos/nuevoturno_profesional.php?OP=N");
-            $boton_primero 		= $sess->encodeURL(WEB_PATH."/lmodules/sigehos/nuevoturno_primero.php?OP=N");
-            
-            $tab1.= "
-            <div id=\"botones_turnos\">
-            	<button id=\"nuevo_turno\" onclick=\"document.location.href = '{$boton_general}';\">Nuevo Turno</button>
-            	<button id=\"nuevo_turno_serv\" onclick=\"document.location.href = '{$boton_servicio}';\">Turno por servicio</button>
-            	<button id=\"nuevo_turno_cops\" onclick=\"document.location.href = '{$boton_cops}';\">Turno COPS</button>
-            	<button id=\"nuevo_turno_prof\" onclick=\"document.location.href = '{$boton_profesional}';\">Turno por profesional</button>
-            	<button id=\"nuevo_turno_primero\" onclick=\"document.location.href = '{$boton_primero}';\">Primer turno disponible</button>	
-            </div>";
-            
-            $tab1.= "
-			<div class=\"titulo\">
-				<div class=\"titulo_texto\">Turnos</div>
-			</div> ".$nl;
-         	
-            //Resultado de la busqueda
-            $tab1.= '<div id="turnos_tbl"></div>';
-            $tab1.= '</div>'; // cierro turnos
                      
-            
 //Consulta de tickets
             $nro = new CField(array("presentation"=>"INT","name"=>"tickets_nro","label"=>"Número","isvisible"=>true,"cols"=>10,"search"=>"fix"));
             $anio = new CField(array("presentation"=>"INT","name"=>"tickets_anio","label"=>"Año","isvisible"=>true,"cols"=>10,"search"=>"fix"));
@@ -129,31 +97,39 @@ if(!class_exists('home_operator'))
 			$tab4.= '</div>'; //cierro home_operator
 						
 //Armo el TAB
-			$html = '<div id="home_operator">
-            <div id="tabs">
-			   <ul>
-			      <li><a href="#tabs-1">Turnos</a></li>
-			      <li><a href="#tabs-2">Tickets</a></li>
-			      <li><a href="#tabs-3">Llamadas</a></li>
-			      <li><a href="#tabs-4">Ciudadanos</a></li>
-			   </ul>
-			   <div id="tabs-1">
-			   <div id="offline"><h3>Para comenzar la atención, deberá ingresar el tipo y número de documento y hacer click sobre el botón "Buscar".</h3></div>
-			   <p>'.$tab1.'</p>
-			   </div>
-			   <div id="tabs-2">
-			   <p>'.$tab2.'</p>
-			   </div>
-			   <div id="tabs-3">
-			   <p>'.$tab3.'</p>
-			   </div>
-			   <div id="tabs-4">
-			   <p>'.$tab4.'</p>
-			   </div>
-			</div>
-			</div>
-			<script type="text/javascript">$("#tabs").tabs();</script>
+			$html = '
+		<div id="home_operator" class="k-content">	
+			<div class="acciones_operador">
+				<div id="tabstrip">
+					<ul>
+						<li class="k-state-active">Tickets</li>
+						<li>Contactos anteriores</li>
+						<li>Ciudadanos con este nro.</li>
+					</ul>
+				
+	
+					<div class="accion"><div id="offline">Debe identificar al ciudadano al iniciar la atención</div>'.$tab2.'</div>
+					<div class="accion">'.$tab3.'</div>
+					<div class="accion">'.$tab4.'</div>
+				</div>	
+			</div>	
+		</div>
+			
+			<script>
+                $(document).ready(function() {
+                    $("#tabstrip").kendoTabStrip({
+						animation:	{
+							open: {
+								effects: "fadeIn"
+							}
+						}
+					
+					});
+                });
+            </script>
 			';
+			
+// ESTILO CSS
 			$style = '<style>
 			#indicadores {width: 200px;border: solid 1px;border-radius: 5px;padding: 10px;text-align: center;float: right;background:#eee;}
 			#indicadores div {padding:3px;margin:3px;}
@@ -169,11 +145,16 @@ if(!class_exists('home_operator'))
 			table table {width:300px;border:solid 1px #ddd;}
 			table table td {border:none;}
 			#turnos_tbl tr {height: 38px;}
+			.accion {min-height: 200px;width:100%;}
 			</style>
 			<script type="text/javascript" src="'.WEB_PATH.'/includes/home_call.js"></script>
+			
 			';
+			
+			//Bloque TALK
 			$t = new talk();
 			list($cnt,$err) = $t->Render($context);
+			
 			$content["home_operator"] = $style.$cnt['talk'].$html;
 			return array( $content, array() );
 		}

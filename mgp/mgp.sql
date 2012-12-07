@@ -407,6 +407,7 @@ CREATE TABLE `ciu_ciudadanos` (
 
 LOCK TABLES `ciu_ciudadanos` WRITE;
 /*!40000 ALTER TABLE `ciu_ciudadanos` DISABLE KEYS */;
+INSERT INTO `ciu_ciudadanos` VALUES (157560,'JORGE','CORDERO','MASCULINO','1968-09-22 00:00:00','DNI 20470276','jorge.cordero@commsys.com.ar','','','','NO','NO','',NULL,'','','','','BUENOS AIRES','ARGENTINA','','',NULL,NULL,'','','',NULL,'call','508','ACTIVO','2012-12-07 00:09:02','','','FISICA','',NULL,'Argentina');
 /*!40000 ALTER TABLE `ciu_ciudadanos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -680,7 +681,7 @@ CREATE TABLE `sec_groups` (
 
 LOCK TABLES `sec_groups` WRITE;
 /*!40000 ALTER TABLE `sec_groups` DISABLE KEYS */;
-INSERT INTO `sec_groups` VALUES ('ControlTotal','Control total'),('operador call','operador call'),('operador denuncias','operador denuncias'),('admin denuncias','admin denuncias'),('operador solicitudes','operador solicitudes'),('call saliente','call saliente'),('terminales','Terminales de autoconsulta');
+INSERT INTO `sec_groups` VALUES ('ControlTotal','Control total'),('operador call','operador call');
 /*!40000 ALTER TABLE `sec_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -703,7 +704,7 @@ CREATE TABLE `sec_groups_rights` (
 
 LOCK TABLES `sec_groups_rights` WRITE;
 /*!40000 ALTER TABLE `sec_groups_rights` DISABLE KEYS */;
-INSERT INTO `sec_groups_rights` VALUES ('ControlTotal','menu.archivo.parametros'),('ControlTotal','menu.usuarios'),('ControlTotal','menu.usuarios.usuarios'),('ControlTotal','menu.usuarios.grupousuarios'),('ControlTotal','menu.usuarios.derechos'),('ControlTotal','menu.usuarios.grupoderechos'),('ControlTotal','menu.ayuda'),('ControlTotal','menu.ayuda.faq'),('ControlTotal','menu.ayuda.manual_reseller'),('ControlTotal','menu.ayuda.manual_telefonia'),('ControlTotal','menu.archivo.configuracion'),('ControlTotal','menu.trans'),('ControlTotal','menu.trans.consulta'),('ControlTotal','menu.trans.procesos'),('ControlTotal','menu.trans.eventos'),('ControlTotal','menu.trans.transacciones'),('ControlTotal','menu.trans.bugtrack'),('ControlTotal','menu.trans.bugtrack.new'),('ControlTotal','menu.trans.projects'),('ControlTotal','menu.trans.projects.new'),('ControlTotal','menu.trans.faq'),('ControlTotal','menu.trans.faq.modificar'),('ControlTotal','menu.trans.faq.new'),('ControlTotal','menu.trans.faq_topic'),('ControlTotal','menu.trans.faq_topic.new'),('ControlTotal','menu.trans.reportes'),('ControlTotal','menu.trans.reportes.del'),('ControlTotal','menu.docs'),('ControlTotal','menu.docs.admin'),('ControlTotal','menu.docs.reclamos'),('ControlTotal','menu.archivo.rss'),('ControlTotal','menu.archivo.ciudadanos'),('ControlTotal','menu.archivo.call'),('ControlTotal','menu.archivo.call.nuevo_reclamo'),('ControlTotal','menu.archivo.sur'),('ControlTotal','menu.archivo.tickets'),('ControlTotal','menu.archivo.tickets.nuevo'),('ControlTotal','menu.archivo.tickets.prestaciones'),('ControlTotal','menu.archivo.tickets.organismos'),('ControlTotal','menu.archivo.tickets.admin'),('ControlTotal','menu.archivo.tickets.proceso'),('ControlTotal','menu.archivo.call_saliente'),('operador call','menu.archivo.tickets'),('operador call','menu.archivo.tickets.nuevo'),('operador call','menu.archivo.ciudadanos'),('ControlTotal','menu.archivo.denuncias'),('ControlTotal','menu.archivo.denuncias.adm'),('operador denuncias','menu.archivo.denuncias'),('admin denuncias','menu.archivo.denuncias'),('admin denuncias','menu.archivo.denuncias.adm'),('ControlTotal','menu.archivo.solicitudes'),('operador_solicitudes','menu.archivo.solicitudes'),('operador solicitudes','menu.archivo.solicitudes'),('operador solicitudes','menu.archivo.tickets'),('operador solicitudes','menu.archivo.tickets.nuevo'),('ControlTotal','menu.archivo.turnos'),('ControlTotal','menu.archivo.turnos.admin'),('operador call','menu.archivo.turnos'),('call saliente','menu.archivo.call_saliente'),('ControlTotal','menu.archivo.messaging'),('ControlTotal','menu.archivo.administracion'),('ControlTotal','menu.archivo.administracion.eventos'),('ControlTotal','menu.archivo.configuracion.georef'),('ControlTotal','menu.archivo.denuncias.lote'),('ControlTotal','menu.archivo.reclamos'),('ControlTotal','menu.archivo.reclamos.adm'),('ControlTotal','menu.archivo.quejas'),('ControlTotal','menu.archivo.terminales'),('ControlTotal','menu.archivo.terminales.admin'),('terminales','menu.archivo.terminales'),('terminales','menu.archivo.terminales.admin');
+INSERT INTO `sec_groups_rights` VALUES ('ControlTotal','menu.archivo.parametros'),('ControlTotal','menu.usuarios'),('ControlTotal','menu.usuarios.usuarios'),('ControlTotal','menu.usuarios.grupousuarios'),('ControlTotal','menu.usuarios.derechos'),('ControlTotal','menu.usuarios.grupoderechos'),('ControlTotal','menu.ayuda'),('ControlTotal','menu.ayuda.faq'),('ControlTotal','menu.ayuda.manual_reseller'),('ControlTotal','menu.ayuda.manual_telefonia'),('ControlTotal','menu.archivo.configuracion'),('ControlTotal','menu.trans'),('ControlTotal','menu.trans.consulta'),('ControlTotal','menu.trans.procesos'),('ControlTotal','menu.trans.eventos'),('ControlTotal','menu.trans.transacciones'),('ControlTotal','menu.trans.bugtrack'),('ControlTotal','menu.trans.bugtrack.new'),('ControlTotal','menu.trans.projects'),('ControlTotal','menu.trans.projects.new'),('ControlTotal','menu.trans.faq'),('ControlTotal','menu.trans.faq.modificar'),('ControlTotal','menu.trans.faq.new'),('ControlTotal','menu.trans.faq_topic'),('ControlTotal','menu.trans.faq_topic.new'),('ControlTotal','menu.trans.reportes'),('ControlTotal','menu.trans.reportes.del'),('ControlTotal','menu.docs'),('ControlTotal','menu.docs.admin'),('ControlTotal','menu.docs.reclamos'),('ControlTotal','menu.archivo.rss'),('ControlTotal','menu.archivo.ciudadanos'),('ControlTotal','menu.archivo.call'),('ControlTotal','menu.archivo.call.nuevo_reclamo'),('ControlTotal','menu.archivo.sur'),('ControlTotal','menu.archivo.tickets'),('ControlTotal','menu.archivo.tickets.nuevo'),('ControlTotal','menu.archivo.tickets.prestaciones'),('ControlTotal','menu.archivo.tickets.organismos'),('ControlTotal','menu.archivo.tickets.admin'),('ControlTotal','menu.archivo.tickets.proceso'),('ControlTotal','menu.archivo.call_saliente'),('operador call','menu.archivo.tickets'),('operador call','menu.archivo.tickets.nuevo'),('operador call','menu.archivo.ciudadanos'),('ControlTotal','menu.archivo.denuncias'),('ControlTotal','menu.archivo.denuncias.adm'),('ControlTotal','menu.archivo.solicitudes'),('operador_solicitudes','menu.archivo.solicitudes'),('ControlTotal','menu.archivo.turnos'),('ControlTotal','menu.archivo.turnos.admin'),('operador call','menu.archivo.turnos'),('ControlTotal','menu.archivo.messaging'),('ControlTotal','menu.archivo.administracion'),('ControlTotal','menu.archivo.administracion.eventos'),('ControlTotal','menu.archivo.configuracion.georef'),('ControlTotal','menu.archivo.denuncias.lote'),('ControlTotal','menu.archivo.reclamos'),('ControlTotal','menu.archivo.reclamos.adm'),('ControlTotal','menu.archivo.quejas'),('ControlTotal','menu.archivo.terminales'),('ControlTotal','menu.archivo.terminales.admin'),('ControlTotal','menu.archivo.administracion.home'),('ControlTotal','menu.archivo.inicio'),('ControlTotal','menu.archivo.inicio'),('operador call','menu.archivo.inicio');
 /*!40000 ALTER TABLE `sec_groups_rights` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -731,6 +732,7 @@ CREATE TABLE `sec_modules` (
 
 LOCK TABLES `sec_modules` WRITE;
 /*!40000 ALTER TABLE `sec_modules` DISABLE KEYS */;
+INSERT INTO `sec_modules` VALUES (14,'DOCMANAGER2','1.0','1.0','ACTIVO','FWK.docmgr2'),(15,'EVENTS','1.0','1.0','ACTIVO','FWK.events'),(16,'GEOREF','1.0','1.0','ACTIVO','FWK.georef'),(17,'HOME','1.0','1.0','ACTIVO','FWK.home'),(18,'MESSAGING','1.0','1.0','ACTIVO','FWK.messaging'),(19,'RSS','1.0','1.0','ACTIVO','FWK.rss'),(20,'SECURITY','1.0','1.0','ACTIVO','FWK.security'),(21,'SETUP','1.0','1.0','ACTIVO','FWK.setup'),(22,'TRANSACCIONES','1.0','1.0','ACTIVO','FWK.transactions'),(23,'CALL','1.0','1.0','ACTIVO','APP.call'),(24,'CIUDADANOS','1.0','1.0','ACTIVO','APP.ciudadanos'),(25,'TICKETS','1.0','1.0','ACTIVO','APP.tickets');
 /*!40000 ALTER TABLE `sec_modules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -778,7 +780,7 @@ CREATE TABLE `sec_rights` (
 
 LOCK TABLES `sec_rights` WRITE;
 /*!40000 ALTER TABLE `sec_rights` DISABLE KEYS */;
-INSERT INTO `sec_rights` VALUES ('menu.archivo.parametros','Permiso para modificar la parametrizacion','Y'),('menu.usuarios','Permiso para la gestion de usuarios','Y'),('menu.usuarios.usuarios','Permiso para la gestion de usuarios','Y'),('menu.usuarios.grupousuarios','Permiso para la gestion de grupos de usuarios','Y'),('menu.usuarios.derechos','Permiso para la gestion de derechos','Y'),('menu.usuarios.grupoderechos','Permiso para la gestion de grupos de derechos','Y'),('menu.ayuda','Permiso para consultar el menu ayuda','Y'),('menu.ayuda.faq','Permiso para consultar el FAQ','Y'),('menu.ayuda.manual_reseller','Permiso para consultar el manual reseller','N'),('menu.ayuda.manual_telefonia','Permiso para consultar el manual gestion telefonia','N'),('menu.archivo.configuracion','Permiso para la gestion de modulos','Y'),('menu.trans','Permiso para la gestion de transacciones','Y'),('menu.trans.consulta','Permiso para la consulta de transacciones','Y'),('menu.trans.procesos','Permiso para la consulta de procesos','Y'),('menu.trans.eventos','Permiso para la gestion de eventos','Y'),('menu.trans.transacciones','Permiso para la gestion de transacciones','Y'),('menu.trans.bugtrack','Permiso para la gestion de bugs','Y'),('menu.trans.bugtrack.new','Permiso para el ingreso de un nuevo reporte de bug','Y'),('menu.trans.projects','Permiso para la gestion de proyectos','Y'),('menu.trans.projects.new','Permiso para el ingreso de un nuevo proyecto','Y'),('menu.trans.faq','Permiso para la gestion de FAQ','Y'),('menu.trans.faq.modificar','Permiso para el modificar una pregunta del FAQ','Y'),('menu.trans.faq.new','Permiso para el ingreso de una nueva pregunta del FAQ','Y'),('menu.trans.faq_topic','Permiso para la gestion de temas del FAQ','Y'),('menu.trans.faq_topic.new','Permiso para el ingreso de un nuevo tema FAQ','Y'),('menu.trans.reportes','Permiso para ver los reportes de usuarios (control calidad)','Y'),('menu.trans.reportes.del','Permiso para borrar los reportes de usuarios (control calidad)','Y'),('menu.docs','Permiso para la gestion de documentos','Y'),('menu.docs.admin','Permiso para la administracion de documentos','Y'),('menu.docs.reclamos','Permiso para la administracion de reclamos','Y'),('menu.archivo.rss','Permiso para la gestion de contenido rss','Y'),('menu.archivo.ciudadanos','Permiso para usar modulo de Ciudadanos','Y'),('menu.archivo.call','Permiso para usar funciones del call center','N'),('menu.archivo.call.nuevo_reclamo','Permiso para ingresar nuevos reclamos','N'),('menu.archivo.sur','Permiso para usar el modulo de reclamos del SUR','N'),('menu.archivo.tickets','Permiso para usar funciones de tickets','Y'),('menu.archivo.tickets.nuevo','Permiso para ingresar nuevos tickets','Y'),('menu.archivo.tickets.prestaciones','Permiso para modificar prestaciones','N'),('menu.archivo.tickets.organismos','Permiso para modificar organismos','N'),('menu.archivo.tickets.admin','Permiso para modificar configuracion','Y'),('menu.archivo.tickets.proceso','Permiso para modificar estados','Y'),('menu.archivo.call_saliente','Permiso para usar funciones del call center','Y'),('menu.archivo.denuncias','Permiso para procesar denuncias','Y'),('menu.archivo.denuncias.adm','Permiso para administrar denuncias','Y'),('menu.archivo.denuncias.lote','Permiso para procesar denuncias en lote','Y'),('menu.archivo.reclamos','Permiso para procesar reclamos','Y'),('menu.archivo.reclamos.adm','Permiso para administrar reclamos','Y'),('menu.archivo.solicitudes','Permiso para procesar solicitudes','Y'),('menu.archivo.quejas','Permiso para procesar quejas','Y'),('menu.archivo.turnos','Permiso para usar funciones de turnos','Y'),('menu.archivo.turnos.admin','Permiso para administrar funciones de turnos','Y'),('menu.archivo.messaging','Permiso para la gestion de mensajeria','Y'),('menu.archivo.administracion','Permiso para usar funciones de administracion','Y'),('menu.archivo.administracion.eventos','Permiso para ver log de eventos','Y'),('menu.archivo.configuracion.georef','Permiso para la gestion de georeferencias','Y'),('menu.archivo.terminales','Permiso para usar funciones de terminales de autoconsulta','Y'),('menu.archivo.terminales.admin','Permiso para administrar funciones de terminales de autoconsulta','Y');
+INSERT INTO `sec_rights` VALUES ('menu.archivo.parametros','Permiso para modificar la parametrizacion','Y'),('menu.usuarios','Permiso para la gestion de usuarios','Y'),('menu.usuarios.usuarios','Permiso para la gestion de usuarios','Y'),('menu.usuarios.grupousuarios','Permiso para la gestion de grupos de usuarios','Y'),('menu.usuarios.derechos','Permiso para la gestion de derechos','Y'),('menu.usuarios.grupoderechos','Permiso para la gestion de grupos de derechos','Y'),('menu.ayuda','Permiso para consultar el menu ayuda','Y'),('menu.ayuda.faq','Permiso para consultar el FAQ','Y'),('menu.ayuda.manual_reseller','Permiso para consultar el manual reseller','N'),('menu.ayuda.manual_telefonia','Permiso para consultar el manual gestion telefonia','N'),('menu.archivo.configuracion','Permiso para la gestion de modulos','Y'),('menu.trans','Permiso para la gestion de transacciones','Y'),('menu.trans.consulta','Permiso para la consulta de transacciones','Y'),('menu.trans.procesos','Permiso para la consulta de procesos','Y'),('menu.trans.eventos','Permiso para la gestion de eventos','Y'),('menu.trans.transacciones','Permiso para la gestion de transacciones','Y'),('menu.trans.bugtrack','Permiso para la gestion de bugs','Y'),('menu.trans.bugtrack.new','Permiso para el ingreso de un nuevo reporte de bug','Y'),('menu.trans.projects','Permiso para la gestion de proyectos','Y'),('menu.trans.projects.new','Permiso para el ingreso de un nuevo proyecto','Y'),('menu.trans.faq','Permiso para la gestion de FAQ','Y'),('menu.trans.faq.modificar','Permiso para el modificar una pregunta del FAQ','Y'),('menu.trans.faq.new','Permiso para el ingreso de una nueva pregunta del FAQ','Y'),('menu.trans.faq_topic','Permiso para la gestion de temas del FAQ','Y'),('menu.trans.faq_topic.new','Permiso para el ingreso de un nuevo tema FAQ','Y'),('menu.trans.reportes','Permiso para ver los reportes de usuarios (control calidad)','Y'),('menu.trans.reportes.del','Permiso para borrar los reportes de usuarios (control calidad)','Y'),('menu.docs','Permiso para la gestion de documentos','Y'),('menu.docs.admin','Permiso para la administracion de documentos','Y'),('menu.docs.reclamos','Permiso para la administracion de reclamos','Y'),('menu.archivo.rss','Permiso para la gestion de contenido rss','Y'),('menu.archivo.ciudadanos','Permiso para usar modulo de Ciudadanos','Y'),('menu.archivo.call','Permiso para usar funciones del call center','N'),('menu.archivo.call.nuevo_reclamo','Permiso para ingresar nuevos reclamos','N'),('menu.archivo.sur','Permiso para usar el modulo de reclamos del SUR','N'),('menu.archivo.tickets','Permiso para usar funciones de tickets','Y'),('menu.archivo.tickets.nuevo','Permiso para ingresar nuevos tickets','Y'),('menu.archivo.tickets.prestaciones','Permiso para modificar prestaciones','N'),('menu.archivo.tickets.organismos','Permiso para modificar organismos','N'),('menu.archivo.tickets.admin','Permiso para modificar configuracion','Y'),('menu.archivo.tickets.proceso','Permiso para modificar estados','Y'),('menu.archivo.call_saliente','Permiso para usar funciones del call center','Y'),('menu.archivo.denuncias','Permiso para procesar denuncias','Y'),('menu.archivo.denuncias.adm','Permiso para administrar denuncias','Y'),('menu.archivo.denuncias.lote','Permiso para procesar denuncias en lote','Y'),('menu.archivo.reclamos','Permiso para procesar reclamos','Y'),('menu.archivo.reclamos.adm','Permiso para administrar reclamos','Y'),('menu.archivo.solicitudes','Permiso para procesar solicitudes','Y'),('menu.archivo.quejas','Permiso para procesar quejas','Y'),('menu.archivo.turnos','Permiso para usar funciones de turnos','N'),('menu.archivo.turnos.admin','Permiso para administrar funciones de turnos','N'),('menu.archivo.messaging','Permiso para la gestion de mensajeria','Y'),('menu.archivo.administracion','Permiso para usar funciones de administracion','Y'),('menu.archivo.administracion.eventos','Permiso para ver log de eventos','Y'),('menu.archivo.configuracion.georef','Permiso para la gestion de georeferencias','Y'),('menu.archivo.terminales','Permiso para usar funciones de terminales de autoconsulta','N'),('menu.archivo.terminales.admin','Permiso para administrar funciones de terminales de autoconsulta','N'),('menu.archivo.administracion.home','Permiso para administrar las homepages','Y'),('menu.archivo.inicio','Permiso para el menu de inicio','Y');
 /*!40000 ALTER TABLE `sec_rights` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -801,7 +803,7 @@ CREATE TABLE `sec_sequence` (
 
 LOCK TABLES `sec_sequence` WRITE;
 /*!40000 ALTER TABLE `sec_sequence` DISABLE KEYS */;
-INSERT INTO `sec_sequence` VALUES ('dummy',1),('sec_users',507),('reclamos',27),('ciu_ciudadanos',157545),('CIU_SESIONES',115687),('tic_organismos',517),('forms',115817),('tic_rubros',15),('DENUNCIA-2009',4452),('-2009',8),('tic_prestaciones_gis',54),('caca',12),('sho_atajos',7),('SOLICITUD-2009',703),('sig_hospitales',11),('sig_cuestionarios',3),('sig_preguntas',9),('cal_queue',250007),('cal_to_do',9),('log_operaciones',1186944),('log_accesos',130095),('cal_llamados',38811),('avi_server',2),('avi_mensajes',2457),('sec_modules',13),('cdl_faq',1),('RECLAMO-2012',1);
+INSERT INTO `sec_sequence` VALUES ('dummy',1),('sec_users',508),('reclamos',27),('ciu_ciudadanos',157560),('CIU_SESIONES',115687),('tic_organismos',517),('forms',115828),('tic_rubros',15),('DENUNCIA-2009',4452),('-2009',8),('tic_prestaciones_gis',54),('caca',12),('sho_atajos',7),('SOLICITUD-2009',703),('sig_hospitales',11),('sig_cuestionarios',3),('sig_preguntas',9),('cal_queue',250007),('cal_to_do',9),('log_operaciones',1186944),('log_accesos',130095),('cal_llamados',38811),('avi_server',2),('avi_mensajes',2457),('sec_modules',25),('cdl_faq',1),('RECLAMO-2012',1),('DENUNCIA-2012',1);
 /*!40000 ALTER TABLE `sec_sequence` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -851,6 +853,7 @@ CREATE TABLE `sec_ultimas_claves` (
 
 LOCK TABLES `sec_ultimas_claves` WRITE;
 /*!40000 ALTER TABLE `sec_ultimas_claves` DISABLE KEYS */;
+INSERT INTO `sec_ultimas_claves` VALUES ('7474d341ae33b91f9c50e344d38fe15b','2012-12-06 21:23:58','508');
 /*!40000 ALTER TABLE `sec_ultimas_claves` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -873,7 +876,7 @@ CREATE TABLE `sec_user_groups` (
 
 LOCK TABLES `sec_user_groups` WRITE;
 /*!40000 ALTER TABLE `sec_user_groups` DISABLE KEYS */;
-INSERT INTO `sec_user_groups` VALUES ('1','ControlTotal');
+INSERT INTO `sec_user_groups` VALUES ('1','ControlTotal'),('508','operador call');
 /*!40000 ALTER TABLE `sec_user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -914,7 +917,7 @@ CREATE TABLE `sec_users` (
 
 LOCK TABLES `sec_users` WRITE;
 /*!40000 ALTER TABLE `sec_users` DISABLE KEYS */;
-INSERT INTO `sec_users` VALUES ('1','Administrador','','jorgecordero@buenosaires.gov.ar','','','admin','311afe5d6d842535399a8a3ce34d0a8c','Activo','2012-02-22 16:30:16','Espa?','default','default.gif','','','','','','{&quot;rpanel&quot;:&quot;open&quot;}',NULL);
+INSERT INTO `sec_users` VALUES ('1','Administrador','','jorgecordero@buenosaires.gov.ar','','','admin','311afe5d6d842535399a8a3ce34d0a8c','Activo','2012-02-22 16:30:16','Espa?','default','default.gif','','','','','','{&quot;rpanel&quot;:&quot;open&quot;}',NULL),('508','operador','','operador@gmail.com','','','operador','7474d341ae33b91f9c50e344d38fe15b','ACTIVO','2012-12-06 21:22:22','Español','default','','','','','','',NULL,'2012-12-06 21:23:58');
 /*!40000 ALTER TABLE `sec_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -937,7 +940,7 @@ CREATE TABLE `sec_usrgroup` (
 
 LOCK TABLES `sec_usrgroup` WRITE;
 /*!40000 ALTER TABLE `sec_usrgroup` DISABLE KEYS */;
-INSERT INTO `sec_usrgroup` VALUES ('Administradores','Administrador del sistema'),('canal_call','Canal de ingreso CALL'),('home_operator','Pantalla inicial para operadores del call'),('home_denuncias','home_denuncias'),('organismo_agc','organismo_agc'),('organismo_dgfyc','organismo_dgfyc'),('organismo_dgfyco','organismo_dgfyco'),('organismo_dghysa','organismo_dghysa'),('home_cgpc','home_cgpc'),('canal_cgpc','canal_cgpc'),('organismo_dgfycee','organismo_dgfycee'),('organismo_dgfycas','organismo_dgfycas'),('organismo_dgfyceh','organismo_dgfyceh'),('organismo_dgfycen','organismo_dgfycen'),('organismo_dgfycai','organismo_dgfycai'),('organismo_dgfycgg','organismo_dgfycgg'),('organismo_dgfycem','organismo_dgfycem'),('organismo_cgac','organismo_cgac'),('home_solicitudes','home solicitudes'),('home_salientes','home_salientes'),('home_terminales','Pantalla de inicio con dash de terminales');
+INSERT INTO `sec_usrgroup` VALUES ('Administradores','Administrador del sistema'),('canal_call','Canal de ingreso CALL'),('home_operator','home operador call'),('home_proceso','home proceso de los tickets');
 /*!40000 ALTER TABLE `sec_usrgroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -960,7 +963,7 @@ CREATE TABLE `sec_usrgroup_users` (
 
 LOCK TABLES `sec_usrgroup_users` WRITE;
 /*!40000 ALTER TABLE `sec_usrgroup_users` DISABLE KEYS */;
-INSERT INTO `sec_usrgroup_users` VALUES ('Administradores','1'),('organismo_dgfyc','1'),('organismo_cgac','1'),('home_terminales','1');
+INSERT INTO `sec_usrgroup_users` VALUES ('Administradores','1'),('home_operator','508'),('canal_call','508');
 /*!40000 ALTER TABLE `sec_usrgroup_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1048,6 +1051,7 @@ CREATE TABLE `tic_avance` (
 
 LOCK TABLES `tic_avance` WRITE;
 /*!40000 ALTER TABLE `tic_avance` DISABLE KEYS */;
+INSERT INTO `tic_avance` VALUES (1,2012,'DENUNCIA','3017','2012-12-07 00:22:14','508','INICIADO','INICIADO','un tema','');
 /*!40000 ALTER TABLE `tic_avance` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1308,6 +1312,7 @@ CREATE TABLE `tic_ticket` (
 
 LOCK TABLES `tic_ticket` WRITE;
 /*!40000 ALTER TABLE `tic_ticket` DISABLE KEYS */;
+INSERT INTO `tic_ticket` VALUES (1,2012,'DENUNCIA','2012-12-07 00:22:14','508','un tema','ABIERTO','&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&lt;direccion&gt;&lt;domicilio&gt;&lt;calle&gt;MITRE, BARTOLOME&lt;/calle&gt;&lt;nro&gt;1530&lt;/nro&gt;&lt;piso&gt;&lt;/piso&gt;&lt;dpto&gt;&lt;/dpto&gt;&lt;nombre_fantasia&gt;&lt;/nombre_fantasia&gt;&lt;/domicilio&gt;&lt;/direccion&gt;','San Nicolas','Comuna 1',106900.382607,102383.214595,0,115827,'call','2013-01-06 00:22:14',NULL,'MITRE, BARTOLOME',1530,NULL,NULL);
 /*!40000 ALTER TABLE `tic_ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1363,6 +1368,7 @@ CREATE TABLE `tic_ticket_ciudadano` (
 
 LOCK TABLES `tic_ticket_ciudadano` WRITE;
 /*!40000 ALTER TABLE `tic_ticket_ciudadano` DISABLE KEYS */;
+INSERT INTO `tic_ticket_ciudadano` VALUES (1,2012,'DENUNCIA',157560,'2012-12-07 00:22:14','un tema');
 /*!40000 ALTER TABLE `tic_ticket_ciudadano` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1418,6 +1424,7 @@ CREATE TABLE `tic_ticket_organismos` (
 
 LOCK TABLES `tic_ticket_organismos` WRITE;
 /*!40000 ALTER TABLE `tic_ticket_organismos` DISABLE KEYS */;
+INSERT INTO `tic_ticket_organismos` VALUES (1,2012,'DENUNCIA',260,'RESPONSABLE','3017',1),(1,2012,'DENUNCIA',486,'OBSERVADOR','3017',1);
 /*!40000 ALTER TABLE `tic_ticket_organismos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1451,6 +1458,7 @@ CREATE TABLE `tic_ticket_prestaciones` (
 
 LOCK TABLES `tic_ticket_prestaciones` WRITE;
 /*!40000 ALTER TABLE `tic_ticket_prestaciones` DISABLE KEYS */;
+INSERT INTO `tic_ticket_prestaciones` VALUES (1,2012,'DENUNCIA','3017','2012-12-07 00:22:14',73,'&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;cuestionarioresultado&gt;&lt;/cuestionarioresultado&gt;','INICIADO','1.1',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `tic_ticket_prestaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1660,84 +1668,6 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
--- Dumping routines for database 'mgp'
---
-/*!50003 DROP FUNCTION IF EXISTS `getCiudadano` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `getCiudadano`(pciu_code int) RETURNS varchar(200) CHARSET latin1
-    READS SQL DATA
-    DETERMINISTIC
-begin
-  declare ret varchar(200);
-  DECLARE EXIT HANDLER FOR NOT FOUND return 'ANONIMO';
-  select concat(ciu_apellido,', ',ciu_nombres) into ret from ciu_ciudadanos
-  where ciu_code=pciu_code;
-  return ret;
-end */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `getPrestaciones` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 FUNCTION `getPrestaciones`(tic_numero int,tic_anio int, tic_tipo varchar(20)) RETURNS varchar(200) CHARSET latin1
-    READS SQL DATA
-    DETERMINISTIC
-begin
-  declare ret varchar(200);
-  DECLARE EXIT HANDLER FOR NOT FOUND return 'SIN PRESTACIONES';
-  select concat(p.tpr_code,'-',p.tpr_detalle) into ret from tic_ticket_prestaciones tp join tic_prestaciones p on tp.tpr_code=p.tpr_code
-  where tp.tic_nro=tic_numero and tp.tic_anio=tic_anio and tp.tic_tipo=tic_tipo;
-  return ret;
-end */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `getnext` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = '' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `getnext`( t varchar(50) )
-begin
-declare rc int;
-update sec_sequence set seq_code=(seq_code+1) where seq_object=t;
-select row_count() into rc;
-insert into sec_sequence(seq_code,seq_object)
-  select 1,t from sec_sequence where rc=0 limit 1;
-select seq_code from sec_sequence where seq_object=t;
-end */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
 -- Final view structure for view `v_ticket`
 --
 
@@ -1803,4 +1733,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-11-25  9:41:28
+-- Dump completed on 2012-12-07  8:49:22
