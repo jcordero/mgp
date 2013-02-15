@@ -4,7 +4,7 @@
 <!-- CLASE CONSULTA/ACTULIZACION DE UN TICKET QUEJAS -->
 <make object="class">
 	<build out_file="class_tic_ticket_upd_que.php" classname="class_tic_ticket_upd_que" classlabel="Ticket Queja">
-		<parse in_file="tickets.sql" tablename="tic_ticket"/>
+		<parse in_file="../mgp.sql" tablename="tic_ticket"/>
         <field name="mapa" type="varchar" size="50"/>
         
         <field name="acc_tpr_code" type="varchar" size="50"/>
@@ -18,50 +18,38 @@
 
         <!-- PRESTACIONES -->
         <build classname="class_tic_ticket_prestaciones" classlabel="Prestaciones">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_prestaciones"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_prestaciones"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- ORGANISMOS -->
         <build classname="class_tic_ticket_organismos" classlabel="Organismos">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_organismos"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_organismos"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- AVANCE -->
         <build classname="class_tic_avance" classlabel="Avance">
-    		<parse in_file="tickets.sql" tablename="tic_avance"/>
+    		<parse in_file="../mgp.sql" tablename="tic_avance"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- RECLAMANTES -->
         <build classname="class_tic_ticket_ciudadano" classlabel="Ciudadano">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_ciudadano"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_ciudadano"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- REITERACIONES -->
         <build classname="class_tic_ticket_ciudadano_reit" classlabel="Reiteracion">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_ciudadano_reit"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_ciudadano_reit"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- ASOCIADOS -->
         <build classname="class_tic_ticket_asociado" classlabel="Asociados">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_asociado"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_asociado"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!--BLOQUE PARA ARCHIVOS ADJUNTOS-->
@@ -96,28 +84,24 @@
 
         <!-- AVANCE -->
         <table relationclass="" classname="class_tic_avance" title="Avance" add="false" delete="false" update="false">
-			<column title="Fecha" order="1">
+            <column title="Prest." order="1">
 				<field name="tic_nro" isvisible="false"/>
-                <field name="tic_anio" isvisible="false"/>
-                <field name="tic_tipo" isvisible="false"/>
-                <field name="tav_tstamp" presentation="DATETIME" label="Fecha"/>
-			</column>
-            <column title="Prest." order="2">
 				<field name="tpr_code" presentation="PRESTACION" label="Prestación"/>
 			</column>
-            <column title="Est.Inicial" order="3">
+            <column title="Est.Inicial" order="2">
 				<field name="tic_estado_in" presentation="ESTADO_QUEJA" label="Estado inicial"/>
+                <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
+				<field name="use_code_in" presentation="USER" label="Operador"/>
 			</column>
-            <column title="Est.Final" order="4">
+            <column title="Est.Final" order="3">
 				<field name="tic_estado_out" presentation="ESTADO_QUEJA" label="Estado final"/>
+                <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha"/>
+				<field name="use_code_out" presentation="USER" label="Operador"/>
 			</column>
-            <column title="Motivo" order="5">
+            <column title="Motivo" order="4">
 				<field name="tic_motivo" presentation="TEXT" label="Motivo"/>
 			</column>
-            <column title="Operador" order="6">
-				<field name="use_code" presentation="USER" label="Operador"/>
-			</column>
-            <column title="Nota" order="7">
+            <column title="Nota" order="5">
 				<field name="tav_nota" presentation="TEXTAREA" label="Nota" cols="60" rows="4"/>
 			</column>
 		</table>
@@ -157,8 +141,6 @@
         <table relationclass="" classname="class_tic_ticket_prestaciones" title="Prestaciones" add="false" delete="false" update="false">
 			<column title="Prestación" order="1">
 				<field name="tic_nro" isvisible="false"/>
-                <field name="tic_anio" isvisible="false"/>
-                <field name="tic_tipo" isvisible="false"/>
                 <field name="tpr_code" presentation="PRESTACION" label="Prestación"/>
 			</column>
             <column title="Rubro" order="2">
@@ -180,8 +162,6 @@
         <table relationclass="" classname="class_tic_ticket_organismos" title="Organismos" add="false" delete="false" update="false">
 			<column title="Organismo" order="1">
 				<field name="tic_nro" isvisible="false"/>
-                <field name="tic_anio" isvisible="false"/>
-                <field name="tic_tipo" isvisible="false"/>
                 <field name="tor_code" presentation="ORGANISMO" label="Organismo"/>
 			</column>
             <column title="Figura" order="2">
@@ -197,8 +177,6 @@
         <table relationclass="" classname="class_tic_ticket_ciudadano" title="Solicitantes" add="false" delete="false" update="false">
 			<column title="Fecha" order="1">
 				<field name="tic_nro" isvisible="false"/>
-                <field name="tic_anio" isvisible="false"/>
-                <field name="tic_tipo" isvisible="false"/>
                 <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
 			</column>
             <column title="Ciudadano" order="2">
@@ -237,8 +215,6 @@
 		
 		<action operation="P" label="Imprimir comprobante" target="queja_maint.php?OP=P"  note="Imprimir comprobante">
 			<sendfield name="tic_nro"  classname="class_tic_ticket_upd_que"/>
-            <sendfield name="tic_anio" classname="class_tic_ticket_upd_que"/>
-            <sendfield name="tic_tipo" classname="class_tic_ticket_upd_que"/>
         </action>
 				
 		<action operation="L" label="Consulta de quejas" target="queabiertas.php?last=1&amp;OP=L"  note="Consulta de quejas"/>
@@ -251,7 +227,8 @@
 <!-- CLASE NOVEDADES QUEJAS -->
 <make object="class">
 	<build out_file="class_v_tickets_que.php" classname="class_v_tickets_que" classlabel="Ticket Queja">
-		<parse in_file="tickets.sql" tablename="v_tickets"/>
+		<parse in_file="../mgp.sql" tablename="v_tickets"/>
+		<field name="responsable" type="varchar" size="5"/>
     </build>
 </make>
 
@@ -262,21 +239,23 @@
 	<build out_file="quenovedades.php" classname="class_v_tickets_que" title="Consulta de novedades de quejas"
         template_html="default.htm" >
 
-		<searchfield name="tic_nro" presentation="TEXT" label="Número" cols="10"/>
+		<searchfield name="tic_nro" presentation="TEXT" label="Número" cols="10" isvisible="false"/>
+		<searchfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
         <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
 		<searchfield name="tic_tipo" presentation="TEXT" label="Tipo" initialvalue="QUEJA" isvisible="false" search="fix"/>
-		<searchfield name="tto_alerta" presentation="TEXT" label="Alerta" initialvalue="1" isvisible="false"/>
+		<searchfield name="ttp_alerta" presentation="TEXT" label="Alerta" initialvalue="1" isvisible="false"/>
         <searchfield name="ttp_estado" presentation="ESTADO_QUEJA" label="Estado"/>
-        <searchfield name="ttp_tstamp" presentation="DATERANGE" label="Ingresado"/>
+        <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
 		<searchfield name="tor_code" presentation="ORGANISMO_TICKET" label="Organismo"/>
 		<searchfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
 		<searchfield name="tto_figura" presentation="ROL" label="Rol"/>
 		
-        <listfield name="tic_nro" presentation="TEXT" label="Número" cols="10"/>
+        <listfield name="tic_nro" presentation="TEXT" label="Número" cols="10" isvisible="false"/>
+        <listfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
         <listfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
 		<listfield name="tic_tipo" presentation="TEXT" label="Tipo"/>
         <listfield name="ttp_estado" presentation="ESTADO_QUEJA" label="Estado"/>
-        <listfield name="ttp_tstamp" presentation="DATERANGE" label="Ingresado"/>
+        <listfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
 		<listfield name="tor_code" presentation="ORGANISMO_TICKET" label="Organismo"/>
 		<listfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
 		<listfield name="tic_nota_in" presentation="TEXT" label="Nota"/>
@@ -285,23 +264,17 @@
 		
 		<action operation="V" label="ver" target="queja_maint.php?OP=V" >
 			<sendfield classname="class_v_tickets_que" name="tic_nro"/>
-            <sendfield classname="class_v_tickets_que" name="tic_anio"/>
-            <sendfield classname="class_v_tickets_que" name="tic_tipo"/>
 			<sendfield classname="class_v_tickets_que" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 
 		<action operation="M" label="Modificar" target="queja_maint.php?OP=M" >
 			<sendfield classname="class_v_tickets_que" name="tic_nro"/>
-            <sendfield classname="class_v_tickets_que" name="tic_anio"/>
-            <sendfield classname="class_v_tickets_que" name="tic_tipo"/>
             <sendfield classname="class_v_tickets_que" name="responsable"/>
             <sendfield classname="class_v_tickets_que" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 
         <action operation="P" label="imprimir" target="queja_maint.php?OP=P" >
 			<sendfield classname="class_v_tickets_que" name="tic_nro"/>
-            <sendfield classname="class_v_tickets_que" name="tic_anio"/>
-            <sendfield classname="class_v_tickets_que" name="tic_tipo"/>
             <sendfield classname="class_v_tickets_que" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 	</build>
@@ -314,20 +287,22 @@
 	<build out_file="queabiertas.php" classname="class_v_tickets_que" title="Consulta de quejas"
         template_html="default.htm" >
         
-		<searchfield name="tic_nro" presentation="TEXT" label="Número" cols="10"/>
+		<searchfield name="tic_nro" presentation="TEXT" label="Número" cols="10" isvisible="false"/>
+		<searchfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
         <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
 		<searchfield name="tic_tipo" presentation="TEXT" label="Tipo" initialvalue="QUEJA" isvisible="false" search="fix" />
 		<searchfield name="ttp_estado" presentation="ESTADO_QUEJA" label="Estado"/>
-        <searchfield name="ttp_tstamp" presentation="DATERANGE" label="Ingresado"/>
+        <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
 		<searchfield name="tor_code" presentation="ORGANISMO_TICKET" label="Organismo"/>
 		<searchfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
 		<searchfield name="tto_figura" presentation="ROL" label="Rol"/>
 		
-        <listfield name="tic_nro" presentation="TEXT" label="Número" cols="10"/>
+        <listfield name="tic_nro" presentation="TEXT" label="Número" cols="10" isvisible="false"/>
+        <listfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
         <listfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
 		<listfield name="tic_tipo" presentation="TEXT" label="Tipo"/>
         <listfield name="ttp_estado" presentation="ESTADO_QUEJA" label="Estado"/>
-        <listfield name="ttp_tstamp" presentation="DATERANGE" label="Ingresado"/>
+        <listfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
 		<listfield name="tor_code" presentation="ORGANISMO_TICKET" label="Organismo"/>
 		<listfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
 		<listfield name="tic_nota_in" presentation="TEXT" label="Nota"/>
@@ -336,23 +311,17 @@
 		
 		<action operation="V" label="ver" target="queja_maint.php?OP=V" >
 			<sendfield classname="class_v_tickets_que" name="tic_nro"/>
-            <sendfield classname="class_v_tickets_que" name="tic_anio"/>
-            <sendfield classname="class_v_tickets_que" name="tic_tipo"/>
-			<sendfield classname="class_v_tickets_que" name="tpr_code" sendas="acc_tpr_code"/>
+            <sendfield classname="class_v_tickets_que" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 
 		<action operation="M" label="Modificar" target="queja_maint.php?OP=M" >
 			<sendfield classname="class_v_tickets_que" name="tic_nro"/>
-            <sendfield classname="class_v_tickets_que" name="tic_anio"/>
-            <sendfield classname="class_v_tickets_que" name="tic_tipo"/>
-			<sendfield classname="class_v_tickets_que" name="responsable"/>
+            <sendfield classname="class_v_tickets_que" name="responsable"/>
             <sendfield classname="class_v_tickets_que" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 
         <action operation="P" label="imprimir" target="queja_maint.php?OP=P" >
 			<sendfield classname="class_v_tickets_que" name="tic_nro"/>
-            <sendfield classname="class_v_tickets_que" name="tic_anio"/>
-            <sendfield classname="class_v_tickets_que" name="tic_tipo"/>
             <sendfield classname="class_v_tickets_que" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 	</build>

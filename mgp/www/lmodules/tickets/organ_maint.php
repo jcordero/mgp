@@ -32,7 +32,7 @@ class asunto_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_organismos")->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Código", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_organismos"));
+        $this->getClass("class_tic_organismos")->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Código", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Sequence"=>"tic_organismos", "Class"=>"class_tic_organismos"));
         $this->getClass("class_tic_organismos")->GetField("tor_sigla")->SetDisplayValues(Array("Name"=>"tor_sigla", "Label"=>"Sigla", "Size"=>20, "IsForDB"=>true, "Order"=>103, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>10, "Class"=>"class_tic_organismos"));
         $this->getClass("class_tic_organismos")->GetField("tor_nombre")->SetDisplayValues(Array("Name"=>"tor_nombre", "Label"=>"Nombre", "Size"=>100, "IsForDB"=>true, "Order"=>104, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_organismos"));
         $this->getClass("class_tic_organismos")->GetField("tor_tipo")->SetDisplayValues(Array("Name"=>"tor_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>109, "IsMandatory"=>true, "Presentation"=>"ORGANISMOTIPO", "IsVisible"=>true, "Class"=>"class_tic_organismos"));

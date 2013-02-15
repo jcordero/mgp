@@ -47,7 +47,7 @@ class CDH_CANALDEINGRESO extends CDH_SELECTARRAY
 	}
 	
 	
-	function RenderFilterForm($cn,$name="",$id="") 
+	function RenderFilterForm($cn,$name="",$id="",$prefix="") 
 	{
 		$fld = $this->m_parent;
 		

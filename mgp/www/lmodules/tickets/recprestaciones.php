@@ -25,10 +25,10 @@ class class_tic_prestaciones_rec_sl extends csearchandlist {
 		$this->m_render_html = 'BLOCK';
 		$this->m_render_pdml = 'BLOCK';
 
-        $this->m_search_fields = array('tpr_code','tpr_padre','tpr_tipo','tpr_detalle','tpr_estado','tpr_ubicacion');
+        $this->m_search_fields = array('tpr_code','tpr_tipo','tpr_detalle','tpr_estado','tpr_ubicacion');
 
-        $this->addAction(7,"denprest_maint.php?OP=V",array(new caction_param('tpr_code'),new caction_param('tpr_tipo')),"","ver","V","","");
-        $this->addAction(7,"denprest_maint.php?OP=M",array(new caction_param('tpr_code'),new caction_param('tpr_tipo')),"","modifica","M","","");
+        $this->addAction(6,"denprest_maint.php?OP=V",array(new caction_param('tpr_code')),"","ver","V","","");
+        $this->addAction(6,"denprest_maint.php?OP=M",array(new caction_param('tpr_code')),"","modifica","M","","");
     }
 
     //Inicializo la parte de busqueda
@@ -37,11 +37,10 @@ class class_tic_prestaciones_rec_sl extends csearchandlist {
 
     /* Campos de busqueda */
         $this->m_obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Código", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"TREEPRESTACION", "IsNullable"=>false, "IsVisible"=>true));
-        $this->m_obj->GetField("tpr_padre")->SetDisplayValues(Array("Name"=>"tpr_padre", "Label"=>"Padre", "Size"=>20, "IsForDB"=>true, "Order"=>104, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>10));
-        $this->m_obj->GetField("tpr_tipo")->SetDisplayValues(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsNullable"=>false, "InitialValue"=>"RECLAMO"));
+        $this->m_obj->GetField("tpr_tipo")->SetDisplayValues(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "InitialValue"=>"RECLAMO"));
         $this->m_obj->GetField("tpr_detalle")->SetDisplayValues(Array("Name"=>"tpr_detalle", "Label"=>"Detalle", "Size"=>100, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsVisible"=>true));
-        $this->m_obj->GetField("tpr_estado")->SetDisplayValues(Array("Name"=>"tpr_estado", "Label"=>"Estado", "Size"=>20, "IsForDB"=>true, "Order"=>105, "Presentation"=>"ACTIVO", "IsVisible"=>true));
-        $this->m_obj->GetField("tpr_ubicacion")->SetDisplayValues(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"UBICACION", "IsVisible"=>true));
+        $this->m_obj->GetField("tpr_estado")->SetDisplayValues(Array("Name"=>"tpr_estado", "Label"=>"Estado", "Size"=>20, "IsForDB"=>true, "Order"=>104, "Presentation"=>"ACTIVO", "IsVisible"=>true));
+        $this->m_obj->GetField("tpr_ubicacion")->SetDisplayValues(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"UBICACION", "IsVisible"=>true));
     }
 
 }
@@ -77,7 +76,7 @@ class col102 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACIONTIPO", "IsNullable"=>false, "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACIONTIPO", "IsVisible"=>true));
     }
 }
 
@@ -98,37 +97,37 @@ class col103 extends ccolumn
     }
 }
 
-class col105 extends ccolumn
+class col104 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
         $this->m_title = 'Estado';
-        $this->m_order = '105';
+        $this->m_order = '104';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'tpr_estado';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tpr_estado", "Label"=>"Estado", "Size"=>20, "IsForDB"=>true, "Order"=>105, "Presentation"=>"ACTIVO", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tpr_estado", "Label"=>"Estado", "Size"=>20, "IsForDB"=>true, "Order"=>104, "Presentation"=>"ACTIVO", "IsVisible"=>true));
     }
 }
 
-class col108 extends ccolumn
+class col107 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
         $this->m_title = 'Ubicación';
-        $this->m_order = '108';
+        $this->m_order = '107';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'tpr_ubicacion';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"UBICACION", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"UBICACION", "IsVisible"=>true));
     }
 }
 
@@ -145,8 +144,8 @@ class class_tic_prestaciones_rec_table extends ctable
         $this->m_cols[101] = new col101($this);
         $this->m_cols[102] = new col102($this);
         $this->m_cols[103] = new col103($this);
-        $this->m_cols[105] = new col105($this);
-        $this->m_cols[108] = new col108($this);
+        $this->m_cols[104] = new col104($this);
+        $this->m_cols[107] = new col107($this);
     }
 
 }

@@ -28,25 +28,21 @@ class datos_personales_gr extends cform_group {
         $this->m_fields[] = 'ciu_ciudadanos_n:ciu_apellido';
         $this->m_fields[] = 'ciu_ciudadanos_n:ciu_sexo';
         $this->m_fields[] = 'ciu_ciudadanos_n:ciu_nacimiento';
-        $this->m_fields[] = 'ciu_ciudadanos_n:ciu_doc_nro';
         $this->m_fields[] = 'ciu_ciudadanos_n:ciu_nacionalidad';
         $this->m_fields[] = 'ciu_ciudadanos_n:ciu_razon_social';
-        $this->m_fields[] = 'ciu_ciudadanos_n:ciu_email';
 
     }
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
         $this->getClass("ciu_ciudadanos_n")->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Label"=>"Cod.ciudadano", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_tipo_persona")->SetDisplayValues(Array("Name"=>"ciu_tipo_persona", "Label"=>"Tipo persona", "Size"=>20, "IsForDB"=>true, "Order"=>135, "Presentation"=>"TIPOPERSONA", "IsVisible"=>true, "ClassParams"=>"ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad", "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"FISICA"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_tipo_persona")->SetDisplayValues(Array("Name"=>"ciu_tipo_persona", "Label"=>"Tipo persona", "Size"=>20, "IsForDB"=>true, "Order"=>132, "Presentation"=>"TIPOPERSONA", "IsVisible"=>true, "ClassParams"=>"ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad", "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"FISICA"));
         $this->getClass("ciu_ciudadanos_n")->GetField("ciu_nombres")->SetDisplayValues(Array("Name"=>"ciu_nombres", "Label"=>"Nombre", "Size"=>50, "IsForDB"=>true, "Order"=>102, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
         $this->getClass("ciu_ciudadanos_n")->GetField("ciu_apellido")->SetDisplayValues(Array("Name"=>"ciu_apellido", "Label"=>"Apellido", "Size"=>50, "IsForDB"=>true, "Order"=>103, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_sexo")->SetDisplayValues(Array("Name"=>"ciu_sexo", "Label"=>"Sexo", "Size"=>15, "IsForDB"=>true, "Order"=>104, "IsMandatory"=>true, "Presentation"=>"SEXO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_sexo")->SetDisplayValues(Array("Name"=>"ciu_sexo", "Label"=>"Género", "Size"=>15, "IsForDB"=>true, "Order"=>104, "IsMandatory"=>true, "Presentation"=>"SEXO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
         $this->getClass("ciu_ciudadanos_n")->GetField("ciu_nacimiento")->SetDisplayValues(Array("Name"=>"ciu_nacimiento", "Label"=>"Fecha de Nacimiento", "Type"=>"datetime", "IsForDB"=>true, "Order"=>105, "Presentation"=>"DATE", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"no"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_doc_nro")->SetDisplayValues(Array("Name"=>"ciu_doc_nro", "Label"=>"Doc.", "Size"=>20, "IsForDB"=>true, "Order"=>106, "IsMandatory"=>true, "Presentation"=>"DOCID", "IsVisible"=>true, "ClassParams"=>"no_search", "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_nacionalidad")->SetDisplayValues(Array("Name"=>"ciu_nacionalidad", "Label"=>"Nacionalidad", "Size"=>100, "IsForDB"=>true, "Order"=>137, "IsMandatory"=>true, "Presentation"=>"NACIONALIDAD", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"Argentina"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_razon_social")->SetDisplayValues(Array("Name"=>"ciu_razon_social", "Label"=>"Razon Social", "Size"=>100, "IsForDB"=>true, "Order"=>136, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_email")->SetDisplayValues(Array("Name"=>"ciu_email", "Label"=>"E-Mail", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"EMAIL", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_nacionalidad")->SetDisplayValues(Array("Name"=>"ciu_nacionalidad", "Label"=>"Nacionalidad", "Size"=>100, "IsForDB"=>true, "Order"=>134, "IsMandatory"=>true, "Presentation"=>"NACIONALIDAD", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"Argentina"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_razon_social")->SetDisplayValues(Array("Name"=>"ciu_razon_social", "Label"=>"Razon Social", "Size"=>100, "IsForDB"=>true, "Order"=>133, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
     }
 }
 }
@@ -85,19 +81,19 @@ class direccion_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("ciu_ciudadanos_n")->GetField("tmp_mapa")->SetDisplayValues(Array("Name"=>"tmp_mapa", "Size"=>50, "Order"=>38, "Presentation"=>"MAPA", "IsVisible"=>true, "ClassParams"=>"ciu_coord_x|ciu_coord_y", "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("tmp_cod_calle")->SetDisplayValues(Array("Name"=>"tmp_cod_calle", "Label"=>"Codigo calle", "Type"=>"int", "Order"=>39, "Presentation"=>"INT", "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_calle")->SetDisplayValues(Array("Name"=>"ciu_dir_calle", "Label"=>"Calle", "Size"=>50, "IsForDB"=>true, "Order"=>113, "Presentation"=>"CALLE", "IsVisible"=>true, "ClassParams"=>"ciu_dir_nro|ciu_coord_x|ciu_coord_y|ciu_barrio|ciu_cgpc|ilu|reco|tmp_mapa|ciu_dir_calle|tmp_cod_calle", "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_nro")->SetDisplayValues(Array("Name"=>"ciu_dir_nro", "Label"=>"Altura", "Type"=>"int", "IsForDB"=>true, "Order"=>114, "Presentation"=>"ALTURA", "IsVisible"=>true, "Cols"=>10, "ClassParams"=>"ciu_dir_calle", "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_piso")->SetDisplayValues(Array("Name"=>"ciu_dir_piso", "Label"=>"Piso", "Size"=>5, "IsForDB"=>true, "Order"=>115, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>10, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_dpto")->SetDisplayValues(Array("Name"=>"ciu_dir_dpto", "Label"=>"Departamento", "Size"=>5, "IsForDB"=>true, "Order"=>116, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>10, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_cod_postal")->SetDisplayValues(Array("Name"=>"ciu_cod_postal", "Label"=>"Codigo Postal", "Size"=>6, "IsForDB"=>true, "Order"=>121, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_localidad")->SetDisplayValues(Array("Name"=>"ciu_localidad", "Label"=>"Localidad", "Size"=>50, "IsForDB"=>true, "Order"=>118, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>20, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"Mar del plata"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_provincia")->SetDisplayValues(Array("Name"=>"ciu_provincia", "Label"=>"Provincia", "Size"=>50, "IsForDB"=>true, "Order"=>119, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>20, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"BUENOS AIRES"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_pais")->SetDisplayValues(Array("Name"=>"ciu_pais", "Label"=>"Pais", "Size"=>50, "IsForDB"=>true, "Order"=>120, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>20, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"ARGENTINA"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_barrio")->SetDisplayValues(Array("Name"=>"ciu_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>117, "Presentation"=>"BARRIOS", "IsVisible"=>true, "Cols"=>20, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_coord_x")->SetDisplayValues(Array("Name"=>"ciu_coord_x", "Label"=>"coordenada x", "Type"=>"float", "IsForDB"=>true, "Order"=>123, "Presentation"=>"TEXT", "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_coord_y")->SetDisplayValues(Array("Name"=>"ciu_coord_y", "Label"=>"coordenada y", "Type"=>"float", "IsForDB"=>true, "Order"=>124, "Presentation"=>"TEXT", "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("tmp_mapa")->SetDisplayValues(Array("Name"=>"tmp_mapa", "Size"=>50, "Order"=>35, "Presentation"=>"MAPA", "IsVisible"=>true, "ClassParams"=>"ciu_coord_x|ciu_coord_y", "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("tmp_cod_calle")->SetDisplayValues(Array("Name"=>"tmp_cod_calle", "Label"=>"Codigo calle", "Type"=>"int", "Order"=>36, "Presentation"=>"INT", "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_calle")->SetDisplayValues(Array("Name"=>"ciu_dir_calle", "Label"=>"Calle", "Size"=>50, "IsForDB"=>true, "Order"=>112, "Presentation"=>"CALLE", "IsVisible"=>true, "ClassParams"=>"ciu_dir_nro|ciu_coord_x|ciu_coord_y|ciu_barrio|ciu_cgpc|ilu|reco|tmp_mapa|ciu_dir_calle|tmp_cod_calle", "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_nro")->SetDisplayValues(Array("Name"=>"ciu_dir_nro", "Label"=>"Altura", "Type"=>"int", "IsForDB"=>true, "Order"=>113, "Presentation"=>"ALTURA", "IsVisible"=>true, "Cols"=>10, "ClassParams"=>"ciu_dir_calle", "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_piso")->SetDisplayValues(Array("Name"=>"ciu_dir_piso", "Label"=>"Piso", "Size"=>5, "IsForDB"=>true, "Order"=>114, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>10, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_dpto")->SetDisplayValues(Array("Name"=>"ciu_dir_dpto", "Label"=>"Departamento", "Size"=>5, "IsForDB"=>true, "Order"=>115, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>10, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_cod_postal")->SetDisplayValues(Array("Name"=>"ciu_cod_postal", "Label"=>"Codigo Postal", "Size"=>6, "IsForDB"=>true, "Order"=>120, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_localidad")->SetDisplayValues(Array("Name"=>"ciu_localidad", "Label"=>"Localidad", "Size"=>50, "IsForDB"=>true, "Order"=>117, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>20, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"Mar del plata"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_provincia")->SetDisplayValues(Array("Name"=>"ciu_provincia", "Label"=>"Provincia", "Size"=>50, "IsForDB"=>true, "Order"=>118, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>20, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"BUENOS AIRES"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_pais")->SetDisplayValues(Array("Name"=>"ciu_pais", "Label"=>"Pais", "Size"=>50, "IsForDB"=>true, "Order"=>119, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>20, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"ARGENTINA"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_barrio")->SetDisplayValues(Array("Name"=>"ciu_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>116, "Presentation"=>"BARRIOS", "IsVisible"=>true, "Cols"=>20, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_coord_x")->SetDisplayValues(Array("Name"=>"ciu_coord_x", "Label"=>"coordenada x", "Type"=>"double", "IsForDB"=>true, "Order"=>122, "Presentation"=>"TEXT", "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_coord_y")->SetDisplayValues(Array("Name"=>"ciu_coord_y", "Label"=>"coordenada y", "Type"=>"double", "IsForDB"=>true, "Order"=>123, "Presentation"=>"TEXT", "Class"=>"ciu_ciudadanos_n"));
     }
 }
 }
@@ -120,19 +116,21 @@ class contacto_gr extends cform_group {
         //Campos del grupo
         $this->m_fields[] = 'ciu_ciudadanos_n:ciu_no_email';
         $this->m_fields[] = 'ciu_ciudadanos_n:ciu_no_llamar';
+        $this->m_fields[] = 'ciu_ciudadanos_n:ciu_horario_cont';
         $this->m_fields[] = 'ciu_ciudadanos_n:ciu_tel_fijo';
         $this->m_fields[] = 'ciu_ciudadanos_n:ciu_tel_movil';
-        $this->m_fields[] = 'ciu_ciudadanos_n:ciu_horario_cont';
+        $this->m_fields[] = 'ciu_ciudadanos_n:ciu_email';
 
     }
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_no_email")->SetDisplayValues(Array("Name"=>"ciu_no_email", "Label"=>"Contactar por mail?", "Size"=>4, "IsForDB"=>true, "Order"=>112, "Presentation"=>"SINO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"NO"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_no_llamar")->SetDisplayValues(Array("Name"=>"ciu_no_llamar", "Label"=>"Contactar por teléfono?", "Size"=>4, "IsForDB"=>true, "Order"=>111, "Presentation"=>"SINO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"NO"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_tel_fijo")->SetDisplayValues(Array("Name"=>"ciu_tel_fijo", "Label"=>"Telefono fijo", "Size"=>20, "IsForDB"=>true, "Order"=>108, "Presentation"=>"PHONE", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_tel_movil")->SetDisplayValues(Array("Name"=>"ciu_tel_movil", "Label"=>"Telefono móvil", "Size"=>20, "IsForDB"=>true, "Order"=>109, "Presentation"=>"PHONE", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_horario_cont")->SetDisplayValues(Array("Name"=>"ciu_horario_cont", "Label"=>"Horario de contacto", "Size"=>50, "IsForDB"=>true, "Order"=>110, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_no_email")->SetDisplayValues(Array("Name"=>"ciu_no_email", "Label"=>"Contactar por mail?", "Size"=>4, "IsForDB"=>true, "Order"=>111, "Presentation"=>"SINO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"NO"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_no_llamar")->SetDisplayValues(Array("Name"=>"ciu_no_llamar", "Label"=>"Contactar por teléfono?", "Size"=>4, "IsForDB"=>true, "Order"=>110, "Presentation"=>"SINO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n", "InitialValue"=>"NO"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_horario_cont")->SetDisplayValues(Array("Name"=>"ciu_horario_cont", "Label"=>"Horario de contacto", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_tel_fijo")->SetDisplayValues(Array("Name"=>"ciu_tel_fijo", "Label"=>"Telefono fijo", "Size"=>20, "IsForDB"=>true, "Order"=>107, "Presentation"=>"PHONE", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_tel_movil")->SetDisplayValues(Array("Name"=>"ciu_tel_movil", "Label"=>"Telefono móvil", "Size"=>20, "IsForDB"=>true, "Order"=>108, "Presentation"=>"PHONE", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_email")->SetDisplayValues(Array("Name"=>"ciu_email", "Label"=>"E-Mail", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"EMAIL", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
     }
 }
 }
@@ -161,9 +159,9 @@ class laboral_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_trabaja")->SetDisplayValues(Array("Name"=>"ciu_trabaja", "Label"=>"Trabaja", "Size"=>4, "IsForDB"=>true, "Order"=>125, "Presentation"=>"SINO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_nivel_estudio")->SetDisplayValues(Array("Name"=>"ciu_nivel_estudio", "Label"=>"Nivel de Estudios", "Size"=>20, "IsForDB"=>true, "Order"=>126, "Presentation"=>"NIVEL_ESTUDIO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_profesion")->SetDisplayValues(Array("Name"=>"ciu_profesion", "Label"=>"Profesion", "Size"=>50, "IsForDB"=>true, "Order"=>127, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_trabaja")->SetDisplayValues(Array("Name"=>"ciu_trabaja", "Label"=>"Trabaja", "Size"=>4, "IsForDB"=>true, "Order"=>124, "Presentation"=>"SINO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_nivel_estudio")->SetDisplayValues(Array("Name"=>"ciu_nivel_estudio", "Label"=>"Nivel de Estudios", "Size"=>20, "IsForDB"=>true, "Order"=>125, "Presentation"=>"NIVEL_ESTUDIO", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_profesion")->SetDisplayValues(Array("Name"=>"ciu_profesion", "Label"=>"Profesion", "Size"=>50, "IsForDB"=>true, "Order"=>126, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"ciu_ciudadanos_n"));
     }
 }
 }
@@ -193,14 +191,69 @@ class audit_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_tstamp")->SetDisplayValues(Array("Name"=>"ciu_tstamp", "Label"=>"Fecha de ingreso", "Type"=>"datetime", "IsForDB"=>true, "Order"=>132, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_canal_ingreso")->SetDisplayValues(Array("Name"=>"ciu_canal_ingreso", "Label"=>"Canal de Ingreso", "Size"=>20, "IsForDB"=>true, "Order"=>129, "Presentation"=>"CANALDEINGRESO", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>130, "Presentation"=>"CURRENTUSER", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"ciu_ciudadanos_n"));
-        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_estado")->SetDisplayValues(Array("Name"=>"ciu_estado", "Label"=>"Estado", "Size"=>30, "IsForDB"=>true, "Order"=>131, "Presentation"=>"ESTADO_CIUDADANO", "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_tstamp")->SetDisplayValues(Array("Name"=>"ciu_tstamp", "Label"=>"Fecha de ingreso", "Type"=>"datetime", "IsForDB"=>true, "Order"=>131, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_canal_ingreso")->SetDisplayValues(Array("Name"=>"ciu_canal_ingreso", "Label"=>"Canal de Ingreso", "Size"=>20, "IsForDB"=>true, "Order"=>128, "Presentation"=>"CANALDEINGRESO", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>129, "Presentation"=>"CURRENTUSER", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("ciu_estado")->SetDisplayValues(Array("Name"=>"ciu_estado", "Label"=>"Estado", "Size"=>30, "IsForDB"=>true, "Order"=>130, "Presentation"=>"ESTADO_CIUDADANO", "Class"=>"ciu_ciudadanos_n"));
     }
 }
 }
 
+
+if( !class_exists('ciu_identificacion_th5') ) {
+class ciu_identificacion_th5 extends ctable_handler {
+    function __construct($parent) {
+        parent::__construct($parent);
+        $this->m_title = 'Documentos'; //Titulo de la tabla
+        $this->m_isFile = false; //Es una tabla que contiene archivos, mostrar browser
+        $this->m_classname = 'ciu_identificacion'; //Clase x defecto
+        $this->m_total = false; //Incluir ultima fila de totales
+        $this->m_id = 'documentos'; //Identificador para Wizards
+        $this->m_order = '5'; //Orden de aparicion
+
+    	//Botones del editor de la tabla
+    	$this->m_button_next = true;// Boton continuar
+    	$this->m_button_close = true;// Boton cerrar
+    	$this->m_button_repeat = false;// Boton repetir carga
+    	$this->m_button_label = '';// Etiqueta del Boton Agregar
+        $this->m_can_add = true; //Mostrar boton Agregar
+        $this->m_can_delete = true; //Mostrar boton Borrar
+        $this->m_can_update = true; //Mostrar boton Modificar
+        $this->m_can_check = false; //Mostrar checkbox
+        $this->m_minimum_rows = 0; //Validacion: cantidad minima de filas
+        $this->m_render_html = 'PARENT'; //Forma de generar el contenido HTML
+        $this->m_render_pdml = 'PARENT'; //Forma de generar el contenido PDF
+        $this->m_note = ""; //Nota
+
+        $this->m_datafields['ciu_code']=1;
+        $this->m_datafields['ciu_pais_emisor']=2;
+        $this->m_datafields['ciu_tipo_doc']=3;
+        $this->m_datafields['ciu_nro_doc']=4;
+
+        $this->m_columns[1] = new ctable_column(1,'País emisor',array('ciu_code','ciu_pais_emisor'));
+        $this->m_columns[2] = new ctable_column(2,'Tipo',array('ciu_tipo_doc'));
+        $this->m_columns[3] = new ctable_column(3,'Número',array('ciu_nro_doc'));
+    }
+
+    public function getJsIncludes($obj) {
+        $r=array();
+        $r[]=$obj->GetField("ciu_code")->getJsIncludes();
+        $r[]=$obj->GetField("ciu_pais_emisor")->getJsIncludes();
+        $r[]=$obj->GetField("ciu_tipo_doc")->getJsIncludes();
+        $r[]=$obj->GetField("ciu_nro_doc")->getJsIncludes();
+        return $r;
+    }
+
+    public function InitializeInstance($obj) {
+        //SetDisplayValues($attributes) 
+        $obj->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
+        $obj->GetField("ciu_pais_emisor")->SetDisplayValues(Array("Name"=>"ciu_pais_emisor", "Label"=>"País emisor", "Size"=>5, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("ciu_tipo_doc")->SetDisplayValues(Array("Name"=>"ciu_tipo_doc", "Label"=>"Tipo doc", "Size"=>15, "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TIPODOC", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("ciu_nro_doc")->SetDisplayValues(Array("Name"=>"ciu_nro_doc", "Label"=>"Nro doc", "Size"=>25, "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"DNI", "IsNullable"=>false, "IsVisible"=>true));
+    }
+
+}
+}
 if( !class_exists('ciu_ciudadanos_n_m') ) {
 class ciu_ciudadanos_n_m extends cclass_maint {
     function __construct() {
@@ -234,6 +287,9 @@ class ciu_ciudadanos_n_m extends cclass_maint {
 		$this->m_handler[2] = new contacto_gr($this);
 		$this->m_handler[3] = new laboral_gr($this);
 		$this->m_handler[4] = new audit_gr($this);
+
+        //Tablas
+		$this->m_handler[5] = new ciu_identificacion_th5($this);
 
     }
 

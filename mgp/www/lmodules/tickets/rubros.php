@@ -36,7 +36,7 @@ class class_tic_rubros_sl extends csearchandlist {
         //SetDisplayValues($attributes) 
 
     /* Campos de busqueda */
-        $this->m_obj->GetField("tru_code")->SetDisplayValues(Array("Name"=>"tru_code", "Label"=>"Código", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true));
+        $this->m_obj->GetField("tru_code")->SetDisplayValues(Array("Name"=>"tru_code", "Label"=>"Código", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true, "Sequence"=>"tic_rubros"));
         $this->m_obj->GetField("tru_detalle")->SetDisplayValues(Array("Name"=>"tru_detalle", "Label"=>"Nombre", "Size"=>100, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsVisible"=>true));
         $this->m_obj->GetField("tru_estado")->SetDisplayValues(Array("Name"=>"tru_estado", "Label"=>"Estado", "Size"=>20, "IsForDB"=>true, "Order"=>103, "Presentation"=>"ACTIVO", "IsVisible"=>true));
     }
@@ -57,7 +57,7 @@ class col101 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tru_code", "Label"=>"Código", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tru_code", "Label"=>"Código", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true, "Sequence"=>"tic_rubros"));
     }
 }
 

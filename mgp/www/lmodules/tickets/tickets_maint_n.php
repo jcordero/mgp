@@ -86,8 +86,8 @@ class domicilio_gr extends cform_group {
         $this->getClass("class_tic_ticket")->GetField("nombre_fantasia")->SetDisplayValues(Array("Name"=>"nombre_fantasia", "Label"=>"Nom.fantasía", "Size"=>100, "Order"=>33, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Type"=>"int", "Order"=>27, "Presentation"=>"MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("tic_id_cuadra")->SetDisplayValues(Array("Name"=>"tic_id_cuadra", "Label"=>"id cuadra", "Type"=>"int", "IsForDB"=>true, "Order"=>113, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
-        $this->getClass("class_tic_ticket")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"float", "IsForDB"=>true, "Order"=>111, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
-        $this->getClass("class_tic_ticket")->GetField("tic_coordy")->SetDisplayValues(Array("Name"=>"tic_coordy", "Label"=>"y", "Type"=>"float", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"double", "IsForDB"=>true, "Order"=>111, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("tic_coordy")->SetDisplayValues(Array("Name"=>"tic_coordy", "Label"=>"y", "Type"=>"double", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("tic_barrio")->SetDisplayValues(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("tic_cgpc")->SetDisplayValues(Array("Name"=>"tic_cgpc", "Label"=>"CGPC", "Size"=>20, "IsForDB"=>true, "Order"=>110, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
     }
@@ -247,7 +247,7 @@ class class_tic_ticket_m extends cclass_maint {
 
         //Acciones
 		$this->m_action[] = new CAction('N','Nuevo ticket','','','tickets_maint_n.php?OP=N','','Cargar nuevo ticket','');
-		$this->m_action[] = new CAction('P','Imprimir comprobante','','','ticket_maint.php?OP=P','forms|tic_nro|tic_anio|tic_tipo|','Imprimir comprobante','');
+		$this->m_action[] = new CAction('P','Imprimir comprobante','','','ticket_maint.php?OP=P','forms|tic_nro|','Imprimir comprobante','');
 		$this->m_action[] = new CAction('L','Consulta de tickets','','','tickets.php?last=1&OP=L','','Consulta de tickets','');
 
         //Grupos

@@ -3,19 +3,17 @@
 <!-- CLASE PRESTACIONES RECLAMOS -->
 <make object="class">
 	<build out_file="class_tic_prestaciones_rec.php" classname="class_tic_prestaciones_rec" classlabel="Prestaciones Reclamos">
-		<parse in_file="tickets.sql" tablename="tic_prestaciones"/>
+		<parse in_file="../mgp.sql" tablename="tic_prestaciones"/>
 		<method objfactoryquerysuffix="order by tpr_detalle"/>
 
         <build classname="class_tic_prestaciones_cuest" classlabel="Cuestionario">
-			<parse in_file="tickets.sql" tablename="tic_prestaciones_cuest"/>
+			<parse in_file="../mgp.sql" tablename="tic_prestaciones_cuest"/>
 			<key parent="tpr_code" child="tpr_code"/>
-			<key parent="tpr_tipo" child="tpr_tipo"/>
 		</build>
 
         <build classname="class_tic_prestaciones_gis" classlabel="GIS Acceso">
-			<parse in_file="tickets.sql" tablename="tic_prestaciones_gis"/>
+			<parse in_file="../mgp.sql" tablename="tic_prestaciones_gis"/>
 			<key parent="tpr_code" child="tpr_code"/>
-			<key parent="tpr_tipo" child="tpr_tipo"/>
             <field name="tpg_code" sequence="tic_prestaciones_gis"/>
 		</build>
 
@@ -29,7 +27,6 @@
 	<build out_file="recprestaciones.php" classname="class_tic_prestaciones_rec" title="Consulta de prestaciones de reclamos"  template_html="default.htm">
 
 		<searchfield name="tpr_code" presentation="TREEPRESTACION" label="Código"/>
-        <searchfield name="tpr_padre" presentation="TEXT" label="Padre" cols="10"/>
 		<searchfield name="tpr_tipo" presentation="TEXT" label="Tipo" initialvalue="RECLAMO" isvisible="false"/>
 		<searchfield name="tpr_detalle" presentation="TEXT" label="Detalle"/>
 		<searchfield name="tpr_estado" presentation="ACTIVO" label="Estado"/>
@@ -43,11 +40,9 @@
 
 		<action label="ver" target="denprest_maint.php?OP=V" operation="V">
 			<sendfield classname="class_tic_prestaciones_rec" name="tpr_code"/>
-            <sendfield classname="class_tic_prestaciones_rec" name="tpr_tipo"/>
 		</action>
         <action label="modifica" target="denprest_maint.php?OP=M" operation="M">
 			<sendfield classname="class_tic_prestaciones_rec" name="tpr_code"/>
-            <sendfield classname="class_tic_prestaciones_rec" name="tpr_tipo"/>
 		</action>
 	</build>
 </make>
@@ -73,7 +68,6 @@
 
 		<group title="Clasificación" id="ubicacion">
             <field name="tpr_code" presentation="TEXT" label="Código" readonly="true"/>
-			<field name="tpr_padre" presentation="TEXT" label="Prestación padre" cols="10" readonly="true"/>
 		</group>
 
 		<group title="Estado" id="estado">
@@ -90,7 +84,6 @@
         <table relationclass="" classname="class_tic_prestaciones_cuest" title="Cuestionario" add="true" delete="true" update="true">
 			<column title="Orden" order="1">
 				<field name="tpr_code" isvisible="false"/>
-				<field name="tpr_tipo" isvisible="false"/>
 				<field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true"/>
 			</column>
 			<column title="Pregunta" order="2">
@@ -108,7 +101,6 @@
         <table relationclass="" classname="class_tic_prestaciones_gis" title="GIS" add="true" delete="true" update="true">
 			<column title="Campo" order="1">
 				<field name="tpr_code" isvisible="false"/>
-				<field name="tpr_tipo" isvisible="false"/>
                 <field name="tpg_code" isvisible="false"/>
 				<field name="tpg_gis_campo" presentation="GISGRILLA" label="Campo" />
 			</column>
@@ -155,7 +147,6 @@
 
 		<group title="Clasificación" id="ubicacion">
             <field name="tpr_code" presentation="TEXT" label="Código" ismandatory="true" cols="10"/>
-			<field name="tpr_padre" presentation="TEXT" label="Prestación padre" cols="10"/>
 		</group>
 
 		<group title="Búsqueda" id="buscar">
@@ -177,7 +168,6 @@
         <table relationclass="" classname="class_tic_prestaciones_cuest" title="Cuestionario" add="true" delete="true" update="true">
 			<column title="Orden" order="1">
 				<field name="tpr_code" isvisible="false"/>
-				<field name="tpr_tipo" isvisible="false"/>
 				<field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true"/>
 			</column>
 			<column title="Pregunta" order="2">
@@ -195,7 +185,6 @@
         <table relationclass="" classname="class_tic_prestaciones_gis" title="GIS" add="true" delete="true" update="true">
 			<column title="Campo" order="1">
 				<field name="tpr_code" isvisible="false"/>
-				<field name="tpr_tipo" isvisible="false"/>
                 <field name="tpg_code" isvisible="false"/>
 				<field name="tpg_gis_campo" presentation="GISGRILLA" label="Campo" />
 			</column>
@@ -229,7 +218,7 @@
 <!-- CLASE CONSULTA/ACTULIZACION DE UN TICKET RECLAMO -->
 <make object="class">
 	<build out_file="class_tic_ticket_upd_rec.php" classname="class_tic_ticket_upd_rec" classlabel="Ticket Reclamo">
-		<parse in_file="tickets.sql" tablename="tic_ticket"/>
+		<parse in_file="../mgp.sql" tablename="tic_ticket"/>
         <field name="mapa" type="varchar" size="50"/>
         
         <field name="acc_tpr_code" type="varchar" size="50"/>
@@ -243,50 +232,38 @@
 
         <!-- PRESTACIONES -->
         <build classname="class_tic_ticket_prestaciones" classlabel="Prestaciones">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_prestaciones"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_prestaciones"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- ORGANISMOS -->
         <build classname="class_tic_ticket_organismos" classlabel="Organismos">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_organismos"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_organismos"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- AVANCE -->
         <build classname="class_tic_avance" classlabel="Avance">
-    		<parse in_file="tickets.sql" tablename="tic_avance"/>
+    		<parse in_file="../mgp.sql" tablename="tic_avance"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- RECLAMANTES -->
         <build classname="class_tic_ticket_ciudadano" classlabel="Ciudadano">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_ciudadano"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_ciudadano"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- REITERACIONES -->
         <build classname="class_tic_ticket_ciudadano_reit" classlabel="Reiteracion">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_ciudadano_reit"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_ciudadano_reit"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!-- ASOCIADOS -->
         <build classname="class_tic_ticket_asociado" classlabel="Asociados">
-    		<parse in_file="tickets.sql" tablename="tic_ticket_asociado"/>
+    		<parse in_file="../mgp.sql" tablename="tic_ticket_asociado"/>
             <key parent="tic_nro" child="tic_nro"/>
-            <key parent="tic_anio" child="tic_anio"/>
-            <key parent="tic_tipo" child="tic_tipo"/>
         </build>
 
         <!--BLOQUE PARA ARCHIVOS ADJUNTOS-->
@@ -325,28 +302,24 @@
 
         <!-- AVANCE -->
         <table relationclass="" classname="class_tic_avance" title="Avance" add="false" delete="false" update="false">
-			<column title="Fecha" order="1">
+			<column title="Prest." order="1">
 				<field name="tic_nro" isvisible="false"/>
-                <field name="tic_anio" isvisible="false"/>
-                <field name="tic_tipo" isvisible="false"/>
-                <field name="tav_tstamp" presentation="DATETIME" label="Fecha"/>
-			</column>
-            <column title="Prest." order="2">
 				<field name="tpr_code" presentation="PRESTACION" label="Prestación"/>
 			</column>
-            <column title="Est.Inicial" order="3">
+            <column title="Est.Inicial" order="2">
 				<field name="tic_estado_in" presentation="ESTADO_DENUNCIA" label="Estado inicial"/>
+                <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
+				<field name="use_code_in" presentation="USER" label="Operador"/>
 			</column>
-            <column title="Est.Final" order="4">
+            <column title="Est.Final" order="3">
 				<field name="tic_estado_out" presentation="ESTADO_DENUNCIA" label="Estado final"/>
+                <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha"/>
+				<field name="use_code_out" presentation="USER" label="Operador"/>
 			</column>
-            <column title="Motivo" order="5">
+            <column title="Motivo" order="4">
 				<field name="tic_motivo" presentation="TEXT" label="Motivo"/>
 			</column>
-            <column title="Operador" order="6">
-				<field name="use_code" presentation="USER" label="Operador"/>
-			</column>
-            <column title="Nota" order="7">
+            <column title="Nota" order="5">
 				<field name="tav_nota" presentation="TEXTAREA" label="Nota" cols="60" rows="4"/>
 			</column>
 		</table>
@@ -388,8 +361,6 @@
         <table relationclass="" classname="class_tic_ticket_prestaciones" title="Prestaciones" add="true" delete="false" update="false">
 			<column title="Prestación" order="1">
 				<field name="tic_nro" isvisible="false"/>
-                <field name="tic_anio" isvisible="false"/>
-                <field name="tic_tipo" isvisible="false"/>
                 <field name="tpr_code" presentation="PRESTACION" label="Prestación"/>
 			</column>
             <column title="Rubro" order="2">
@@ -411,8 +382,6 @@
         <table relationclass="" classname="class_tic_ticket_organismos" title="Organismos" add="false" delete="false" update="false">
 			<column title="Organismo" order="1">
 				<field name="tic_nro" isvisible="false"/>
-                <field name="tic_anio" isvisible="false"/>
-                <field name="tic_tipo" isvisible="false"/>
                 <field name="tor_code" presentation="ORGANISMO" label="Organismo"/>
 			</column>
             <column title="Figura" order="2">
@@ -428,8 +397,6 @@
         <table relationclass="" classname="class_tic_ticket_ciudadano" title="Solicitantes" add="false" delete="false" update="false">
 			<column title="Fecha" order="1">
 				<field name="tic_nro" isvisible="false"/>
-                <field name="tic_anio" isvisible="false"/>
-                <field name="tic_tipo" isvisible="false"/>
                 <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
 			</column>
             <column title="Ciudadano" order="2">
@@ -444,17 +411,12 @@
         <table relationclass="" classname="class_tic_ticket_asociado" title="Otras denuncias asociadas a esta" add="false" delete="false" update="false">
 			<column title="Fecha" order="1">
 				<field name="tic_nro" isvisible="false"/>
-                <field name="tic_anio" isvisible="false"/>
-                <field name="tic_tipo" isvisible="false"/>
                 <field name="tta_tstamp" presentation="DATETIME" label="Fecha"/>
 			</column>
             <column title="Nro" order="2">
 				<field name="tic_nro_asoc" presentation="INT" label="Nro"/>
 			</column>
-            <column title="Año" order="3">
-				<field name="tic_anio_asoc" presentation="INT" label="Año"/>
-			</column>
-			<column title="Operador" order="4">
+			<column title="Operador" order="3">
 				<field name="use_code" presentation="USER" label="Operador"/>
 			</column>
 			
@@ -486,8 +448,6 @@
 		
 		<action operation="P" label="Imprimir comprobante" target="reclamo_maint.php?OP=P" note="Imprimir comprobante">
 			<sendfield name="tic_nro" classname="class_tic_ticket_upd_rec"/>
-            <sendfield name="tic_anio" classname="class_tic_ticket_upd_rec"/>
-            <sendfield name="tic_tipo" classname="class_tic_ticket_upd_rec"/>
         </action>
 		
 		
@@ -500,7 +460,8 @@
 <!-- CLASE NOVEDADES RECLAMOS -->
 <make object="class">
 	<build out_file="class_v_tickets.php" classname="class_v_tickets" classlabel="Ticket Reclamo">
-		<parse in_file="tickets.sql" tablename="v_tickets"/>
+		<parse in_file="../mgp.sql" tablename="v_tickets"/>
+		<field name="responsable" type="varchar" size="5"/>
     </build>
 </make>
 
@@ -511,12 +472,13 @@
 	<build out_file="recnovedades.php" classname="class_v_tickets" title="Consulta de novedades de reclamo"
         template_html="default.htm" >
 
-		<searchfield name="tic_nro" presentation="TEXT" label="Número" cols="10"/>
+		<searchfield name="tic_nro" presentation="TEXT" label="Número" cols="10" isvisible="false"/>
+		<searchfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
         <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
 		<searchfield name="tic_tipo" presentation="TEXT" label="Tipo" initialvalue="RECLAMO" isvisible="false"/>
-		<searchfield name="tto_alerta" presentation="TEXT" label="Alerta" initialvalue="1" isvisible="false"/>
+		<searchfield name="ttp_alerta" presentation="TEXT" label="Alerta" initialvalue="1" isvisible="false"/>
         <searchfield name="ttp_estado" presentation="ESTADO_DENUNCIA" label="Estado"/>
-        <searchfield name="ttp_tstamp" presentation="DATERANGE" label="Ingresado"/>
+        <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
 		<searchfield name="tor_code" presentation="ORGANISMO_TICKET" label="Organismo"/>
 		<searchfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
 		<searchfield name="tru_code" presentation="RUBRO" label="Rubro"/>
@@ -524,11 +486,12 @@
 		<searchfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
 		<searchfield name="tic_barrio" presentation="BARRIOS" label="Barrio"/>
 		
-        <listfield name="tic_nro" presentation="TEXT" label="Número" cols="10"/>
+        <listfield name="tic_nro" presentation="TEXT" label="Número" cols="10" isvisible="false"/>
+        <listfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
         <listfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
 		<listfield name="tic_tipo" presentation="TEXT" label="Tipo"/>
         <listfield name="ttp_estado" presentation="ESTADO_DENUNCIA" label="Estado"/>
-        <listfield name="ttp_tstamp" presentation="DATERANGE" label="Ingresado"/>
+        <listfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
 		<listfield name="tor_code" presentation="ORGANISMO_TICKET" label="Organismo"/>
 		<listfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
 		<listfield name="tru_code" presentation="RUBRO" label="Rubro"/>
@@ -539,23 +502,17 @@
 		
 		<action operation="V" label="ver" target="reclamo_maint.php?OP=V" >
 			<sendfield classname="class_v_tickets" name="tic_nro"/>
-            <sendfield classname="class_v_tickets" name="tic_anio"/>
-            <sendfield classname="class_v_tickets" name="tic_tipo"/>
 			<sendfield classname="class_v_tickets" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 
 		<action operation="M" label="Modificar" target="reclamo_maint.php?OP=M" >
 			<sendfield classname="class_v_tickets" name="tic_nro"/>
-            <sendfield classname="class_v_tickets" name="tic_anio"/>
-            <sendfield classname="class_v_tickets" name="tic_tipo"/>
             <sendfield classname="class_v_tickets" name="responsable"/>
             <sendfield classname="class_v_tickets" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 
         <action operation="P" label="imprimir" target="reclamo_maint.php?OP=P" >
 			<sendfield classname="class_v_tickets" name="tic_nro"/>
-            <sendfield classname="class_v_tickets" name="tic_anio"/>
-            <sendfield classname="class_v_tickets" name="tic_tipo"/>
             <sendfield classname="class_v_tickets" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 	</build>
@@ -568,11 +525,12 @@
 	<build out_file="recabiertos.php" classname="class_v_tickets" title="Consulta de reclamos"
         template_html="default.htm" >
         
-		<searchfield name="tic_nro" presentation="TEXT" label="Número" cols="10"/>
+		<searchfield name="tic_nro" presentation="TEXT" label="Número" cols="10" isvisible="false"/>
+		<searchfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
         <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
 		<searchfield name="tic_tipo" presentation="TEXT" label="Tipo" initialvalue="RECLAMO" isvisible="false"/>
 		<searchfield name="ttp_estado" presentation="ESTADO_DENUNCIA" label="Estado"/>
-        <searchfield name="ttp_tstamp" presentation="DATERANGE" label="Ingresado"/>
+        <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
 		<searchfield name="tor_code" presentation="ORGANISMO_TICKET" label="Organismo"/>
 		<searchfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
 		<searchfield name="tru_code" presentation="RUBRO" label="Rubro"/>
@@ -580,11 +538,12 @@
 		<searchfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
 		<searchfield name="tic_barrio" presentation="BARRIOS" label="Barrio"/>
 		
-        <listfield name="tic_nro" presentation="TEXT" label="Número" cols="10"/>
+        <listfield name="tic_nro" presentation="TEXT" label="Número" cols="10" isvisible="false"/>
+        <listfield name="tic_identificador" presentation="TEXT" label="Identificador" />
         <listfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
 		<listfield name="tic_tipo" presentation="TEXT" label="Tipo"/>
         <listfield name="ttp_estado" presentation="ESTADO_DENUNCIA" label="Estado"/>
-        <listfield name="ttp_tstamp" presentation="DATERANGE" label="Ingresado"/>
+        <listfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
 		<listfield name="tor_code" presentation="ORGANISMO_TICKET" label="Organismo"/>
 		<listfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
 		<listfield name="tru_code" presentation="RUBRO" label="Rubro"/>
@@ -595,23 +554,17 @@
 		
 		<action operation="V" label="ver" target="reclamo_maint.php?OP=V" >
 			<sendfield classname="class_v_tickets" name="tic_nro"/>
-            <sendfield classname="class_v_tickets" name="tic_anio"/>
-            <sendfield classname="class_v_tickets" name="tic_tipo"/>
-			<sendfield classname="class_v_tickets" name="tpr_code" sendas="acc_tpr_code"/>
+            <sendfield classname="class_v_tickets" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 
 		<action operation="M" label="Modificar" target="reclamo_maint.php?OP=M" >
 			<sendfield classname="class_v_tickets" name="tic_nro"/>
-            <sendfield classname="class_v_tickets" name="tic_anio"/>
-            <sendfield classname="class_v_tickets" name="tic_tipo"/>
-			<sendfield classname="class_v_tickets" name="responsable"/>
+            <sendfield classname="class_v_tickets" name="responsable"/>
             <sendfield classname="class_v_tickets" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 
         <action operation="P" label="imprimir" target="reclamo_maint.php?OP=P" >
 			<sendfield classname="class_v_tickets" name="tic_nro"/>
-            <sendfield classname="class_v_tickets" name="tic_anio"/>
-            <sendfield classname="class_v_tickets" name="tic_tipo"/>
             <sendfield classname="class_v_tickets" name="tpr_code" sendas="acc_tpr_code"/>
 		</action>
 	</build>

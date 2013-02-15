@@ -36,7 +36,7 @@ class datos_personales_gr extends cform_group {
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
         $this->getClass("class_ciu_sesiones_ver")->GetField("cse_code")->SetDisplayValues(Array("Name"=>"cse_code", "Label"=>"Cod.Sesion", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_ciu_sesiones_ver"));
-        $this->getClass("class_ciu_sesiones_ver")->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Label"=>"Cod.ciudadano", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"CIUDADANO", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_ciu_sesiones_ver"));
+        $this->getClass("class_ciu_sesiones_ver")->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Label"=>"Cod.ciudadano", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"CIUDADANO", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_ciu_sesiones_ver"));
         $this->getClass("class_ciu_sesiones_ver")->GetField("cse_tstamp")->SetDisplayValues(Array("Name"=>"cse_tstamp", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_ciu_sesiones_ver"));
         $this->getClass("class_ciu_sesiones_ver")->GetField("cse_duracion")->SetDisplayValues(Array("Name"=>"cse_duracion", "Label"=>"Duracion (seg)", "Type"=>"int", "IsForDB"=>true, "Order"=>105, "Presentation"=>"DURACION", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_ciu_sesiones_ver"));
         $this->getClass("class_ciu_sesiones_ver")->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"USER", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_ciu_sesiones_ver"));
@@ -125,8 +125,8 @@ class class_ciu_historial_contactos_th2 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("chi_code")->SetDisplayValues(Array("Name"=>"chi_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("cse_code")->SetDisplayValues(Array("Name"=>"cse_code", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "IsNullable"=>false));
+        $obj->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
+        $obj->GetField("cse_code")->SetDisplayValues(Array("Name"=>"cse_code", "Type"=>"int", "IsForDB"=>true, "Order"=>103));
         $obj->GetField("chi_fecha")->SetDisplayValues(Array("Name"=>"chi_fecha", "Label"=>"Fecha y hora", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATETIME", "IsVisible"=>true));
         $obj->GetField("chi_motivo")->SetDisplayValues(Array("Name"=>"chi_motivo", "Label"=>"Actividad", "Size"=>100, "IsForDB"=>true, "Order"=>105, "Presentation"=>"TEXT", "IsVisible"=>true));
     }

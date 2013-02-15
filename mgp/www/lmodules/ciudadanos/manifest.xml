@@ -12,4 +12,246 @@
 </menuitem>
 </menu>
 
+<valuelist name="NACIONALIDAD" description="Lista de nacionalidades">
+<value>Argentina</value>
+<value>Brasil</value>
+<value>Uruguay</value>
+<value>Paraguay</value>
+<value>Perú</value>
+<value>Bolivia</value>
+<value>Chile</value>
+<value>Venezuela</value>
+<value>Colombia</value>
+<value>Ecuador</value>
+<value>México</value>
+<value>Cuba</value>
+<value>El Salvador</value>
+<value>Guatemala</value>
+<value>Honduras</value>
+<value>España</value>
+<value>Italia</value>
+<value>Panamá</value>
+<value>Francia</value>
+<value>Estados Unidos</value>
+<value>China</value>
+<value>Japón</value>
+<value>Vietnam</value>
+<value>Senegal</value>
+<value>Taiwan</value>
+<value>República Dominicana</value>
+<value>Sudáfrica</value>
+<value>Nigeria</value>
+<value>Ucrania</value>
+<value>Afganistán</value>
+<value>Albania</value>
+<value>Alemania</value>
+<value>Andorra</value>
+<value>Angola</value>
+<value>Arabia Saudita</value>
+<value>Argelia</value>
+<value>Armenia</value>
+<value>Australia</value>
+<value>Austria</value>
+<value>Bahamas</value>
+<value>Bahrein</value>
+<value>Barbados</value>
+<value>Bélgica</value>
+<value>Belice</value>
+<value>Benin</value>
+<value>Bulgaria</value>
+<value>Burundi</value>
+<value>Bután</value>
+<value>Camboya</value>
+<value>Camerún</value>
+<value>Canadá</value>
+<value>Chad</value>
+<value>Chipre</value>
+<value>Comores</value>
+<value>Corea del Norte</value>
+<value>Corea del Sur</value>
+<value>Costa Rica</value>
+<value>Croacia</value>
+<value>Dinamarca</value>
+<value>Djibouti</value>
+<value>Dominica</value>
+<value>Egipto</value>
+<value>Emiratos Arabes Unidos</value>
+<value>Eritrea</value>
+<value>Eslovaquia</value>
+<value>Eslovenia</value>
+<value>Estonia</value>
+<value>Etiopía</value>
+<value>Fiji</value>
+<value>Filipinas</value>
+<value>Finlandia</value>
+<value>Gabón</value>
+<value>Gambia</value>
+<value>Georgia</value>
+<value>Ghana</value>
+<value>Granada</value>
+<value>Grecia</value>
+<value>Guinea</value>
+<value>Guinea Ecuatorial</value>
+<value>Guinea-Bissau</value>
+<value>Guyana</value>
+<value>Haití</value>
+<value>Hong Kong</value>
+<value>Hungría</value>
+<value>India</value>
+<value>Indonesia</value>
+<value>Irlanda</value>
+<value>Islandia</value>
+<value>Islas Marshall</value>
+<value>Islas Salomón</value>
+<value>Israel</value>
+<value>Jamaica</value>
+<value>Jordania</value>
+<value>Kenia</value>
+<value>Kiribati</value>
+<value>Kuwait</value>
+<value>Laos</value>
+<value>Líbano</value>
+<value>Liberia</value>
+<value>Libia</value>
+<value>Liechtenstein</value>
+<value>Lituania</value>
+<value>Luxemburgo</value>
+<value>Macao</value>
+<value>Macedonia</value>
+<value>Madagascar</value>
+<value>Malasia</value>
+<value>Maldivas</value>
+<value>Malí</value>
+<value>Malta</value>
+<value>Marruecos</value>
+<value>Mauritania</value>
+<value>Moldavia</value>
+<value>Mónaco</value>
+<value>Mongolia</value>
+<value>Mozambique</value>
+<value>Myanmar</value>
+<value>Namibia</value>
+<value>Nauru</value>
+<value>Nepal</value>
+<value>Nicaragua</value>
+<value>Níger</value>
+<value>Noruega</value>
+<value>Nueva Zelanda</value>
+<value>Omán</value>
+<value>Pakistán</value>
+<value>Palau</value>
+<value>Papúa Nueva Guinea</value>
+<value>Polonia</value>
+<value>Portugal</value>
+<value>Qatar</value>
+<value>Reino Unido</value>
+<value>República Centroafricana</value>
+<value>República Checa</value>
+<value>Rumania</value>
+<value>Samoa</value>
+<value>San Marino</value>
+<value>Santa Lucía</value>
+<value>Serbia y Montenegro</value>
+<value>Seychelles</value>
+<value>Sierra Leona</value>
+<value>Singapur</value>
+<value>Siria</value>
+<value>Somalía</value>
+<value>Sri Lanka</value>
+<value>Sudán</value>
+<value>Suecia</value>
+<value>Suiza</value>
+<value>Surinam</value>
+<value>Tanzania</value>
+<value>Togo</value>
+<value>Tonga</value>
+<value>Trinidad y Tobago</value>
+<value>Túnez</value>
+<value>Turkmenistán</value>
+<value>Turquía</value>
+<value>Tuvalu</value>
+<value>Uganda</value>
+<value>Uzbekistan</value>
+<value>Vanuatu</value>
+<value>Yemen</value>
+<value>Zambia</value>
+<value>Bielorrusia</value>
+<value>Aruba</value>
+<value>Azerbaijan</value>
+<value>Bangladesh</value>
+<value>Suazilandia</value>
+<value>Bermuda</value>
+<value>Santa Elena</value>
+<value>Bouvet Island</value>
+<value>Congo</value>
+<value>Sao Tome and Principe</value>
+<value>Cabo Verda</value>
+<value>Burkina Faso</value>
+<value>Brunei Darussalam</value>
+<value>British Indian Ocean Territory</value>
+<value>Bosnia y Herzegovina</value>
+<value>Botsuana</value>
+<value>Svalbard and Jan Mayen</value>
+<value>Western Sahara</value>
+<value>Virgin Islands British</value>
+<value>American Samoa</value>
+<value>Anguila</value>
+<value>Zimbabue</value>
+<value>Antártida</value>
+<value>United States Minor Outlying I</value>
+<value>Antigua and Barbuda</value>
+<value>Toquelau</value>
+<value>Virgin Islands U.S.</value>
+<value>Tajikistán</value>
+<value>Antillas Holandesas</value>
+<value>Tailandia</value>
+<value>Zaire</value>
+<value>San Vicente y Las Granadinas</value>
+<value>Mayotte</value>
+<value>Islas Mauricio</value>
+<value>Niue</value>
+<value>Norfolk Island</value>
+<value>Northern Mariana Islands</value>
+<value>Islas Malvinas</value>
+<value>Nueva Caledonia</value>
+<value>Islas Feroe</value>
+<value>Islas Cook</value>
+<value>Islas Caimán</value>
+<value>Islas Sandwhich</value>
+<value>Islas Turks y Caicos</value>
+<value>Micronesia</value>
+<value>Martinique</value>
+<value>Malaui</value>
+<value>Lesoto</value>
+<value>Montserrat</value>
+<value>Latvia</value>
+<value>Kyrgyzstán</value>
+<value>Kazakhstán</value>
+<value>Islas Wallis y Futuna</value>
+<value>Isla Christmas</value>
+<value>Palestinian Territory</value>
+<value>Isalas Cocos</value>
+<value>República Democrática del Cong</value>
+<value>French Guiana</value>
+<value>República Islámica de Irán</value>
+<value>Ruanda</value>
+<value>El Vaticano</value>
+<value>Rusian</value>
+<value>Saint Kitts and Nevis</value>
+<value>Saint Pierre y Miquelon</value>
+<value>East Timor</value>
+<value>French Polynesia</value>
+<value>French Southern Territories</value>
+<value>Iraq</value>
+<value>Holanda</value>
+<value>Heard Island and McDonald Isla</value>
+<value>Pitcairn</value>
+<value>Guam</value>
+<value>Guadalupe</value>
+<value>Puerto Rico</value>
+<value>Groenlandia</value>
+<value>Gibraltar</value>
+<value>Cote D Ivoire</value>
+</valuelist>
+
 </module>

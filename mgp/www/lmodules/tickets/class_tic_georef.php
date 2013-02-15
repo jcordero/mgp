@@ -18,8 +18,8 @@ class class_tic_georef extends cobjbase {
         //Extensiones a esta clase
 
         //-- CField( Array(Parametros) )
-        $this->m_fields['tge_tipo'] = new CField(Array("Name"=>"tge_tipo", "Size"=>30, "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $this->m_fields['tge_nombre'] = new CField(Array("Name"=>"tge_nombre", "Size"=>100, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
+        $this->m_fields['tge_tipo'] = new CField(Array("Name"=>"tge_tipo", "Size"=>30, "IsForDB"=>true, "Order"=>101));
+        $this->m_fields['tge_nombre'] = new CField(Array("Name"=>"tge_nombre", "Size"=>100, "IsForDB"=>true, "Order"=>102));
         $this->m_fields['tge_calle_nombre'] = new CField(Array("Name"=>"tge_calle_nombre", "Size"=>100, "IsForDB"=>true, "Order"=>103));
         $this->m_fields['tge_altura'] = new CField(Array("Name"=>"tge_altura", "Type"=>"int", "IsForDB"=>true, "Order"=>104));
         $this->m_fields['tge_otra_denominacion'] = new CField(Array("Name"=>"tge_otra_denominacion", "Size"=>500, "IsForDB"=>true, "Order"=>105));
@@ -34,12 +34,12 @@ class class_tic_georef extends cobjbase {
         // No hay clases dependientes
 
         //Consultas particulares a la base de datos
-        $this->m_loaddb_sql = "SELECT tge_tipo, tge_nombre, tge_calle_nombre, tge_altura, tge_otra_denominacion, tge_coordx, tge_coordy, tge_cgpc, tge_barrio, tge_calle FROM tic_georef  WHERE tge_tipo= :tge_tipo_key: AND tge_nombre= :tge_nombre_key:";
+        $this->m_loaddb_sql = "SELECT tge_tipo, tge_nombre, tge_calle_nombre, tge_altura, tge_otra_denominacion, tge_coordx, tge_coordy, tge_cgpc, tge_barrio, tge_calle FROM tic_georef ";
         $this->m_objfactory_sql = "SELECT tge_tipo, tge_nombre, tge_calle_nombre, tge_altura, tge_otra_denominacion, tge_coordx, tge_coordy, tge_cgpc, tge_barrio, tge_calle FROM tic_georef";
         $this->m_objfactory_suffix_sql = "order by tge_nombre";
-        $this->m_savedb_update_sql = "UPDATE tic_georef SET tge_tipo= :tge_tipo:, tge_nombre= :tge_nombre:, tge_calle_nombre= :tge_calle_nombre:, tge_altura= :tge_altura:, tge_otra_denominacion= :tge_otra_denominacion:, tge_coordx= :tge_coordx:, tge_coordy= :tge_coordy:, tge_cgpc= :tge_cgpc:, tge_barrio= :tge_barrio:, tge_calle= :tge_calle: WHERE tge_tipo=:tge_tipo_key: AND tge_nombre=:tge_nombre_key:";
+        $this->m_savedb_update_sql = "UPDATE tic_georef SET tge_tipo= :tge_tipo:, tge_nombre= :tge_nombre:, tge_calle_nombre= :tge_calle_nombre:, tge_altura= :tge_altura:, tge_otra_denominacion= :tge_otra_denominacion:, tge_coordx= :tge_coordx:, tge_coordy= :tge_coordy:, tge_cgpc= :tge_cgpc:, tge_barrio= :tge_barrio:, tge_calle= :tge_calle:";
         $this->m_savedb_insert_sql = "INSERT INTO tic_georef(tge_tipo, tge_nombre, tge_calle_nombre, tge_altura, tge_otra_denominacion, tge_coordx, tge_coordy, tge_cgpc, tge_barrio, tge_calle) VALUES (:tge_tipo:, :tge_nombre:, :tge_calle_nombre:, :tge_altura:, :tge_otra_denominacion:, :tge_coordx:, :tge_coordy:, :tge_cgpc:, :tge_barrio:, :tge_calle:)";
-        $this->m_savedb_delete_sql = "DELETE FROM tic_georef WHERE tge_tipo=:tge_tipo_key: AND tge_nombre=:tge_nombre_key:";
+        $this->m_savedb_delete_sql = "DELETE FROM tic_georef";
         $this->m_savedb_purge_sql = "DELETE FROM tic_georef";
         $this->m_savedb_total_sql = "SELECT COUNT(*) as cant FROM tic_georef ";
     }

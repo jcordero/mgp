@@ -29,44 +29,6 @@
         	$buff.='</li>';
         	$buff.='</ul>';
         }
-        if($this->haveRight($primary_db,'menu.archivo.call_saliente')) { 
-            $buff.="</li>";
-            $buff.='<li>Saliente';
-        	$buff.='<ul>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/colallamadas.php?OP=V')."\">Cola de llamadas</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/pendientes.php?OP=V')."\">Tareas Pendientes</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/colallamadasadm.php?OP=V')."\">Contactos realizados</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/ajustes.php?OP=M')."\">Ajustes de campaña</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/llamados.php?OP=V')."\">Números contactados</a>";
-        	$buff.='</li>';
-        	$buff.="<li>Reportes";
-        	$buff.='<ul>';
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/colallamadasadm.php?OP=V')."\">Contactos</a>";
-            	$buff.='</li>';
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/rep_operador.php?pagemode=off&OP=M')."\">Por operador</a>";
-            	$buff.='</li>';
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/rep_barrio.php?pagemode=off&OP=M')."\">Por barrio</a>";
-            	$buff.='</li>';
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/rep_prestacion.php?pagemode=off&OP=M')."\">Por prestacion</a>";
-            	$buff.='</li>';
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/rep_horario.php?pagemode=off&OP=M')."\">Por horario</a>";
-            	$buff.='</li>';
-        	$buff.='</ul>';
-        	$buff.='</li>';
-        	$buff.="<li>Skills";
-        	$buff.='<ul>';
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/skills.php?OP=V')."\">Consulta de skills</a>";
-            	$buff.='</li>';
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/call/skill_maint.php?OP=N')."\">Nuevo skill</a>";
-            	$buff.='</li>';
-        	$buff.='</ul>';
-        	$buff.='</li>';
-        	$buff.='</ul>';
-        }
         if($this->haveRight($primary_db,'menu.archivo.tickets')) { 
             $buff.="</li>";
             $buff.='<li>Tickets';

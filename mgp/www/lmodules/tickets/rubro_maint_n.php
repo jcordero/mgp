@@ -29,7 +29,7 @@ class asunto_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_rubros")->GetField("tru_code")->SetDisplayValues(Array("Name"=>"tru_code", "Label"=>"Código", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"SEQUENCE", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "ClassParams"=>"tic_rubros", "Class"=>"class_tic_rubros"));
+        $this->getClass("class_tic_rubros")->GetField("tru_code")->SetDisplayValues(Array("Name"=>"tru_code", "Label"=>"Código", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsReadOnly"=>true, "Sequence"=>"tic_rubros", "Class"=>"class_tic_rubros"));
         $this->getClass("class_tic_rubros")->GetField("tru_detalle")->SetDisplayValues(Array("Name"=>"tru_detalle", "Label"=>"Nombre", "Size"=>100, "IsForDB"=>true, "Order"=>102, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_rubros"));
     }
 }

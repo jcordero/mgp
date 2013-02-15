@@ -18,7 +18,7 @@ class class_tic_rubros extends cobjbase {
         //Extensiones a esta clase
 
         //-- CField( Array(Parametros) )
-        $this->m_fields['tru_code'] = new CField(Array("Name"=>"tru_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
+        $this->m_fields['tru_code'] = new CField(Array("Name"=>"tru_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false, "Sequence"=>"tic_rubros"));
         $this->m_fields['tru_detalle'] = new CField(Array("Name"=>"tru_detalle", "Size"=>100, "IsForDB"=>true, "Order"=>102));
         $this->m_fields['tru_estado'] = new CField(Array("Name"=>"tru_estado", "Size"=>20, "IsForDB"=>true, "Order"=>103));
         $this->m_fields['tru_tstamp'] = new CField(Array("Name"=>"tru_tstamp", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104));

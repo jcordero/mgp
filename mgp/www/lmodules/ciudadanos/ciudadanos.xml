@@ -3,14 +3,20 @@
 	<!-- Clase Ciudadanos_n-  -->
 	<make object="class">
 		<build out_file="ciu_ciudadanos_n.php" classname="ciu_ciudadanos_n" classlabel="ciudadanos">
-			<parse in_file="ciudadanos.sql" tablename="ciu_ciudadanos" />
+			<parse in_file="../mgp.sql" tablename="ciu_ciudadanos" />
 
 			<field name="tmp_mapa" type="varchar" size="50" isfordb="false" />
 			<field name="tmp_cod_calle" type="int" isfordb="false" />
 
+            <!-- Parte para los documentos del ciudadano -->
+			<build classname="ciu_identificacion" classlabel="documentos">
+				<parse in_file="../mgp.sql" tablename="ciu_identificacion" />
+				<key parent="ciu_code" child="ciu_code" />
+			</build>
+
              <!-- Parte para el historialdel ciudadano -->
 			<build classname="ciu_historial_contactos" classlabel="historial">
-				<parse in_file="ciudadanos.sql" tablename="ciu_historial_contactos" />
+				<parse in_file="../mgp.sql" tablename="ciu_historial_contactos" />
 				<key parent="ciu_code" child="ciu_code" />
 				<field name="chi_code" sequence="ciu_historial_contactos" />
 			</build>
@@ -24,16 +30,14 @@
 		<build out_file="ciudadanos.php" classname="ciu_ciudadanos_n" title="Ciudadanos">
 			
 			<!-- Consulta Ciudadanos - Campos de Busqueda -->
-			<searchfield name="CIU_CODE" presentation="INT" label="Codigo" />
+			<searchfield name="CIU_CODE" presentation="INT" label="Codigo" isvisible="false"/>
 			<searchfield name="CIU_NOMBRES" presentation="TEXT" label="Nombre" />
 			<searchfield name="CIU_APELLIDO" presentation="TEXT" label="Apellido" />
-			<searchfield name="CIU_DOC_NRO" presentation="DNI" label="Dni" />
 
 			<!-- Consulta Ciudadanos - Campos de Resultados -->
-			<listfield name="CIU_CODE" presentation="INT" label="Codigo" />
+			<listfield name="CIU_CODE" presentation="INT" label="Codigo" isvisible="false"/>
 			<listfield name="CIU_NOMBRES" presentation="TEXT" label="Nombre" />
 			<listfield name="CIU_APELLIDO" presentation="TEXT" label="Apellido" />
-			<listfield name="CIU_DOC_NRO" presentation="DNI" label="Nro Documento" />
 			<listfield name="CIU_SEXO" presentation="SEXO" label="Sexo" />
 			<listfield name="CIU_TEL_FIJO" presentation="PHONE" label="Tel.Fijo" />
 			<listfield name="CIU_TEL_MOVIL" presentation="PHONE" label="Tel.Movil" />
@@ -66,12 +70,10 @@
 				<field name="ciu_tipo_persona" presentation="TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
 				<field name="ciu_nombres" presentation="TEXT" label="Nombre" ismandatory="true" />
 				<field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
-				<field name="ciu_sexo" presentation="SEXO" label="Sexo"  ismandatory="true" />
+				<field name="ciu_sexo" presentation="SEXO" label="Género"  ismandatory="true" />
 				<field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
-				<field name="ciu_doc_nro" presentation="DOCID" label="Doc." ismandatory="true" classparams="no_search" />
                 <field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" initialvalue="Argentina"/>
                 <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
-                <field name="ciu_email" presentation="EMAIL" label="E-Mail" />
 			</group>
 
 			<!-- Datos personales - Domicilio-->
@@ -87,9 +89,7 @@
 				<field name="ciu_provincia" presentation="TEXT" label="Provincia" cols="20" initialvalue="BUENOS AIRES"/>
 				<field name="ciu_pais" presentation="TEXT" label="Pais" ismandatory="false" cols="20" initialvalue="ARGENTINA"/>
 				<field name="ciu_barrio" presentation="BARRIOS" label="Barrio" ismandatory="false" cols="20" />
-<!--  				<field name="ciu_cgpc" presentation="CGPC" label="Comuna" ismandatory="false" cols="20" /> -->
-				
-				<!-- Campos Invisibles-->
+
 				<field name="ciu_coord_x" presentation="TEXT" label="coordenada x" ismandatory="false" isvisible="false" />
 				<field name="ciu_coord_y" presentation="TEXT" label="coordenada y" ismandatory="false" isvisible="false" />
 			</group>
@@ -98,9 +98,10 @@
 			<group title="Contacto" id="contacto" render_html="block">
 				<field name="ciu_no_email" presentation="SINO" 	label="Contactar por mail?" initialvalue="NO"/>
 				<field name="ciu_no_llamar" presentation="SINO"  label="Contactar por teléfono?" initialvalue="NO"/>
+				<field name="ciu_horario_cont" presentation="TEXT" label="Horario de contacto" />
 				<field name="ciu_tel_fijo" presentation="PHONE" label="Telefono fijo" />
 				<field name="ciu_tel_movil" presentation="PHONE" label="Telefono móvil" />
-				<field name="ciu_horario_cont" presentation="TEXT" label="Horario de contacto" />
+				<field name="ciu_email" presentation="EMAIL" label="E-Mail" />
 			</group>
 
 			<!-- Informacion adicional laboral/estudios -->
@@ -118,6 +119,20 @@
 				<field name="ciu_estado" presentation="ESTADO_CIUDADANO" label="Estado" ismandatory="false" isvisible="false" />
 			</group>
 
+			<!-- Documentos -->
+			<table relationclass="" classname="ciu_identificacion" title="Documentos" add="true" delete="true" update="true">
+                <column title="País emisor" order="1">
+                    <field name="ciu_code" isvisible="false"/>
+                    <field name="ciu_pais_emisor" presentation="TEXT" label="País emisor" />
+                </column> 
+                <column title="Tipo" order="2">
+                    <field name="ciu_tipo_doc" presentation="TIPODOC" label="Tipo doc"/>
+                </column>
+                <column title="Número" order="3">
+                    <field name="ciu_nro_doc" presentation="DNI" label="Nro doc"/>
+                </column>
+            </table>
+
 		</build>
 	</make>
 
@@ -132,12 +147,10 @@
 				<field name="ciu_tipo_persona" presentation="TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
 				<field name="ciu_nombres" presentation="TEXT" label="Nombre" ismandatory="true" />
 				<field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
-				<field name="ciu_sexo" presentation="SEXO" label="Sexo"  ismandatory="true" />
+				<field name="ciu_sexo" presentation="SEXO" label="Género"  ismandatory="true" />
 				<field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
-				<field name="ciu_doc_nro" presentation="DOCID" label="Doc." ismandatory="true" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_dir_calle|ciu_dir_nro|ciu_dir_piso|ciu_dir_dpto|ciu_localidad|ciu_cod_postal|ciu_tipo_persona|ciu_sexo|ciu_profesion|ciu_nacionalidad" />
-                <field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" />
+				<field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" />
                 <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
-                <field name="ciu_email" presentation="EMAIL" label="E-Mail" />
 			</group>
 
 			<!-- Datos personales - Domicilio-->
@@ -152,8 +165,7 @@
 				<field name="ciu_provincia" presentation="TEXT" label="Provincia" cols="20" initialvalue="BUENOS AIRES"/>
 				<field name="ciu_pais" presentation="TEXT" label="Pais" ismandatory="false" cols="20" initialvalue="ARGENTINA"/>
 				<field name="ciu_barrio" presentation="BARRIOS" label="Barrio" ismandatory="false" cols="20" />
-		<!-- 		<field name="ciu_cgpc" presentation="CGPC" label="Comuna" ismandatory="false" cols="20" />  -->
-				<!-- Campos Invisibles-->
+		
 				<field name="ciu_coord_x" presentation="TEXT" label="coordenada x" ismandatory="false" isvisible="false" />
 				<field name="ciu_coord_y" presentation="TEXT" label="coordenada y" ismandatory="false" isvisible="false" />
 			</group>
@@ -162,9 +174,10 @@
 			<group title="Datos de contacto" id="contacto" render_html="block">
 				<field name="ciu_no_email" presentation="SINO" 	label="Contacto por mail?" initialvalue="NO"/>
 				<field name="ciu_no_llamar" presentation="SINO"  label="Contacto por teléfono?" initialvalue="NO"/>
+				<field name="ciu_horario_cont" presentation="TEXT" label="Horario de Contacto" />
 				<field name="ciu_tel_fijo" presentation="PHONE" label="Telefono Fijo" />
 				<field name="ciu_tel_movil" presentation="PHONE" label="Telefono Movil" />
-				<field name="ciu_horario_cont" presentation="TEXT" label="Horario de Contacto" />
+				<field name="ciu_email" presentation="EMAIL" label="E-Mail" />
 			</group>
 
 			<!-- Informacion adicional laboral/estudios -->
@@ -182,6 +195,20 @@
 				<field name="ciu_estado" presentation="ESTADO_CIUDADANO" label="Estado" ismandatory="false" cols="20" initialvalue="ACTIVO" isvisible="false" />
 			</group>
 
+			<!-- Documentos -->
+			<table relationclass="" classname="ciu_identificacion" title="Documentos" add="true" delete="true" update="true">
+                <column title="País emisor" order="1">
+                    <field name="ciu_code" isvisible="false"/>
+                    <field name="ciu_pais_emisor" presentation="NACIONALIDAD" label="País emisor" />
+                </column> 
+                <column title="Tipo" order="2">
+                    <field name="ciu_tipo_doc" presentation="TIPODOC" label="Tipo doc"/>
+                </column>
+                <column title="Número" order="3">
+                    <field name="ciu_nro_doc" presentation="DNI" label="Nro doc"/>
+                </column>
+            </table>
+
 		</build>
 	</make>
 
@@ -193,10 +220,10 @@
 	<!-- Actividad en una sesion -->
 	<make object="class">
 		<build out_file="class_ciu_sesiones_ver.php" classname="class_ciu_sesiones_ver" classlabel="sesiones ciudadanos">
-			<parse in_file="ciudadanos.sql" tablename="ciu_sesiones" />
+			<parse in_file="../mgp.sql" tablename="ciu_sesiones" />
 
             <build classname="class_ciu_historial_contactos" classlabel="detalle sesiones">
-                <parse in_file="ciudadanos.sql" tablename="ciu_historial_contactos" />
+                <parse in_file="../mgp.sql" tablename="ciu_historial_contactos" />
                 <key parent="cse_code" child="cse_code" />
             </build>
 		</build>
@@ -241,7 +268,7 @@
     <!-- CLASE SESIONES -->
     <make object="class">
         <build out_file="class_ciu_sesiones.php" classname="class_ciu_sesiones" classlabel="Sesiones">
-            <parse in_file="ciudadanos.sql" tablename="ciu_sesiones"/>
+            <parse in_file="../mgp.sql" tablename="ciu_sesiones"/>
         </build>
     </make>
 

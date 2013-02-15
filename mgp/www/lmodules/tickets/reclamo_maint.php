@@ -80,8 +80,8 @@ class ubicacion_gr extends cform_group {
         $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_lugar")->SetDisplayValues(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>1000, "IsForDB"=>true, "Order"=>108, "Presentation"=>"DIRECCION", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
         $this->getClass("class_tic_ticket_upd_rec")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Size"=>50, "Order"=>22, "Presentation"=>"MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket_upd_rec"));
         $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_id_cuadra")->SetDisplayValues(Array("Name"=>"tic_id_cuadra", "Label"=>"IdCuadra", "Type"=>"int", "IsForDB"=>true, "Order"=>113, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd_rec"));
-        $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"float", "IsForDB"=>true, "Order"=>111, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd_rec"));
-        $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_coordy")->SetDisplayValues(Array("Name"=>"tic_coordy", "Label"=>"y", "Type"=>"float", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd_rec"));
+        $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"double", "IsForDB"=>true, "Order"=>111, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd_rec"));
+        $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_coordy")->SetDisplayValues(Array("Name"=>"tic_coordy", "Label"=>"y", "Type"=>"double", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd_rec"));
         $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_barrio")->SetDisplayValues(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
         $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_cgpc")->SetDisplayValues(Array("Name"=>"tic_cgpc", "Label"=>"CGPC", "Size"=>20, "IsForDB"=>true, "Order"=>110, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
         $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_calle_nombre")->SetDisplayValues(Array("Name"=>"tic_calle_nombre", "Label"=>"Calle", "Size"=>100, "IsForDB"=>true, "Order"=>118, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd_rec"));
@@ -122,8 +122,8 @@ class estado_gr extends cform_group {
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
         $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Label"=>"Número", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
-        $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_anio")->SetDisplayValues(Array("Name"=>"tic_anio", "Label"=>"Año", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
-        $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_tipo")->SetDisplayValues(Array("Name"=>"tic_tipo", "Label"=>"Tipo", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
+        $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_anio")->SetDisplayValues(Array("Name"=>"tic_anio", "Label"=>"Año", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
+        $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_tipo")->SetDisplayValues(Array("Name"=>"tic_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
         $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_tstamp_in")->SetDisplayValues(Array("Name"=>"tic_tstamp_in", "Label"=>"Ingreso Denuncia", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
         $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_tstamp_plazo")->SetDisplayValues(Array("Name"=>"tic_tstamp_plazo", "Label"=>"Fec.Cierre estimado", "Type"=>"datetime", "IsForDB"=>true, "Order"=>116, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
         $this->getClass("class_tic_ticket_upd_rec")->GetField("tic_tstamp_cierre")->SetDisplayValues(Array("Name"=>"tic_tstamp_cierre", "Label"=>"Fec.Cierre Denuncia", "Type"=>"datetime", "IsForDB"=>true, "Order"=>117, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd_rec"));
@@ -162,36 +162,34 @@ class class_tic_avance_th3 extends ctable_handler {
         $this->m_note = ""; //Nota
 
         $this->m_datafields['tic_nro']=1;
-        $this->m_datafields['tic_anio']=2;
-        $this->m_datafields['tic_tipo']=3;
-        $this->m_datafields['tav_tstamp']=4;
-        $this->m_datafields['tpr_code']=5;
-        $this->m_datafields['tic_estado_in']=6;
-        $this->m_datafields['tic_estado_out']=7;
-        $this->m_datafields['tic_motivo']=8;
-        $this->m_datafields['use_code']=9;
+        $this->m_datafields['tpr_code']=2;
+        $this->m_datafields['tic_estado_in']=3;
+        $this->m_datafields['tav_tstamp_in']=4;
+        $this->m_datafields['use_code_in']=5;
+        $this->m_datafields['tic_estado_out']=6;
+        $this->m_datafields['tav_tstamp_out']=7;
+        $this->m_datafields['use_code_out']=8;
+        $this->m_datafields['tic_motivo']=9;
         $this->m_datafields['tav_nota']=10;
 
-        $this->m_columns[1] = new ctable_column(1,'Fecha',array('tic_nro','tic_anio','tic_tipo','tav_tstamp'));
-        $this->m_columns[2] = new ctable_column(2,'Prest.',array('tpr_code'));
-        $this->m_columns[3] = new ctable_column(3,'Est.Inicial',array('tic_estado_in'));
-        $this->m_columns[4] = new ctable_column(4,'Est.Final',array('tic_estado_out'));
-        $this->m_columns[5] = new ctable_column(5,'Motivo',array('tic_motivo'));
-        $this->m_columns[6] = new ctable_column(6,'Operador',array('use_code'));
-        $this->m_columns[7] = new ctable_column(7,'Nota',array('tav_nota'));
+        $this->m_columns[1] = new ctable_column(1,'Prest.',array('tic_nro','tpr_code'));
+        $this->m_columns[2] = new ctable_column(2,'Est.Inicial',array('tic_estado_in','tav_tstamp_in','use_code_in'));
+        $this->m_columns[3] = new ctable_column(3,'Est.Final',array('tic_estado_out','tav_tstamp_out','use_code_out'));
+        $this->m_columns[4] = new ctable_column(4,'Motivo',array('tic_motivo'));
+        $this->m_columns[5] = new ctable_column(5,'Nota',array('tav_nota'));
     }
 
     public function getJsIncludes($obj) {
         $r=array();
         $r[]=$obj->GetField("tic_nro")->getJsIncludes();
-        $r[]=$obj->GetField("tic_anio")->getJsIncludes();
-        $r[]=$obj->GetField("tic_tipo")->getJsIncludes();
-        $r[]=$obj->GetField("tav_tstamp")->getJsIncludes();
         $r[]=$obj->GetField("tpr_code")->getJsIncludes();
         $r[]=$obj->GetField("tic_estado_in")->getJsIncludes();
+        $r[]=$obj->GetField("tav_tstamp_in")->getJsIncludes();
+        $r[]=$obj->GetField("use_code_in")->getJsIncludes();
         $r[]=$obj->GetField("tic_estado_out")->getJsIncludes();
+        $r[]=$obj->GetField("tav_tstamp_out")->getJsIncludes();
+        $r[]=$obj->GetField("use_code_out")->getJsIncludes();
         $r[]=$obj->GetField("tic_motivo")->getJsIncludes();
-        $r[]=$obj->GetField("use_code")->getJsIncludes();
         $r[]=$obj->GetField("tav_nota")->getJsIncludes();
         return $r;
     }
@@ -199,15 +197,15 @@ class class_tic_avance_th3 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("tic_anio")->SetDisplayValues(Array("Name"=>"tic_anio", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("tic_tipo")->SetDisplayValues(Array("Name"=>"tic_tipo", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "IsNullable"=>false));
-        $obj->GetField("tav_tstamp")->SetDisplayValues(Array("Name"=>"tav_tstamp", "Label"=>"Fecha", "Type"=>"datetime", "IsPK"=>true, "IsForDB"=>true, "Order"=>105, "Presentation"=>"DATETIME", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"PRESTACION", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado inicial", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"ESTADO_DENUNCIA", "IsVisible"=>true));
-        $obj->GetField("tic_estado_out")->SetDisplayValues(Array("Name"=>"tic_estado_out", "Label"=>"Estado final", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"ESTADO_DENUNCIA", "IsVisible"=>true));
-        $obj->GetField("tic_motivo")->SetDisplayValues(Array("Name"=>"tic_motivo", "Label"=>"Motivo", "Size"=>50, "IsForDB"=>true, "Order"=>110, "Presentation"=>"TEXT", "IsVisible"=>true));
-        $obj->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"USER", "IsVisible"=>true));
-        $obj->GetField("tav_nota")->SetDisplayValues(Array("Name"=>"tav_nota", "Label"=>"Nota", "Size"=>1000, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4, "Cols"=>60));
+        $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACION", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado inicial", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"ESTADO_DENUNCIA", "IsVisible"=>true));
+        $obj->GetField("tav_tstamp_in")->SetDisplayValues(Array("Name"=>"tav_tstamp_in", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATETIME", "IsVisible"=>true));
+        $obj->GetField("use_code_in")->SetDisplayValues(Array("Name"=>"use_code_in", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"USER", "IsVisible"=>true));
+        $obj->GetField("tic_estado_out")->SetDisplayValues(Array("Name"=>"tic_estado_out", "Label"=>"Estado final", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"ESTADO_DENUNCIA", "IsVisible"=>true));
+        $obj->GetField("tav_tstamp_out")->SetDisplayValues(Array("Name"=>"tav_tstamp_out", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>110, "Presentation"=>"DATETIME", "IsVisible"=>true));
+        $obj->GetField("use_code_out")->SetDisplayValues(Array("Name"=>"use_code_out", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"USER", "IsVisible"=>true));
+        $obj->GetField("tic_motivo")->SetDisplayValues(Array("Name"=>"tic_motivo", "Label"=>"Motivo", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $obj->GetField("tav_nota")->SetDisplayValues(Array("Name"=>"tav_nota", "Label"=>"Nota", "Size"=>1000, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4, "Cols"=>60));
     }
 
 }
@@ -239,15 +237,13 @@ class class_tic_ticket_prestaciones_th4 extends ctable_handler {
         $this->m_note = ""; //Nota
 
         $this->m_datafields['tic_nro']=1;
-        $this->m_datafields['tic_anio']=2;
-        $this->m_datafields['tic_tipo']=3;
-        $this->m_datafields['tpr_code']=4;
-        $this->m_datafields['tru_code']=5;
-        $this->m_datafields['ttp_cuestionario']=6;
-        $this->m_datafields['ttp_prioridad']=7;
-        $this->m_datafields['ttp_estado']=8;
+        $this->m_datafields['tpr_code']=2;
+        $this->m_datafields['tru_code']=3;
+        $this->m_datafields['ttp_cuestionario']=4;
+        $this->m_datafields['ttp_prioridad']=5;
+        $this->m_datafields['ttp_estado']=6;
 
-        $this->m_columns[1] = new ctable_column(1,'Prestación',array('tic_nro','tic_anio','tic_tipo','tpr_code'));
+        $this->m_columns[1] = new ctable_column(1,'Prestación',array('tic_nro','tpr_code'));
         $this->m_columns[2] = new ctable_column(2,'Rubro',array('tru_code'));
         $this->m_columns[3] = new ctable_column(3,'Cuestionario',array('ttp_cuestionario'));
         $this->m_columns[4] = new ctable_column(4,'Prioridad',array('ttp_prioridad'));
@@ -257,8 +253,6 @@ class class_tic_ticket_prestaciones_th4 extends ctable_handler {
     public function getJsIncludes($obj) {
         $r=array();
         $r[]=$obj->GetField("tic_nro")->getJsIncludes();
-        $r[]=$obj->GetField("tic_anio")->getJsIncludes();
-        $r[]=$obj->GetField("tic_tipo")->getJsIncludes();
         $r[]=$obj->GetField("tpr_code")->getJsIncludes();
         $r[]=$obj->GetField("tru_code")->getJsIncludes();
         $r[]=$obj->GetField("ttp_cuestionario")->getJsIncludes();
@@ -270,13 +264,11 @@ class class_tic_ticket_prestaciones_th4 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("tic_anio")->SetDisplayValues(Array("Name"=>"tic_anio", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("tic_tipo")->SetDisplayValues(Array("Name"=>"tic_tipo", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "IsNullable"=>false));
-        $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"PRESTACION", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("tru_code")->SetDisplayValues(Array("Name"=>"tru_code", "Label"=>"Rubro", "Type"=>"int", "IsForDB"=>true, "Order"=>106, "Presentation"=>"RUBRO", "IsVisible"=>true));
-        $obj->GetField("ttp_cuestionario")->SetDisplayValues(Array("Name"=>"ttp_cuestionario", "Label"=>"Cuestionario", "Size"=>3000, "IsForDB"=>true, "Order"=>107, "Presentation"=>"CUESTIONARIO", "IsVisible"=>true, "IsReadOnly"=>true));
-        $obj->GetField("ttp_prioridad")->SetDisplayValues(Array("Name"=>"ttp_prioridad", "Label"=>"Prioridad", "Size"=>20, "IsForDB"=>true, "Order"=>109, "Presentation"=>"PRIORIDAD", "IsVisible"=>true, "IsReadOnly"=>true));
-        $obj->GetField("ttp_estado")->SetDisplayValues(Array("Name"=>"ttp_estado", "Label"=>"Estado", "Size"=>10, "IsForDB"=>true, "Order"=>108, "Presentation"=>"ESTADO_DENUNCIA", "IsVisible"=>true, "IsReadOnly"=>true, "InitialValue"=>"INICIADA"));
+        $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACION", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("tru_code")->SetDisplayValues(Array("Name"=>"tru_code", "Label"=>"Rubro", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "Presentation"=>"RUBRO", "IsVisible"=>true));
+        $obj->GetField("ttp_cuestionario")->SetDisplayValues(Array("Name"=>"ttp_cuestionario", "Label"=>"Cuestionario", "Size"=>3000, "IsForDB"=>true, "Order"=>104, "Presentation"=>"CUESTIONARIO", "IsVisible"=>true, "IsReadOnly"=>true));
+        $obj->GetField("ttp_prioridad")->SetDisplayValues(Array("Name"=>"ttp_prioridad", "Label"=>"Prioridad", "Size"=>20, "IsForDB"=>true, "Order"=>106, "Presentation"=>"PRIORIDAD", "IsVisible"=>true, "IsReadOnly"=>true));
+        $obj->GetField("ttp_estado")->SetDisplayValues(Array("Name"=>"ttp_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"ESTADO_DENUNCIA", "IsVisible"=>true, "IsReadOnly"=>true, "InitialValue"=>"INICIADA"));
     }
 
 }
@@ -308,13 +300,11 @@ class class_tic_ticket_organismos_th5 extends ctable_handler {
         $this->m_note = ""; //Nota
 
         $this->m_datafields['tic_nro']=1;
-        $this->m_datafields['tic_anio']=2;
-        $this->m_datafields['tic_tipo']=3;
-        $this->m_datafields['tor_code']=4;
-        $this->m_datafields['tto_figura']=5;
-        $this->m_datafields['tpr_code']=6;
+        $this->m_datafields['tor_code']=2;
+        $this->m_datafields['tto_figura']=3;
+        $this->m_datafields['tpr_code']=4;
 
-        $this->m_columns[1] = new ctable_column(1,'Organismo',array('tic_nro','tic_anio','tic_tipo','tor_code'));
+        $this->m_columns[1] = new ctable_column(1,'Organismo',array('tic_nro','tor_code'));
         $this->m_columns[2] = new ctable_column(2,'Figura',array('tto_figura'));
         $this->m_columns[3] = new ctable_column(3,'Prestacion',array('tpr_code'));
     }
@@ -322,8 +312,6 @@ class class_tic_ticket_organismos_th5 extends ctable_handler {
     public function getJsIncludes($obj) {
         $r=array();
         $r[]=$obj->GetField("tic_nro")->getJsIncludes();
-        $r[]=$obj->GetField("tic_anio")->getJsIncludes();
-        $r[]=$obj->GetField("tic_tipo")->getJsIncludes();
         $r[]=$obj->GetField("tor_code")->getJsIncludes();
         $r[]=$obj->GetField("tto_figura")->getJsIncludes();
         $r[]=$obj->GetField("tpr_code")->getJsIncludes();
@@ -333,11 +321,9 @@ class class_tic_ticket_organismos_th5 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("tic_anio")->SetDisplayValues(Array("Name"=>"tic_anio", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("tic_tipo")->SetDisplayValues(Array("Name"=>"tic_tipo", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "IsNullable"=>false));
-        $obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"ORGANISMO", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("tto_figura")->SetDisplayValues(Array("Name"=>"tto_figura", "Label"=>"Figura", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"GISFIGURA", "IsVisible"=>true));
-        $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsForDB"=>true, "Order"=>106, "Presentation"=>"PRESTACION", "IsVisible"=>true));
+        $obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "Presentation"=>"ORGANISMO", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("tto_figura")->SetDisplayValues(Array("Name"=>"tto_figura", "Label"=>"Figura", "Size"=>50, "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"GISFIGURA", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACION", "IsNullable"=>false, "IsVisible"=>true));
     }
 
 }
@@ -369,13 +355,11 @@ class class_tic_ticket_ciudadano_th6 extends ctable_handler {
         $this->m_note = ""; //Nota
 
         $this->m_datafields['tic_nro']=1;
-        $this->m_datafields['tic_anio']=2;
-        $this->m_datafields['tic_tipo']=3;
-        $this->m_datafields['ttc_tstamp']=4;
-        $this->m_datafields['ciu_code']=5;
-        $this->m_datafields['ttc_nota']=6;
+        $this->m_datafields['ttc_tstamp']=2;
+        $this->m_datafields['ciu_code']=3;
+        $this->m_datafields['ttc_nota']=4;
 
-        $this->m_columns[1] = new ctable_column(1,'Fecha',array('tic_nro','tic_anio','tic_tipo','ttc_tstamp'));
+        $this->m_columns[1] = new ctable_column(1,'Fecha',array('tic_nro','ttc_tstamp'));
         $this->m_columns[2] = new ctable_column(2,'Ciudadano',array('ciu_code'));
         $this->m_columns[3] = new ctable_column(3,'Nota',array('ttc_nota'));
     }
@@ -383,8 +367,6 @@ class class_tic_ticket_ciudadano_th6 extends ctable_handler {
     public function getJsIncludes($obj) {
         $r=array();
         $r[]=$obj->GetField("tic_nro")->getJsIncludes();
-        $r[]=$obj->GetField("tic_anio")->getJsIncludes();
-        $r[]=$obj->GetField("tic_tipo")->getJsIncludes();
         $r[]=$obj->GetField("ttc_tstamp")->getJsIncludes();
         $r[]=$obj->GetField("ciu_code")->getJsIncludes();
         $r[]=$obj->GetField("ttc_nota")->getJsIncludes();
@@ -394,11 +376,9 @@ class class_tic_ticket_ciudadano_th6 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("tic_anio")->SetDisplayValues(Array("Name"=>"tic_anio", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("tic_tipo")->SetDisplayValues(Array("Name"=>"tic_tipo", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "IsNullable"=>false));
-        $obj->GetField("ttc_tstamp")->SetDisplayValues(Array("Name"=>"ttc_tstamp", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>105, "Presentation"=>"DATETIME", "IsVisible"=>true));
-        $obj->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Label"=>"Ciudadano", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"CIUDADANO", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("ttc_nota")->SetDisplayValues(Array("Name"=>"ttc_nota", "Label"=>"Nota", "Size"=>1000, "IsForDB"=>true, "Order"=>106, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $obj->GetField("ttc_tstamp")->SetDisplayValues(Array("Name"=>"ttc_tstamp", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>103, "Presentation"=>"DATETIME", "IsVisible"=>true));
+        $obj->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Label"=>"Ciudadano", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"CIUDADANO", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("ttc_nota")->SetDisplayValues(Array("Name"=>"ttc_nota", "Label"=>"Nota", "Size"=>1000, "IsForDB"=>true, "Order"=>104, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 
 }
@@ -430,27 +410,20 @@ class class_tic_ticket_asociado_th7 extends ctable_handler {
         $this->m_note = ""; //Nota
 
         $this->m_datafields['tic_nro']=1;
-        $this->m_datafields['tic_anio']=2;
-        $this->m_datafields['tic_tipo']=3;
-        $this->m_datafields['tta_tstamp']=4;
-        $this->m_datafields['tic_nro_asoc']=5;
-        $this->m_datafields['tic_anio_asoc']=6;
-        $this->m_datafields['use_code']=7;
+        $this->m_datafields['tta_tstamp']=2;
+        $this->m_datafields['tic_nro_asoc']=3;
+        $this->m_datafields['use_code']=4;
 
-        $this->m_columns[1] = new ctable_column(1,'Fecha',array('tic_nro','tic_anio','tic_tipo','tta_tstamp'));
+        $this->m_columns[1] = new ctable_column(1,'Fecha',array('tic_nro','tta_tstamp'));
         $this->m_columns[2] = new ctable_column(2,'Nro',array('tic_nro_asoc'));
-        $this->m_columns[3] = new ctable_column(3,'Año',array('tic_anio_asoc'));
-        $this->m_columns[4] = new ctable_column(4,'Operador',array('use_code'));
+        $this->m_columns[3] = new ctable_column(3,'Operador',array('use_code'));
     }
 
     public function getJsIncludes($obj) {
         $r=array();
         $r[]=$obj->GetField("tic_nro")->getJsIncludes();
-        $r[]=$obj->GetField("tic_anio")->getJsIncludes();
-        $r[]=$obj->GetField("tic_tipo")->getJsIncludes();
         $r[]=$obj->GetField("tta_tstamp")->getJsIncludes();
         $r[]=$obj->GetField("tic_nro_asoc")->getJsIncludes();
-        $r[]=$obj->GetField("tic_anio_asoc")->getJsIncludes();
         $r[]=$obj->GetField("use_code")->getJsIncludes();
         return $r;
     }
@@ -458,12 +431,9 @@ class class_tic_ticket_asociado_th7 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("tic_anio")->SetDisplayValues(Array("Name"=>"tic_anio", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("tic_tipo")->SetDisplayValues(Array("Name"=>"tic_tipo", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "IsNullable"=>false));
-        $obj->GetField("tta_tstamp")->SetDisplayValues(Array("Name"=>"tta_tstamp", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>106, "Presentation"=>"DATETIME", "IsVisible"=>true));
-        $obj->GetField("tic_nro_asoc")->SetDisplayValues(Array("Name"=>"tic_nro_asoc", "Label"=>"Nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("tic_anio_asoc")->SetDisplayValues(Array("Name"=>"tic_anio_asoc", "Label"=>"Año", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>105, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"USER", "IsVisible"=>true));
+        $obj->GetField("tta_tstamp")->SetDisplayValues(Array("Name"=>"tta_tstamp", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>103, "Presentation"=>"DATETIME", "IsVisible"=>true));
+        $obj->GetField("tic_nro_asoc")->SetDisplayValues(Array("Name"=>"tic_nro_asoc", "Label"=>"Nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>104, "Presentation"=>"USER", "IsVisible"=>true));
     }
 
 }
@@ -561,7 +531,7 @@ class class_tic_ticket_upd_rec_m extends cclass_maint {
     	$this->m_css_prefix = '';// Prefijo CSS
 
         //Acciones
-		$this->m_action[] = new CAction('P','Imprimir comprobante','','','reclamo_maint.php?OP=P','tic_nro|tic_anio|tic_tipo|','Imprimir comprobante','');
+		$this->m_action[] = new CAction('P','Imprimir comprobante','','','reclamo_maint.php?OP=P','tic_nro|','Imprimir comprobante','');
 		$this->m_action[] = new CAction('L','Consulta de denuncias','','','recabiertos.php?last=1&OP=L','','Consulta de reclamos','');
 
         //Grupos

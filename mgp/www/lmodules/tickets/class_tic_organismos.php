@@ -18,7 +18,7 @@ class class_tic_organismos extends cobjbase {
         //Extensiones a esta clase
 
         //-- CField( Array(Parametros) )
-        $this->m_fields['tor_code'] = new CField(Array("Name"=>"tor_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
+        $this->m_fields['tor_code'] = new CField(Array("Name"=>"tor_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false, "Sequence"=>"tic_organismos"));
         $this->m_fields['tor_padre'] = new CField(Array("Name"=>"tor_padre", "Type"=>"int", "IsForDB"=>true, "Order"=>102));
         $this->m_fields['tor_sigla'] = new CField(Array("Name"=>"tor_sigla", "Size"=>20, "IsForDB"=>true, "Order"=>103));
         $this->m_fields['tor_nombre'] = new CField(Array("Name"=>"tor_nombre", "Size"=>100, "IsForDB"=>true, "Order"=>104));
