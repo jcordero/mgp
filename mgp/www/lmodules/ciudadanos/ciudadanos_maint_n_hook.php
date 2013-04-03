@@ -1,5 +1,6 @@
 <?php
-include_once "homepage/callsession.php";
+include_once "beans/call_status.php";
+include_once "beans/person_status.php";
 
 class ciu_ciudadanos_n_hooks extends cclass_maint_hooks
 {
@@ -11,7 +12,9 @@ class ciu_ciudadanos_n_hooks extends cclass_maint_hooks
         $contenido = array();
         $errores = array();
 		$obj = $this->m_data;
-		$m_session = new callsession();
+		$m_session = new call_status();
+		$m_person = new person_status();
+		
 		
         $ciu_code = $obj->getField("ciu_code")->getValue();
         $ciu_apellido = $obj->getField("ciu_apellido")->getValue();
@@ -22,16 +25,16 @@ class ciu_ciudadanos_n_hooks extends cclass_maint_hooks
             
         if($ciu_apellido!="")
         {
-            $m_session->person_status = 'IDENTIFICADO';
-            $m_session->person_apellido = $ciu_apellido;
-            $m_session->person_nombres = $ciu_nombres;
-            $m_session->person_doc = $ciu_doc_nro;
-            $m_session->person_id = $ciu_code;
-            $m_session->person_sexo = $sexo;
-    		$m_session->person_edad = $this->calcularEdad($nacimiento);
-            $m_session->person_pais = $ciu_nacionalidad;
+            $m_person->person_status = 'IDENTIFICADO';
+            $m_person->person_apellido = $ciu_apellido;
+            $m_person->person_nombres = $ciu_nombres;
+            $m_person->person_doc = $ciu_doc_nro;
+            $m_person->person_id = $ciu_code;
+            $m_person->person_sexo = $sexo;
+    		$m_person->person_edad = $this->calcularEdad($nacimiento);
+            $m_person->person_pais = $ciu_nacionalidad;
     		    	
-            $m_session->saveSession("person");
+            $m_person->saveSession();
 
             //Actualizo la sesion abierta
             $m_session->talk_session = $_SESSION['talk_session'];

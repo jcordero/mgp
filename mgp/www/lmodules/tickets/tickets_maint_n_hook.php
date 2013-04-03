@@ -4,6 +4,8 @@
  * @author jcordero
  *
  */
+include_once 'beans/person_status.php';
+
 class class_tic_ticket_hooks extends cclass_maint_hooks
 {
     private $m_prestacion_detalle;
@@ -14,6 +16,15 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
     private $m_org_responsable;
     private $m_org_prestador;
 
+    public function afterLoadForm() {
+   		$ps = new person_status();
+   		if( $ps->person_status=='ANONIMO' ) {
+   			return array('MENSAJE:ERROR: No se pueden emitir tickets anonimos');
+   		} 	
+   		return array();
+    }
+    
+   
     //
     // Se ejecuta antes de salvar el objeto a la base de datos
     // Hay que completar el nro y el año del ticket

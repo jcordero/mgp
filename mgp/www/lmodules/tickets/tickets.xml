@@ -239,12 +239,12 @@
             <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
             <field name="tpr_ubicacion" presentation="UBICACION" label="Ubicación" ismandatory="true"/>
             <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="true"/>
-            <field name="tpr_show" presentation="TEXT" label="Mostrar en" ismandatory="false"/>
+            <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false"/>
 		</group>
 
 		<group title="Ayuda y búsqueda" id="buscar">
             <field name="tpr_metadata" presentation="TEXTAREA" label="Descripción" rows="5" cols="60"/>
-			<field name="tpr_keywords" presentation="TEXT" label="Palabras clave"/>
+			<field name="tpr_keywords" presentation="TEXTAREA" label="Palabras clave"  rows="5" cols="60" note="separar con comas"/>
 		</group>
 
 		<group title="Clasificación" id="ubicacion">
@@ -258,18 +258,18 @@
 		</group>
 
 		<group title="Administración delegada" id="admin">
-			<field name="tpr_admin" presentation="TEXT" label="Administrable por"/>
+			<field name="tpr_admin" presentation="TICKET::ORGANISMO" label="Administrable por" note="Organismo"/>
 		</group>
 		
 		<group title="Notificaciones" id="notifica">
-			<field name="tpr_al_inicio" presentation="TEXT" label="Al inicio"/>
-			<field name="tpr_al_final" presentation="TEXT" label="Al final"/>
-			<field name="tpr_al_vencimiento" presentation="TEXT" label="Al vencimiento"/>
+			<field name="tpr_al_inicio" presentation="TEXT" label="Al inicio" note="(correo electrónico)"/>
+			<field name="tpr_al_final" presentation="TEXT" label="Al final" note="(correo electrónico)"/>
+			<field name="tpr_al_vencimiento" presentation="TEXT" label="Al vencimiento" note="(correo electrónico)"/>
 		</group>
 
 		<group title="Estados optativos" id="estados_opt">
-			<field name="tor_code_inspeccion" presentation="ORGANISMOS" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
-			<field name="tor_code_verificacion" presentation="ORGANISMOS" label="Al final certificación" note="código de organismo que hace la certificación"/>
+			<field name="tor_code_inspeccion" presentation="TICKET::ORGANISMO" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
+			<field name="tor_code_verificacion" presentation="TICKET::ORGANISMO" label="Al final certificación" note="código de organismo que hace la certificación"/>
 		</group>
 
 		<group title="Asociación automática de tickets" id="asociar">
@@ -307,7 +307,7 @@
 				<field name="tpg_usa_gis" presentation="SINO" label="Usar GIS?" ismandatory="true"/>
 			</column>
 			<column title="Organismo" order="4">
-				<field name="tor_code" presentation="ORGANISMO" label="Organismo" ismandatory="true"/>
+				<field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
 			</column>
             <column title="Figura" order="5">
 				<field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true"/>
@@ -329,7 +329,7 @@
 				<field name="tpr_prioridad" presentation="PRIORIDAD" label="Prioridad" />
 			</column>
 			<column title="Organismo" order="3">
-				<field name="tor_code" presentation="ORGANISMO" label="Organismo" ismandatory="true"/>
+				<field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
 			</column>
             <column title="Figura" order="4">
 				<field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" initialvalue="RESPONSABLE"/>
@@ -353,7 +353,7 @@
             <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
             <field name="tpr_ubicacion" presentation="UBICACION" label="Ubicación" ismandatory="true" initialvalue="DOMICILIO"/>
             <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="true"/>
-            <field name="tpr_show" presentation="TEXT" label="Mostrar en" ismandatory="false"/>
+            <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false"/>
         </group>
 
 		<group title="Clasificación" id="ubicacion">
@@ -372,7 +372,7 @@
 		</group>
 
 		<group title="Administración delegada" id="admin">
-			<field name="tpr_admin" presentation="TEXT" label="Administrable por" note="codigo de organismo"/>
+			<field name="tpr_admin" presentation="TICKET::ORGANISMO" label="Administrable por" note="codigo de organismo"/>
 		</group>
 
 		<group title="Notificaciones" id="notifica">
@@ -382,8 +382,8 @@
 		</group>
 
 		<group title="Estados optativos" id="estados_opt">
-			<field name="tor_code_inspeccion" presentation="ORGANISMOS" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
-			<field name="tor_code_verificacion" presentation="ORGANISMOS" label="Al final certificación" note="código de organismo que hace la certificación"/>
+			<field name="tor_code_inspeccion" presentation="TICKET::ORGANISMO" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
+			<field name="tor_code_verificacion" presentation="TICKET::ORGANISMO" label="Al final certificación" note="código de organismo que hace la certificación"/>
 		</group>
 
 		<group title="Asociación automática de tickets" id="asociar">
@@ -421,7 +421,7 @@
 				<field name="tpg_usa_gis" presentation="SINO" label="Usar GIS?" ismandatory="true"/>
 			</column>
 			<column title="Organismo" order="4">
-				<field name="tor_code" presentation="ORGANISMO" label="Organismo" ismandatory="true"/>
+				<field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
 			</column>
             <column title="Figura" order="5">
 				<field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true"/>
@@ -442,7 +442,7 @@
 				<field name="tpr_prioridad" presentation="PRIORIDAD" label="Prioridad" />
 			</column>
 			<column title="Organismo" order="3">
-				<field name="tor_code" presentation="ORGANISMO" label="Organismo" ismandatory="true"/>
+				<field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
 			</column>
             <column title="Figura" order="4">
 				<field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" initialvalue="RESPONSABLE"/>
@@ -525,13 +525,13 @@
 
         <!-- Ubicacion del problema -->
 		<group title="Ubicación DOMICILIO" id="domicilio" render_html="block">
-			<field name="calle" presentation="CALLE" label="Calle" cols="60" ismandatory="true" classparams="callenro|tic_coordx|tic_coordy|tic_barrio|tic_cgpc|||mapa|calle_nombre"/>
-			<field name="callenro" presentation="ALTURA" label="Altura" cols="5" ismandatory="true" classparams="calle"/>
-            <field name="calle_nombre" presentation="TEXT" label="Calle Nombre" readonly="true" isvisible="false"/>
+			<field name="calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
+			<field name="callenro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
+            <field name="calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
 
             <field name="piso" presentation="INT" label="Piso" cols="5" />
             <field name="dpto" presentation="TEXT" label="Departamento" cols="5" />
-            <field name="nombre_fantasia" presentation="TEXT" label="Nom.fantasía" />
+            <field name="nombre_fantasia" presentation="TEXT" label="Nom.fantasía" isvisible="false"/>
 
 			<field name="mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
 			<field name="tic_id_cuadra" presentation="TEXT" label="id cuadra" isvisible="false" readonly="true"/>
@@ -539,7 +539,7 @@
 			<field name="tic_coordy" presentation="TEXT" label="y" isvisible="false" readonly="true"/>
 			
             <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
-			<field name="tic_cgpc" label="CGPC" presentation="TEXT" readonly="true"/>
+			<field name="tic_cgpc" label="Comuna" presentation="TEXT" readonly="true"/>
 		</group>
 
 		<group title="Ubicación VILLA" id="villa" render_html="block">

@@ -18,15 +18,18 @@
 if(!class_exists('talk'))
 {
     include_once "common/cfield.php";
-	include_once "homepage/callsession.php";
-    
+	include_once "beans/call_status.php";
+	include_once "beans/person_status.php";
+	
 	class talk
 	{
   		private $m_session;
+  		private $m_person;
   		
 		 function __construct()
 	    {
-		    $this->m_session = new callsession(); //Crea el objeto y carga los valores desde la sesion
+		    $this->m_session = new call_status(); //Crea el objeto y carga los valores desde la sesion
+		    $this->m_person = new person_status();
 		}
 		
 		public function Render($context)
@@ -49,31 +52,21 @@ if(!class_exists('talk'))
             //Una sesion anonima, se puede hacer nominal con solo identificar a la persona con la sesion abierta.
             
             $html.= '<div id="talk_status">'.$this->m_session->talk_status.'</div>'; //EN ESPERA
-            $html.= '<div id="person_status">'.$this->m_session->person_status.'</div>'; //ANONIMO
+            $html.= '<div id="person_status">'.$this->m_person->person_status.'</div>'; //ANONIMO
         
             $html.= '
 	</div>
 	
 	<div id="talk_search">
-      	<input type="hidden" name="m_talk_ani" id="m_talk_ani" value="'.$this->m_session->talk_ani.'"/>
-		<input type="hidden" name="m_talk_status" id="m_talk_status" value="'.$this->m_session->talk_status.'"/>
-		<input type="hidden" name="m_person_status" id="m_person_status" value="'.$this->m_session->person_status.'"/>
-		<input type="hidden" name="m_user_session" id="m_user_session" value="'.session_id().'"/>
-		<input type="hidden" name="m_person_id" id="m_person_id" value="'.$this->m_session->person_id.'"/>
-		<input type="hidden" name="m_entrypoint" id="m_entrypoint" value="'.$this->m_session->talk_entry_point.'"/>
-		<input type="hidden" name="m_skill" id="m_skill" value="'.$this->m_session->talk_skill.'"/>
-		<input type="hidden" name="m_person_apellido" id="m_person_apellido" value="'.$this->m_session->person_apellido.'"/>
-		<input type="hidden" name="m_person_nombres" id="m_person_nombres" value="'.$this->m_session->person_nombres.'"/>
-		<input type="hidden" name="m_sexo" id="m_sexo" value="'.$this->m_session->person_sexo.'"/>
-        <input type="hidden" name="m_edad" id="m_edad" value="'.$this->m_session->person_edad.'"/>
-        <input type="hidden" name="m_cops_id" id="m_cops_id" value="'.$this->m_session->person_cops_id.'"/>';
+		<script type="text/javascript">
+			var person = '.$this->m_person->toJSON().';
+			var talk = '.$this->m_session->toJSON().';
+		</script>';
             
-       		$nac = new CField(array("presentation"=>"NACIONALIDAD","name"=>"person_pais","label"=>"Nac.","isvisible"=>true,"value"=>$this->m_session->person_pais,"initialvalue"=>"Argentina"));
-            $html.=$nac->RenderFilterForm($primary_db);  
-     
-            $doc = new CField(array("presentation"=>"DOCID","name"=>"person_doc","label"=>"Doc.","isvisible"=>true,"classparams"=>"no_search","value"=>$this->m_session->person_doc));
-            $html.=$doc->RenderFilterForm($primary_db);  
-            
+        //Esto genera los campos pm_person_doc (pais) tm_person_doc (tipo doc) y nm_person_doc (nro doc)    
+            $doc = new CField(array("presentation"=>"CIUDADANO::DNI","name"=>"person_doc","label"=>"Doc.","isvisible"=>true,"classparams"=>"no_search","value"=>$this->m_person->person_doc,"initialvalue"=>"ARG DNI "));
+            $doc->NewInstance($primary_db);
+            $html.=$doc->RenderFilterForm($primary_db);
             
             $html.= '<button onclick="boton_buscar()">Buscar</button>
 	</div>

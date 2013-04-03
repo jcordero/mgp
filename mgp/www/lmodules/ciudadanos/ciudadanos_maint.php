@@ -226,20 +226,14 @@ class ciu_identificacion_th5 extends ctable_handler {
         $this->m_note = ""; //Nota
 
         $this->m_datafields['ciu_code']=1;
-        $this->m_datafields['ciu_pais_emisor']=2;
-        $this->m_datafields['ciu_tipo_doc']=3;
-        $this->m_datafields['ciu_nro_doc']=4;
+        $this->m_datafields['ciu_nro_doc']=2;
 
-        $this->m_columns[1] = new ctable_column(1,'País emisor',array('ciu_code','ciu_pais_emisor'));
-        $this->m_columns[2] = new ctable_column(2,'Tipo',array('ciu_tipo_doc'));
-        $this->m_columns[3] = new ctable_column(3,'Número',array('ciu_nro_doc'));
+        $this->m_columns[1] = new ctable_column(1,'Documento',array('ciu_code','ciu_nro_doc'));
     }
 
     public function getJsIncludes($obj) {
         $r=array();
         $r[]=$obj->GetField("ciu_code")->getJsIncludes();
-        $r[]=$obj->GetField("ciu_pais_emisor")->getJsIncludes();
-        $r[]=$obj->GetField("ciu_tipo_doc")->getJsIncludes();
         $r[]=$obj->GetField("ciu_nro_doc")->getJsIncludes();
         return $r;
     }
@@ -247,9 +241,7 @@ class ciu_identificacion_th5 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("ciu_pais_emisor")->SetDisplayValues(Array("Name"=>"ciu_pais_emisor", "Label"=>"País emisor", "Size"=>5, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("ciu_tipo_doc")->SetDisplayValues(Array("Name"=>"ciu_tipo_doc", "Label"=>"Tipo doc", "Size"=>15, "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TIPODOC", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("ciu_nro_doc")->SetDisplayValues(Array("Name"=>"ciu_nro_doc", "Label"=>"Nro doc", "Size"=>25, "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"DNI", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("ciu_nro_doc")->SetDisplayValues(Array("Name"=>"ciu_nro_doc", "Label"=>"Documento", "Size"=>25, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"CIUDADANO::DNI", "IsNullable"=>false, "IsVisible"=>true));
     }
 
 }

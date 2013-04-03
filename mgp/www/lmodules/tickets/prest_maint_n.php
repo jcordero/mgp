@@ -36,7 +36,7 @@ class asunto_gr extends cform_group {
         $this->getClass("class_tic_prestaciones")->GetField("tpr_tipo")->SetDisplayValues(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>102, "IsMandatory"=>true, "Presentation"=>"PRESTACIONTIPO", "IsVisible"=>true, "Class"=>"class_tic_prestaciones"));
         $this->getClass("class_tic_prestaciones")->GetField("tpr_ubicacion")->SetDisplayValues(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>107, "IsMandatory"=>true, "Presentation"=>"UBICACION", "IsVisible"=>true, "Class"=>"class_tic_prestaciones", "InitialValue"=>"DOMICILIO"));
         $this->getClass("class_tic_prestaciones")->GetField("tpr_plazo")->SetDisplayValues(Array("Name"=>"tpr_plazo", "Label"=>"Plazo", "Size"=>20, "IsForDB"=>true, "Order"=>108, "IsMandatory"=>true, "Presentation"=>"PLAZO", "IsVisible"=>true, "Class"=>"class_tic_prestaciones"));
-        $this->getClass("class_tic_prestaciones")->GetField("tpr_show")->SetDisplayValues(Array("Name"=>"tpr_show", "Label"=>"Mostrar en", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_prestaciones"));
+        $this->getClass("class_tic_prestaciones")->GetField("tpr_show")->SetDisplayValues(Array("Name"=>"tpr_show", "Label"=>"Mostrar en", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TICKET::MOSTRAR_EN", "IsVisible"=>true, "Class"=>"class_tic_prestaciones"));
     }
 }
 }
@@ -150,7 +150,7 @@ class admin_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_prestaciones")->GetField("tpr_admin")->SetDisplayValues(Array("Name"=>"tpr_admin", "Label"=>"Administrable por", "Size"=>50, "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_prestaciones", "Note"=>"codigo de organismo"));
+        $this->getClass("class_tic_prestaciones")->GetField("tpr_admin")->SetDisplayValues(Array("Name"=>"tpr_admin", "Label"=>"Administrable por", "Size"=>50, "IsForDB"=>true, "Order"=>112, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true, "Class"=>"class_tic_prestaciones", "Note"=>"codigo de organismo"));
     }
 }
 }
@@ -209,8 +209,8 @@ class estados_opt_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_prestaciones")->GetField("tor_code_inspeccion")->SetDisplayValues(Array("Name"=>"tor_code_inspeccion", "Label"=>"Al inicio inspección", "Type"=>"int", "IsForDB"=>true, "Order"=>116, "Presentation"=>"ORGANISMOS", "IsVisible"=>true, "Class"=>"class_tic_prestaciones", "Note"=>"código de organismo que hace la inspección"));
-        $this->getClass("class_tic_prestaciones")->GetField("tor_code_verificacion")->SetDisplayValues(Array("Name"=>"tor_code_verificacion", "Label"=>"Al final certificación", "Type"=>"int", "IsForDB"=>true, "Order"=>117, "Presentation"=>"ORGANISMOS", "IsVisible"=>true, "Class"=>"class_tic_prestaciones", "Note"=>"código de organismo que hace la certificación"));
+        $this->getClass("class_tic_prestaciones")->GetField("tor_code_inspeccion")->SetDisplayValues(Array("Name"=>"tor_code_inspeccion", "Label"=>"Al inicio inspección", "Type"=>"int", "IsForDB"=>true, "Order"=>116, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true, "Class"=>"class_tic_prestaciones", "Note"=>"código de organismo que hace la inspección"));
+        $this->getClass("class_tic_prestaciones")->GetField("tor_code_verificacion")->SetDisplayValues(Array("Name"=>"tor_code_verificacion", "Label"=>"Al final certificación", "Type"=>"int", "IsForDB"=>true, "Order"=>117, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true, "Class"=>"class_tic_prestaciones", "Note"=>"código de organismo que hace la certificación"));
     }
 }
 }
@@ -366,7 +366,7 @@ class class_tic_prestaciones_gis_th9 extends ctable_handler {
         $obj->GetField("tpg_gis_campo")->SetDisplayValues(Array("Name"=>"tpg_gis_campo", "Label"=>"Campo", "Size"=>100, "IsForDB"=>true, "Order"=>104, "Presentation"=>"GISGRILLA", "IsVisible"=>true));
         $obj->GetField("tpg_gis_valor")->SetDisplayValues(Array("Name"=>"tpg_gis_valor", "Label"=>"Valor", "Size"=>100, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true));
         $obj->GetField("tpg_usa_gis")->SetDisplayValues(Array("Name"=>"tpg_usa_gis", "Label"=>"Usar GIS?", "Size"=>5, "IsForDB"=>true, "Order"=>105, "IsMandatory"=>true, "Presentation"=>"SINO", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>106, "IsMandatory"=>true, "Presentation"=>"ORGANISMO", "IsVisible"=>true));
+        $obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>106, "IsMandatory"=>true, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true));
         $obj->GetField("tto_figura")->SetDisplayValues(Array("Name"=>"tto_figura", "Label"=>"Figura", "Size"=>50, "IsForDB"=>true, "Order"=>109, "IsMandatory"=>true, "Presentation"=>"GISFIGURA", "IsVisible"=>true));
         $obj->GetField("tpg_tstamp")->SetDisplayValues(Array("Name"=>"tpg_tstamp", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>107, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true));
         $obj->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"CURRENTUSER", "IsVisible"=>true, "IsReadOnly"=>true));
@@ -427,7 +427,7 @@ class class_tic_prestaciones_rubros_th10 extends ctable_handler {
         $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
         $obj->GetField("tru_code")->SetDisplayValues(Array("Name"=>"tru_code", "Label"=>"Rubro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"RUBRO", "IsNullable"=>false, "IsVisible"=>true));
         $obj->GetField("tpr_prioridad")->SetDisplayValues(Array("Name"=>"tpr_prioridad", "Label"=>"Prioridad", "Size"=>20, "IsForDB"=>true, "Order"=>103, "Presentation"=>"PRIORIDAD", "IsVisible"=>true));
-        $obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>104, "IsMandatory"=>true, "Presentation"=>"ORGANISMO", "IsVisible"=>true));
+        $obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>104, "IsMandatory"=>true, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true));
         $obj->GetField("tto_figura")->SetDisplayValues(Array("Name"=>"tto_figura", "Label"=>"Figura", "Size"=>50, "IsForDB"=>true, "Order"=>105, "IsMandatory"=>true, "Presentation"=>"GISFIGURA", "IsVisible"=>true, "InitialValue"=>"RESPONSABLE"));
     }
 

@@ -9,35 +9,15 @@ $(document).ready(function() {
     {
     	armar_home_page();
     	armar_panel();    
-    }
-    
-    //Cambio de pais
-    $("#m_person_pais").change(function(){
-    	var p = $(this).val();
-    	if(p=="Brasil" || p=="Bolivia" || p=="Chile" || p=="Paraguay" || p=="Uruguay" || p=="Perú") {
-    		$("#am_person_doc").html('<option value="CI">CI');
-    		$("#am_person_doc").val("CI");
-    	} else {
-    		if(p!="Argentina") {
-    			$("#am_person_doc").html('<option value="PAS">PAS');
-    			$("#am_person_doc").val("PAS");
-    		} else {
-    			$("#am_person_doc").html('<option value="DNI">DNI<option value="LE">LE<option value="LC">LC<option value="CIPF">CIPF<option value="PAS">PAS');
-    			$("#am_person_doc").val("DNI");
-    		}
-    	}
-    });
+    }    
 });
 
 function armar_home_page() {
 	try {
-		var person_status = $('#m_person_status').val();
-		if(person_status=="IDENTIFICADO")
+		if(person.person_status=="IDENTIFICADO")
 		{
 			esperar();
-		    //boton_buscar_turnos();
-			//buscar_orientacion();
-			
+		    
 		    //Busco los contactos (sesiones anteriores)
 		    boton_buscar_contactos();
 		
@@ -54,24 +34,24 @@ function armar_home_page() {
 
 function armar_panel() {
 	//Indicador ANONIMO
-	var person_status = $('#m_person_status').val();
-	if(person_status=="ANONIMO")
+	if(person.person_status=="ANONIMO")
 	{
 		$('#identificado').hide();
 		$('#talk_btn_anonimo').hide();
 		$('#talk_btn_modificar').hide();
-		$('#person_status').html("ANONIMO");
-		$('#person_status').css("background","#DDD");
-		$('#talk_search').show();
-		$('#offline').show();
-		
 		$('#turnos').hide();
 		$('#tickets').hide();
 		$('#calls').hide();
 		$('#ciudadanos').hide();
+		$('#person_status').html("ANONIMO");
+		$('#person_status').css("background","#DDD");
+		$('#talk_search').show();
+		$('#offline').show();		
 	}	
 	else
 	{
+		$('#talk_search').hide();
+		$('#offline').hide();
 		$('#turnos').show();
 		$('#tickets').show();
 		$('#calls').show();
@@ -82,40 +62,17 @@ function armar_panel() {
 		$('#identificado').show();
 		$('#talk_btn_anonimo').show();
 		$('#talk_btn_modificar').show();
-		$('#talk_search').hide();
-		$('#offline').hide();
-			
-		var ciu_apellido = $("#m_person_apellido").val();
-    	var ciu_nombres = $("#m_person_nombres").val();
-    	var tipo_doc = $("#am_person_doc").val();
-    	var nro_doc = $("#bm_person_doc").val();
-    	//var cops_id = $("#m_cops_id").val();
-    	var sexo = $("#m_sexo").val();
-    	var edad = $("#m_edad").val();
-    	var pais = $("#m_person_pais").val();
-    	var id = $("#m_person_id").val();
-    	
+			    	
     	//Armo el texto de descripcion Nombre, Apellido y debajo Tipo y nro de doc
-    	var b="<h3>"+ciu_nombres+", "+ciu_apellido+"</h3>"+tipo_doc+" "+nro_doc+" ("+pais+")";
-		b+="<br/><br/>ID: <b>"+id+"</b>";
-    	
-    	//Es afiliado a COPS?
-/*    	if(cops_id!=0)
-    	{
-    		b+="<br/><br/>Afiliado COPS: <b>"+cops_id+"</b>";
-    	}
-    	else
-    	{
-    		$('#nuevo_turno_cops').hide();
-    	}*/
-    	b+="<br/>Sexo: <b>"+sexo+"</b><br/>Edad: <b>"+edad+" años</b>";
-    	
+    	var d = (person.person_doc!='' ? person.person_doc.split(' ') : ['ARG','DNI','']);
+    	var b="<h3>"+person.person_nombres+", "+person.person_apellido+"</h3>"+d[1]+" "+d[2]+" ("+d[0]+")";
+		b+="<br/><br/>ID: <b>"+person.person_id+"</b>";    	
+    	b+="<br/>Sexo: <b>"+person.person_sexo+"</b><br/>Edad: <b>"+person.person_edad+" años</b>";
     	$("#talk_nominal").html(b);
 	}
 	
 	//Indicador EN ESPERA - CONECTADO
-	var talk_status = $('#m_talk_status').val();
-	if(talk_status=="EN ESPERA")
+	if(talk.talk_status=="EN ESPERA")
 	{
 		$('#talk_btn_terminar').hide();
 		$('#talk_status').html("EN ESPERA");
@@ -136,38 +93,25 @@ function armar_panel() {
 var g_goto = "";
 function boton_buscar()
 {
-    var doc_tipo = $('#am_person_doc').val();
-    var doc_nro = $('#bm_person_doc').val();
-    var nombres = $('#m_person_nombres').val();
-    var apellido = $('#m_person_apellido').val();
-    var ani = $('#m_talk_ani').val();
-    var session = $('#m_user_session').val();
-    var pais = $('#m_person_pais :selected').val();
-    	
+	var pais = $('#pm_person_doc :selected').val();
+    var doc_tipo = $('#tm_person_doc').val();
+    var doc_nro = $('#nm_person_doc').val();
+    var nombres = '';
+    var apellido = '';
+    
 	if(doc_nro=="")
 	{
 		alert_box('Debe ingresar primero un número de documento','ATENCION');
 		return false;
 	}
-		
-	//Fix NEGRO NEGRO para el SIGEHOS
-	if(pais=="Bolivia" || pais=="Perú" || pais=="Uruguay" || pais=="Brasil" || pais=="Paraguay" || pais=="Chile")
-	{
-		doc_tipo = "CI";
-		$('#am_person_doc').val("CI");
-	}
-	if( pais!="Argentina" && pais!="Bolivia" && pais!="Perú" && pais!="Uruguay" && pais!="Brasil" && pais!="Paraguay" && pais!="Chile")
-	{
-		doc_tipo = "PAS";
-		$('#am_person_doc').val("PAS");		
-	}	
-	
+
 	//Pongo en espera...
 	esperar("Buscando datos del ciudadano...");
 	
 	//Identificador compuesto del DOC
-	var doc = doc_tipo + " " + doc_nro;
-    var params = doc + '|' + nombres + '|' + apellido + '|' + ani + '|' + session + '|' + pais;
+	var doc = pais + " " + doc_tipo + " " + doc_nro;
+	person.person_doc = doc;
+	
     new rem_request(this,function(obj,json){
     	listo();
     	var jdata = eval('(' + json + ')');
@@ -186,21 +130,22 @@ function boton_buscar()
             else
             {
             	//Se identifico a la persona?
-            	$("#m_person_id").val(jdata.ciudadanos[0].ciu_code);
-            	$("#m_person_status").val("IDENTIFICADO");
-            	$("#m_person_apellido").val(jdata.ciudadanos[0].ciu_apellido);
-            	$("#m_person_nombres").val(jdata.ciudadanos[0].ciu_nombres);
-            	
-            	$("#m_cops_id").val(jdata.ciudadanos[0].cops_id);
-            	$("#m_sexo").val(jdata.ciudadanos[0].sexo);
-            	$("#m_edad").val(jdata.ciudadanos[0].edad);
-            	$("#m_person_pais").val(jdata.ciudadanos[0].pais);
-                
+            	var p = jdata.ciudadanos[0];
+            	person.person_status 	= 'IDENTIFICADO';
+            	person.person_doc 		= doc;
+            	person.person_nombres 	= p.ciu_nombres;
+            	person.person_apellido 	= p.ciu_apellido;
+            	person.person_id 		= p.ciu_code;
+            	person.person_cops_id 	= p.cops_id;
+            	person.person_sexo 		= p.sexo;
+            	person.person_edad 		= p.edad;
+            	person.person_pais 		= p.pais;
+            	            	                
             	armar_home_page();
             	armar_panel();
             }
         }	
-    },"HOME","doBuscar",params);
+    },"HOME","doBuscar",doc + '|' + nombres + '|' + apellido + '|' + talk.talk_ani + '|' + talk.session + '|' + pais);
 }
 
 

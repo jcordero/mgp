@@ -1,7 +1,6 @@
 <?php 
 include_once "common/cdatatypes.php";
 
-/** 	Tipo de dato: Codigo de empresa cliente*/
 class CDH_ORGANISMO extends CDataHandler 
 {
 	function __construct($parent) 

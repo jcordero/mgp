@@ -101,20 +101,18 @@ class ciu_identificacion extends cobjbase {
 
         //-- CField( Array(Parametros) )
         $this->m_fields['ciu_code'] = new CField(Array("Name"=>"ciu_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $this->m_fields['ciu_pais_emisor'] = new CField(Array("Name"=>"ciu_pais_emisor", "Size"=>5, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $this->m_fields['ciu_tipo_doc'] = new CField(Array("Name"=>"ciu_tipo_doc", "Size"=>15, "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "IsNullable"=>false));
-        $this->m_fields['ciu_nro_doc'] = new CField(Array("Name"=>"ciu_nro_doc", "Size"=>25, "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "IsNullable"=>false));
+        $this->m_fields['ciu_nro_doc'] = new CField(Array("Name"=>"ciu_nro_doc", "Size"=>25, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes
 
         //Consultas particulares a la base de datos
-        $this->m_loaddb_sql = "SELECT ciu_code, ciu_pais_emisor, ciu_tipo_doc, ciu_nro_doc FROM ciu_identificacion  WHERE ciu_code= :ciu_code_key: AND ciu_pais_emisor= :ciu_pais_emisor_key: AND ciu_tipo_doc= :ciu_tipo_doc_key: AND ciu_nro_doc= :ciu_nro_doc_key:";
-        $this->m_objfactory_sql = "SELECT ciu_code, ciu_pais_emisor, ciu_tipo_doc, ciu_nro_doc FROM ciu_identificacion";
+        $this->m_loaddb_sql = "SELECT ciu_code, ciu_nro_doc FROM ciu_identificacion  WHERE ciu_code= :ciu_code_key: AND ciu_nro_doc= :ciu_nro_doc_key:";
+        $this->m_objfactory_sql = "SELECT ciu_code, ciu_nro_doc FROM ciu_identificacion";
         $this->m_objfactory_suffix_sql = "";
-        $this->m_savedb_update_sql = "UPDATE ciu_identificacion SET ciu_code= :ciu_code:, ciu_pais_emisor= :ciu_pais_emisor:, ciu_tipo_doc= :ciu_tipo_doc:, ciu_nro_doc= :ciu_nro_doc: WHERE ciu_code=:ciu_code_key: AND ciu_pais_emisor=:ciu_pais_emisor_key: AND ciu_tipo_doc=:ciu_tipo_doc_key: AND ciu_nro_doc=:ciu_nro_doc_key:";
-        $this->m_savedb_insert_sql = "INSERT INTO ciu_identificacion(ciu_code, ciu_pais_emisor, ciu_tipo_doc, ciu_nro_doc) VALUES (:ciu_code:, :ciu_pais_emisor:, :ciu_tipo_doc:, :ciu_nro_doc:)";
-        $this->m_savedb_delete_sql = "DELETE FROM ciu_identificacion WHERE ciu_code=:ciu_code_key: AND ciu_pais_emisor=:ciu_pais_emisor_key: AND ciu_tipo_doc=:ciu_tipo_doc_key: AND ciu_nro_doc=:ciu_nro_doc_key:";
+        $this->m_savedb_update_sql = "UPDATE ciu_identificacion SET ciu_code= :ciu_code:, ciu_nro_doc= :ciu_nro_doc: WHERE ciu_code=:ciu_code_key: AND ciu_nro_doc=:ciu_nro_doc_key:";
+        $this->m_savedb_insert_sql = "INSERT INTO ciu_identificacion(ciu_code, ciu_nro_doc) VALUES (:ciu_code:, :ciu_nro_doc:)";
+        $this->m_savedb_delete_sql = "DELETE FROM ciu_identificacion WHERE ciu_code=:ciu_code_key: AND ciu_nro_doc=:ciu_nro_doc_key:";
         $this->m_savedb_purge_sql = "DELETE FROM ciu_identificacion WHERE ciu_code=:ciu_code_key:";
         $this->m_savedb_total_sql = "SELECT COUNT(*) as cant FROM ciu_identificacion ";
     }

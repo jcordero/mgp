@@ -121,15 +121,9 @@
 
 			<!-- Documentos -->
 			<table relationclass="" classname="ciu_identificacion" title="Documentos" add="true" delete="true" update="true">
-                <column title="País emisor" order="1">
-                    <field name="ciu_code" isvisible="false"/>
-                    <field name="ciu_pais_emisor" presentation="TEXT" label="País emisor" />
-                </column> 
-                <column title="Tipo" order="2">
-                    <field name="ciu_tipo_doc" presentation="TIPODOC" label="Tipo doc"/>
-                </column>
-                <column title="Número" order="3">
-                    <field name="ciu_nro_doc" presentation="DNI" label="Nro doc"/>
+                <column title="Documento" order="1">
+                    <field name="ciu_code" isvisible="false"/>                    
+                    <field name="ciu_nro_doc" presentation="CIUDADANO::DNI" label="Documento"/>
                 </column>
             </table>
 
@@ -197,15 +191,9 @@
 
 			<!-- Documentos -->
 			<table relationclass="" classname="ciu_identificacion" title="Documentos" add="true" delete="true" update="true">
-                <column title="País emisor" order="1">
+                <column title="Documento" order="1">
                     <field name="ciu_code" isvisible="false"/>
-                    <field name="ciu_pais_emisor" presentation="NACIONALIDAD" label="País emisor" />
-                </column> 
-                <column title="Tipo" order="2">
-                    <field name="ciu_tipo_doc" presentation="TIPODOC" label="Tipo doc"/>
-                </column>
-                <column title="Número" order="3">
-                    <field name="ciu_nro_doc" presentation="DNI" label="Nro doc"/>
+                    <field name="ciu_nro_doc" presentation="CIUDADANO::DNI" label="Documento"/>
                 </column>
             </table>
 

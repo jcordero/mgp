@@ -4,34 +4,29 @@ if(session_id() == "")
 	session_start();
 }
 include_once "common/cdatatypes.php";
-include_once "homepage/callsession.php";
+include_once "beans/call_status.php";
+include_once "beans/person_status.php";
 include_once "common/csession.php";
 
 class CDH_HOME extends CDataHandler
 {
     private $m_session;
+    private $m_person;
     
     function __construct($parent)
     {
 		parent::__construct($parent);
 		$fld = $this->m_parent;
-        $this->m_session = new callsession();
+        $this->m_session = new call_status();
+        $this->m_person = new person_status();
 	}
 
 	function setAnonimo($user_session)
 	{
 		session_id($user_session);
-        $this->m_session->person_status = 'ANONIMO';
-        $this->m_session->person_doc = '';
-        $this->m_session->person_nombres = '';
-        $this->m_session->person_apellido = '';
-        $this->m_session->person_id = 0;
-        $this->m_session->person_sexo = 'N';
-        $this->m_session->person_edad = 0;
-        $this->m_session->person_pais = "Argentina";
-        
-        $this->m_session->saveSession("person");
-	}
+		$this->m_person->reset();
+		$this->m_person->saveSession();        
+ 	}
 	
     /** Buscar un ciudadano en la base
      * Enviar en el parametro de entrada, separado por pipes, Documento + Apellido + Nombres + ANI + IDSesion
@@ -62,128 +57,56 @@ class CDH_HOME extends CDataHandler
 
         //No hay datos para buscar...
         session_id($user_session);
-        if(strlen($doc)<=6 && $apellido=='' && $ani=="")
+        if(strlen($doc)<=8 && $apellido=='' && $ani=="")
         {
         	$this->setAnonimo($user_session);
             return json_encode(array( "ciudadanos"=>$conjunto, "url"=>$url));
         }
 
         //Esta declarado el doc?, lo busco por ahi
-        if(strlen($doc)>6)
+        if(strlen($doc)>8)
         {
-            $sql = "SELECT ciu_code,ciu_nombres,ciu_apellido,ciu_doc_nro,ciu_sexo,ciu_nacimiento,ciu_nacionalidad FROM ciu_ciudadanos 
-            			WHERE ciu_doc_nro='$doc' AND (ciu_nacionalidad is null OR ciu_nacionalidad='$pais' OR ciu_nacionalidad='')";
+            $sql = "SELECT ciu.ciu_code,ciu.ciu_nombres,ciu.ciu_apellido,ide.ciu_nro_doc,ciu.ciu_sexo,ciu.ciu_nacimiento,ciu.ciu_nacionalidad 
+            		FROM ciu_ciudadanos ciu JOIN ciu_identificacion ide ON ciu.ciu_code=ide.ciu_code 
+            		WHERE ide.ciu_nro_doc='{$doc}'";
         }
         else
         {
             if($apellido!='' && $nombres=="")
             {
-                $sql = "SELECT ciu_code,ciu_nombres,ciu_apellido,ciu_doc_nro,ciu_sexo,ciu_nacimiento,ciu_nacionalidad FROM ciu_ciudadanos 
-	                		WHERE ciu_apellido like '$apellido%'  AND (ciu_nacionalidad is null OR ciu_nacionalidad='$pais' OR ciu_nacionalidad='')";
+                $sql = "SELECT ciu.ciu_code,ciu.ciu_nombres,ciu.ciu_apellido,ide.ciu_nro_doc,ciu.ciu_sexo,ciu.ciu_nacimiento,ciu.ciu_nacionalidad 
+                		FROM ciu_ciudadanos ciu JOIN ciu_identificacion ide ON ciu.ciu_code=ide.ciu_code
+	                	WHERE ciu.ciu_apellido like '$apellido%'";
             }
             else
         	{
-                $sql = "SELECT ciu_code,ciu_nombres,ciu_apellido,ciu_doc_nro,ciu_sexo,ciu_nacimiento,ciu_nacionalidad FROM ciu_ciudadanos 
-                			WHERE ciu_apellido like '$apellido%' and ciu_nombres like '$nombres%'  AND (ciu_nacionalidad is null OR ciu_nacionalidad='$pais' OR ciu_nacionalidad='')";
+                $sql = "SELECT ciu.ciu_code,ciu.ciu_nombres,ciu.ciu_apellido,ide.ciu_nro_doc,ciu.ciu_sexo,ciu.ciu_nacimiento,ciu.ciu_nacionalidad 
+                		FROM ciu_ciudadanos ciu JOIN ciu_identificacion ide ON ciu.ciu_code=ide.ciu_code
+	                	WHERE ciu.ciu_apellido like '$apellido%' and ciu.ciu_nombres like '$nombres%'";
             }
         }
 
+        //Busco el ciudadano en la base de datos
         $re = $primary_db->do_execute($sql);
         while( $row=$primary_db->_fetch_row($re) )
         {
             $conjunto[] = array(
-            	"ciu_code" 		=> 	$row[0],
-            	"ciu_nombres"	=>	$row[1],
-           		"ciu_apellido"	=>	$row[2],
-            	"ciu_doc_nro"	=> 	$row[3],
-            	"sexo"			=>	$row[4],
-            	"edad"			=>	$this->calcularEdad($row[5]),
+            	"ciu_code" 		=> 	$row['ciu_code'],
+            	"ciu_nombres"	=>	$row['ciu_nombres'],
+           		"ciu_apellido"	=>	$row['ciu_apellido'],
+            	"ciu_doc_nro"	=> 	$row['ciu_nro_doc'],
+            	"sexo"			=>	$row['ciu_sexo'],
+            	"edad"			=>	$this->calcularEdad($row['ciu_nacimiento']),
             	"cops_id"		=> 	0,
             	"pais"			=> 	$row['ciu_nacionalidad']
             );
         }
-		$primary_db->_free_result($re);
-
-    	//Esta inscripto en COPS?
-		$this->m_session->person_cops_id = 0;
-			
-        //Tengo el documento declarado?? Si en el DOC no puedo llamar a COPS
-        if( $doc!="" && defined("URL_SIGEHOS_COPS") )
-        {
-        	list($tipo_doc,$nro_doc) = explode(" ",$doc);
-        	$nro_doc = intval($nro_doc,10);
-
-        	//FIX PARA LOS EXTRANJEROS
-        	$tipo_doc = $this->PAIStoDOC($pais, $tipo_doc);
-        	        
-        	$cops_url = URL_SIGEHOS_COPS."/sigehos/cops/api/afiliado/?tipo_doc=$tipo_doc&nro_doc=$nro_doc";
-			$obj_cops = $this->askSigehos($cops_url);
-			if($obj_cops)
-			{
-				if( isset($obj_cops->id) )	
-				{
-					$this->m_session->person_cops_id = $obj_cops->id;
-				}
-				else
-				{
-					error_log("HOME::doBuscar() ERROR: No existe en la respuesta de COPS el ID de afiliado");
-				}
-			}
-        }
         
-        //Retorno conjunto vacio? o sea no hay datos en la base local
+		//Retorno conjunto vacio? o sea no hay datos en la base local
         if(count($conjunto)==0)
         {
-        	//No esta en la base del call, pero esta en la base de COPS?
-			if($obj_cops)
-			{
-				//Creo el CIUDADANO en la base local
-				list($tipo_doc,$nro_doc) = explode(" ",$doc);
-				$params = array(
-					"ciu_code"			=> $primary_db->Sequence("ciu_ciudadanos"),
-					"ciu_nombres"		=> $obj_cops->persona->nombres,
-					"ciu_apellido"		=> $obj_cops->persona->apellido,
-					"ciu_sexo"			=> $this->convertToSexo($obj_cops->persona->sexo), //F o M o N
-					"ciu_nacimiento"	=> $obj_cops->persona->fecha_nac, //AAAA-MM-DD
-					"ciu_doc_nro"		=> $doc,
-					"use_code"			=> $_SESSION['user_id'],
-					"pais"				=> $this->DOCtoPAIS($tipo_doc)
-				);
-				
-				$sql = "insert into ciu_ciudadanos(ciu_code,ciu_nombres,ciu_apellido,ciu_sexo,ciu_nacimiento,ciu_doc_nro,ciu_no_llamar,ciu_no_email,ciu_localidad,ciu_provincia,ciu_pais,ciu_ultimo_acceso,ciu_canal_ingreso,use_code,ciu_estado,ciu_tstamp,ciu_tipo_persona,ciu_nacionalidad) 
-					values(:ciu_code:,':ciu_nombres:',':ciu_apellido:',':ciu_sexo:',':ciu_nacimiento:',':ciu_doc_nro:','NO','NO','CABA','CABA','ARGENTINA',NOW(),'CALL',':use_code:','ACTIVO',NOW(),'FISICA',':pais:')";
-				$primary_db->do_execute($sql,$res,$params);
-				error_log("INSERTO CIUDADANO ".print_r($params,true));
-				
-				//Respuesta ciu_code,ciu_nombres,ciu_apellido,ciu_doc_nro
-				$edad = $this->calcularEdad($params['ciu_nacimiento']);
-				$conjunto[] = array(
-					"ciu_code"		=> $params['ciu_code'],
-					"ciu_nombres"	=> $params['ciu_nombres'],
-					"ciu_apellido"	=> $params['ciu_apellido'],
-					"ciu_doc_nro"	=> $params['ciu_doc_nro'],
-				    "sexo"			=> $params['ciu_sexo'],
-            		"edad"			=> $edad,
-            		"cops_id"		=> $obj_cops->id,
-					"pais"			=> $params['pais']
-				); 
-				
-				//Salvo en la session
-				$this->m_session->person_status = 'IDENTIFICADO';
-            	$this->m_session->person_apellido = $params["ciu_apellido"];
-            	$this->m_session->person_nombres = $params['ciu_nombres'] ;
-            	$this->m_session->person_doc = $params['ciu_doc_nro'];
-            	$this->m_session->person_id = $params['ciu_code'];
-            	$this->m_session->person_cops_id = $obj_cops->id;
-            	$this->m_session->person_edad = $edad;
-            	$this->m_session->person_sexo = $params['ciu_sexo'];
-            	$this->m_session->person_pais = $params['pais'];	
-			}
-			else 
-			{
-				//No puedo encontrar  a la persona en ningun lado... pido carga manual
-        		$this->setAnonimo($user_session);        
-			}
+			//No puedo encontrar  a la persona en ningun lado... pido carga manual
+        	$this->setAnonimo($user_session);        
         }
         elseif(count($conjunto)>1)
         {
@@ -192,54 +115,37 @@ class CDH_HOME extends CDataHandler
 		}
         else //count($conjunto) == 1 Hay una sola persona que se encontró en la base local
         {
-            $this->m_session->person_status = 'IDENTIFICADO';
-            $this->m_session->person_apellido = $conjunto[0]['ciu_apellido'];
-            $this->m_session->person_nombres = $conjunto[0]['ciu_nombres'] ;
-            $this->m_session->person_doc = $conjunto[0]['ciu_doc_nro'];
-            $this->m_session->person_id = $conjunto[0]['ciu_code'];
-            $this->m_session->person_edad = $conjunto[0]['edad'];
-            $this->m_session->person_sexo = $conjunto[0]['sexo'];
-            $this->m_session->person_pais = $conjunto[0]['pais'];
-            
-            //Agrego al conjunto el dato de COPS que falta
-            $conjunto[0]['cops_id'] = $this->m_session->person_cops_id;
-            
-            //Actualizo el registro local con la data que viene de COPS
-            if($obj_cops)
-            {	
-            	$sexo = $this->convertToSexo($obj_cops->persona->sexo);
-            	$this->m_session->person_sexo = $sexo; 
-            	$conjunto[0]['sexo'] = $sexo;
-   	         	$this->m_session->person_apellido = $obj_cops->persona->apellido;
-   	         	$conjunto[0]['ciu_apellido'] = $obj_cops->persona->apellido;
-            	$this->m_session->person_nombres = $obj_cops->persona->nombres;
-            	$conjunto[0]['ciu_nombres'] = $obj_cops->persona->nombres;
-            
-            	$sql = "UPDATE ciu_ciudadanos SET ciu_nombres='{$obj_cops->persona->nombres}',ciu_apellido='{$obj_cops->persona->apellido}',ciu_sexo='{$sexo}',ciu_nacimiento='{$obj_cops->persona->fecha_nac}' WHERE ciu_code='{$this->m_session->person_id}'";
-	            $primary_db->do_execute($sql,$res);
-            }        
-            
+            $this->m_person->person_status = 'IDENTIFICADO';
+            $this->m_person->person_apellido = $conjunto[0]['ciu_apellido'];
+            $this->m_person->person_nombres = $conjunto[0]['ciu_nombres'] ;
+            $this->m_person->person_doc = $conjunto[0]['ciu_doc_nro'];
+            $this->m_person->person_id = $conjunto[0]['ciu_code'];
+            $this->m_person->person_edad = $conjunto[0]['edad'];
+            $this->m_person->person_sexo = $conjunto[0]['sexo'];
+            $this->m_person->person_pais = $conjunto[0]['pais'];
+                        
             //Marco el ultimo acceso
-            $sql = "UPDATE ciu_ciudadanos SET ciu_ultimo_acceso=NOW() WHERE ciu_code='{$this->m_session->person_id}'";
+            $sql = "UPDATE ciu_ciudadanos SET ciu_ultimo_acceso=NOW() WHERE ciu_code='{$this->m_person->person_id}'";
             $primary_db->do_execute($sql,$res);
             
             //Actualizo la sesion si esta abierta
             if($this->m_session->talk_session!=0)
             {
-                $sql = "UPDATE ciu_sesiones SET ciu_code='{$this->m_session->person_id}' WHERE cse_code='{$this->m_session->talk_session}'";
+                $sql = "UPDATE ciu_sesiones SET ciu_code='{$this->m_person->person_id}' WHERE cse_code='{$this->m_session->talk_session}'";
                 $primary_db->do_execute($sql,$res);
             }            
         }
         
         //Salvo el resultado en la sesion
-        $this->m_session->saveSession("person");
+        $this->m_session->saveSession();
+        $this->m_person->saveSession();
 
         //No hay datos locales... Pido que se carguen los datos a mano. (Ver como hacer que ser carguen desde el SIGEHOS)
         if(count($conjunto)==0)
         {
         	$sess = new CSession();
         	$host = $_SERVER["HTTP_HOST"];
-        	$url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/ciudadanos_maint_n.php?OP=N&ciu_doc_nro=$doc&ciu_tel_fijo=$ani&ciu_tel_movil=$ani&ciu_nacionalidad=$pais");
+        	$url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/ciudadanos_maint_n.php?OP=N&ciu_doc_nro={$doc}&ciu_tel_fijo={$ani}&ciu_tel_movil={$ani}&ciu_nacionalidad={$pais}");
         }
                 
         $resp = array("ciudadanos"=>$conjunto, "url"=>$url);
@@ -429,7 +335,7 @@ class CDH_HOME extends CDataHandler
      */
     function doBuscarTickets($params)
     {
-        global $primary_db,$reclamos_db;
+        global $primary_db;
         $nro="";
         $anio="";
         $ciu_code = "";
@@ -462,35 +368,18 @@ class CDH_HOME extends CDataHandler
         //Busco por codigo en los reclamos
         $conjunto = array();
         if($nro!="" && $anio!="")
-        {
-        	$conjunto1 = array();
-        	$conjunto2 = array();
-        	
-            //Busco en los reclamos
-            if(defined("SUR_ACTIVO"))
-            {
-	        	$sql = "SELECT * FROM v_ticket WHERE numero='$nro' AND anio='$anio'";
-	        	$re = $reclamos_db->do_execute($sql);
-		        while( $row=$reclamos_db->_fetch_row($re) )
-		        {
-		            $conjunto1[] = $row;
-		        }
-		        $reclamos_db->_free_result($re);
-            }
-            
-	        //Busco en los tickets
-	        $sql = "SELECT * FROM v_ticket WHERE tic_nro='$nro' AND tic_anio='$anio'";
+        {        	            
+	        //Busco el ticket pedido
+	        $sql = "SELECT * FROM tic_ticket tic JOIN tic_ticket_prestaciones pre ON tic.tic_nro=pre.tic_nro
+	        		WHERE tic.tic_nro='{$nro}' AND tic.tic_anio='{$anio}'";
         	$re = $primary_db->do_execute($sql);
 	        while( $row=$primary_db->_fetch_row($re) )
 	        {
 	            //Decodifico la direccion 
         		$xml = htmlspecialchars_decode( $row["ubicacion"], ENT_QUOTES );
         		$row = array_merge($row, array("ubicacion_text" => $this->ubicacionToText($xml) ));
-            	$conjunto2[] = $row;
+            	$conjunto[] = $row;
 	        }
-	        $primary_db->_free_result($re);
-	        
-	        $conjunto = array_merge($conjunto1,$conjunto2);
         }
         else
         {
@@ -505,7 +394,6 @@ class CDH_HOME extends CDataHandler
         			$row = array_merge($row, array("ubicacion_text" => $this->ubicacionToText($xml) ));
             		$conjunto[] = $row;
         		}
-        		$primary_db->_free_result($re);
             }
         }
 
