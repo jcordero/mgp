@@ -15,10 +15,11 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
     private $m_anio;
     private $m_org_responsable;
     private $m_org_prestador;
-
+	private $m_ps;
+	
     public function afterLoadForm() {
-   		$ps = new person_status();
-   		if( $ps->person_status=='ANONIMO' ) {
+   		$this->m_ps = new person_status();
+   		if( $this->m_ps->person_status=='ANONIMO' ) {
    			return array('MENSAJE:ERROR: No se pueden emitir tickets anonimos');
    		} 	
    		return array();
@@ -63,42 +64,41 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         }
 
         //Recupero los campos del form
-        $nota 	= $this->nosql($obj->getField("tic_nota_in")->getValue());
+        $nota 	= $primary_db->Filtrado($obj->getField("tic_nota_in")->getValue());
         
         //GeoRef 
-        $tipo_georef = $this->nosql($obj->getField("tipo_georef")->getValue());
+        $tipo_georef = $primary_db->Filtrado($obj->getField("tipo_georef")->getValue());
         
         //DIRECCION
-        $barrio = $this->nosql($obj->getField("tic_barrio")->getValue());
-        $cgpc 	= $this->nosql($obj->getField("tic_cgpc")->getValue());
-        $coordx = $this->nosql($obj->getField("tic_coordx")->getValue());
-        $coordy = $this->nosql($obj->getField("tic_coordy")->getValue());
-        $callenro = $this->nosql($obj->getField("callenro")->getValue());
-        $calle_nombre = $this->nosql($obj->getField("calle_nombre")->getValue());
-		$nombre_fantasia = $this->nosql($obj->getField("nombre_fantasia")->getValue());
+        $barrio = $primary_db->Filtrado($obj->getField("tic_barrio")->getValue());
+        $cgpc 	= $primary_db->Filtrado($obj->getField("tic_cgpc")->getValue());
+        $coordx = $primary_db->Filtrado($obj->getField("tic_coordx")->getValue());
+        $coordy = $primary_db->Filtrado($obj->getField("tic_coordy")->getValue());
+        $callenro = $primary_db->Filtrado($obj->getField("callenro")->getValue());
+        $calle_nombre = $primary_db->Filtrado($obj->getField("calle_nombre")->getValue());
+		$nombre_fantasia = $primary_db->Filtrado($obj->getField("nombre_fantasia")->getValue());
         
         //Caso VILLA
-        $villa = $this->nosql($obj->getField("villa")->getValue());
-        $vilmanzana = $this->nosql($obj->getField("vilmanzana")->getValue());
-        $vilcasa = $this->nosql($obj->getField("vilcasa")->getValue());
+        $villa = $primary_db->Filtrado($obj->getField("villa")->getValue());
+        $vilmanzana = $primary_db->Filtrado($obj->getField("vilmanzana")->getValue());
+        $vilcasa = $primary_db->Filtrado($obj->getField("vilcasa")->getValue());
         
         //Caso PLAZA
-        $plaza = $this->nosql($obj->getField("plaza")->getValue());
+        $plaza = $primary_db->Filtrado($obj->getField("plaza")->getValue());
         
         //Caso CEMENTERIO
-        $cementerio = $this->nosql($obj->getField("cementerio")->getValue());
-        $sepultura = $this->nosql($obj->getField("sepultura")->getValue());
-        $sepsector = $this->nosql($obj->getField("sepsector")->getValue());
-        $sepcalle = $this->nosql($obj->getField("sepcalle")->getValue());
-        $sepnumero = $this->nosql($obj->getField("sepnumero")->getValue());
-        $sepfila = $this->nosql($obj->getField("sepfila")->getValue());
+        $cementerio = $primary_db->Filtrado($obj->getField("cementerio")->getValue());
+        $sepultura = $primary_db->Filtrado($obj->getField("sepultura")->getValue());
+        $sepsector = $primary_db->Filtrado($obj->getField("sepsector")->getValue());
+        $sepcalle = $primary_db->Filtrado($obj->getField("sepcalle")->getValue());
+        $sepnumero = $primary_db->Filtrado($obj->getField("sepnumero")->getValue());
+        $sepfila = $primary_db->Filtrado($obj->getField("sepfila")->getValue());
         
 
         //Tipo de prestacion y descripción
-        $prestacion = $this->nosql($obj->getField("prestacion")->getValue());
-        $sql = "select tpr_tipo,tpr_detalle,tpr_plazo from tic_prestaciones where tpr_code='$prestacion'";
-        $re = $primary_db->do_execute($sql);
-        if( $row=$primary_db->_fetch_array($re,0) )
+        $prestacion = $primary_db->Filtrado($obj->getField("prestacion")->getValue());
+        $row = $primary_db->QueryArray("select tpr_tipo,tpr_detalle,tpr_plazo from tic_prestaciones where tpr_code='{$prestacion}'");
+        if( $row )
         {
             $this->m_tipo = $row['tpr_tipo'];
             $this->m_prestacion_detalle = $row['tpr_detalle'];
@@ -129,7 +129,7 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         $callenro = ($callenro=="" ? 1 : $callenro);
         
         //La altura de la calle no puede ser blanco, si no esta definido debe ser 0
-        $id_cuadra = $this->nosql($obj->getField("tic_id_cuadra")->getValue());
+        $id_cuadra = $primary_db->Filtrado($obj->getField("tic_id_cuadra")->getValue());
         $id_cuadra = ($id_cuadra=="" ? 0 : $id_cuadra);
         
         //Las coordeanadas no pueden estar en blanco
@@ -145,7 +145,7 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         $organismos = array();
         if($this->m_tipo=="DENUNCIA")
         {
-            $rubro = $this->nosql($obj->getField("rubro")->getValue());
+            $rubro = $primary_db->Filtrado($obj->getField("rubro")->getValue());
             $sql = "select tpr_prioridad,tor_code,tto_figura from tic_prestaciones_rubros where tpr_code='$prestacion' and tru_code='$rubro'";
             $re = $primary_db->do_execute($sql);
             if( $row=$primary_db->_fetch_array($re,0) )
@@ -177,189 +177,51 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         }
 
         //Creo la descripcion del lugar
-        $lugar = $this->generaXMLLugar($obj);
+        $lugar = $this->generaJSONLugar($obj);
         
         //Usuario que esta creando el ticket
-        $use_code = $this->nosql($obj->getField("use_code")->getValue());
+        $use_code = $primary_db->Filtrado($obj->getField("use_code")->getValue());
         
         //Canal de ingreso del ticket
         $canal = $this->determinarCanal();
         
         //Proceso georeferencias y destinatarios, salvo que sea una denuncia y el destinatario sea indicado por el rubro
-        //if(count($organismos)==0)
-        //{
-        	$organismos = array_merge($organismos, $this->procesarGeoRef($prestacion,$coordx,$coordy));
-        //}
+        $organismos = array_merge($organismos, $this->procesarGeoRef($prestacion,$coordx,$coordy));
         
         //Ticket asociado a un Reclamante o es Anonimo
-        $ciu_code = $this->nosql($_SESSION['person_id']);
+        $ciu_code = $primary_db->Filtrado( $this->m_ps->person_id );
         
-        //Proceso Reclamos: mando al SUR viejo
-        if($this->m_tipo=='RECLAMO' && defined("SUR_ACTIVO"))
-        {
-        	$calleNom = $this->nosql($obj->getField("calle_nombre")->getValue());
-        	$calleNro = $this->nosql($obj->getField("callenro")->getValue());
-        	$grcalle = $this->nosql($obj->getField("calle")->getValue());
-        	$grzona = $this->ComunaToOrganismo($cgpc);
-        	$georef = array(
-        		"Calle" => ($grcalle!="" ? $grcalle : 0),
-        		"CalleNom" => $calleNom,
-        		"CalleNro" => ($calleNro!="" ? $calleNro : 0),
-        		"Zona" => ($grzona!="" ? $grzona : 0),
-        		"Barrio" => $barrio,
-        		"PtoX" => ($coordx!="" ? $coordx : 0),
-        		"PtoY" => ($coordy!="" ? $coordy : 0),
-        		"IDCuadra" =>($id_cuadra!="" ? $id_cuadra : 0)
-        	);
-        	
-      		//Verifico que exista un prestador y responsable. Si no estan... Estamos en el horno.
-      		if($this->m_org_prestador==0 && $this->m_org_responsable==0)
-      		{
-      			//Llamar a 0800-cagaste no hay prestador ni responsable. La prestacion esta mal definida seguramente
-      			error_log("Prestacion: $prestacion no puede definir Responsable/Prestador en $calleNom $calleNro");
-	      	    $res[] = "MENSAJE: La prestación no esta correctamente configurada. Avise al supervisor. Intente volver a cargar el reclamo con otra prestación parecida.";
-	            return $res;		
-      		}
-      		
-      		//Si solo falta uno de los organismos, puedo salvar la plata igualandolos
-      		if($this->m_org_prestador==0 && $this->m_org_responsable!=0)
-      		{
-      			$this->m_org_prestador = $this->m_org_responsable;
-      			error_log("Prestacion: $prestacion no puede definir Prestador en $calleNom $calleNro");
-      		}
-      		if($this->m_org_prestador!=0 && $this->m_org_responsable==0)
-      		{
-      			$this->m_org_responsable = $this->m_org_prestador;
-      			error_log("Prestacion: $prestacion no puede definir Responsable en $calleNom $calleNro");
-      		}
-      		
-        	$prest = array(
-        		"Prestacion" => $prestacion,
-        		"Prestador" => ($this->m_org_prestador!="" ? $this->m_org_prestador : 0),
-        		"OrgResponsable" => ($this->m_org_responsable!="" ? $this->m_org_responsable : 0),
-        		"Plazo" => $this->PlazoADias($plazo),
-        		"Obs" => $nota
-        	);
-        	
-        	//CIUDADANO ANONIMO
-        	$ciud = array(
-        		"Quien" => "Anonimo",
-        		"QuienTipoDoc" => "DNI",
-        		"QuienNroDoc" => 0,
-        		"QuienTelFax" => "",
-        		"QuienDomCod" => 0,
-        		"QuienDomNro" => 0,
-        		"QuienDomPiso" => 0,
-        		"QuienDomDpto" => "",
-        		"QuienCodPostal" => "",
-        		"QuienEmail" => ""
-        	);
-	        	
-        	if(isset($_SESSION['person_status']) && $_SESSION['person_status']=="IDENTIFICADO" )
-        	{
-        		//Saco de la base los datos del ciudadano
-        		$sql = "SELECT * FROM ciu_ciudadanos WHERE ciu_code='$ciu_code'";
-        		$re = $primary_db->do_execute($sql);
-        		if( $row = $primary_db->_fetch_array($re,0) )
-	        	{
-	        		list($tipo_doc,$nro_doc) = explode(" ",$row['ciu_doc_nro']);
-	        		$ciud = array(
-		        		"Quien" => $row['ciu_apellido'].", ".$row['ciu_nombres'],
-		        		"QuienTipoDoc" => $tipo_doc,
-		        		"QuienNroDoc" => ($nro_doc!="" ? $nro_doc : 0),
-		        		"QuienTelFax" => $row['ciu_tel_fijo'],
-		        		"QuienDomCod" => ($row['ciu_dir_cod_calle']!="" ? $row['ciu_dir_cod_calle'] : 0),
-		        		"QuienDomNro" => ($row['ciu_dir_nro']!="" ? $row['ciu_dir_nro'] : 0),
-		        		"QuienDomPiso" => ($row['ciu_dir_piso']!="" ? $row['ciu_dir_piso'] : 0),
-		        		"QuienDomDpto" => $row['ciu_dir_dpto'],
-		        		"QuienCodPostal" => $row['ciu_cod_postal'],
-		        		"QuienEmail" => $row['ciu_email'],
-		        	);
-	        	}
-	        	$primary_db->_free_result($re);
-        	}
-        	
-        	//login del operador
-        	$userid = $this->nosql($_SESSION['login']);
-        	
-        	//Canal de ingreso
-        	if($canal=="CALL")
-        	{
-        		$formaIngreso = 0; //telefono
-        		$org_receptor = 174; //Call
-        	}
-        	elseif($canal=="ENTE")
-        	{
-        		$formaIngreso = 0; //telefono
-        		$org_receptor = 469; //Ente
-        	}
-        	elseif($canal=="CGPC")
-        	{
-        		$formaIngreso = 2; //mostrador
-        		$org_receptor = 472; //CGPC (aqui habria que tomar el organismo del usuario logeado)
-        	}
-        	else
-        	{
-        		$formaIngreso = 4; //internet
-        		$org_receptor = 177; //Internet
-        	}
-        	
-            //Registro de por donde ingreso el ticket    	
-        	$recl = array(
-        		"UserId" => $userid,
-        		"FormaIngreso" => $formaIngreso,
-        		"OrgReceptor" => $org_receptor
-        	);
-        	
-        	//Ejecuto el STORE que da el alta del reclamo en el SUR. Retorna el numero/año del reclamo creado.
-        	$values = array_map("utf8_decode",array_merge($georef,$prest,$ciud,$recl));
-			$sql = "EXECUTE [dbo].[sp_InsertReclamo] null,null,:Calle:,':CalleNom:',:CalleNro:,:Zona:,':Prestacion:',:Prestador:,:OrgResponsable:,0,:Plazo:,':Obs:'";
-			$sql.= ",null,null,null,null,null,null,':Quien:',':QuienTipoDoc:',:QuienNroDoc:,':QuienTelFax:',:QuienDomCod:,:QuienDomNro:";
-			$sql.= ",:QuienDomPiso:,':QuienDomDpto:',':QuienCodPostal:',':QuienEmail:',:OrgReceptor:,':UserId:',':FormaIngreso:',0,'NO'";
-			$sql.= ",null,':Barrio:',null,:PtoX:,:PtoY:,:IDCuadra:,null,null";
-        	$re = $reclamos_db->do_execute($sql,$res,$values);
-        	if(!$re)
-        	{
-        		$err[] = "MENSAJE:ERROR No se puede salvar el reclamo en este momento. Contactese con mesa de ayuda.";
-        		return $err;
-        	}
-        	if( $row = $reclamos_db->_fetch_array($re,0) )
-	        {
-	            $this->m_numero = $row['numero'];
-	            $this->m_anio = $row['anio'];
-	        }
-        	$reclamos_db->_free_result($re);        	
-        }
-		else //Denuncias Quejas y Solicitudes al SUACI
-        {
-            //Determino el código de reclamo
-            $this->m_numero = $this->generaCodigoTicket($this->m_tipo);
-            $this->m_anio = date("Y"); //Año actual
-        }
-
+		//Determino el código de reclamo
+        $this->m_numero = $this->generaCodigoTicket($this->m_tipo);
+        $this->m_anio = date("Y"); //Año actual
+        
         //Comando SQL para calcular el plazo
         $plazo_sql = "NOW() + INTERVAL ".$this->PlazoADias($plazo)." DAY";
         
         //Creo ticket
-        $sql = "INSERT INTO tic_ticket(tic_nro,tic_anio,tic_tipo,tic_tstamp_in,use_code,tic_nota_in,tic_estado,tic_lugar,tic_barrio,tic_cgpc,tic_coordx,tic_coordy,tic_id_cuadra,tic_forms,tic_canal,tic_calle_nombre,tic_nro_puerta,tic_tstamp_plazo) ";
-        $sql.= "VALUES (:TIC_NRO:,:TIC_ANIO:,:TIC_TIPO:,NOW(),:USE_CODE:,:TIC_NOTA_IN:,'ABIERTO',:TIC_LUGAR:,:TIC_BARRIO:,:TIC_CGPC:,:TIC_COORDX:,:TIC_COORDY:,:TIC_ID_CUADRA:,:TIC_FORMS:,:TIC_CANAL:,:TIC_CALLE_NOMBRE:,:TIC_NRO_PUERTA:,:TIC_TSTAMP_PLAZO:)";
+        $identificador = $this->m_tipo.' '.$this->m_numero.'/'.$this->m_anio;
+        $nro = $primary_db->Sequence('tic_tickets');
+        $sql = "INSERT INTO tic_ticket(tic_nro  , tic_numero , tic_anio , tic_tipo   , tic_tstamp_in, use_code   , tic_nota_in   , tic_estado, tic_lugar   , tic_barrio   , tic_cgpc   , tic_coordx , tic_coordy , tic_id_cuadra , tic_forms , tic_canal   , tic_tstamp_plazo, tic_tstamp_cierre, tic_calle_nombre   , tic_nro_puerta, tic_nro_asociado, tic_identificador   )";
+        $sql.= "               VALUES (:TIC_NRO:,:TIC_NUMERO:,:TIC_ANIO:,':TIC_TIPO:',NOW()         ,':USE_CODE:',':TIC_NOTA_IN:','ABIERTO'  ,':TIC_LUGAR:',':TIC_BARRIO:',':TIC_CGPC:',:TIC_COORDX:,:TIC_COORDY:,:TIC_ID_CUADRA:,:TIC_FORMS:,':TIC_CANAL:',:TIC_TSTAMP_PLAZO:,NULL             ,':TIC_CALLE_NOMBRE:',:TIC_NRO_PUERTA:,NULL            ,':TIC_IDENTIFICADOR:')";
         $values = array(
-                "TIC_NRO"       	=>  $this->m_numero,
-                "TIC_ANIO"      	=>  $this->m_anio,
-                "TIC_TIPO"      	=>  "'$this->m_tipo'",
-                "USE_CODE"      	=>  "'$use_code'",
-                "TIC_NOTA_IN"   	=>  "'$nota'",
-                "TIC_LUGAR"     	=>  "'$lugar'",
-                "TIC_BARRIO"    	=>  "'$barrio'",
-                "TIC_CGPC"      	=>  "'$cgpc'",
+                "TIC_NRO"       	=>  $nro,
+                "TIC_NUMERO"       	=>  $this->m_numero,
+        		"TIC_ANIO"      	=>  $this->m_anio,
+                "TIC_TIPO"      	=>  $this->m_tipo,
+                "USE_CODE"      	=>  $use_code,
+                "TIC_NOTA_IN"   	=>  $nota,
+                "TIC_LUGAR"     	=>  $lugar,
+                "TIC_BARRIO"    	=>  $barrio,
+                "TIC_CGPC"      	=>  $cgpc,
                 "TIC_COORDX"    	=>  $coordx,
                 "TIC_COORDY"    	=>  $coordy,
                 "TIC_ID_CUADRA" 	=>  $id_cuadra,
                 "TIC_FORMS"     	=>  $this->m_form,
-                "TIC_CANAL"     	=>  "'$canal'",
-                "TIC_CALLE_NOMBRE"	=>  "'$calle_nombre'",
+                "TIC_CANAL"     	=>  $canal,
+                "TIC_CALLE_NOMBRE"	=>  $calle_nombre,
                 "TIC_NRO_PUERTA"	=>  $callenro,
-        		"TIC_TSTAMP_PLAZO"	=>	$plazo_sql
+        		"TIC_TSTAMP_PLAZO"	=>	$plazo_sql,
+        		"TIC_IDENTIFICADOR" => 	$identificador
         );
         $primary_db->do_execute($sql,$res,$values);
 
@@ -367,59 +229,52 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         $cuestionario = $obj->getField("cuestionario")->getValue();
         
         //Inserto la prestacion inicial
-        $sql = "INSERT INTO tic_ticket_prestaciones(tic_nro,tic_anio,tic_tipo,tpr_code,ttp_tstamp,tru_code,ttp_cuestionario,ttp_estado,ttp_prioridad) ";
-        $sql.= "VALUES(:TIC_NRO:,:TIC_ANIO:,:TIC_TIPO:,:TPR_CODE:,NOW(),:TRU_CODE:,:TTP_CUESTIONARIO:,'INICIADO',:TTP_PRIORIDAD:)";
+        $sql = "INSERT INTO tic_ticket_prestaciones(tic_nro  ,tpr_code    , tru_code   , ttp_cuestionario   , ttp_estado, ttp_prioridad   , ttp_tstamp_plazo, ttp_alerta) ";
+        $sql.=                              "VALUES(:TIC_NRO:,':TPR_CODE:',':TRU_CODE:',':TTP_CUESTIONARIO:','INICIADO' ,':TTP_PRIORIDAD:',NULL             , NULL      )";
         $values = array(
-                "TIC_NRO"           =>   $this->m_numero,
-                "TIC_ANIO"          =>   $this->m_anio,
-                "TIC_TIPO"          =>   "'$this->m_tipo'",
-                "TPR_CODE"          =>  "'$prestacion'",
-                "TRU_CODE"          =>   "'$rubro'",
-                "TTP_CUESTIONARIO"  =>   "'$cuestionario'",
-                "TTP_PRIORIDAD"     =>   "'$prioridad'");
+                "TIC_NRO"           =>   $nro,
+                "TPR_CODE"          =>   $prestacion,
+                "TRU_CODE"          =>   $rubro,
+                "TTP_CUESTIONARIO"  =>   $cuestionario,
+                "TTP_PRIORIDAD"     =>   $prioridad);
         $primary_db->do_execute($sql,$res,$values);
 
         //Creo paso inicial de la prestacion
-        $sql = "INSERT INTO tic_avance(tic_nro,tic_anio,tic_tipo,tpr_code,tav_tstamp,use_code,tic_estado_in,tic_estado_out,tav_nota,tic_motivo) ";
-        $sql.= "VALUES(:TIC_NRO:,:TIC_ANIO:,:TIC_TIPO:,:TPR_CODE:,NOW(),:USE_CODE:,'INICIADO','INICIADO',:TAV_NOTA:,'')";
+        $sql = "INSERT INTO tic_avance(tic_nro  , tpr_code   , tav_code ,tav_tstamp_in, use_code_in   , tic_estado_in,tav_nota    , tic_motivo,tic_estado_out,tav_tstamp_out,use_code_out)";
+        $sql.= "				VALUES(:TIC_NRO:,':TPR_CODE:',:TAV_CODE:,NOW()        ,':USE_CODE_IN:','INICIADO'    ,':TAV_NOTA:','INICIADO' ,NULL          ,NULL          ,NULL        )";
         $values = array(
-                "TIC_NRO"   =>   $this->m_numero,
-                "TIC_ANIO"  =>   $this->m_anio,
-                "TIC_TIPO"  =>   "'$this->m_tipo'",
-                "TPR_CODE"  =>   "'$prestacion'",
-                "USE_CODE"  =>   "'$use_code'",
-                "TAV_NOTA"  =>   "'$nota'");
+                "TIC_NRO"   	=>   $nro,
+                "TPR_CODE"  	=>   $prestacion,
+        		"TAV_CODE"		=> 	 $primary_db->Sequence('tic_avances'),
+                "USE_CODE_IN"  	=>   $use_code,
+                "TAV_NOTA"  	=>   $nota);
         $primary_db->do_execute($sql,$res,$values);
 
         //Creo la relacion Organismo->Ticket para el RESPONSABLE, PRESTADOR y OBSERVADOR
         foreach($organismos as $organismo)
         {
-                $sql = "INSERT INTO tic_ticket_organismos(tic_nro,tic_anio,tic_tipo,tor_code,tto_figura,tpr_code,tto_alerta) ";
-                $sql.= "VALUES(:TIC_NRO:,:TIC_ANIO:,:TIC_TIPO:,:TOR_CODE:,:TTO_FIGURA:,:TPR_CODE:,1)";
+                $sql = "INSERT INTO tic_ticket_organismos(tic_nro  , tpr_code   ,tor_code  , tto_figura   )";
+                $sql.= "						   VALUES(:TIC_NRO:,':TPR_CODE:',:TOR_CODE:,':TTO_FIGURA:')";
                 $values = array(
-                    "TIC_NRO"       =>   $this->m_numero,
-                    "TIC_ANIO"      =>   $this->m_anio,
-                    "TIC_TIPO"      =>   "'$this->m_tipo'",
+                    "TIC_NRO"       =>   $nro,
                     "TOR_CODE"      =>   $organismo['tor_code'],
-                    "TTO_FIGURA"    =>   "'".$organismo['tto_figura']."'",
-	                "TPR_CODE"    	=>   "'$prestacion'"
+                    "TTO_FIGURA"    =>   $organismo['tto_figura'],
+	                "TPR_CODE"    	=>   $prestacion
                 );
                 $primary_db->do_execute($sql,$res,$values);
         }
 
         //La sesion NO ES anonima? Entonces salvo los datos del ciudadano
-        if(isset($_SESSION['person_status']) && $_SESSION['person_status']=="IDENTIFICADO" )
+        if( $this->m_ps->person_status=="IDENTIFICADO" )
         {
                 //Creo relacion Ciudadano-Ticket (salvo que sea anonimo)
-                $sql = "INSERT INTO tic_ticket_ciudadano(tic_nro,tic_anio,tic_tipo,ciu_code,ttc_tstamp,ttc_nota) ";
-                $sql.="VALUES(:TIC_NRO:,:TIC_ANIO:,:TIC_TIPO:,:CIU_CODE:,NOW(),:TTC_NOTA:)";
+                $sql = "INSERT INTO tic_ticket_ciudadano(tic_nro  , ciu_code, ttc_tstamp, ttc_nota   ) ";
+                $sql.="							  VALUES(:TIC_NRO:,:CIU_CODE:,NOW()     ,':TTC_NOTA:')";
 
                 $values = array(
-                "TIC_NRO"   =>   $this->m_numero,
-                "TIC_ANIO"  =>   $this->m_anio,
-                "TIC_TIPO"  =>   "'$this->m_tipo'",
+                "TIC_NRO"   =>   $nro,
                 "CIU_CODE"  =>   $ciu_code,
-                "TTC_NOTA"  =>   "'$nota'");
+                "TTC_NOTA"  =>   $nota);
                 $primary_db->do_execute($sql,$res,$values);
         }
         
@@ -475,101 +330,88 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
     private function generaCodigoTicket($tipo)
     {
         global $primary_db;
-        $codigo=0;
         $anio = date("Y"); //Año actual
-        $sql = "call getnext( '$tipo-$anio')";
-        $re = $primary_db->do_execute($sql);
-        if( $row = $primary_db->_fetch_array($re,0) )
-        {
-            $codigo = $row[0];
-        }
-        $primary_db->_free_result($re);
+        $codigo = $primary_db->Sequence("$tipo-$anio");
         return $codigo;
     }
 
-
-    //Genera un XML con la direccion 
-    private function generaXMLLugar($obj)
+    //Genera un JSON con la direccion
+    private function generaJSONLugar($obj)
     {
-    	$tipo_georef = $this->nosql($obj->getField("tipo_georef")->getValue());
-        
+    	global $primary_db;
+    	$tipo_georef = $primary_db->Filtrado($obj->getField("tipo_georef")->getValue());
+		$geo = null;
+		    
     	if($tipo_georef=="DOMICILIO")
     	{
-	        $calle_nombre = $obj->getField("calle_nombre")->getValue();
-	        $calle = $obj->getField("calle")->getValue();
-	        $callenro = $obj->getField("callenro")->getValue();
-	        $piso = $obj->getField("piso")->getValue();
-	        $dpto = $obj->getField("dpto")->getValue();
-	        $nombre_fantasia = $obj->getField("nombre_fantasia")->getValue();
-	        
-		    $ret = '<?xml version="1.0" encoding="utf-8"?>';
-	        $ret.= '<direccion><domicilio>';
-	        $ret.= '<calle>'.$calle_nombre.'</calle>';
-	        $ret.= '<nro>'.$callenro.'</nro>';
-	        $ret.= '<piso>'.$piso.'</piso>';
-	        $ret.= '<dpto>'.$dpto.'</dpto>';
-	        $ret.= '<nombre_fantasia>'.$nombre_fantasia.'</nombre_fantasia>';
-	        $ret.= '</domicilio></direccion>';       
+    		$geo = array(
+    			'tipo'				=> $tipo_georef,
+	    		'calle_nombre' 		=> $primary_db->Filtrado($obj->getField("calle_nombre")->getValue()),
+	    		'calle' 			=> $primary_db->Filtrado($obj->getField("calle")->getValue()),
+	    		'callenro' 			=> $primary_db->Filtrado($obj->getField("callenro")->getValue()),
+	    		'piso' 				=> $primary_db->Filtrado($obj->getField("piso")->getValue()),
+	    		'dpto' 				=> $primary_db->Filtrado($obj->getField("dpto")->getValue()),
+	    		'nombre_fantasia' 	=> $primary_db->Filtrado($obj->getField("nombre_fantasia")->getValue()),
+	    		'barrio' 			=> $primary_db->Filtrado($obj->getField("tic_barrio")->getValue()),
+	    		'comuna' 			=> $primary_db->Filtrado($obj->getField("tic_cgpc")->getValue()),
+    			'lat'				=> $primary_db->Filtrado($obj->getField("tic_coordx")->getValue()),
+    			'lng'				=> $primary_db->Filtrado($obj->getField("tic_coordy")->getValue()),
+    		);
     	}
-    	
-        if($tipo_georef=="VILLA")
-    	{    	
-        	$villa = $this->nosql($obj->getField("villa")->readAltValue());
-        	$vilmanzana = $this->nosql($obj->getField("vilmanzana")->getValue());
-        	$vilcasa = $this->nosql($obj->getField("vilcasa")->getValue());
-
-        	$ret = '<?xml version="1.0" encoding="utf-8"?>';
-	        $ret.= '<direccion><villa>';
-	        $ret.= '<nombre>'.$villa.'</nombre>';
-	        $ret.= '<manzana>'.$vilmanzana.'</manzana>';
-	        $ret.= '<casa>'.$vilcasa.'</casa>';
-	        $ret.= '</villa></direccion>';
+    
+    	if($tipo_georef=="VILLA")
+    	{
+    		$geo = array(
+    			'tipo'		=> $tipo_georef,
+	    		'villa' 	=> $primary_db->Filtrado($obj->getField("villa")->readAltValue()),
+	    		'manzana' 	=> $primary_db->Filtrado($obj->getField("vilmanzana")->getValue()),
+	    		'casa' 		=> $primary_db->Filtrado($obj->getField("vilcasa")->getValue()),
+    			'lat'		=> $primary_db->Filtrado($obj->getField("tic_coordx")->getValue()),
+    			'lng'		=> $primary_db->Filtrado($obj->getField("tic_coordy")->getValue()),
+    		);
     	}
-    	
-        if($tipo_georef=="PLAZA")
-    	{    	
-        	$plaza = $this->nosql($obj->getField("plaza")->getValue());
-        	$ret = '<?xml version="1.0" encoding="utf-8"?>';
-	        $ret.= '<direccion><plaza>';
-	        $ret.= '<nombre>'.$plaza.'</nombre>';
-	        $ret.= '</plaza></direccion>';
+    
+    	if($tipo_georef=="PLAZA")
+    	{
+    		$geo = array(
+    			'tipo'	=> $tipo_georef,
+    			'plaza' => $primary_db->Filtrado($obj->getField("plaza")->getValue())
+    		);
     	}
-    	
-        if($tipo_georef=="CEMENTERIO")
-    	{    	
-	        $cementerio = $this->nosql($obj->getField("cementerio")->getValue());
-    	    $sepultura = $this->nosql($obj->getField("sepultura")->getValue());
-        	$sepsector = $this->nosql($obj->getField("sepsector")->getValue());
-        	$sepcalle = $this->nosql($obj->getField("sepcalle")->getValue());
-        	$sepnumero = $this->nosql($obj->getField("sepnumero")->getValue());
-        	$sepfila = $this->nosql($obj->getField("sepfila")->getValue());
-        	
-        	$ret = '<?xml version="1.0" encoding="utf-8"?>';
-	        $ret.= '<direccion><cementerio>';
-	        $ret.= '<nombre>'.$cementerio.'</nombre>';
-	        $ret.= '<sepultura>'.$sepultura.'</sepultura>';
-	        $ret.= '<sector>'.$sepsector.'</sector>';
-	        $ret.= '<calle>'.$sepcalle.'</calle>';
-	        $ret.= '<numeror>'.$sepnumero.'</numero>';
-	        $ret.= '<fila>'.$sepfila.'</fila>';
-	        $ret.= '</cementerio></direccion>';
+    
+    	if($tipo_georef=="CEMENTERIO")
+    	{
+    		$geo = array(
+    			'tipo'			=> $tipo_georef,
+	    		'cementerio' 	=> $primary_db->Filtrado($obj->getField("cementerio")->getValue()),
+	    		'sepultura' 	=> $primary_db->Filtrado($obj->getField("sepultura")->getValue()),
+	    		'sector' 		=> $primary_db->Filtrado($obj->getField("sepsector")->getValue()),
+	    		'calle' 		=> $primary_db->Filtrado($obj->getField("sepcalle")->getValue()),
+	    		'numero' 		=> $primary_db->Filtrado($obj->getField("sepnumero")->getValue()),
+	    		'fila' 			=> $primary_db->Filtrado($obj->getField("sepfila")->getValue()),
+    			'lat'			=> $primary_db->Filtrado($obj->getField("tic_coordx")->getValue()),
+    			'lng'			=> $primary_db->Filtrado($obj->getField("tic_coordy")->getValue()),
+    		);
     	}
-
-	    if($tipo_georef=="ORGAN.PUBLICO")
-    	{    	
-        	$organismo = $this->nosql($obj->getField("orgpublico")->getValue());
-        	$sector = $this->nosql($obj->getField("orgsector")->getValue());
-        	
-        	$ret = '<?xml version="1.0" encoding="utf-8"?>';
-	        $ret.= '<direccion><orgpublico>';
-	        $ret.= '<nombre>'.$organismo.'</nombre>';
-	        $ret.= '<sector>'.$sector.'</sector>';
-	        $ret.= '</orgpublico></direccion>';
-    	}
-    	
-        return $ret;
+    
+    	if($tipo_georef=="ORGAN.PUBLICO")
+    	{
+    		$geo = array(
+   				'tipo'		=> $tipo_georef,
+	    		'organismo'	=> $primary_db->Filtrado($obj->getField("orgpublico")->getValue()),
+	    		'sector' 	=> $primary_db->Filtrado($obj->getField("orgsector")->getValue()),
+    			'lat'		=> $primary_db->Filtrado($obj->getField("tic_coordx")->getValue()),
+    			'lng'		=> $primary_db->Filtrado($obj->getField("tic_coordy")->getValue()),
+    		);	
+       	}
+       	
+    	$ret = json_encode($geo);
+       	error_log("generaJSONLugar() $ret");
+    	return $ret;
     }
-
+    
+    
+    
     
     //Determina el canal de ingreso, mirando en los atributos del usuario
     private function determinarCanal()
@@ -679,36 +521,6 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         return $ans[0]->Resultado;
     }
     
-    /** La usig expresa el CGPC como "Comuna X"
-     * hay que convertir ese string al codigo de organismo
-     * @param $cgpc
-     * @return int
-     */
-    private function ComunaToOrganismo($cgpc)
-    {
-    	$org_cgps = array(
-    		"Comuna 1" => 1,
-	    	"Comuna 2" => 2,
-	    	"Comuna 3" => 3,
-	    	"Comuna 4" => 6,
-	    	"Comuna 5" => 5,
-	    	"Comuna 6" => 7,
-	    	"Comuna 7" => 8,
-	    	"Comuna 8" => 9,
-	    	"Comuna 9" => 10,
-	    	"Comuna 10" => 11,
-	    	"Comuna 11" => 12,
-	    	"Comuna 12" => 13,
-	    	"Comuna 13" => 14,
-	    	"Comuna 14" => 15,
-	    	"Comuna 15" => 16,
-    	);
-    	if(array_key_exists($cgpc,$org_cgps))
-    	{
-    		return $org_cgps[$cgpc];	
-    	}
- 		return 0;   	
-    }
     
     /** Plazo es un string "Cantidad Unidad"
      * Se lo convierte a una cantidad de dias
@@ -736,13 +548,6 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
     		$res = intval($cant); //dias
     	}
   		return $res;  	
-    }
-    
-    private function nosql($campo)
-    {
-    	$search = array("'" ,"-");
-    	$replace= array("''","_" );
-		return str_replace($search,$replace,$campo);    	
     }
 }
 ?>

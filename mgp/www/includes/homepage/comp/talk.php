@@ -43,69 +43,66 @@ if(!class_exists('talk'))
 			}
 			
             $html = '
-<div id="talk">
-	<div id="indicadores">';
+<script type="text/javascript">
+	var person = '.$this->m_person->toJSON().';
+	var talk = '.$this->m_session->toJSON().';
+</script>
+	                    
+<div id="talk" class="row">
+	<div class="span7">
+		<div id="talk_search">';
+			    
+	        //Esto genera los campos pm_person_doc (pais) tm_person_doc (tipo doc) y nm_person_doc (nro doc)    
+            $doc = new CField(array("presentation"=>"CIUDADANO::DNI","name"=>"person_doc","label"=>"Doc.","isvisible"=>true,"classparams"=>"no_search","value"=>$this->m_person->person_doc,"initialvalue"=>"ARG DNI "));
+            $doc->NewInstance($primary_db);
+            $html.=$doc->RenderFilterForm($primary_db);
+            
+            $html.= '
+	    	<div class="offset5"><button onclick="boton_buscar()" class="btn btn-primary"><i class="icon-search"></i>  Buscar</button></div>
+		</div>
+		
+	 	<div id="identificado" class="row">
+	    		<div id="talk_nominal" class="span4"></div>            
+				<div id="talk_actions" class="span2">
+				    <button id="talk_btn_anonimo" 	onclick="boton_anonimo()"   class="btn"><i class="icon-off"></i> Anónimo</button>
+				    <button id="talk_btn_modificar" onclick="boton_modificar()" class="btn"><i class="icon-edit"></i> Modificar</button>
+				    <button id="talk_btn_terminar"  onclick="boton_terminar()"  class="btn">Terminar</button>        
+				</div>        
+	        </div>
+	</div>    
+	
+
+	<div id="indicadores" class="span2 offset2">';
 
             //Al iniciar una sesion se crea un nuevo objeto sesion. El mismo se inicia con la
             //persona identificada. Si no hay una persona identificada, se busca el ANI en la base
             //para identificar a la persona de ser posible antes de iniciar la sesion.
             //Una sesion anonima, se puede hacer nominal con solo identificar a la persona con la sesion abierta.
             
-            $html.= '<div id="talk_status">'.$this->m_session->talk_status.'</div>'; //EN ESPERA
-            $html.= '<div id="person_status">'.$this->m_person->person_status.'</div>'; //ANONIMO
-        
+            $html.= '<button id="talk_status" class="btn">'.$this->m_session->talk_status.'</button>  '; //EN ESPERA
+            $html.= '<button id="person_status" class="btn">'.$this->m_person->person_status.'</button>'; //ANONIMO
             $html.= '
 	</div>
 	
-	<div id="talk_search">
-		<script type="text/javascript">
-			var person = '.$this->m_person->toJSON().';
-			var talk = '.$this->m_session->toJSON().';
-		</script>';
-            
-        //Esto genera los campos pm_person_doc (pais) tm_person_doc (tipo doc) y nm_person_doc (nro doc)    
-            $doc = new CField(array("presentation"=>"CIUDADANO::DNI","name"=>"person_doc","label"=>"Doc.","isvisible"=>true,"classparams"=>"no_search","value"=>$this->m_person->person_doc,"initialvalue"=>"ARG DNI "));
-            $doc->NewInstance($primary_db);
-            $html.=$doc->RenderFilterForm($primary_db);
-            
-            $html.= '<button onclick="boton_buscar()">Buscar</button>
-	</div>
 	
- 	<div id="identificado">
-    	Identificado como: <div id="talk_nominal"></div>
-        <div id="cops"></div>            
-	</div>
-	
-	<div id="talk_actions">
-    	<button id="talk_btn_anonimo" onclick="boton_anonimo()">Anónimo</button>
-        <button id="talk_btn_modificar" onclick="boton_modificar()">Modificar</button>
-       	<button id="talk_btn_terminar" onclick="boton_terminar()">Terminar</button>        
-   	</div>            
 </div>';
 
             
-            $style = '<style>
-            #indicadores {width: 200px;border: solid 1px;border-radius: 5px;padding: 10px;text-align: center;float: right;background:#eee;}
-            #indicadores div {padding:3px;margin:3px;}
-            #talk {height: 190px;}
-            #talk_search {width: 500px;float: left;height: 100px;}
-            #talk_search button {margin-left:308px;margin-top:10px;}
-            #talk_btn_anonimo, #talk_btn_modificar, #talk_btn_terminar {display:none}
-            #botones_turnos {float: right;margin-top: 3px;}
-            .buscar {background:none;border:none;text-align:left;}
-            table {border-spacing: 0px;}
-            th {background:#eee;padding: 5px;}
-            td {border-bottom:solid 1px #ddd;padding:3px;min-heigth:38px;}
-            table table {width:300px;border:solid 1px #ddd;}
-            table table td {border:none;}
-            #turnos_tbl tr {height: 38px;}
-            </style>
-            <script type="text/javascript" src="'.WEB_PATH.'/includes/home_call.js"></script>
+            $style = '
+<style>
+    #indicadores{border: solid 1px #ddd;border-radius:5px;padding:10px;text-align:center;margin-top:10px;}
+    #identificado {border:solid 1px #ccc;border-radius:5px;background:#efefef;margin-top:10px;margin-bottom:10px;padding-bottom:5px;}
+    #indicadores button {margin:3px;width:150px;}
+	#talk_btn_anonimo, #talk_btn_modificar, #talk_btn_terminar {display:none}
+	#talk_actions {margin-top:10px;margin-bottom:10px;}
+	#talk_actions button {margin-bottom:10px;}            
+</style>
             ';
             
-            
 			$content["talk"] = $style.$html;
-			return array( $content, array() );
+			$includes[] = '<script type="text/javascript" src="'.WEB_PATH.'/includes/home_call.js"></script>';
+			$err = array();
+			return array( $content, $err, $includes );
 		}
 	}
 }

@@ -40,7 +40,7 @@ class ubicacion_gr extends cform_group {
         $this->getClass("class_tic_ticket_upd")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"double", "IsForDB"=>true, "Order"=>111, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_coordy")->SetDisplayValues(Array("Name"=>"tic_coordy", "Label"=>"y", "Type"=>"double", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_barrio")->SetDisplayValues(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_cgpc")->SetDisplayValues(Array("Name"=>"tic_cgpc", "Label"=>"CGPC", "Size"=>20, "IsForDB"=>true, "Order"=>110, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_cgpc")->SetDisplayValues(Array("Name"=>"tic_cgpc", "Label"=>"CGPC", "Size"=>20, "IsForDB"=>true, "Order"=>110, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
     }
 }
 }

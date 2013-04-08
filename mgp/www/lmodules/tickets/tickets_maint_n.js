@@ -46,10 +46,17 @@ function downloadOnLoad()
     		$('#lm_tic_barrio').html(o.barrio);
     		$('#m_calle').val(o.cod_calle);
     		$('#hm_calle').val(o.calle);
+    		$('#m_calle_nombre').val(o.calle);
     		
     		//Cargo el mapa 350 x 250px
-    		$('#m_mapa img').attr('src','http://maps.googleapis.com/maps/api/staticmap?center='+o.longitud+','+o.latitud+'&zoom=17&size=350x250&maptype=roadmap&markers=color:blue%7Clabel:%7C'+o.longitud+','+o.latitud+'&sensor=false');
-    		
+    		/* GoogleMaps
+    		 * $('#m_mapa img').attr('src','http://maps.googleapis.com/maps/api/staticmap?center='+o.longitud+','+o.latitud+'&zoom=17&size=350x250&maptype=roadmap&markers=color:blue%7Clabel:%7C'+o.longitud+','+o.latitud+'&sensor=false');
+    		 * 
+    		 * OpenStreetMap
+    		 * $('#m_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
+    		 */
+    		$('#m_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
+    		    		
     		//Oculto la calle y altura
     		$('#calle .fldm input').hide();
     		$('#calle .fldm img').hide();

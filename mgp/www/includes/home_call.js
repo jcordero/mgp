@@ -10,6 +10,10 @@ $(document).ready(function() {
     	armar_home_page();
     	armar_panel();    
     }    
+    
+    kendo.culture("es-AR");
+    $("#m_calls_fecha_desde").kendoDatePicker();
+    $("#m_calls_fecha_hasta").kendoDatePicker();
 });
 
 function armar_home_page() {
@@ -18,11 +22,12 @@ function armar_home_page() {
 		{
 			esperar();
 		    
+		    //Cargo los tickets abiertos por el ciudadano
+		    buscar_tickets_ciudadano();
+
 		    //Busco los contactos (sesiones anteriores)
 		    boton_buscar_contactos();
 		
-		    //Cargo los tickets abiertos por el ciudadano
-		    buscar_tickets_ciudadano();
 		    listo();
 		}
 	}
@@ -44,7 +49,7 @@ function armar_panel() {
 		$('#calls').hide();
 		$('#ciudadanos').hide();
 		$('#person_status').html("ANONIMO");
-		$('#person_status').css("background","#DDD");
+		$('#person_status').removeClass("btn-success");
 		$('#talk_search').show();
 		$('#offline').show();		
 	}	
@@ -58,19 +63,19 @@ function armar_panel() {
 		$('#ciudadanos').show();
 
 		$('#person_status').html("IDENTIFICADO");
-		$('#person_status').css("background","#AFA");
+		$('#person_status').addClass("btn-success");
 		$('#identificado').show();
 		$('#talk_btn_anonimo').show();
 		$('#talk_btn_modificar').show();
 			    	
     	//Armo el texto de descripcion Nombre, Apellido y debajo Tipo y nro de doc
     	var d = (person.person_doc!='' ? person.person_doc.split(' ') : ['ARG','DNI','']);
-    	var b="<h3>"+person.person_nombres+", "+person.person_apellido+"</h3>"+d[1]+" "+d[2]+" ("+d[0]+")";
-		b+="<br/><br/>ID: <b>"+person.person_id+"</b>";    	
+    	var b="<h4>"+person.person_nombres+", "+person.person_apellido+"</h4>"+d[1]+" "+d[2]+" ("+d[0]+")";
+		b+="<br/>ID: <b>"+person.person_id+"</b>";    	
     	b+="<br/>Sexo: <b>"+person.person_sexo+"</b><br/>Edad: <b>"+person.person_edad+" años</b>";
     	$("#talk_nominal").html(b);
 	}
-	
+
 	//Indicador EN ESPERA - CONECTADO
 	if(talk.talk_status=="EN ESPERA")
 	{
@@ -145,7 +150,7 @@ function boton_buscar()
             	armar_panel();
             }
         }	
-    },"HOME","doBuscar",doc + '|' + nombres + '|' + apellido + '|' + talk.talk_ani + '|' + talk.session + '|' + pais);
+    },"HOME","doBuscar",doc + '|' + nombres + '|' + apellido + '|' + talk.talk_ani + '||' + pais);
 }
 
 
@@ -212,7 +217,6 @@ function boton_terminar()
 //Iniciar una sesion anonima
 function boton_anonimo()
 {
-    var session = document.getElementById('m_user_session');
     new rem_request(this,function(obj,json){
     	if(json=="")
         {
@@ -223,15 +227,12 @@ function boton_anonimo()
         	//vuelvo a la home page        
         	document.location = sess_web_path+"/index.php";
         }	
-    },"HOME","doAnonimo",session.value);
+    },"HOME","doAnonimo",'');
 }
 
 //Modificar o completar los datos del ciudadano identificado
 function boton_modificar()
 {
-    var session = $('#m_user_session').val();
-    var doc = $('#m_person_id').val();
-    var pars = session + "|" + doc;
     new rem_request(this,function(obj,json){
     	if(json=="")
         {
@@ -242,7 +243,7 @@ function boton_modificar()
         	var jdata = eval('(' + json + ')');
             document.location.href = jdata.url;
         }	
-    },"HOME","doModificar",pars);
+    },"HOME","doModificar",'');
 }
 
 function boton_buscar_ani()
@@ -307,18 +308,10 @@ function buscar_ani(ani,entry_point,call_id,skill)
 //Buscar otros contactos(sesiones) de este ciudadano
 function boton_buscar_contactos()
 {
-    var	id = $('#m_person_id').val();
-    if(!document.getElementById("calls_tbl") || id==0 || id=="")
-    {
-        completar_tabla_contactos(null);
-        return; //No hay tabla de resultado
-    }
-
-    var fecha_desde = $('#m_calls_fecha').val();
-    var fecha_hasta = $('#hm_calls_fecha').val();
-    var session = $('#m_user_session').val();
+    var fecha_desde = $('#m_calls_fecha_desde').val();
+    var fecha_hasta = $('#m_calls_fecha_hasta').val();
     
-    var params =  id + '|' + fecha_desde + '|' + fecha_hasta + '|' + session;
+    var params =  fecha_desde + '|' + fecha_hasta;
     new rem_request(this,function(obj,json) {
     	if(json=="")
         {
@@ -336,10 +329,11 @@ function boton_buscar_contactos()
 //Buscar cualquier ticket.
 function boton_buscar_tickets()
 {
-    var nro = document.getElementById('m_tickets_nro');
-    var anio = document.getElementById('m_tickets_anio');
+    var tipo = $('#m_tickets_tipo').val();
+    var nro = $('#m_tickets_nro').val();
+    var anio = $('#m_tickets_anio').val();
     
-    var params =  nro.value + '|' + anio.value;
+    var params =  tipo + '|' + nro + '|' + anio;
     new rem_request(this,function(obj,json){
     	if(json=="")
         {
@@ -351,31 +345,6 @@ function boton_buscar_tickets()
         	completar_tabla_tickets(jdata);
         }	
     },"HOME","doBuscarTickets",params);
-}
-
-//BUSCAR TURNOS
-function boton_buscar_turnos()
-{
-  var id = $('#m_person_id').val();
-  if(!document.getElementById("turnos_tbl") || id==0 || id=="")
-  {
-	  completar_tabla_turnos(null);
-      return; //No hay tabla de resultado
-  }
-
-  var session = $('#m_user_session').val();  
-  new rem_request(this,function(obj,json)
-  {
-	  if(json=="")
-	  {
-	      alert_box("BuscarTurnos no retorna resultados","ERROR");
-	  }
-	  else
-	  {
-		  var jdata = eval('(' + json + ')');
-	      completar_tabla_turnos(jdata);
-	  }  
-  },"HOME","doBuscarTurnos",id + '|' + session);
 }
 
 
@@ -428,43 +397,46 @@ function boton_nuevo_ticket()
 function completar_tabla_tickets(datos)
 {
 	var j=0;
-	var b = "<table><thead><tr><th>Tipo</th><th>Estado</th><th>Nro</th><th>Año</th><th>Prestación</th><th>Ubicación</th><th>Acción</th></tr></thead>";
-	b+="<tbody>";
-	var s="cajadato_par";
+	var b = "<table class=\"table table-striped\">" +
+			"  <thead>" +
+			"    <tr>" +
+			"		<th>Tipo</th>" +
+			"		<th>Estado</th>" +
+			"		<th>Nro</th>" +
+			"		<th>Año</th>" +
+			"		<th>Prestación</th>" +
+			"		<th>Ubicación</th>" +
+			"		<th>Acción</th>" +
+			"	 </tr>" +
+			"  </thead>" +
+			"  <tbody>";
+	
 	if(datos) 
 	{
 		for(j=0;j<datos.length;j++)
 		{
-			if(s=="cajadato_par")
-			{
-				s="cajadato_impar";
-			}	
-			else
-			{
-				s="cajadato_par";
-			}
-			b+="<tr class=\""+s+"\"><td>"+datos[j].tipo+"</td>";
-			b+="<td>"+datos[j].estado+"</td>";
-			b+="<td>"+datos[j].numero+"</td>";
-			b+="<td>"+datos[j].anio+"</td>";
-			b+="<td>"+datos[j].prestacion+"</td>";
-			b+="<td>"+datos[j].ubicacion_text+"</td>";
-			
-			
-			b+="<td>";
+			b+="<tr>" +
+			   "  <td>"+datos[j].tipo+"</td>" + 
+			   "  <td>"+datos[j].estado+"</td>" +
+			   "  <td>"+datos[j].numero+"</td>" +
+			   "  <td>"+datos[j].anio+"</td>" +
+			   "  <td>"+datos[j].prestacion+"</td>" +
+			   "  <td>"+datos[j].ubicacion_text+"</td>" +
+			   "  <td>";
 			if(datos[j].ver_ticket!="")
 			{
-				b+="<button onclick=\"clickTicket1('"+datos[j].url_ver+"')\">Ver</button>";
+				b+="<button onclick=\"clickTicket1('"+datos[j].url_ver+"')\" class=\"btn\">Ver</button>  ";
 			}
 			if(datos[j].ver_reclamo!="")
 			{
-				b+="<button onclick=\"clickTicket2('"+datos[j].url_ver+"')\">Ver</button>";
+				b+="<button onclick=\"clickTicket2('"+datos[j].url_ver+"')\" class=\"btn\">Ver</button>  ";
 			}
 			if(datos[j].reiterar!="")
 			{
-				b+="<button onclick=\"clickTicket3('"+datos[j].url_reiterar+"')\">Reiterar</button>";
+				b+="<button onclick=\"clickTicket3('"+datos[j].url_reiterar+"')\" class=\"btn\">Reiterar</button>";
 			}		
-			b+="</td></tr>";
+			b+="  </td>" +
+			   "</tr>";
 		}
 	}
 	if(j==0)
@@ -474,9 +446,6 @@ function completar_tabla_tickets(datos)
 	b+="</tbody></table>";
 	
 	$("#tickets_tbl").html(b);		
-	$("#tickets_tbl table").kendoGrid({
-        height: 250
-    });
 }
 
 
@@ -518,8 +487,7 @@ function getCiudadano(ix)
 //Que define al usuario conectado
 function setSession(ciu_code)
 {
-    var session = document.getElementById('m_user_session');
-    var params =  ciu_code + '|' + session.value;
+    var params =  ciu_code + '|' + '';
     var json = rem_sync_request("HOME","doSetSession",params);
     var jdata = eval('(' + json + ')');
     if(!jdata)
@@ -535,23 +503,23 @@ function setSession(ciu_code)
 function completar_tabla_contactos(datos)
 {
 	var j=0;
-	var b = "<table><thead><tr><th>Fecha</th><th>Sesión</th><th>Operador</th><th>Teléfono</th><th>Nota</th><th>Acciones</th></tr></thead>";
-	b+="<tbody>";
-	var s="cajadato_par";
+	var b = "<table class=\"table table-striped\">" +
+			"	<thead>" +
+			"		<tr>" +
+			"			<th>Fecha</th>" +
+			"			<th>Sesión</th>" +
+			"			<th>Operador</th>" +
+			"			<th>Teléfono</th>" +
+			"			<th>Nota</th>" +
+			"			<th>Acciones</th>" +
+			"		</tr>" +
+			"	</thead>" +
+			"  <tbody>";
 	if(datos)
 	{
 		for(j=0;j<datos.length;j++)
 		{
-			if(s=="cajadato_par")
-			{
-				s="cajadato_impar";
-			}	
-			else
-			{
-				s="cajadato_par";
-			}
-	
-			b+="<tr class=\""+s+"\"><td>"+datos[j].cse_tstamp+"</td>";
+			b+="<tr><td>"+datos[j].cse_tstamp+"</td>";
 			b+="<td>"+datos[j].cse_duracion+"</td>";
 			b+="<td>"+datos[j].use_code+"</td>";
 			b+="<td>"+datos[j].cse_ani+"</td>";
@@ -559,7 +527,7 @@ function completar_tabla_contactos(datos)
 			
 			if(datos[j].acciones=="Detalle")
 			{
-				b+="<td><button onclick=\"getContacto('"+datos[j].detalle+"')\">Ver Contacto</button></td></tr>";
+				b+="<td><button onclick=\"getContacto('"+datos[j].detalle+"')\" class=\"btn\">Ver Contacto</button></td></tr>";
 			}
 			else
 			{	
@@ -574,77 +542,28 @@ function completar_tabla_contactos(datos)
 	b+="</tbody></table>";
 	
 	$("#calls_tbl").html(b);
-	$("#calls_tbl table").kendoGrid({
-        height: 250
-    });
 }
 
-function completar_tabla_turnos(datos)
-{	
-	var j=0;
-	var b = "<table><thead><tr><th>Hospital</th><th>Servicio</th><th>Fecha</th><th>Estado</th><th>Acción</th></tr></thead>";
-	b+="<tbody>";
-	var s="cajadato_par";
-	if(datos) 
-	{
-		for(j=0;j<datos.length;j++)
-		{
-			if(s=="cajadato_par")
-			{
-				s="cajadato_impar";
-			}	
-			else
-			{
-				s="cajadato_par";
-			}
-			b+="<tr class=\""+s+"\"><td>"+datos[j].hospital+"</td>";
-			b+="<td>"+datos[j].servicio+"</td>";
-			b+="<td>"+datos[j].fecha+"</td>";
-			b+="<td>"+datos[j].estado+"</td>";
-			
-			if(datos[j].acciones=="Cancelar")
-			{
-				b+="<td><button onclick=\"cancelaTurno('"+datos[j].cancelar+"')\">Cancelar</button></td></tr>";
-			}
-			else
-			{	
-				b+="<td></td></tr>";
-			}
-		}
-	}
-	if(j==0)
-	{
-		b+='<tr><td colspan="5">Sin datos</td></tr>';
-	}
-	b+="</tbody></table>";
-	
-	$("#turnos_tbl").html(b);	
-	$("#turnos_tbl table").kendoGrid({
-        height: 250
-    });
-}
 
 
 function completar_tabla_ani(datos)
 {
 	var j=0;
-	var b = "<table><thead><tr><th>Apellido</th><th>Nombre</th><th>Documento</th><th>Acción</th></tr></thead>";
-	b+="<tbody>";
-	var s="cajadato_par";
+	var b = "<table class=\"table table-striped\">" +
+			"	<thead>" +
+			"		<tr>" +
+			"			<th>Apellido</th>" +
+			"			<th>Nombre</th>" +
+			"			<th>Documento</th>" +
+			"			<th>Acción</th>" +
+			"		</tr>" +
+			"	</thead>" +
+			"  <tbody>";
 	if(datos)
 	{
 		for(j=0;j<datos.length;j++)
 		{
-			if(s=="cajadato_par")
-			{
-				s="cajadato_impar";
-			}	
-			else
-			{
-				s="cajadato_par";
-			}
-	
-			b+="<tr class=\""+s+"\"><td>"+datos[j].ciu_apellido+"</td>";
+			b+="<tr><td>"+datos[j].ciu_apellido+"</td>";
 			b+="<td>"+datos[j].ciu_nombres+"</td>";
 			b+="<td>"+datos[j].ciu_doc_nro+"</td>";
 			
@@ -652,14 +571,14 @@ function completar_tabla_ani(datos)
 			
 			if(datos[j].btn_detalle!="")
 			{
-				b+="<button onclick=\"tabla_ani_click1('"+datos[j].detalle+"')\">Detalles</button>";
+				b+="<button onclick=\"tabla_ani_click1('"+datos[j].detalle+"')\" class=\"btn\">Detalles</button>";
 			}
 	
 			if(datos[j].btn_sesion!="")
 			{
-				b+="<button onclick=\"tabla_ani_click2('"+datos[j].sesion+"')\">Sesión</button>";
+				b+="<button onclick=\"tabla_ani_click2('"+datos[j].sesion+"')\" class=\"btn\">Sesión</button>";
 			}
-	
+
 			b+="</td></tr>";
 		}
 	}
@@ -670,9 +589,6 @@ function completar_tabla_ani(datos)
 	b+="</tbody></table>";
 	
 	$("#ciudadanos_tbl").html(b);	
-	$("#ciudadanos_tbl table").kendoGrid({
-        height: 250
-    });
 }
 
 //ix = ciudadano
@@ -688,78 +604,3 @@ function tabla_ani_click2(id)
 }
 
 
-//NUEVA ORIENTACION
-function boton_nueva_orientacion()
-{
-	var session = $('#m_user_session').val();
-    new rem_request(this,function(obj,json){
-    	if(json=="")
-        {
-            alert_box("doNuevaOrientacion no retorna resultados","ERROR");
-        }
-        else
-        {
-        	var jdata = eval('(' + json + ')');
-            document.location.href = jdata.url;
-        }	
-    },"HOME","doNuevaOrientacion",session);
-}
-
-//BUSCAR ORIENTACION
-function buscar_orientacion()
-{
-  var id = $('#m_person_id').val(); 
-  if( $("#orientacion_tbl").length==0 || id==0 || id=="")
-  {
-      return; //No hay tabla de resultado
-  }
-
-  var session = $('#m_user_session').val();  
-  new rem_request(this, function(obj,json){
-	  if(json=="")
-	  {
-	      alert_box("doBuscarOrientacion no retorna resultados","ERROR");
-	  }
-	  else
-	  {
-		  var jdata = eval('(' + json + ')');
-	      completar_tabla_orientacion(jdata);
-	  }
-  },"HOME","doBuscarOrientacion",id + '|' + session);
-}
-
-//TABLA ORIENTACION
-function completar_tabla_orientacion(datos)
-{
-	var j=0;
-	var b = "<table><thead><tr><th>Fecha</th><th>Motivo</th><th>Nota</th></tr></thead>";
-	b+="<tbody>";
-	var s="cajadato_par";
-	if(datos)
-	{	
-		for(j=0;j<datos.length;j++)
-		{
-			if(s=="cajadato_par")
-			{
-				s="cajadato_impar";
-			}	
-			else
-			{
-				s="cajadato_par";
-			}
-			b+="<tr class=\""+s+"\"><td>"+datos[j].cor_tstamp+"</td>";
-			b+="<td>"+datos[j].cor_motivo+"</td>";
-			b+="<td>"+datos[j].cor_nota+"</td>";
-		}
-	}
-	if(j==0)
-	{
-		b+='<tr><td colspan="3">Sin datos</td></tr>';
-	}
-	b+="</tbody></table>";
-	
-	$("#orientacion_tbl").html(b);	
-	$("#orientacion_tbl table").kendoGrid({
-        height: 250
-    });
-}

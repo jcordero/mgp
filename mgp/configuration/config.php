@@ -17,6 +17,7 @@ define("JQUERY_LIB",true);
 define("JQUERY_UI_LIB",true);
 define("KENDO_LIB",	true);
 define("KENDO_MENU_LIB",true);
+define("BOOTSTRAP_LIB", true);
 
 define("CMD_UPDATE_SITE","ls");
 define("CMD_UPDATE_PLATAFORMA","ls");

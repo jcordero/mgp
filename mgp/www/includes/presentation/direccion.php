@@ -16,36 +16,17 @@ class CDH_DIRECCION extends CDataHandler
 		$html="";
 		$val = html_entity_decode( $fld->getValue() );
 		$name = "m_".$fld->m_Name;
-
+		$mostrar = "";
+		
 		if($fld->m_IsVisible)
 		{
-            //Convierto el XML de la georeferencia en algo entendible por el usuario
-            $xmldoc = new DOMDocument();
-            $xsldoc = new DOMDocument();
-            $xslproc = new XSLTProcessor();
-            if(!$xmldoc->loadXML($val))
-            {
-            	error_log("CDH_DIRECCION error de parseo del xml para: $val");
-            }
+            $obj = json_decode($val);
 
-            //Que tipo de GeoRef esta usando?
-            $direcciones = $xmldoc->getElementsByTagName("direccion");
-            $cant = $direcciones->length; 
-            if( $cant > 0)
-            {
-            	$tipo = $direcciones->item(0)->firstChild->nodeName;
-	            $xsl = HOME_PATH."www/includes/georef/".$tipo.".xsl";
-
-    	        //Cargo el template
-        	    $xsldoc->load($xsl);
-            	$xslproc->importStyleSheet($xsldoc);
-
-            	//Hago la transformacion
-            	$mostrar = $xslproc->transformToXML($xmldoc);
-            }
-            else
-            {
-            	$mostrar = "";
+            if($obj) {
+            	$mostrar .= ($obj->calle_nombre!='' ? 'Calle: '.$obj->calle_nombre.' '.$obj->callenro.'<br/>' : '');
+            	$mostrar .= ($obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
+            	$mostrar .= ($obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
+            	$mostrar .= ($obj->barrio!='' ? 'Barrio: '.$obj->barrio : '');
             }
             
 			if($showlabel)

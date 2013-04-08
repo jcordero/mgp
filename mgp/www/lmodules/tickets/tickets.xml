@@ -539,7 +539,7 @@
 			<field name="tic_coordy" presentation="TEXT" label="y" isvisible="false" readonly="true"/>
 			
             <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
-			<field name="tic_cgpc" label="Comuna" presentation="TEXT" readonly="true"/>
+			<field name="tic_cgpc" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
 		</group>
 
 		<group title="Ubicación VILLA" id="villa" render_html="block">
@@ -694,7 +694,7 @@
             <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
 			<field name="tic_coordy" presentation="TEXT" label="y" isvisible="false"/>
             <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
-			<field name="tic_cgpc" label="CGPC" presentation="TEXT" readonly="true"/>
+			<field name="tic_cgpc" label="CGPC" presentation="TEXT" readonly="true" isvisible="false"/>
 		</group>
 
 		<group title="Ticket" id="ticket" render_html="block">
