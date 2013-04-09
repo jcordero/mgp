@@ -54,6 +54,10 @@ class ciudadano {
         
     }
     
+    function loadByDoc($sEmisor,$sTipoDoc,$iNumeroDocumento) {
+        
+    }
+    
     function save() {
         
     }

@@ -70,11 +70,8 @@ exit;
 
 /*******************************************************************************/
 
-function consulta_ciudadano($tipo,$anio,$nro) {
-    /* TODO: Escribir consulta a objeto ticket
-     */
-    $ret = array('resultado' => 'no implementado');
-    return $ret;
+function consulta_ciudadano($sEmisor,$sTipoDoc,$iNumeroDocumento){
+    return array('ciudadano' => ciudadano::load;
 }
 
 function ingreso_ticket($tipo,$anio,$nro,$ingreso_ticket) {
