@@ -16,9 +16,9 @@ function downloadOnLoad()
 
     //campos extra en las direcciones
     $('#calle .fldm').append('<div class="fldl"></div>');
-	$('#callenro .fldm').append('<div class="fldl"></div>');
-	$('#piso .fld').append('<div class="fldl"></div>');
-	$('#dpto .fld').append('<div class="fldl"></div>');
+    $('#callenro .fldm').append('<div class="fldl"></div>');
+    $('#piso .fld').append('<div class="fldl"></div>');
+    $('#dpto .fld').append('<div class="fldl"></div>');
     
     /* Boton de validar la direccion */
     $('#contenido_domicilio').after('<div class="submitbutton"><button id="valida_direccion">Validar Dirección</button> <button id="cambia_direccion">Cambiar Dirección</button></div>');
@@ -28,13 +28,13 @@ function downloadOnLoad()
     	var altura = $('#m_callenro').val();
     	
     	if(calle=='') {
-    		alert_box('Debe completar la calle antes de validar la dirección');
-    		return;
+            alert_box('Debe completar la calle antes de validar la dirección');
+    	return;
     	}
 
     	if(altura=='') {
-    		alert_box('Debe completar la altura antes de validar la dirección');
-    		return;
+            alert_box('Debe completar la altura antes de validar la dirección');
+            return;
     	}
 
     	new rem_request(this,function(obj,json){

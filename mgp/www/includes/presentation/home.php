@@ -51,7 +51,7 @@ class CDH_HOME extends CDataHandler
         //No hay datos para buscar...
         if(strlen($doc)<=8 && $apellido=='' && $ani=="")
         {
-        	$this->setAnonimo();
+            $this->setAnonimo();
             return json_encode(array( "ciudadanos"=>$conjunto, "url"=>$url));
         }
 
@@ -83,28 +83,28 @@ class CDH_HOME extends CDataHandler
         while( $row=$primary_db->_fetch_row($re) )
         {
             $conjunto[] = array(
-            	"ciu_code" 		=> 	$row['ciu_code'],
+            	"ciu_code" 	=> 	$row['ciu_code'],
             	"ciu_nombres"	=>	$row['ciu_nombres'],
-           		"ciu_apellido"	=>	$row['ciu_apellido'],
+           	"ciu_apellido"	=>	$row['ciu_apellido'],
             	"ciu_doc_nro"	=> 	$row['ciu_nro_doc'],
-            	"sexo"			=>	$row['ciu_sexo'],
-            	"edad"			=>	$this->calcularEdad($row['ciu_nacimiento']),
-            	"cops_id"		=> 	0,
-            	"pais"			=> 	$row['ciu_nacionalidad']
+            	"sexo"		=>	$row['ciu_sexo'],
+            	"edad"		=>	$this->calcularEdad($row['ciu_nacimiento']),
+            	"cops_id"	=> 	0,
+            	"pais"		=> 	$row['ciu_nacionalidad']
             );
         }
         
-		//Retorno conjunto vacio? o sea no hay datos en la base local
+	//Retorno conjunto vacio? o sea no hay datos en la base local
         if(count($conjunto)==0)
         {
-			//No puedo encontrar  a la persona en ningun lado... pido carga manual
-        	$this->setAnonimo();        
+            //No puedo encontrar  a la persona en ningun lado... pido carga manual
+            $this->setAnonimo();        
         }
         elseif(count($conjunto)>1)
         {
-        	//Hay mas de una persona que coincide
-        	$this->setAnonimo();        
-		}
+            //Hay mas de una persona que coincide
+            $this->setAnonimo();        
+	}
         else //count($conjunto) == 1 Hay una sola persona que se encontró en la base local
         {
             $this->m_person->person_status = 'IDENTIFICADO';
@@ -135,7 +135,7 @@ class CDH_HOME extends CDataHandler
         //No hay datos locales... Pido que se carguen los datos a mano. (Ver como hacer que ser carguen desde el SIGEHOS)
         if(count($conjunto)==0)
         {
-        	$url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/ciudadanos_maint_n.php?OP=N&ciu_doc_nro={$doc}&ciu_tel_fijo={$ani}&ciu_tel_movil={$ani}&ciu_nacionalidad={$pais}");
+            $url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/ciudadanos_maint_n.php?OP=N&tmp_doc={$doc}&ciu_tel_fijo={$ani}&ciu_tel_movil={$ani}&ciu_nacionalidad={$pais}");
         }
                 
         $resp = array("ciudadanos"=>$conjunto, "url"=>$url);

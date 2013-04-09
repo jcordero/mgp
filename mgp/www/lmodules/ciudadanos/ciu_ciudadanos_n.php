@@ -54,6 +54,8 @@ class ciu_ciudadanos_n extends cobjbase {
         $this->m_fields['ciu_nacionalidad'] = new CField(Array("Name"=>"ciu_nacionalidad", "Size"=>100, "IsForDB"=>true, "Order"=>134));
         $this->m_fields['tmp_mapa'] = new CField(Array("Name"=>"tmp_mapa", "Size"=>50, "Order"=>35));
         $this->m_fields['tmp_cod_calle'] = new CField(Array("Name"=>"tmp_cod_calle", "Type"=>"int", "Order"=>36));
+        $this->m_fields['tmp_doc'] = new CField(Array("Name"=>"tmp_doc", "Size"=>50, "Order"=>37));
+        $this->m_fields['tmp_calle_nombre'] = new CField(Array("Name"=>"tmp_calle_nombre", "Size"=>50, "Order"=>38));
 
         //--Contenedores de Clases dependientes
         $this->m_childs_classname['ciu_identificacion']='ciu_identificacion';

@@ -7,7 +7,9 @@
 
 			<field name="tmp_mapa" type="varchar" size="50" isfordb="false" />
 			<field name="tmp_cod_calle" type="int" isfordb="false" />
-
+                        <field name="tmp_doc" type="varchar" size="50" isfordb="false" />
+			<field name="tmp_calle_nombre" type="varchar" size="50" isfordb="false" />
+                        
             <!-- Parte para los documentos del ciudadano -->
 			<build classname="ciu_identificacion" classlabel="documentos">
 				<parse in_file="../mgp.sql" tablename="ciu_identificacion" />
@@ -72,6 +74,7 @@
 				<field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
 				<field name="ciu_sexo" presentation="SEXO" label="Género"  ismandatory="true" />
 				<field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
+                                
                 <field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" initialvalue="Argentina"/>
                 <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
 			</group>
@@ -134,7 +137,8 @@
 	<make object="table_maint">
 		<build out_file="ciudadanos_maint_n.php" classname="ciu_ciudadanos_n" title="Ciudadano" public="false">
 			<include file="ciudadanos.css"/>
-			
+			<include file="ciudadanos.js"/>
+                        
 			<!-- Datos personales -->
 			<group title="Datos identificatorios" id="datos_personales" render_html="block">
 				<field name="ciu_code" presentation="SEQUENCE" label="Cod.ciudadano" cols="20" classparams="ciu_ciudadanos" readonly="true" />
@@ -143,11 +147,12 @@
 				<field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
 				<field name="ciu_sexo" presentation="SEXO" label="Género"  ismandatory="true" />
 				<field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
+                                <field name="tmp_doc" presentation="CIUDADANO::DNI" label="Documento"/>
 				<field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" />
-                <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
+                                <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
 			</group>
 
-			<!-- Datos personales - Domicilio-->
+			<!-- Datos personales - Domicilio
 			<group title="Dirección" id="direccion" 	render_html="block">
 				<field name="tmp_mapa" presentation="MAPA" classparams="ciu_coord_x|ciu_coord_y" />	
 				<field name="ciu_dir_calle" presentation="CALLE" label="Calle" ismandatory="false" classparams="ciu_dir_nro|ciu_coord_x|ciu_coord_y|ciu_barrio|ciu_cgpc|ilu|reco|tmp_mapa|ciu_dir_calle"/>
@@ -163,6 +168,27 @@
 				<field name="ciu_coord_x" presentation="TEXT" label="coordenada x" ismandatory="false" isvisible="false" />
 				<field name="ciu_coord_y" presentation="TEXT" label="coordenada y" ismandatory="false" isvisible="false" />
 			</group>
+                        -->
+                        
+                                <!-- Ubicacion del problema -->
+                        <group title="Dirección" id="direccion" render_html="block">
+                            <field name="tmp_mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
+                            <field name="ciu_dir_calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
+                            <field name="ciu_dir_nro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
+                            <field name="tmp_calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
+                            <field name="ciu_dir_piso" presentation="INT" label="Piso" cols="5" />
+                            <field name="ciu_dir_dpto" presentation="TEXT" label="Departamento" cols="5" />
+                            <field name="ciu_cod_postal" presentation="TEXT" label="Codigo Postal" ismandatory="false" />
+                            <field name="ciu_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
+                            <field name="ciu_localidad" presentation="TEXT" label="Localidad" cols="20" initialvalue="Mar del Plata" isvisible="false"/>
+                            <field name="ciu_provincia" presentation="TEXT" label="Provincia" cols="20" initialvalue="BUENOS AIRES" isvisible="false"/>
+                            <field name="ciu_pais" presentation="TEXT" label="Pais" ismandatory="false" cols="20" initialvalue="ARGENTINA" isvisible="false"/>
+                            
+                            <field name="ciu_coord_x" presentation="TEXT" label="x" isvisible="false" readonly="true"/>
+                            <field name="ciu_coord_y" presentation="TEXT" label="y" isvisible="false" readonly="true"/>
+                        </group>
+
+                        
 
 			<!-- Datos personales - Contacto-->
 			<group title="Datos de contacto" id="contacto" render_html="block">

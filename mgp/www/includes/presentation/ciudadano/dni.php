@@ -92,7 +92,7 @@ class CDH_DNI extends CDataHandler {
 		$val2 = "";
 		if($fld->m_no_form==false)
 		{
-			$val = (isset($_REQUEST["m_".$fld->m_Name]) ? $_REQUEST["m_".$fld->m_Name] : "");
+			$val  = (isset($_REQUEST["m_".$fld->m_Name])  ? $_REQUEST["m_".$fld->m_Name]  : "");
 			$val1 = (isset($_REQUEST["pm_".$fld->m_Name]) ? $_REQUEST["pm_".$fld->m_Name] : "");
 			$val2 = (isset($_REQUEST["tm_".$fld->m_Name]) ? $_REQUEST["tm_".$fld->m_Name] : "");
 			$val3 = (isset($_REQUEST["nm_".$fld->m_Name]) ? $_REQUEST["nm_".$fld->m_Name] : "");
@@ -115,7 +115,32 @@ class CDH_DNI extends CDataHandler {
 	
 	function getJsIncludes()
 	{
-		return '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ciudadano/dni.js"></script>';
+            return '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ciudadano/dni.js"></script>';
 	}
+        
+        function ajaxBuscarDNI($p) {
+            global $padron_db;
+            list($pais,$tipo,$nro) = explode(' ',$p);
+            $nro = intval($nro);
+            $ret = array('resultado'=>'no encontrado');
+            if($pais=='ARG') {
+                $row = $padron_db->QueryArray("SELECT matricula,apelnom,direcc,clase,ocup,sexo,tipo,localidad,provincia FROM padron_2007 where matricula={$nro}");
+                if($row) {
+                    $ret = array(
+                        'resultado'     => 'encontrado',
+                        'nro'           => $row['matricula'],
+                        'nombre'        => $row['apelnom'],
+                        'direccion'     => $row['direcc'],
+                        'clase'         => $row['clase'],
+                        'ocupacion'     => $row['ocup'],
+                        'genero'        => $row['sexo'],
+                        'tipo_doc'      => $row['tipo'],
+                        'localidad'     => $row['localidad'],
+                        'provincia'     => $row['provincia'],
+                    );
+                }
+            }
+            return json_encode($ret);
+        }
 }
 ?>
