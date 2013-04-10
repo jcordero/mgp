@@ -14,8 +14,8 @@ class person_status
     
     function __construct()
     {
-		$this->loadSession();
-	}
+	$this->loadSession();
+    }
 
     public function loadSession()
     {
@@ -32,9 +32,9 @@ class person_status
             $this->person_edad 		= $ps->person_edad;
             $this->person_pais 		= $ps->person_pais;
         }
-		else                
+	else                
         {
-        	$this->reset();
+            $this->reset();
         }
     }
 
@@ -45,14 +45,14 @@ class person_status
     
     public function reset() {
     	$this->person_status 	= 'ANONIMO';
-    	$this->person_doc 		= '';
+    	$this->person_doc 	= '';
     	$this->person_nombres 	= '';
     	$this->person_apellido 	= '';
-    	$this->person_id 		= 0;
+    	$this->person_id 	= 0;
     	$this->person_cops_id 	= 0;
-    	$this->person_sexo 		= 'N';
-    	$this->person_edad 		= 0;
-    	$this->person_pais 		= "ARG";
+    	$this->person_sexo 	= 'N';
+    	$this->person_edad 	= 0;
+    	$this->person_pais 	= "ARG";
     }
     
     public function toJSON() {

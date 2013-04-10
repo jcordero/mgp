@@ -15,8 +15,8 @@ class call_status
     
     function __construct()
     {
-		$this->loadSession();
-	}
+	$this->loadSession();
+    }
 
     public function loadSession()
     {
@@ -35,8 +35,13 @@ class call_status
             $this->talk_skill = $cs->talk_skill;
             $this->session = session_id();
         }
-		else 
-		{
+	else 
+	{
+            $this->reset();
+        }
+    }
+
+    public function reset() {
             $this->talk_status = 'EN ESPERA';
             $this->talk_begin = 0;
             $this->talk_end = 0;
@@ -48,9 +53,8 @@ class call_status
             $this->talk_call_id = "";
             $this->talk_skill = "";
             $this->session = session_id();
-        }
     }
-
+    
     public function saveSession()
     {
     	$_SESSION['call_status'] = serialize($this);
