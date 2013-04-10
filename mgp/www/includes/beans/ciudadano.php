@@ -5,7 +5,7 @@ class ciudadano {
     public $ciu_code;
     public $ciu_nombres;
     public $ciu_apellido;
-    public  $ciu_sexo;
+    public $ciu_sexo;
     public $ciu_nacimiento;
     public $ciu_email;
     public $ciu_tel_fijo;
@@ -50,15 +50,57 @@ class ciudadano {
        
     }
     
-    function load($identificador) {
+    static function update($ciudadano) {
+        global $primary_db;
+        
+        
+    }
+    static function  factoryById($id) {
+         global $primary_db;
+        $sql="select * from ciu_ciudadanos  where ciu_code = $id ";
+        $re = $primary_db->do_execute($sql);
+        if( $row=$primary_db->_fetch_array($re) )
+        {
+             $a=array();
+             foreach($row as $key => $value)
+             {
+                if(!is_numeric($key))
+                 $a[$key] = $row[$key];   
+             }
+            return  (object)$a;
+        }
+        $primary_db->_free_result($re);
+              
+    }
+    
+    static function  factoryByDoc($sEmisor,$sTipoDoc,$iNumeroDocumento) {
+        global $primary_db;
+        $sql="select * from ciu_ciudadanos  where ciu_code = $id ";
+        $re = $primary_db->do_execute($sql);
+        if( $row=$primary_db->_fetch_array($re) )
+        {
+            return $row;
+        }
+        $primary_db->_free_result($re);
+        
         
     }
     
-    function loadByDoc($sEmisor,$sTipoDoc,$iNumeroDocumento) {
+    function addEvento($evento) {
+         global $primary_db;
+          $sql = "insert into ciu_historial_contactos(chi_code,ciu_code,chi_fecha,chi_motivo,use_code, chi_canal) values(:chi_code:,:ciu_code:,':chi_fecha:',':chi_motivo:',:use_code:,':chi_canal:')";
+        $params = array(
+            'chi_code'      => $evento->chi_code,
+            'ciu_code'   => $evento->ciu_code,
+             'chi_fecha'      =>$evento->chi_fecha,
+             'chi_motivo'   => $evento->chi_motivo,
+             'use_code'      => $evento->use_code,
+             'chi_canal'   => $evento->chi_canal,
+        );
+        $primary_db->do_execute($sql,$errores,$params);
         
-    }
-    
-    function save() {
+        return array($contenido,$errores);
+        
         
     }
     
