@@ -50,14 +50,14 @@ $ret = array('resultado' => 'metodo desconocido');
 
 if($metodo=='GET') {
    if (! isset($id)) $ret = consulta_ciudadano($sEmisor,$sTipoDoc,$iNumeroDocumento);
-   else  $ret = consulta_ciudadano($id);
+   else  $ret = consulta_ciudadanoById($id);
     
 }
 
 if($metodo=='PUT') {
     $obj = json_decode($json);
     if($obj && isset($obj->ciudadano) ) {
-        $ret = update_ticket($sFirma,$obj->ciudadano);
+        $ret = update_ciudadano($sFirma,$obj->ciudadano);
     }
     
     if($obj && isset($obj->evento) ) {
@@ -71,23 +71,35 @@ exit;
 /*******************************************************************************/
 
 function consulta_ciudadano($sEmisor,$sTipoDoc,$iNumeroDocumento){
-    return array('ciudadano' => ciudadano::load;
+    return array('ciudadano' => ciudadano::FactoryByDoc($sEmisor, $sTipoDoc, $iNumeroDocumento));
 }
 
-function ingreso_ticket($tipo,$anio,$nro,$ingreso_ticket) {
+function consulta_ciudadanoById($id) {
     /* TODO: Ingresar ticket 
      * 
      */
-    $ret = array('resultado' => 'no implementado');
+    $ret = array('resultado' => ciudadano::FactoryById($id));
     return $ret;
 }
 
-function actualizo_ticket($tipo,$anio,$nro,$cambio_estado_ticket) {
+function nuevo_evento($json) {
+    /* TODO: Ingresar ticket 
+     * 
+     */
+    $ret = array('resultado' => ciudadano::FactoryById($id));
+    return $ret;
+}
+
+
+function update_ciudadano($sFirma,$json) {
     /* TODO: cambiar de estado el ticket
      * 
      */
-    $ret = array('resultado' => 'no implementado');
+    $ret = array('resultado' => );
     return $ret;
 }
+
+
+
 
 ?>
