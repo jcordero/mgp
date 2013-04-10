@@ -1,7 +1,7 @@
 function downloadOnLoad()
 {
     var divrubro = $("#rubro");
-    if(divrubro.length==1)
+    if(divrubro.length===1)
     {
         divrubro.hide();
         rubro.m_mandatory = false;
@@ -21,18 +21,19 @@ function downloadOnLoad()
     $('#dpto .fld').append('<div class="fldl"></div>');
     
     /* Boton de validar la direccion */
-    $('#contenido_domicilio').after('<div class="submitbutton"><button id="valida_direccion">Validar Dirección</button> <button id="cambia_direccion">Cambiar Dirección</button></div>');
+    $('#contenido_domicilio').after(
+            '<div><button class="btn" id="valida_direccion">Validar Dirección</button> <button class="btn hide" id="cambia_direccion">Cambiar Dirección</button></div>');
     
     $('#valida_direccion').click(function(){
     	var calle = $('#m_calle').val();
     	var altura = $('#m_callenro').val();
     	
-    	if(calle=='') {
+    	if(calle==='') {
             alert_box('Debe completar la calle antes de validar la dirección');
     	return;
     	}
 
-    	if(altura=='') {
+    	if(altura==='') {
             alert_box('Debe completar la altura antes de validar la dirección');
             return;
     	}
@@ -57,45 +58,48 @@ function downloadOnLoad()
     		 */
     		$('#m_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
     		    		
-    		//Oculto la calle y altura
-    		$('#calle .fldm input').hide();
-    		$('#calle .fldm img').hide();
-    		$('#callenro .fldm input').hide();
-    		$('#piso .fld input').hide();
-    		$('#dpto .fld input').hide();
-    		
-    		//Pongo los campos ReadOnly
-    		$('#calle .fldl').html( $('#hm_calle').val() ).show();
-    		$('#callenro .fldl').html( $('#m_callenro').val() ).show();
-    		$('#piso .fldl').html( $('#m_piso').val() ).show();
-    		$('#dpto .fldl').html( $('#m_dpto').val() ).show();
-    	
-    		//Cambio los botones
-    		$('#valida_direccion').hide();
-    		$('#cambia_direccion').show();
-    		
+                direccion_validada();
     	},"TICKET::DIRECCION","validarDireccion", calle+'|'+altura);
     });
     
     $('#cambia_direccion').hide().click(function(){
     	//Oculto los campos read only
-		$('#calle .fldl').hide();
-		$('#callenro .fldl').hide();
-		$('#piso .fldl').hide();
-		$('#dpto .fldl').hide();
+        $('#calle .fldl').hide();
+        $('#callenro .fldl').hide();
+        $('#piso .fldl').hide();
+        $('#dpto .fldl').hide();
     	
     	//Muestro los campo editables
     	$('#calle .fldm input').show();
-		$('#calle .fldm img').show();
-		$('#callenro .fldm input').show();
-		$('#piso .fld input').show();
-		$('#dpto .fld input').show();
-	
-		//Muestro los botones
-		$('#cambia_direccion').hide();
-		$('#valida_direccion').show();
+        $('#calle .fldm img').show();
+        $('#callenro .fldm input').show();
+        $('#piso .fld input').show();
+        $('#dpto .fld input').show();
+
+        //Muestro los botones
+        $('#cambia_direccion').hide();
+        $('#valida_direccion').show();
 
     });
     
 }
 
+
+function direccion_validada() {
+    //Oculto la calle y altura
+    $('#calle .fldm input').hide();
+    $('#calle .fldm img').hide();
+    $('#callenro .fldm input').hide();
+    $('#piso .fld input').hide();
+    $('#dpto .fld input').hide();
+
+    //Pongo los campos ReadOnly
+    $('#calle .fldl').html( $('#hm_calle').val() ).show();
+    $('#callenro .fldl').html( $('#m_callenro').val() ).show();
+    $('#piso .fldl').html( $('#m_piso').val() ).show();
+    $('#dpto .fldl').html( $('#m_dpto').val() ).show();
+
+    //Cambio los botones
+    $('#valida_direccion').hide();
+    $('#cambia_direccion').show();
+}
