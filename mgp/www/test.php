@@ -10,3 +10,31 @@ echo  'obtengo un ciudadano <pre>';
 $ret = array('resultado' => ciudadano::FactoryById(36));
 echo json_encode($ret);
 echo '</pre>';
+
+
+
+echo  'actualizo un ciudadano <pre>';
+$ret = array('resultado' => ciudadano::updateCiudadano(ciudadano::FactoryById(36)));
+echo json_encode($ret);
+echo '</pre>';
+
+
+
+echo  'obtengo un ciudadano por doc <pre>';
+$ret = array('resultado' => ciudadano::FactoryByDoc('ARG','DNI','20470276'));
+echo json_encode($ret);
+echo '</pre>';
+
+echo  'cargo un evento <pre>';
+$evento = array(
+            'chi_code'      => 2,
+            'ciu_code'   => 37,
+             'chi_fecha'      =>'2013-03-22 00:00:00',
+             'chi_motivo'   =>'motivo',
+             'use_code'      => '1',
+             'chi_canal'   => 'canal',
+        );
+
+$ret = array('resultado' => ciudadano::addEvento($evento));
+echo json_encode($ret);
+echo '</pre>';

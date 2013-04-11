@@ -86,10 +86,17 @@ function nuevo_evento($json) {
     /* TODO: Ingresar ticket 
      * 
      */
-    $ret = array('resultado' => ciudadano::FactoryById($id));
+    $ret = array('resultado' => ciudadano::addEvento($json));
     return $ret;
 }
 
+function nuevo_ciudadano($json) {
+    /* TODO: Ingresar ticket 
+     * 
+     */
+    $ret = array('resultado' => ciudadano::addCiudadano($json));
+    return $ret;
+}
 
 function update_ciudadano($sFirma,$json) {
     /* TODO: cambiar de estado el ticket
