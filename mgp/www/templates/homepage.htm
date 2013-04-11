@@ -1,90 +1,98 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:com="http://www.commsys.com.ar">
-	<head>
-    	<meta charset="utf-8">
-	    <title><com:title/></title>
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	    <meta name="description" content="">
-	    <meta name="author" content="">
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title><com:title/></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
     <!-- Le styles -->
-
-    
-    <com:security/>
-    <com:jsincludes/>
-
+    <link rel="stylesheet" type="text/css" href="/mgp/common/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/mgp/common/bootstrap/css/bootstrap-responsive.css" />
     <style>
     	html, body { height: 100%;}
+        body {color:black;margin:0px;padding:0px;/*text-align:center*/;font: 10pt Verdana,Arial,sans-serif; /*background:url(/mgp/images/back_mgp.jpg) repeat-x;*/}
       	#wrap {min-height: 100%;height: auto !important;height: 100%;margin: 0 auto -40px;}
       	#push,#footer {height: 40px;}
       	#footer {background-color: #f5f5f5;}
-      	body {background:url(/mgp/images/back_mgp.jpg) repeat-x;}
-		.box {background:#efefef;padding:15px;border:solid 1px #eee; border-radius:5px;}
-	    div#head {height: 156px;width: 100%;position: relative;z-index: 3; /*para arreglar bug de IE*/}
-	    div#headSpacer {width: 100%;}
-	    #head_center {position: relative;margin:auto;text-align:left;height:115px;background: url("/mgp/images/rayitas.png") repeat-y transparent;background-position:right;}
-	    #head_nav {position: relative;text-align:center;background:#000;height:41px;}
-	    img.logo {position:relative;top:10px;}
-    </style>
+        .box {background:#efefef;padding:15px;border:solid 1px #eee; border-radius:5px;}
+        div#head {height: 156px;width: 100%;position: relative;z-index: 3; /*para arreglar bug de IE*/}
+        #head_center {position: relative;margin:auto;text-align:left;height:115px;background: url("/mgp/images/rayitas.png") repeat-y transparent;background-position:right;}
+        #head_nav {position: relative;text-align:center;/*background:#000*/;height:41px;}
+        img.logo {position:relative;top:10px;}
         
-    <style>
-     	#appmenu {position:relative;top:6px; }
-	    .k-header, .k-grid-header, .k-toolbar, .k-grouping-header, .k-tooltip, .k-pager-wrap, .k-button, .k-draghandle {background-color: #000;}
-		.k-widget, .k-input, .k-textbox, .k-group, .k-content, .k-header, .k-editable-area, .k-separator, .k-colorpicker .k-arrow-down, .k-autocomplete, .k-dropdown-wrap, .k-toolbar, 
-		.k-group-footer td, .k-grid-footer, .k-footer-template td, .k-state-default, .k-state-default .k-select, .k-state-disabled, .k-grid-header-wrap, .k-grid-header, .k-grid td, 
-		.k-grid-footer-wrap, .k-pager-wrap, .k-grouping-header, .k-grouping-header .k-group-indicator, .k-dropdown-wrap, .k-autocomplete, .k-panelbar > .k-item > .k-link, 
-		.k-panel > .k-item > .k-link, .k-panelbar .k-panel, .k-panelbar .k-content, .k-calendar th, .k-slider-track, .k-splitbar, .k-dropzone-active, .k-upload-files, .k-tiles, 
-		.k-toolbar, .k-dropdown-wrap, .k-tooltip, .k-progress {border-color: #000;}
-		.k-header {color: #ddd;background: transparent;border: none;}
-		.k-item {}
-		.k-link {text-decoration: none!important;font-weight: normal!important;font-family: Verdana, Arial, sans-serif!important;font-size: 13px!important;}
+        .homepage {min-height:100%;}
+        /*#head {background: #e0ded8;}*/
+        #appmenu {position:relative;top:6px;max-width:1200px;min-width: 750px;width: 99.4%;position: relative;margin:auto;text-align:left;}
+        .back1, .back2 {position:absolute;top:0px;left:0px;width:100%;height:156px;background:#e0ded8;}
+        .back2 {height:41px;background:#000;top:115px;}
+        
+        #identificado, #tickets {display: none;}
+        select {width: auto!important;}
     </style>
-    </head>
+</head>
 
-	<body onLoad="onPageLoad()" class="homepage">
-
-	<div class="container" id="wrap">
-		
-		<div id="head">
-			<div id="head_center" class="container">
-		    	<a href="/mgp/index.php"><img src="/mgp/images/mdq.png" class="logo"></a>
-		        <com:homepage.comp.mpfwho/>
-		    </div>
-		    <div id="head_nav">
-		    	<div id="appmenu" class="container"></div>
-		    </div>
-		</div>
+<body onLoad="onPageLoad()" class="homepage">
+    <div class="back1"></div>
+    <div class="back2"></div>
+    <div class="container" id="wrap">
+        <div id="head">
+            <div id="head_center" class="container">
+                <a href="/mgp/index.php"><img src="/mgp/images/mdq.png" class="logo"></a>
+                <com:homepage.comp.mpfwho/>
+            </div>
+            <div id="head_nav">
+                <div id="appmenu" class="container"></div>
+            </div>
+        </div>
 	
         <com:homepage.comp.dynhome/>
 		
-		<div id="footer">
-			<div class="container"><p class="muted credit"><com:homepage.comp.soft_version/><p></div>
-		</div>
- 	</div>
+        <div id="footer">
+            <div class="container"><p class="muted credit"><com:homepage.comp.soft_version/><p></div>
+        </div>
+    </div>
   
   <!-- Le javascript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+  <!-- Placed at the end of the document so the pages load faster -->
+    <com:security/>
+    <com:jsincludes/>
+    <style>
+     	#appmenu {position:relative;top:6px; }
+        .k-header, .k-grid-header, .k-toolbar, .k-grouping-header, .k-tooltip, .k-pager-wrap, .k-button, .k-draghandle {background-color: #000;}
+        .k-widget, .k-input, .k-textbox, .k-group, .k-content, .k-header, .k-editable-area, .k-separator, .k-colorpicker .k-arrow-down, .k-autocomplete, .k-dropdown-wrap, .k-toolbar, 
+        .k-group-footer td, .k-grid-footer, .k-footer-template td, .k-state-default, .k-state-default .k-select, .k-state-disabled, .k-grid-header-wrap, .k-grid-header, .k-grid td, 
+        .k-grid-footer-wrap, .k-pager-wrap, .k-grouping-header, .k-grouping-header .k-group-indicator, .k-dropdown-wrap, .k-autocomplete, .k-panelbar > .k-item > .k-link, 
+        .k-panel > .k-item > .k-link, .k-panelbar .k-panel, .k-panelbar .k-content, .k-calendar th, .k-slider-track, .k-splitbar, .k-dropzone-active, .k-upload-files, .k-tiles, 
+        .k-toolbar, .k-dropdown-wrap, .k-tooltip, .k-progress {border-color: #000;}
+        .k-header {color: #ddd;background: transparent;border: none;}
+        .k-item {}
+        .k-link {text-decoration: none!important;font-weight: normal!important;font-family: Verdana, Arial, sans-serif!important;font-size: 13px!important;}
+    </style>
+    <script type="text/javascript" src="/mgp/common/bootstrap/js/bootstrap.min.js"></script>
+
     <script type="text/javascript">
-            $(document).ready(function(){
-                // Funciones para animar los iconos cuando carga el home
-                function doAnimation(image) {
-                	if($.fadeIn) {
-	                    image.fadeIn(150, function() {
-	                        // wait until animation is done and recurse if there are more animations
-	                        if(animations.length > 0) doAnimation(animations.shift());
-	                    });
-                	}
+        $(document).ready(function(){
+            // Funciones para animar los iconos cuando carga el home
+            function doAnimation(image) {
+                if($.fadeIn) {
+                    image.fadeIn(150, function() {
+                        // wait until animation is done and recurse if there are more animations
+                        if(animations.length > 0) doAnimation(animations.shift());
+                    });
                 }
-        
-                var animations = new Array();
-        
-                $(".boton").each(function() {
-                    animations.push($(this));
-                });
-                doAnimation(animations.shift());
+            }
+
+            var animations = new Array();
+
+            $(".boton").each(function() {
+                animations.push($(this));
             });
+            doAnimation(animations.shift());
+        });
     </script>
 
-	</body>
+    </body>
 </html>

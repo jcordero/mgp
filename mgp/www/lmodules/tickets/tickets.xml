@@ -589,45 +589,45 @@
 
 <!--  BUSCAR TICKETS -->
 <make object="search_and_list">
-	<build out_file="tickets.php" classname="class_v_tickets1" title="Consulta de tickets"
+    <build out_file="tickets.php" classname="class_v_tickets1" title="Consulta de tickets"
         template_html="default.htm" >
 
-		<searchfield name="tic_identificador" presentation="TEXT" label="Identificador" cols="45"/>
-        <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
-		<searchfield name="tic_tipo" presentation="PRESTACIONTIPO" label="Tipo" search="fix"/>
+	<searchfield name="tic_identificador" presentation="TEXT" label="Identificador" cols="45"/>
+        <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10" initialvalue="2013" />
+	<searchfield name="tic_tipo" presentation="PRESTACIONTIPO" label="Tipo" search="fix"/>
         <searchfield name="ttp_estado" presentation="ESTADO_DENUNCIA" label="Estado"/>
         <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
-		<searchfield name="tor_code" presentation="ORGANISMO" label="Organismo"/>
-		<searchfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
-		<searchfield name="tru_code" presentation="RUBRO" label="Rubro"/>
-		<searchfield name="tic_calle_nombre" presentation="TEXT" label="Calle"/>
-		<searchfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
-		<searchfield name="tic_barrio" presentation="BARRIOS" label="Barrio"/>
+	<searchfield name="tor_code" presentation="ORGANISMO" label="Organismo"/>
+	<searchfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
+	<searchfield name="tru_code" presentation="RUBRO" label="Rubro"/>
+	<searchfield name="tic_calle_nombre" presentation="TEXT" label="Calle"/>
+	<searchfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
+	<searchfield name="tic_barrio" presentation="BARRIOS" label="Barrio"/>
 		
         <listfield name="tic_nro" presentation="TEXT" isvisible="false"/>
         <listfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
         <listfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
-		<listfield name="tic_tipo" presentation="TEXT" label="Tipo"/>
+	<listfield name="tic_tipo" presentation="TEXT" label="Tipo"/>
         <listfield name="ttp_estado" presentation="ESTADO_DENUNCIA" label="Estado"/>
         <listfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
-		<listfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
-		<listfield name="tru_code" presentation="RUBRO" label="Rubro"/>
-		<listfield name="tic_calle_nombre" presentation="TEXT" label="Calle"/>
-		<listfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
-		<listfield name="tic_barrio" presentation="BARRIOS" label="Barrio"/>
-		<listfield name="tic_nota_in" presentation="TEXT" label="Nota"/>
-		<listfield name="tor_code" presentation="ORGANISMO" label="Organismo"/>
-		<listfield name="tto_figura" presentation="TEXT" label="Rol"/>
+        <listfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
+        <listfield name="tru_code" presentation="RUBRO" label="Rubro"/>
+        <listfield name="tic_calle_nombre" presentation="TEXT" label="Calle"/>
+        <listfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
+        <listfield name="tic_barrio" presentation="BARRIOS" label="Barrio"/>
+        <listfield name="tic_nota_in" presentation="TEXT" label="Nota"/>
+        <listfield name="tor_code" presentation="ORGANISMO" label="Organismo"/>
+        <listfield name="tto_figura" presentation="TEXT" label="Rol"/>
+
 		
-		
-		<action operation="V" label="ver" target="ticket_maint.php?OP=V" >
-			<sendfield classname="class_v_tickets1" name="tic_nro"/>
-		</action>
+        <action operation="V" label="ver" target="ticket_maint.php?OP=V" >
+            <sendfield classname="class_v_tickets1" name="tic_nro"/>
+        </action>
 
         <action operation="P" label="imprimir" target="ticket_maint.php?OP=P" >
-			<sendfield classname="class_v_tickets1" name="tic_nro"/>
-		</action>
-	</build>
+            <sendfield classname="class_v_tickets1" name="tic_nro"/>
+        </action>
+    </build>
 </make>
 
 <!-- CLASE CONSULTA DE UN TICKET -->

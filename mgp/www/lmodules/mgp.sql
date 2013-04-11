@@ -135,6 +135,7 @@ create table ciu_historial_contactos (
   chi_motivo varchar(100) null,
   use_code varchar(50) null,
   chi_canal varchar(50) null,
+  chi_nota text null,
   constraint pk_ciu_historial_contactos primary key clustered (chi_code, ciu_code) 
 )
 
