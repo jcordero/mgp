@@ -1,5 +1,4 @@
-function downloadOnLoad()
-{
+$(document).ready(function() {
     var divrubro = $("#rubro");
     if(divrubro.length===1)
     {
@@ -82,7 +81,7 @@ function downloadOnLoad()
 
     });
     
-}
+});
 
 
 function direccion_validada() {
