@@ -34,7 +34,7 @@ if(!class_exists('talk'))
 		
 		public function Render($context)
 		{
-			global $sess,$primary_db;
+			global $primary_db;
 
 			if( strstr(strtolower($_SESSION["groups"]),"home_operator")===false )
 			{
@@ -92,10 +92,10 @@ if(!class_exists('talk'))
 <style>
     #indicadores{border: solid 1px #ddd;border-radius:5px;padding:10px;text-align:center;margin-top:10px;}
     #identificado {border:solid 1px #ccc;border-radius:5px;background:#efefef;margin-top:10px;margin-bottom:10px;padding-bottom:5px;}
-    #indicadores button {margin:3px;width:150px;}
-	#talk_btn_anonimo, #talk_btn_modificar, #talk_btn_terminar {display:none}
-	#talk_actions {margin-top:10px;margin-bottom:10px;}
-	#talk_actions button {margin-bottom:10px;}            
+    #indicadores button {margin:3px;width:90%;}
+    #talk_btn_anonimo, #talk_btn_modificar, #talk_btn_terminar {display:none}
+    #talk_actions {margin-top:10px;margin-bottom:10px;}
+    #talk_actions button {margin-bottom:10px;}            
 </style>
             ';
             

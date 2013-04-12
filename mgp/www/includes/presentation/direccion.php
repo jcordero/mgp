@@ -18,31 +18,28 @@ class CDH_DIRECCION extends CDataHandler
 		$name = "m_".$fld->m_Name;
 		$mostrar = "";
 		
-		if($fld->m_IsVisible)
-		{
-            $obj = json_decode($val);
+                $id = $name;
+                $hval = str_replace('"', '&#34;', $val);
+		$html="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$hval\"/>"."\n";
 
-            if($obj) {
-            	$mostrar .= ($obj->calle_nombre!='' ? 'Calle: '.$obj->calle_nombre.' '.$obj->callenro.'<br/>' : '');
-            	$mostrar .= ($obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
-            	$mostrar .= ($obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
-            	$mostrar .= ($obj->barrio!='' ? 'Barrio: '.$obj->barrio : '');
-            }
+		if($fld->m_IsVisible)
+		{    
+                    $obj = json_decode($val);
+                    if($obj) {
+                        $mostrar .= ($obj->calle_nombre!='' ? 'Calle: '.$obj->calle_nombre.' '.$obj->callenro.'<br/>' : '');
+                        $mostrar .= ($obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
+                        $mostrar .= ($obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
+                        $mostrar .= ($obj->barrio!='' ? 'Barrio: '.$obj->barrio : '');
+                    }
             
-			if($showlabel)
-			{
-				$html="<div class=\"itm\"><div class=\"desc\">$fld->m_Label</div><div class=\"fldro\">$mostrar</div></div>"."\n";
-			}
-			else
-			{
-				$html=$mostrar;
-			}
-		}
-		else
-		{
-            //Campo oculto
-			$id = $name;
-			$html="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$val\"/>"."\n";
+                    if($showlabel)
+                    {
+			$html.="<div class=\"itm\"><div class=\"desc\">$fld->m_Label</div><div class=\"fldro\">$mostrar</div></div>"."\n";
+                    }
+                    else
+                    {
+                        $html.=$mostrar;
+                    }
 		}
 		
 		return $html;

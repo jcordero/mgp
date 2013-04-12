@@ -23,14 +23,13 @@ if(!class_exists('home_operator'))
 	{
 		public function Render($context)
 		{
-			global $sess,$primary_db;
+			global $primary_db;
 			$content = array(); 
 			$errors = array(); 
-			$includes = array();
                      
 //Consulta de tickets
-            $nro = new CField(array("presentation"=>"INT","name"=>"tickets_nro","label"=>"Número","isvisible"=>true,"cols"=>10,"search"=>"fix"));
-            $anio = new CField(array("presentation"=>"INT","name"=>"tickets_anio","label"=>"Año","isvisible"=>true,"cols"=>10,"search"=>"fix"));
+            //$nro = new CField(array("presentation"=>"INT","name"=>"tickets_nro","label"=>"Número","isvisible"=>true,"cols"=>10,"search"=>"fix"));
+            //$anio = new CField(array("presentation"=>"INT","name"=>"tickets_anio","label"=>"Año","isvisible"=>true,"cols"=>10,"search"=>"fix"));
             
          	$tab2 = '
          	<div id="offline" class="alert">
@@ -130,8 +129,7 @@ if(!class_exists('home_operator'))
 			
 			//Bloque TALK
 			$t = new talk();
-			list($cnt,$err,$inc) = $t->Render($context);
-			$includes = array_merge($includes,$inc);
+			list($cnt,$err,$includes) = $t->Render($context);
 			
 			$content["home_operator"] = $cnt['talk'].$html;
 			return array( $content, $errors, $includes );
