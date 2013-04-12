@@ -38,3 +38,10 @@ $evento = array(
 $ret = array('resultado' => ciudadano::addEvento($evento));
 echo json_encode($ret);
 echo '</pre>';
+
+////////////////////////////////////////////////ticket/////////////////////////////////////
+
+echo  'obtengo un ticket ident <pre>';
+$ret = array('resultado' => ticket::factoryByIdent('RECLAMO','2','2013'));
+echo json_encode($ret);
+echo '</pre>';
