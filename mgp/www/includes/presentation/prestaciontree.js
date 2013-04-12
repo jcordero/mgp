@@ -4,9 +4,9 @@ function m_prestacion_onSelect(row)
 	var codigo = row.key;
 	var texto = row.label;
 	var type = row.type;
-	if( codigo.length!=4 )
+	if( codigo.length<4 )
 	{
-		return;
+            return;
 	}	
 	var params = prestacion.m_params;
 		
