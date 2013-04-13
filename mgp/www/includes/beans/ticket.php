@@ -50,7 +50,7 @@ class ticket {
              $a["solicitantes"]= ticket::getSolicitantes($row["tic_nro"]);
              $a["reiteraciones"]= ticket::getReiteraciones($row["tic_nro"]); 
               $a["asociados"]= ticket::getAsociados($row["tic_nro"]);
-             $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
+        //     $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
              
              
              return  (object)$a;
@@ -61,16 +61,35 @@ class ticket {
         $primary_db->_free_result($re);
               
     }
-    
+    private static function getCuestionario($id){
+      
+       //falta la respuestas
+        global $primary_db;
+        $sql="select  tpr_code ,tpr_preg , ' 'as  tpr_resp from tic_prestaciones_cuest where tpr_code=$id";
+        $re = $primary_db->do_execute($sql);
+       
+        if( $row=$primary_db->_fetch_array($re) )
+        {
+             $a=array();
+             foreach($row as $key => $value)
+             {
+                if(!is_numeric($key))
+                 $a[$key] = $row[$key];   
+             }
+            
+             return  (object)$a;
+        }
+     
+    }
     
      private static function getPrestaciones($idTicket){
        
        //falta la descripcion
         global $primary_db;
-        $sql="select  tpr_code , tpr_description , true_code , ''  as  tru_description  , ttp_estado   tr from tic_ticket_prestaciones_cuest   v join ciu_identificacion ci  on ci.ciu_code= v.ciu_code   where tic_nro=$idTicket";
-       
+        $sql="select  tpr_code ,'' as tpr_description , tru_code   , ttp_estado   from tic_ticket_prestaciones    where tic_nro=$idTicket";
+      
         $re = $primary_db->do_execute($sql);
-       
+      
         
         if( $row=$primary_db->_fetch_array($re) )
         {
@@ -81,8 +100,7 @@ class ticket {
                  $a[$key] = $row[$key];   
              }
             
-             
-            
+            $a["cuestionario"]=ticket::getCuestionario($row["tpr_code"]);
              return  (object)$a;
         }
         
