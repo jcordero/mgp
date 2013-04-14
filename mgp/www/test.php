@@ -45,3 +45,9 @@ echo  'obtengo un ticket ident <pre>';
 $ret = array('resultado' => ticket::factoryByIdent('RECLAMO','2','2013'));
 echo json_encode($ret);
 echo '</pre>';
+
+
+echo  'obtengo un ticket por ciudadano <pre>';
+$ret = array('resultado' => ticket::factoryByCiudadano(36));
+echo json_encode($ret);
+echo '</pre>';

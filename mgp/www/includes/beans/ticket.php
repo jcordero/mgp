@@ -31,6 +31,38 @@ class ticket {
         $this->organismos = array();
     }
     
+    static function  factoryByCiudadano($idCiudadano) {
+         global $primary_db;
+        $sql="select * from tic_ticket t  join tic_ticket_ciudadano ci on t.tic_nro=ci.tic_nro  where ciu_code=$idCiudadano";
+        $re = $primary_db->do_execute($sql);
+       
+        
+        if( $row=$primary_db->_fetch_array($re) )
+        {
+             $a=array();
+             foreach($row as $key => $value)
+             {
+                if(!is_numeric($key))
+                 $a[$key] = $row["tic_nro"];   
+             }
+             $a["prestaciones"]= ticket::getPrestaciones($row["tic_nro"]);
+             $a["solicitantes"]= ticket::getSolicitantes($row["tic_nro"]);
+             $a["reiteraciones"]= ticket::getReiteraciones($row["tic_nro"]); 
+             $a["asociados"]= ticket::getAsociados($row["tic_nro"]);
+          //   $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
+             
+             
+             return  (object)$a;
+        }
+        else{
+            return array("el ticket no existe");
+        }
+        $primary_db->_free_result($re);
+              
+    }
+   
+    
+    
   
       static function  factoryByIdent($tipo,$nro,$anio) {
          global $primary_db;
@@ -49,8 +81,8 @@ class ticket {
              $a["prestaciones"]= ticket::getPrestaciones($row["tic_nro"]);
              $a["solicitantes"]= ticket::getSolicitantes($row["tic_nro"]);
              $a["reiteraciones"]= ticket::getReiteraciones($row["tic_nro"]); 
-              $a["asociados"]= ticket::getAsociados($row["tic_nro"]);
-        //     $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
+             $a["asociados"]= ticket::getAsociados($row["tic_nro"]);
+          //   $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
              
              
              return  (object)$a;
