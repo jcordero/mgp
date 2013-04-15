@@ -56,7 +56,7 @@ echo '</pre>';
 echo  'agrego un ticket <pre>';
 $ticket= ticket::factoryByCiudadano(36);
 $ticket->tic_lugar= "un lugar";
-$ticket->tpr_code=0101;
+$ticket->tpr_code="0101";
 $ticket->tru_code=0;
 $ret = array('resultado' => ticket::addTicket($ticket));
 echo json_encode($ret);

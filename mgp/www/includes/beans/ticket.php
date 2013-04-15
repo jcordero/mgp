@@ -68,10 +68,10 @@ class ticket {
              $primary_db->do_execute($sql,$errores);
              
            //  die($sql);
-          //   $sql = "insert into tic_ticket_prestaciones(tic_nro,tpr_code,tru_code) " .
-         //        " values($tic_nro,$ticket->tpr_code,$ticket->tru_code)";
+             $sql = "insert into tic_ticket_prestaciones(tic_nro,tpr_code,tru_code) " .
+                " values($tic_nro,'$ticket->tpr_code',$ticket->tru_code)";
         
-         //  $primary_db->do_execute($sql,$errores);
+           $primary_db->do_execute($sql,$errores);
          
            if (count($errores) > 0 )
 	    {	
