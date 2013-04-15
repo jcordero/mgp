@@ -102,7 +102,7 @@ function update_ciudadano($sFirma,$json) {
     /* TODO: cambiar de estado el ticket
      * 
      */
-    $ret = array('resultado' => );
+    $ret = array('resultado' =>  );
     return $ret;
 }
 

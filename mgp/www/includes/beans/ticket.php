@@ -31,6 +31,60 @@ class ticket {
         $this->organismos = array();
     }
     
+    
+    
+      static function addTicket($ticket) {
+         global $primary_db;
+         $contenido=array();
+         $errores=array();
+         $ticket =(object)$ticket;
+        // todo tpr_code ,tru_code ,ciu_documento , media , ciu_nombre,ciu_apellido,ciu_movil,ciu_email
+      //   $existe=$primary_db->QueryString("SELECT count(*) FROM ciu_identificacion  ciu_nro_doc = '" . $sEmisor . " " .$sTipoDoc . " " . $iNumeroDocumento . "'");
+      //   if($existe>0)return array("El ciudadano  existe");
+         $primary_db->beginTransaction();
+         // ingreso la prestacion
+         
+          $tic_nro = $primary_db->Sequence("tic_tickets");
+         
+           
+           
+         
+            $ciudadano= new ciudadano;
+            $ciudadano->ciu_apellido=$ticket->ciu_apellido;
+            $ciudadano->ciu_nombre=$ticket->ciu_nombre;
+            $ciudadano->ciu_movil=$ticket->ciu_movil;
+            $ciudadano->ciu_movil=$ticket->ciu_email;
+            $ciudadano->ciu_documento=$ticket->ciu_documento;
+            if(ciudadano::existe($ticket->ciu_documento)){
+                 ciudadano::addCiudadano($ciudadano);
+            }
+
+
+              $sql = "insert into tic_ticket(tic_nro,tic_tstamp_in,tic_nota_in,tic_lugar,tic_barrio,tic_cgpc,tic_coordx,tic_coordy,tic_calle_nombre,tic_nro_puerta) " .
+                      " values($tic_nro,'$ticket->tic_tstamp_in','$ticket->tic_nota_in','$ticket->tic_lugar','$ticket->tic_barrio','$ticket->tic_cgpc',$ticket->tic_coordx,$ticket->tic_coordy,'$ticket->tic_calle_nombre',$ticket->tic_nro_puerta )";
+
+
+
+             $primary_db->do_execute($sql,$errores);
+             
+           //  die($sql);
+          //   $sql = "insert into tic_ticket_prestaciones(tic_nro,tpr_code,tru_code) " .
+         //        " values($tic_nro,$ticket->tpr_code,$ticket->tru_code)";
+        
+         //  $primary_db->do_execute($sql,$errores);
+         
+           if (count($errores) > 0 )
+	    {	
+  	      $res[]="MENSAJE: error. $sql";
+              $primary_db->rollbackTransaction();
+  	      return $res;
+	    } 	
+            $primary_db->commitTransaction();
+             return array($contenido,$errores);
+
+        
+    }
+    
     static function  factoryByCiudadano($idCiudadano) {
          global $primary_db;
         $sql="select * from tic_ticket t  join tic_ticket_ciudadano ci on t.tic_nro=ci.tic_nro  where ciu_code=$idCiudadano";
@@ -43,7 +97,7 @@ class ticket {
              foreach($row as $key => $value)
              {
                 if(!is_numeric($key))
-                 $a[$key] = $row["tic_nro"];   
+                 $a[$key] = $row[$key];   
              }
              $a["prestaciones"]= ticket::getPrestaciones($row["tic_nro"]);
              $a["solicitantes"]= ticket::getSolicitantes($row["tic_nro"]);
@@ -76,7 +130,7 @@ class ticket {
              foreach($row as $key => $value)
              {
                 if(!is_numeric($key))
-                 $a[$key] = $row["tic_nro"];   
+                 $a[$key] = $row[$key];   
              }
              $a["prestaciones"]= ticket::getPrestaciones($row["tic_nro"]);
              $a["solicitantes"]= ticket::getSolicitantes($row["tic_nro"]);

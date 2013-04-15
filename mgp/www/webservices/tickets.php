@@ -48,7 +48,7 @@ exit;
 function consulta_ticket($tipo,$anio,$nro) {
     /* TODO: Escribir consulta a objeto ticket
      */
-    $ret = array('resultado' => 'no implementado');
+    $ret = ticket::factoryByIdent($tipo, $nro, $anio);
     return $ret;
 }
 

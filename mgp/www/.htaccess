@@ -1,0 +1,5 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteBase /
+RewriteRule ^/mgp/test  mgp/index.php
+RewriteRule ^/mgp/webservices/tickets/([A-Z]+)/([0-9]+)/([0-9]+) /mgp/webservices/tickets.php?tipo=$1$ano=$2&nro=$3
