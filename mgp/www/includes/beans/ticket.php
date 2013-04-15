@@ -75,12 +75,13 @@ class ticket {
          
            if (count($errores) > 0 )
 	    {	
-  	      $res[]="MENSAJE: error. $sql";
+  	     // $res[]="MENSAJE: error. $sql";
               $primary_db->rollbackTransaction();
-  	      return $res;
+  	      
 	    } 	
             $primary_db->commitTransaction();
-             return array($contenido,$errores);
+            $contenido[]=$tic_nro; 
+            return array($contenido,$errores);
 
         
     }
