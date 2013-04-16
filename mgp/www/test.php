@@ -1,63 +1,52 @@
 <?php
-include 'common/sites.php';
-include 'beans/ticket.php';
-include 'beans/ciudadano.php';
-echo  'Creo objeto ticket <pre>';
-$t = new ticket();
-echo $t->toJSON();
-echo '</pre>';
-echo  'obtengo un ciudadano <pre>';
-$ret = array('resultado' => ciudadano::FactoryById(36));
-echo json_encode($ret);
-echo '</pre>';
 
+$secret = 'hasdYR33n1j34j#4jn*(-s';
 
+//Foto 
+$foto = base64_encode(file_get_contents('/Users/jcordero/Desktop/59346361.jpg'));
 
-echo  'actualizo un ciudadano <pre>';
-$ret = array('resultado' => ciudadano::updateCiudadano(ciudadano::FactoryById(36)));
-echo json_encode($ret);
-echo '</pre>';
+//llamada por CURL
+$ingreso_ticket = json_encode((object) array(
+  'object'              =>  'ingreso_ticket',
+  'tic_tipo'            =>  'RECLAMO',
+  'tic_coordx'          =>  -38.0086896250302,
+  'tic_coordy'          =>  -57.5345889139824,
+  'tic_calle_nombre'    =>  'ALVEAR, CARLOS MARIA',
+  'tic_nro_puerta'      =>  '345',
+  'tpr_code'            =>  '0101',
+  'ciu_documento'       =>  'ARG DNI 20300300',
+  'ciu_nombre'          =>  'JUAN CARLOS',
+  'ciu_apellido'        =>  'PETRUZA',
+  'media'               =>  $foto
+));
+        
+$data = http_build_query(array(
+    'payload'   => $ingreso_ticket, 
+    'signature' => md5($secret.$ingreso_ticket)
+   )); 
 
+$c = curl_init();
+curl_setopt($c, CURLOPT_URL, "http://mgp/mgp/webservices/tickets.php");
+curl_setopt($c, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Expect:'));
+curl_setopt($c, CURLOPT_VERBOSE, 1);
+curl_setopt($c, CURLOPT_CUSTOMREQUEST, "PUT"); 
+curl_setopt($c, CURLOPT_RETURNTRANSFER, 1); 
+curl_setopt($c, CURLOPT_POSTFIELDS,$data);
+$verbose = fopen('php://temp', 'rw+');
+curl_setopt($c, CURLOPT_STDERR, $verbose);
 
+$tuData = curl_exec($c); 
+if(!curl_errno($c)){ 
+  $info = curl_getinfo($c); 
+  echo '<p>Took ' . $info['total_time'] . ' seconds to send a request to ' . $info['url']; 
+  echo '<p>Respuesta<pre>'.$tuData.'</pre>';
+} else { 
+  echo '<p>Curl error: ' . curl_error($c); 
+} 
+curl_close($c);
 
-echo  'obtengo un ciudadano por doc <pre>';
-$ret = array('resultado' => ciudadano::FactoryByDoc('ARG','DNI','20470276'));
-echo json_encode($ret);
-echo '</pre>';
+echo '<p>---- LOG ------';
+!rewind($verbose);
+$verboseLog = stream_get_contents($verbose);
+echo "<p><pre>", htmlspecialchars($verboseLog), "</pre>";
 
-echo  'cargo un evento <pre>';
-$evento = array(
-            'chi_code'      => 2,
-            'ciu_code'   => 37,
-             'chi_fecha'      =>'2013-03-22 00:00:00',
-             'chi_motivo'   =>'motivo',
-             'use_code'      => '1',
-             'chi_canal'   => 'canal',
-        );
-
-$ret = array('resultado' => ciudadano::addEvento($evento));
-echo json_encode($ret);
-echo '</pre>';
-
-////////////////////////////////////////////////ticket/////////////////////////////////////
-
-echo  'obtengo un ticket ident <pre>';
-$ret = array('resultado' => ticket::factoryByIdent('RECLAMO','2','2013'));
-echo json_encode($ret);
-echo '</pre>';
-
-
-echo  'obtengo un ticket por ciudadano <pre>';
-$ret = array('resultado' => ticket::factoryByCiudadano(36));
-echo json_encode($ret);
-echo '</pre>';
-
-
-echo  'agrego un ticket <pre>';
-$ticket= ticket::factoryByCiudadano(36);
-$ticket->tic_lugar= "un lugar";
-$ticket->tpr_code="0101";
-$ticket->tru_code=0;
-$ret = array('resultado' => ticket::addTicket($ticket));
-echo json_encode($ret);
-echo '</pre>';

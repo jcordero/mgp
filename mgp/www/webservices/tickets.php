@@ -1,7 +1,6 @@
 <?php
-
 include_once 'common/sites.php';
-include_once 'beans/tickets.php';
+include_once 'beans/ticket.php';
 
 /**
  * Ingreso de ticket
@@ -17,34 +16,63 @@ include_once 'beans/tickets.php';
  * Metodo: PUT
  * En el payload del PUT va un objeto JSON con los datos del ticket
  */
+$ret['resultado'] = '';
+$metodo = $_SERVER['REQUEST_METHOD'];   // GET, PUT 
 
-$metodo = $_SERVER['REQUEST_METHOD']; // GET, POST, PUT 
-$tipo = $_REQUEST['tipo'];
-$anio = $_REQUEST['anio'];
-$nro = $_REQUEST['nro'];
-$json = $_POST['json'];
-$ciu_code= $_REQUEST['ciu_code'];
-$ret = array('resultado' => 'metodo desconocido');
-
-if($metodo=='GET') {
-   if(isset($tipo))
-    $ret = ticket::factoryByIdent($tipo, $nro, $anio);
-   else 
-     $ret = ticket::factoryByCiudadano($ciu_code);
-       
+//validacion de la entrada
+if($metodo!="GET" && $metodo!="PUT") {
+    $ret['resultado'] = 'Solo se acepta el metodo GET o PUT';
 }
-
-if($metodo=='PUT') {
-    $obj = json_decode($json);
-    if($obj && isset($obj->ingreso_ticket) ) {
-        $ret = ingreso_ticket($tipo,$anio,$nro,$obj->ingreso_ticket);
+    
+if($metodo=='GET' && $ret['resultado']==='') {
+    $tipo = strtoupper($_GET['tipo']);      //RECLAMO SOLICITUD DENUNCIA QUEJA
+    $anio = intval($_GET['anio']);          //Nro
+    $nro = intval($_GET['nro']);            //Nro
+    
+    if($tipo!="RECLAMO" && $tipo!="SOLICITUD" && $tipo!="DENUNCIA" && $tipo!="QUEJA") {
+        $ret['resultado'] = 'El parametro tipo solo puede ser RECLAMO, SOLICITUD, DENUNCIA o QUEJA';
     }
     
-    if($obj && isset($obj->cambio_estado_ticket) ) {
-        $ret = actualizo_ticket($tipo,$anio,$nro,$obj->cambio_estado_ticket);
+    if($anio==0) {
+        $ret['resultado'] = 'El parametro anio es invalido';
+    }
+
+    if($nro==0) {
+        $ret['resultado'] = 'El parametro nro es invalido';
+    }
+
+    $ret = ticket::factoryByIdent($tipo, $nro, $anio);
+}
+
+if($metodo=='PUT' && $ret['resultado']==='') {
+    parse_str(file_get_contents("php://input"),$post_vars);
+    $json = $post_vars['payload']; //Payload del post
+    $sign = $post_vars['signature']; //Firma
+
+    //Valido json y sign
+    $obj = json_decode($json); 
+    if(!$obj) {
+        $ret['resultado'] = 'El contenido JSON es invalido';
+    } else {
+        if(isset($obj->object) && $obj->object=='ingreso_ticket' ) {
+            $ret = ingreso_ticket($obj);
+        }
+
+        if(isset($obj->object)  && $obj->object=='cambio_estado_ticket') {
+            $ret = actualizo_ticket($tipo,$anio,$nro,$obj);
+        }
     }
 }
 
+ob_end_clean();
+
+//No es ni GET o PUT
+if($ret['resultado']==='')
+    $ret['resultado']='metodo no implementado';
+
+if($ret['resultado']!=='OK')
+    header('HTTP/1.0 400 Bad Request');
+            
 echo json_encode($ret);
 exit;
 
@@ -57,11 +85,8 @@ function consulta_ticket($tipo,$anio,$nro) {
     return $ret;
 }
 
-function ingreso_ticket($tipo,$anio,$nro,$ingreso_ticket) {
-    /* TODO: Ingresar ticket 
-     * 
-     */
-    $ret = array('resultado' => 'no implementado');
+function ingreso_ticket($ingreso_ticket) {
+    $ret = ticket::addTicket($ingreso_ticket);
     return $ret;
 }
 

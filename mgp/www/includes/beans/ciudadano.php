@@ -50,6 +50,18 @@ class ciudadano {
        
     }
     
+    /**
+     * Verifica si ya existe el cidadano
+     * @global type $primary_db
+     * @param type string $doc_nro Usar formato PAIS TIPO NRO, ejemplo ARG DNI 20300300
+     * @return type int codigo del ciudadano si existe. 0 si no existe. 
+     */
+    static function existe($doc_nro) {
+        global $primary_db;
+        $doc = $primary_db->Filtrado($doc_nro);
+        return (int) $primary_db->QueryString("select ciu_code from ciu_identificacion where ciu_nro_doc='$doc'");
+    }
+    
     static function updateCiudadano($ciudadano) {
         global $primary_db;
          $contenido=array();

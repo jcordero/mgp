@@ -1,14 +1,14 @@
 
 function m_prestacion_onSelect(row)
 {	
-	var codigo = row.key;
-	var texto = row.label;
-	var type = row.type;
-	if( codigo.length<4 )
-	{
-            return;
-	}	
-	var params = prestacion.m_params;
+    var codigo = row.key;
+    var texto = row.label;
+    var type = row.type;
+    if( codigo.length<4 )
+    {
+        return;
+    }	
+    var params = prestacion.m_params;
 		
     //Borrar el cuestionario
     var cuest = document.getElementById("m_"+ params + "_placeholder");
