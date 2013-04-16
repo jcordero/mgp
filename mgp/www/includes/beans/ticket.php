@@ -292,9 +292,10 @@ class ticket {
         $re = $primary_db->do_execute($sql);
         $tickets = array();
         
-        while( $row=$primary_db->_fetch_array($re) )
+        while( $row=$primary_db->_fetch_row($re) )
         {
-             $a=array();
+            
+            $a=array();
              foreach($row as $key => $value)
              {
                 if(!is_numeric($key))
@@ -306,14 +307,14 @@ class ticket {
              $a["asociados"]= ticket::getAsociados($row["tic_nro"]);
           //   $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
              
-             
+      
              $tickets[]=  (object)$a;
         }
        // else{
        //     return array("el ticket no existe");
        // }
         $primary_db->_free_result($re);
-        return tickets;
+        return $tickets;
               
     }
    
@@ -321,13 +322,14 @@ class ticket {
     
   
       static function  factoryByIdent($tipo,$nro,$anio) {
-         global $primary_db;
-        $sql="select * from tic_ticket   where tic_identificador ='$tipo" . " " .$nro . "/$anio'";
-        $re = $primary_db->do_execute($sql);
-       
         
+         
+          global $primary_db;
+        $sql="select * from tic_ticket   where tic_identificador ='$tipo" . " " .$nro . "/$anio'";
+       $re = $primary_db->do_execute($sql);
+        ;
         if( $row=$primary_db->_fetch_array($re) )
-        {
+        {   
              $a=array();
              foreach($row as $key => $value)
              {
@@ -339,14 +341,14 @@ class ticket {
              $a["reiteraciones"]= ticket::getReiteraciones($row["tic_nro"]); 
              $a["asociados"]= ticket::getAsociados($row["tic_nro"]);
           //   $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
-             
-             
+          
+              $primary_db->_free_result($re);
              return  (object)$a;
         }
         else{
             return array("el ticket no existe");
         }
-        $primary_db->_free_result($re);
+       
               
     }
     private static function getCuestionario($id){

@@ -1,0 +1,43 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  
+        <script>  
+        $(document).ready(function() {
+        $.ajax({
+                type: "GET",
+                url: "webservices/tickets.php",
+                data: { anio: "2013", tipo: "RECLAMO" , nro: "2" }
+                }).done(function( msg ) {
+                $('#texto').text(msg) ;
+        });
+         $.ajax({
+                type: "GET",
+                url: "webservices/tickets.php",
+                data: { ciu_code: 36   }
+                }).done(function( msg ) {
+                $('#texto2').text(msg) ;
+        });        
+
+});
+         
+        
+
+
+      </script>
+    
+    </head>
+    <body>
+        <div id="texto">TODO write content</div>
+        <br> <br> <br>
+        <div id="texto2">TODO write content</div>
+    </body>
+</html>
