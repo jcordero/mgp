@@ -90,9 +90,9 @@ class ticket {
          global $primary_db;
         $sql="select * from tic_ticket t  join tic_ticket_ciudadano ci on t.tic_nro=ci.tic_nro  where ciu_code=$idCiudadano";
         $re = $primary_db->do_execute($sql);
-       
+        $tickets = array();
         
-        if( $row=$primary_db->_fetch_array($re) )
+        while( $row=$primary_db->_fetch_array($re) )
         {
              $a=array();
              foreach($row as $key => $value)
@@ -107,12 +107,13 @@ class ticket {
           //   $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
              
              
-             return  (object)$a;
+             $tickets[]=  (object)$a;
         }
-        else{
-            return array("el ticket no existe");
-        }
+       // else{
+       //     return array("el ticket no existe");
+       // }
         $primary_db->_free_result($re);
+        return tickets;
               
     }
    
