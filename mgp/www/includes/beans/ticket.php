@@ -127,7 +127,7 @@ class ticket {
           global $primary_db;
         $sql="select * from tic_ticket   where tic_identificador ='$tipo" . " " .$nro . "/$anio'";
        $re = $primary_db->do_execute($sql);
-        
+        ;
         if( $row=$primary_db->_fetch_array($re) )
         {   
              $a=array();

@@ -1,7 +1,7 @@
 <?php
 
 include_once 'common/sites.php';
-include_once 'beans/tickets.php';
+include_once 'beans/ticket.php';
 
 /**
  * Ingreso de ticket
