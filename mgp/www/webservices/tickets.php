@@ -25,13 +25,17 @@ $nro = $_REQUEST['nro'];
 $json = $_POST['json'];
 $ciu_code= $_REQUEST['ciu_code'];
 $ret = array('resultado' => 'metodo desconocido');
-
 if($metodo=='GET') {
-   if(isset($tipo))
-    $ret = ticket::factoryByIdent($tipo, $nro, $anio);
-   else 
-     $ret = ticket::factoryByCiudadano($ciu_code);
+   
+    if(isset($tipo)){
        
+    $ret = ticket::factoryByIdent($tipo, $nro, $anio);
+   
+   
+   }else {
+    
+       $ret = ticket::factoryByCiudadano($ciu_code);
+   }    
 }
 
 if($metodo=='PUT') {

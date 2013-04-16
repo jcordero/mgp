@@ -37,7 +37,7 @@ class ticket {
          global $primary_db;
          $contenido=array();
          $errores=array();
-         $ticket =(object)$ticket;
+        // $ticket =(object)$ticket;
         // todo tpr_code ,tru_code ,ciu_documento , media , ciu_nombre,ciu_apellido,ciu_movil,ciu_email
       //   $existe=$primary_db->QueryString("SELECT count(*) FROM ciu_identificacion  ciu_nro_doc = '" . $sEmisor . " " .$sTipoDoc . " " . $iNumeroDocumento . "'");
       //   if($existe>0)return array("El ciudadano  existe");
@@ -67,7 +67,7 @@ class ticket {
 
              $primary_db->do_execute($sql,$errores);
              
-           //  die($sql);
+             
              $sql = "insert into tic_ticket_prestaciones(tic_nro,tpr_code,tru_code) " .
                 " values($tic_nro,'$ticket->tpr_code',$ticket->tru_code)";
         
@@ -92,9 +92,10 @@ class ticket {
         $re = $primary_db->do_execute($sql);
         $tickets = array();
         
-        while( $row=$primary_db->_fetch_array($re) )
+        while( $row=$primary_db->_fetch_row($re) )
         {
-             $a=array();
+            
+            $a=array();
              foreach($row as $key => $value)
              {
                 if(!is_numeric($key))
@@ -106,14 +107,14 @@ class ticket {
              $a["asociados"]= ticket::getAsociados($row["tic_nro"]);
           //   $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
              
-             
+      
              $tickets[]=  (object)$a;
         }
        // else{
        //     return array("el ticket no existe");
        // }
         $primary_db->_free_result($re);
-        return tickets;
+        return $tickets;
               
     }
    
@@ -121,13 +122,14 @@ class ticket {
     
   
       static function  factoryByIdent($tipo,$nro,$anio) {
-         global $primary_db;
+        
+         
+          global $primary_db;
         $sql="select * from tic_ticket   where tic_identificador ='$tipo" . " " .$nro . "/$anio'";
-        $re = $primary_db->do_execute($sql);
-       
+       $re = $primary_db->do_execute($sql);
         
         if( $row=$primary_db->_fetch_array($re) )
-        {
+        {   
              $a=array();
              foreach($row as $key => $value)
              {
@@ -139,14 +141,14 @@ class ticket {
              $a["reiteraciones"]= ticket::getReiteraciones($row["tic_nro"]); 
              $a["asociados"]= ticket::getAsociados($row["tic_nro"]);
           //   $a["organismos"]= ticket::getOrganismos($row["tic_nro"]); 
-             
-             
+          
+              $primary_db->_free_result($re);
              return  (object)$a;
         }
         else{
             return array("el ticket no existe");
         }
-        $primary_db->_free_result($re);
+       
               
     }
     private static function getCuestionario($id){

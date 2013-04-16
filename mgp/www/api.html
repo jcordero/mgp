@@ -1,0 +1,35 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  
+        <script>  
+        $(document).ready(function() {
+        $.ajax({
+                type: "GET",
+                url: "webservices/tickets.php",
+                data: { anio: "2013", tipo: "RECLAMO" , nro: "2" }
+                }).done(function( msg ) {
+                alert( "Data Saved: " + msg );
+        });
+                
+
+});
+         
+        
+
+
+      </script>
+    
+    </head>
+    <body>
+        <div id="texto">TODO write content</div>
+    </body>
+</html>

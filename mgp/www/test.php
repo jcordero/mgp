@@ -54,7 +54,7 @@ echo '</pre>';
 
 
 echo  'agrego un ticket <pre>';
-$ticket= ticket::factoryByCiudadano(36);
+$ticket= ticket::factoryByIdent('RECLAMO','2','2013');
 $ticket->tic_lugar= "un lugar";
 $ticket->tpr_code="0101";
 $ticket->tru_code=0;
