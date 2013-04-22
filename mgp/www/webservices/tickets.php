@@ -1,7 +1,7 @@
 <?php
 include_once 'common/sites.php';
 include_once 'beans/ticket.php';
-
+ini_set("error_log", LOG_PATH.'api_miciudad.log');
 /**
  * Ingreso de ticket
  * Metodo: PUT
@@ -16,35 +16,44 @@ include_once 'beans/ticket.php';
  * Metodo: PUT
  * En el payload del PUT va un objeto JSON con los datos del ticket
  */
-$ret['resultado'] = '';
+$ret['resultado'] = 'ERROR';
+$ret['error'] = '';
 $metodo = $_SERVER['REQUEST_METHOD'];   // GET, PUT 
 
 //validacion de la entrada
 if($metodo!="GET" && $metodo!="PUT") {
-    $ret['resultado'] = 'Solo se acepta el metodo GET o PUT';
+    $ret['error'] = 'Solo se acepta el metodo GET o PUT';
 }
     
-if($metodo=='GET' && $ret['resultado']==='') {
+if($metodo==='GET' && $ret['error']==='') {
     $tipo = strtoupper($_GET['tipo']);      //RECLAMO SOLICITUD DENUNCIA QUEJA
     $anio = intval($_GET['anio']);          //Nro
     $nro = intval($_GET['nro']);            //Nro
     
     if($tipo!="RECLAMO" && $tipo!="SOLICITUD" && $tipo!="DENUNCIA" && $tipo!="QUEJA") {
-        $ret['resultado'] = 'El parametro tipo solo puede ser RECLAMO, SOLICITUD, DENUNCIA o QUEJA';
+        $ret['error'] = 'El parametro tipo solo puede ser RECLAMO, SOLICITUD, DENUNCIA o QUEJA';
     }
     
     if($anio==0) {
-        $ret['resultado'] = 'El parametro anio es invalido';
+        $ret['error'] = 'El parametro anio es invalido';
     }
 
     if($nro==0) {
-        $ret['resultado'] = 'El parametro nro es invalido';
+        $ret['error'] = 'El parametro nro es invalido';
     }
 
-    $ret = ticket::factoryByIdent($tipo, $nro, $anio);
+    $t = new ticket();
+    $t->setTipoNroAnio($tipo, $nro, $anio);
+    if( $t->load() ) {
+        $ret['resultado'] = 'OK';
+        $ret['ticket'] = $t;
+    }
+    else
+        $ret['error'] = 'El ticket solicitado no existe';
 }
 
-if($metodo=='PUT' && $ret['resultado']==='') {
+if($metodo=='PUT' && $ret['error']==='') {
+    $post_vars = null;
     parse_str(file_get_contents("php://input"),$post_vars);
     $json = $post_vars['payload']; //Payload del post
     $sign = $post_vars['signature']; //Firma
@@ -67,8 +76,8 @@ if($metodo=='PUT' && $ret['resultado']==='') {
 ob_end_clean();
 
 //No es ni GET o PUT
-if($ret['resultado']==='')
-    $ret['resultado']='metodo no implementado';
+if($ret['resultado']==='ERROR' && $ret['error']==='')
+    $ret['error']='metodo no implementado';
 
 if($ret['resultado']!=='OK')
     header('HTTP/1.0 400 Bad Request');

@@ -373,27 +373,19 @@ TD.log{ font: 10px 'Courier New', Courier, arial}
     margin-right:20px;
     margin-bottom: -15px;
 }
+
 .editor{
-    position: absolute;
     border: #7e7e7e 1pt solid;
-    display: none;
     background: #ecebeb;
-    width: 960px;
+    width: 100%;
     height: auto;
-    margin-left:12px;
 }
 
 .bajo_tabla {
     display: none;
     height: auto;
-    background-color: #f9f9f9;
     z-index:2;	
-    margin: 25px 10px 15px 10px;
-    margin-bottom:14px;
-    box-shadow: 0 0 6px 3px #DDD; 
-    border:1px solid #ddd;
 }
-
 
 .bajo_tabla .submitbutton {
     background: #f0f0f0;
@@ -427,12 +419,13 @@ TD.log{ font: 10px 'Courier New', Courier, arial}
 }
 
 .cuernito {
-    background: url("/mgp/images/default/new-record-header.png") no-repeat scroll 0 0 transparent;
+/*    background: url("/mgp/images/default/new-record-header.png") no-repeat scroll 0 0 transparent;
     height: 16px;
     left: 14px;
     position: relative;
     top: -13px;
-
+*/
+    display:none;
 }
 .contenido {
     padding: 10px 0;

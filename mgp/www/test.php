@@ -19,14 +19,14 @@ $ingreso_ticket = json_encode((object) array(
   'ciu_apellido'        =>  'PETRUZA',
   'media'               =>  $foto
 ));
-        
+
 $data = http_build_query(array(
     'payload'   => $ingreso_ticket, 
     'signature' => md5($secret.$ingreso_ticket)
-   )); 
+)); 
 
 $c = curl_init();
-curl_setopt($c, CURLOPT_URL, "http://mgp/mgp/webservices/tickets.php");
+curl_setopt($c, CURLOPT_URL, "http://mgp.commsys.com.ar/mgp/webservices/tickets");
 curl_setopt($c, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Expect:'));
 curl_setopt($c, CURLOPT_VERBOSE, 1);
 curl_setopt($c, CURLOPT_CUSTOMREQUEST, "PUT"); 
@@ -36,6 +36,8 @@ $verbose = fopen('php://temp', 'rw+');
 curl_setopt($c, CURLOPT_STDERR, $verbose);
 
 $tuData = curl_exec($c); 
+echo "<p>Respuesta: <pre>".print_r(json_decode($tuData),true)."</pre>";
+
 if(!curl_errno($c)){ 
   $info = curl_getinfo($c); 
   echo '<p>Took ' . $info['total_time'] . ' seconds to send a request to ' . $info['url']; 
