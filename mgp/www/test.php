@@ -1,5 +1,7 @@
 <?php
 
+$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
+
 $secret = 'hasdYR33n1j34j#4jn*(-s';
 
 //Foto 
@@ -26,7 +28,7 @@ $data = http_build_query(array(
 )); 
 
 $c = curl_init();
-curl_setopt($c, CURLOPT_URL, "http://mgp.commsys.com.ar/mgp/webservices/tickets");
+curl_setopt($c, CURLOPT_URL, $url);
 curl_setopt($c, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Expect:'));
 curl_setopt($c, CURLOPT_VERBOSE, 1);
 curl_setopt($c, CURLOPT_CUSTOMREQUEST, "PUT"); 
@@ -35,6 +37,7 @@ curl_setopt($c, CURLOPT_POSTFIELDS,$data);
 $verbose = fopen('php://temp', 'rw+');
 curl_setopt($c, CURLOPT_STDERR, $verbose);
 
+echo "<p>Uso URL = ".$url;
 $tuData = curl_exec($c); 
 echo "<p>Respuesta: <pre>".print_r(json_decode($tuData),true)."</pre>";
 

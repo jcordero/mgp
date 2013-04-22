@@ -1,9 +1,10 @@
 <?php
 
+//$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets.php?tipo=RECLAMO&anio=2013&nro=37";
+$url = "http://mgp/mgp/webservices/tickets.php?tipo=RECLAMO&anio=2013&nro=7";
+
 $secret = 'hasdYR33n1j34j#4jn*(-s';
 
-$url = "http://mgp/mgp/webservices/tickets.php?tipo=RECLAMO&anio=2013&nro=8";
-echo "<p>URL: ".$url;
 
 $c = curl_init();
 curl_setopt($c, CURLOPT_URL, $url);
@@ -12,6 +13,7 @@ curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 $verbose = fopen('php://temp', 'rw+');
 curl_setopt($c, CURLOPT_STDERR, $verbose);
 
+echo "<p>Envio URL: ".$url;
 $tuData = curl_exec($c); 
 echo "<p>Respuesta: <pre>".print_r(json_decode($tuData),true)."</pre>";
 

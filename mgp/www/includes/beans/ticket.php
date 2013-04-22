@@ -4,10 +4,10 @@ include_once 'beans/ciudadano.php';
 
 class ticket {
     /** Identificador publico del ticket "TIPO NRO/AÑO" */
-    private $tic_identificador;
+    public $tic_identificador;
         
     /** Tipo de ticket (RECLAMO, DENUNCIA, QUEJA, SOLICITUD) */
-    private $tic_tipo;
+    public $tic_tipo;
     
     /** Codigo del ticket al que este esta asociado este */
     public $tic_nro_asociado;
@@ -458,13 +458,13 @@ class ticket {
                 'tpr_description'   => $row['tpr_detalle'],
                 'tru_code'          => $row['tru_code'], 
                 'tru_description'   => $row['tru_detalle'],
-                'ttp_cuestionario'  => $row['ttp_cuestionario'], 
                 'ttp_estado'        => $row['ttp_estado'],
                 'ttp_prioridad'     => $row['ttp_prioridad'], 
-                'ttp_tstamp_plazo'  => $row['ttp_tstamp_plazo'], 
+                'ttp_tstamp_plazo'  => $this->DatetoISO8601($row['ttp_tstamp_plazo']), 
                 'ttp_alerta'        => $row['ttp_alerta'],
                 'avance'            => $this->loadAvance($tic_nro, $row['tpr_code']),
-                'organismos'        => $this->loadOrganismos($tic_nro)
+                'organismos'        => $this->loadOrganismos($tic_nro),
+                'cuestionario'      => $this->loadCuestionario($tic_nro, $row['tpr_code']), 
             );
             $ret[] = $prestacion;
         }
@@ -523,13 +523,13 @@ class ticket {
         $sql = "select * from tic_ticket_asociado WHERE tic_nro='{$tic_nro}'";
         $rs = $primary_db->do_execute($sql);
         while( $row=$primary_db->_fetch_row($rs) ) {
-            $organismo = (object) array(          
+            $ticket = (object) array(          
                 'tic_nro_asoc'  => $row['tic_nro_asoc'],
                 'tta_tstamp'    => $this->DatetoISO8601($row['tta_tstamp']),
                 'use_code'      => $this->loadOperador($row['use_code']),
                 'tta_motivo'    => $row['tta_motivo']
             );
-            $ret[] = $organismo;
+            $ret[] = $ticket;
         }
         return $ret;
     }
@@ -571,7 +571,7 @@ class ticket {
         $sql = "select * from tic_avance WHERE tic_nro='{$tic_nro}' and tpr_code='{$tpr_code}'";
         $rs = $primary_db->do_execute($sql);
         while( $row=$primary_db->_fetch_row($rs) ) {
-            $organismo = (object) array(          
+            $avance = (object) array(          
                 'tav_code'      => $row['tav_code'],
                 'tav_tstamp_in' => $this->DatetoISO8601($row['tav_tstamp_in']),
                 'use_code_in'   => $this->loadOperador($row['use_code_in']),
@@ -582,11 +582,28 @@ class ticket {
                 'tav_tstamp_out'=> $this->DatetoISO8601($row['tav_tstamp_out']),
                 'use_code_out'  => $this->loadOperador($row['use_code_out'])
             );
-            $ret[] = $organismo;
+            $ret[] = $avance;
         }
         return $ret;
     }
 
+    private function loadCuestionario($tic_nro,$tpr_code) {
+        global $primary_db;
+        $ret = array();
+        $sql = "select * from tic_ticket_cuestionario WHERE tic_nro='{$tic_nro}' and tpr_code='{$tpr_code}'";
+        $rs = $primary_db->do_execute($sql);
+        while( $row=$primary_db->_fetch_row($rs) ) {
+            $pregunta = (object) array(          
+                'tcu_code'      => $row['tcu_code'], 
+                'tpr_preg'      => $row['tpr_preg'], 
+                'tpr_tipo_preg' => $row['tpr_tipo_preg'], 
+                'tpr_respuesta' => $row['tpr_respuesta'], 
+                'tpr_miciudad'  => $row['tpr_miciudad']                
+            );
+            $ret[] = $pregunta;
+        }
+        return $ret;
+    }
     
  
     function save() {
