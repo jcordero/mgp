@@ -2,6 +2,8 @@
 include_once 'common/sites.php';
 include_once 'beans/ticket.php';
 ini_set("error_log", LOG_PATH.'api_miciudad.log');
+error_log("\n------------------ INICIO PROCESO API -----------------------\n");
+
 /**
  * Ingreso de ticket
  * Metodo: PUT
@@ -95,8 +97,16 @@ function consulta_ticket($tipo,$anio,$nro) {
 }
 
 function ingreso_ticket($ingreso_ticket) {
-    $ret = ticket::addTicket($ingreso_ticket);
-    return $ret;
+    $tic = new ticket();
+    $tic->fromJSON($ingreso_ticket);
+    $tic->save();
+    
+    $resultado = $tic->getStatus() ? 'OK' : 'ERROR';
+    return array(
+        'resultado'         => $resultado,
+        'error'             => $tic->getErrorString(),
+        'tic_identificador' => $tic->tic_identificador
+    );
 }
 
 function actualizo_ticket($tipo,$anio,$nro,$cambio_estado_ticket) {

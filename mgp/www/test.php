@@ -1,6 +1,7 @@
 <?php
 
-$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
+//$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
+$url = "http://mgp/mgp/webservices/tickets.php";
 
 $secret = 'hasdYR33n1j34j#4jn*(-s';
 
@@ -19,7 +20,9 @@ $ingreso_ticket = json_encode((object) array(
   'ciu_documento'       =>  'ARG DNI 20300300',
   'ciu_nombre'          =>  'JUAN CARLOS',
   'ciu_apellido'        =>  'PETRUZA',
-  'media'               =>  $foto
+  'media'               =>  $foto,
+  
+  'tic_nota_in'         =>  "una nota que se manda en el alta"  
 ));
 
 $data = http_build_query(array(
