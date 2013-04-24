@@ -476,6 +476,7 @@ create table tic_prestaciones_cuest (
   tpr_preg varchar(100) null,
   tpr_tipo_preg varchar(20) null,
   tpr_opciones varchar(200) null,
+  tpr_miciudad varchar(45) null,
   constraint pk_tic_prestaciones_cuest primary key clustered (tpr_code, tpr_orden)
 )
 
@@ -691,6 +692,18 @@ create table v_tickets (
 
 create  table ciu_paises (
   cpa_code char(3) not null ,
-  cpa_descripcion varchar(150) null ,
+  cpa_descripcion varchar(150) null,
   constraint pk_ciu_paises primary key clustered (cpa_code) 
 )
+
+CREATE  tic_ticket_cuestionario (
+  tic_nro INT NOT NULL,
+  tpr_code VARCHAR(20) NOT NULL,
+  tcu_code INT NOT NULL,
+  tpr_preg VARCHAR(100) NULL,
+  tpr_tipo_preg VARCHAR(20) NULL,
+  tpr_respuesta TEXT NULL,
+  tpr_miciudad VARCHAR(45) NULL,
+  constraint pk_tic_ticket_cuestionario primary key clustered (tic_nro, tpr_code, tcu_code) 
+ )
+
