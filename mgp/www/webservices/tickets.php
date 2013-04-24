@@ -28,9 +28,11 @@ if($metodo!="GET" && $metodo!="PUT") {
 }
     
 if($metodo==='GET' && $ret['error']==='') {
-    $tipo = strtoupper($_GET['tipo']);      //RECLAMO SOLICITUD DENUNCIA QUEJA
-    $anio = intval($_GET['anio']);          //Nro
-    $nro = intval($_GET['nro']);            //Nro
+    error_log("URL GET = ".$_SERVER['REQUEST_URI']);    
+    $p = explode('/', $_SERVER['REQUEST_URI']);
+    $tipo = strtoupper($p[4]);      //RECLAMO SOLICITUD DENUNCIA QUEJA           
+    $anio = intval($p[5]);          //Nro         
+    $nro = intval($p[6]);            //Nro   
     
     if($tipo!="RECLAMO" && $tipo!="SOLICITUD" && $tipo!="DENUNCIA" && $tipo!="QUEJA") {
         $ret['error'] = 'El parametro tipo solo puede ser RECLAMO, SOLICITUD, DENUNCIA o QUEJA';
