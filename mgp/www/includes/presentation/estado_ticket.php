@@ -9,10 +9,9 @@ class CDH_ESTADO_TICKET extends CDH_SELECTARRAY
 		parent::__construct($parent);
 		$fld = $this->m_parent;
 		$this->m_array = array(
-			"ABIERTO"=>"ABIERTO",
-			"CERRADO"=>"CERRADO",
-            "ASOCIADO"=>"ASOCIADO"
-            
+                    "ABIERTO"=>"ABIERTO",
+                    "CERRADO"=>"CERRADO",
+                    "ASOCIADO"=>"ASOCIADO"
 		);
 	}
 		

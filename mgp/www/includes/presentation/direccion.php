@@ -9,8 +9,7 @@ class CDH_DIRECCION extends CDataHandler
 	
 	}
 
-    //Mostrar el XML de la direccion
-    function RenderReadOnly($cn,$showlabel=false)
+        function RenderReadOnly($cn,$showlabel=false)
 	{
 		$fld = $this->m_parent;
 		$html="";
@@ -19,8 +18,8 @@ class CDH_DIRECCION extends CDataHandler
 		$mostrar = "";
 		
                 $id = $name;
-                $hval = str_replace('"', '&#34;', $val);
-		$html="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$hval\"/>"."\n";
+                //$hval = str_replace('"', '&#34;', $val);
+		//$html.="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$hval\"/>"."\n";
 
 		if($fld->m_IsVisible)
 		{    

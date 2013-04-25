@@ -40,6 +40,10 @@ class class_tic_ticket_upd extends cobjbase {
         $this->m_fields['tic_nro_asociado'] = new CField(Array("Name"=>"tic_nro_asociado", "Type"=>"int", "IsForDB"=>true, "Order"=>120));
         $this->m_fields['tic_identificador'] = new CField(Array("Name"=>"tic_identificador", "Size"=>45, "IsForDB"=>true, "Order"=>121));
         $this->m_fields['mapa'] = new CField(Array("Name"=>"mapa", "Size"=>50, "Order"=>22));
+        $this->m_fields['tmp_accion'] = new CField(Array("Name"=>"tmp_accion", "Size"=>50, "Order"=>23));
+        $this->m_fields['tmp_nuevo_estado'] = new CField(Array("Name"=>"tmp_nuevo_estado", "Size"=>50, "Order"=>24));
+        $this->m_fields['tmp_prestacion'] = new CField(Array("Name"=>"tmp_prestacion", "Size"=>50, "Order"=>25));
+        $this->m_fields['tmp_nota'] = new CField(Array("Name"=>"tmp_nota", "Size"=>50, "Order"=>26));
 
         //--Contenedores de Clases dependientes
         $this->m_childs_classname['class_tic_ticket_prestaciones']='class_tic_ticket_prestaciones';
@@ -327,14 +331,15 @@ class cfile extends cobjbase {
         //Extensiones a esta clase
 
         //-- CField( Array(Parametros) )
-        $this->m_fields['std_code'] = new CField(Array("Name"=>"std_code", "Label"=>"Codigo remito", "Size"=>50, "Order"=>1));
-        $this->m_fields['doc_code'] = new CField(Array("Name"=>"doc_code", "Label"=>"Codigo", "Size"=>50, "Order"=>2));
-        $this->m_fields['doc_name'] = new CField(Array("Name"=>"doc_name", "Label"=>"Archivo", "Size"=>200, "Order"=>3));
-        $this->m_fields['doc_tstamp'] = new CField(Array("Name"=>"doc_tstamp", "Label"=>"Fecha", "Type"=>"DATETIME", "Order"=>4));
-        $this->m_fields['doc_mime'] = new CField(Array("Name"=>"doc_mime", "Label"=>"Clase", "Size"=>50, "Order"=>5));
-        $this->m_fields['doc_size'] = new CField(Array("Name"=>"doc_size", "Label"=>"Tamaño", "Type"=>"int", "Order"=>6));
-        $this->m_fields['doc_storage'] = new CField(Array("Name"=>"doc_storage", "Label"=>"URI", "Size"=>200, "Order"=>7));
-        $this->m_fields['doc_note'] = new CField(Array("Name"=>"doc_note", "Label"=>"Nota", "Size"=>200, "Order"=>8));
+        $this->m_fields['use_code'] = new CField(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "Order"=>1));
+        $this->m_fields['std_code'] = new CField(Array("Name"=>"std_code", "Label"=>"Codigo remito", "Size"=>50, "Order"=>2));
+        $this->m_fields['doc_code'] = new CField(Array("Name"=>"doc_code", "Label"=>"Codigo", "Size"=>50, "Order"=>3));
+        $this->m_fields['doc_name'] = new CField(Array("Name"=>"doc_name", "Label"=>"Archivo", "Size"=>200, "Order"=>4));
+        $this->m_fields['doc_tstamp'] = new CField(Array("Name"=>"doc_tstamp", "Label"=>"Fecha", "Type"=>"DATETIME", "Order"=>5));
+        $this->m_fields['doc_mime'] = new CField(Array("Name"=>"doc_mime", "Label"=>"Clase", "Size"=>50, "Order"=>6));
+        $this->m_fields['doc_size'] = new CField(Array("Name"=>"doc_size", "Label"=>"Tamaño", "Type"=>"int", "Order"=>7));
+        $this->m_fields['doc_storage'] = new CField(Array("Name"=>"doc_storage", "Label"=>"URI", "Size"=>200, "Order"=>8));
+        $this->m_fields['doc_note'] = new CField(Array("Name"=>"doc_note", "Label"=>"Nota", "Size"=>200, "Order"=>9));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes

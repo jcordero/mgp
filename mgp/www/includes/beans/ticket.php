@@ -6,6 +6,7 @@ include_once 'beans/prestacion.php';
 include_once 'beans/solicitante.php';
 include_once 'beans/reiteracion.php';
 include_once 'beans/asociado.php';
+include_once 'common/cmessaging.php';
 
 class ticket {
     /** Nro interno del ticket */
@@ -243,8 +244,8 @@ class ticket {
             $t = $p[0];
             $q = explode('/',$p[1]);
             if( count($q)==2 ) {
-                $n = $p[0];
-                $a = $p[1];
+                $n = $q[0];
+                $a = $q[1];
                 $this->setTipoNroAnio($t, $n, $a);
             }
         }
@@ -303,14 +304,14 @@ class ticket {
         if( $this->tic_identificador=='' ) { 
             return false; //No se puede cargar el registro, sin indicar primero cual se busca   
         } else {
-            $tic_nro = $primary_db->QueryString("select tic_nro from tic_ticket where tic_identificador='{$this->tic_identificador}'");
-            if( intval($tic_nro)==0 ) 
+            $this->tic_nro = $primary_db->QueryString("select tic_nro from tic_ticket where tic_identificador='{$this->tic_identificador}'");
+            if( intval($this->tic_nro)==0 ) 
                 return false; //El ticket pedido no existe               
         }
         
         
         //Ya se en este punto que el ticket existe. Lo cargo ahora completo desde la base
-        $row = $primary_db->QueryArray("select * from tic_ticket where tic_nro='{$tic_nro}'");
+        $row = $primary_db->QueryArray("select * from tic_ticket where tic_nro='{$this->tic_nro}'");
     
         $this->tic_tipo = $row['tic_tipo'];
         $this->tic_nro_asociado = $row['tic_nro_asociado'];
@@ -330,10 +331,10 @@ class ticket {
         $this->tic_nro_puerta = $row['tic_nro_puerta'];
         $this->tic_cruza_calle = $row['tic_cruza_calle'];
        
-        $this->prestaciones = prestacion::factory($tic_nro);
-        $this->solicitantes = solicitante::factory($tic_nro);
-        $this->reiteraciones = reiteracion::factory($tic_nro);
-        $this->asociados = asociado::factory($tic_nro);
+        $this->prestaciones = prestacion::factory($this->tic_nro);
+        $this->solicitantes = solicitante::factory($this->tic_nro);
+        $this->reiteraciones = reiteracion::factory($this->tic_nro);
+        $this->asociados = asociado::factory($this->tic_nro);
         
         return true;
     }
@@ -499,6 +500,141 @@ class ticket {
     	
     	return $geo;
     }
+    
+    function prestacionesTerminadas() {
+        $cerradas = 0;
+       
+        foreach($this->prestaciones as $pres) {
+            if( $pres->ttp_estado==='cerrado' || $pres->ttp_estado==='rechazado' )
+                $cerradas++;
+        }
+        
+        return ($cerradas==count($this->prestaciones)-1 ? true : false);            
+    }
+    
+    function cambiar_estado($tpr_code,$nuevo_estado,$nota) {
+        global $primary_db;
+        $estado = strtolower($nuevo_estado);
+        
+        error_log("ticket::cambiar_estado($tpr_code,$nuevo_estado,$nota)");
+        
+        //Salvo el ticket
+        $primary_db->beginTransaction();
+         
+        //Busco la prestacion a modificar
+        foreach($this->prestaciones as $pres) {
+            if( $pres->tpr_code===$tpr_code ) {
+        
+                //Modificar el estado de la prestacion del ticket
+                //Agregar un evento de avance a la prestacion
+                $pres->cambiar_estado($this,$nuevo_estado,$nota);
+                        
+                //Se cerro todo el ticket? Cambio de estado al ticket
+                $pres->ttp_estado = $estado;
+                if( $estado==='cerrado' || $estado==='rechazado' ) {
+                    if( $this->prestacionesTerminadas() ) {
+                        $this->tic_estado = 'CERRADO';
+                    }
+                }
+
+                //Grabo los cambios
+                $this->update();
+                
+                //Aviso al WS MiCiudad si el ticket es del canal movil.
+                if($this->tic_canal==='movil') {
+                    //Creo un evento para notificacion asincronica
+                }
+                    
+                //Si se cerró el ticket, envio las notificaciones
+                if( $this->tic_estado=='CERRADO' ) {
+                    //Definicion de la prestacion
+                    $al_final = $primary_db->QueryString("select tpr_al_final from tic_prestaciones where tpr_code='{$pres->tpr_code}'");
+
+                    //Aviso x mail si es el fin de la prestacion a los responsables
+                    if( $al_final!='' ) {
+                        $this->notificarEmail('aviso_cierre_interno', $pres, $nota, $al_final);                
+                    }
+
+                    //Aviso x mail a los ciudadanos interesados (y registro esto en su historia)
+                    $this->notificarSolicitantes('aviso_cierre', $pres, $nota);
+                }
+            }
+        }
+        
+        if(count($this->errors)>0) {
+            $primary_db->rollbackTransaction();
+            $this->errors[] = 'Error al crear el ticket';
+        } else { 
+            $primary_db->commitTransaction();
+        }
+    }
+    
+    function update() {
+         global $primary_db;
+         $errores=array();
+                        
+         //Actualizo el ticket (tic_ticket)
+         $sql1 = "update tic_ticket set tic_estado=':tic_estado:', tic_tstamp_cierre=':tic_tstamp_cierre:' where tic_nro=:tic_nro:";
+         $params1 = array(
+            'tic_nro'           => $this->tic_nro,
+            'tic_tstamp_cierre' => $this->tic_tstamp_cierre, 
+            'tic_estado'        => $this->tic_estado
+         );
+         $primary_db->do_execute($sql1,$errores,$params1);
+        
+         if(count($errores)>0)
+             $this->errors = array_merge($this->errors, $errores);
+    }
+    
+    //Envia un mensaje a cada solicitante y crea un registro en su historia
+    function notificarSolicitantes($template, $prestacion, $nota) {
+        
+        foreach($this->solicitantes as $sol) {
+            $email = $sol->ciu_email;
+            if($email!='') {
+                $this->notificarEmail($template, $prestacion, $nota, $email,$sol->ciu_nombres,$sol->ciu_apellido);
+           }
+        }
+    }
+    
+    
+    //Envia un mensaje a cada solicitante y crea un registro en su historia
+    function notificarEmail($template, $prestacion, $nota, $email, $nombres='', $apellido='') {
+        
+        $subject = 'Cambio de estado de ticket';        
+        if($email!='') {
+
+            //Armo la dirección
+            $direccion = $this->tic_calle_nombre.' '.$this->tic_nro.' '.($this->tic_cruza_calle!='' ? 'y '.$this->tic_cruza_calle : '');
+            if($this->tic_nro!='') {
+                $direccion.= ($this->tic_piso!='' ? ' piso '.$this->tic_piso : '');
+                $direccion.= ($this->tic_dpto!='' ? ' dpto '.$this->tic_dpto : '');
+            }
+
+            $last_avance = $prestacion->getLastAvance();
+
+            //Campos del template
+            $tem_fld = json_encode(array(
+                'ticket'        => $this->tic_identificador,
+                'prestacion'    => $prestacion->tpr_description,
+                'direccion'     => $direccion,
+                'lat'           => $this->tic_coordx,
+                'lng'           => $this->tic_coordy,
+                'nombre'        => $nombres,
+                'apellido'      => $apellido,
+                'estado_ticket' => $this->tic_estado,
+                'fecha'         => ISO8601toDate($last_avance->tav_tstamp_in),
+                'estado_prest'  => $prestacion->ttp_estado,
+                'nota'          => $nota
+            ));
+
+            $msg = new cmessage();
+            $mt = new cmail_type("HTML",'','',$template);
+            $headers = array();
+            $r = $msg->Send(DEFAULT_SMTP,$email,$mt,$headers,$subject,$tem_fld);
+        }    
+    }
+
 }
 
 

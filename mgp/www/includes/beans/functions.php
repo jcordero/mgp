@@ -43,10 +43,16 @@
 
 
     function loadOperador($use_code='') {
-        global $primary_db;
+        global $primary_db,$sess;
         
         if($use_code==='' || intval($use_code)===0)
             return (object) array('use_code'=>'','use_name'=>'Sin especificar');
+
+        if(strtolower($use_code)==='current')
+            return (object) array(
+                'use_code'  =>  $sess->getUserId(),
+                'use_name'  =>  $sess->getUserName()
+        );    
         
         return (object) array(
             'use_code'  =>  $use_code,

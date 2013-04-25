@@ -12,10 +12,9 @@ class avance {
     public $use_code_out;
     
     function __construct() {
-        $this->tic_estado_in    = 'INICIADO';
-        $this->tic_motivo       = 'Ingreso del ticket'; 
-        $this->tic_estado_out   = 'INICIADO';
-            
+        $this->tic_estado_in    = '';
+        $this->tic_motivo       = ''; 
+        $this->tic_estado_out   = '';
     }
     
     function setCode($code) {
@@ -46,11 +45,31 @@ class avance {
         );
         $primary_db->do_execute($sql4,$errores,$params4);
     }
+
     
+    function update($parent, $tpr_code) {
+        global $primary_db, $sess;
+        $errores = array();
+                
+        //Actualizo el evento en el historial del ticket (tic_avance)
+        $sql4 = "update tic_avance set tic_estado_out=':tic_estado_out:', tav_tstamp_out=':tav_tstamp_out:', use_code_out=':use_code_out:'
+                where tic_nro=:tic_nro: AND tpr_code=':tpr_code:' AND tav_code=:tav_code:";
+        $params4 = array(
+            'tic_nro'         => $parent->getNro(), 
+            'tpr_code'        => $tpr_code, 
+            'tav_code'        => $this->tav_code, 
+            'tic_estado_out'  => $this->tic_estado_out, 
+            'tav_tstamp_out'  => $this->tav_tstamp_out, 
+            'use_code_out'    => $sess->getUserId()
+        );
+        $primary_db->do_execute($sql4,$errores,$params4);
+    }
+
+        
     static function factory($tic_nro,$tpr_code) {
         global $primary_db;
         $ret = array();
-        $sql = "select * from tic_avance WHERE tic_nro='{$tic_nro}' and tpr_code='{$tpr_code}'";
+        $sql = "select * from tic_avance WHERE tic_nro='{$tic_nro}' and tpr_code='{$tpr_code}' order by tav_code ASC";
         $rs = $primary_db->do_execute($sql);
         while( $row=$primary_db->_fetch_row($rs) ) {
             $avance = new avance();

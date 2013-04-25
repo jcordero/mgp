@@ -99,6 +99,10 @@ class estado_gr extends cform_group {
         $this->m_fields[] = 'class_tic_ticket_upd:tic_tstamp_cierre';
         $this->m_fields[] = 'class_tic_ticket_upd:tic_estado';
         $this->m_fields[] = 'class_tic_ticket_upd:tic_nota_in';
+        $this->m_fields[] = 'class_tic_ticket_upd:tmp_accion';
+        $this->m_fields[] = 'class_tic_ticket_upd:tmp_nuevo_estado';
+        $this->m_fields[] = 'class_tic_ticket_upd:tmp_prestacion';
+        $this->m_fields[] = 'class_tic_ticket_upd:tmp_nota';
 
     }
 
@@ -109,6 +113,10 @@ class estado_gr extends cform_group {
         $this->getClass("class_tic_ticket_upd")->GetField("tic_tstamp_cierre")->SetDisplayValues(Array("Name"=>"tic_tstamp_cierre", "Label"=>"Cierre ticket", "Type"=>"datetime", "IsForDB"=>true, "Order"=>117, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_estado")->SetDisplayValues(Array("Name"=>"tic_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_nota_in")->SetDisplayValues(Array("Name"=>"tic_nota_in", "Label"=>"Nota al ingreso", "Size"=>500, "IsForDB"=>true, "Order"=>106, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tmp_accion")->SetDisplayValues(Array("Name"=>"tmp_accion", "Size"=>50, "Order"=>23, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tmp_nuevo_estado")->SetDisplayValues(Array("Name"=>"tmp_nuevo_estado", "Size"=>50, "Order"=>24, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tmp_prestacion")->SetDisplayValues(Array("Name"=>"tmp_prestacion", "Size"=>50, "Order"=>25, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tmp_nota")->SetDisplayValues(Array("Name"=>"tmp_nota", "Size"=>50, "Order"=>26, "Class"=>"class_tic_ticket_upd"));
     }
 }
 }
@@ -130,7 +138,7 @@ class class_tic_ticket_prestaciones_th3 extends ctable_handler {
     	$this->m_button_close = true;// Boton cerrar
     	$this->m_button_repeat = false;// Boton repetir carga
     	$this->m_button_label = '';// Etiqueta del Boton Agregar
-        $this->m_can_add = true; //Mostrar boton Agregar
+        $this->m_can_add = false; //Mostrar boton Agregar
         $this->m_can_delete = false; //Mostrar boton Borrar
         $this->m_can_update = false; //Mostrar boton Modificar
         $this->m_can_check = false; //Mostrar checkbox
@@ -193,9 +201,9 @@ class class_tic_avance_th4 extends ctable_handler {
     	$this->m_button_close = true;// Boton cerrar
     	$this->m_button_repeat = false;// Boton repetir carga
     	$this->m_button_label = '';// Etiqueta del Boton Agregar
-        $this->m_can_add = true; //Mostrar boton Agregar
-        $this->m_can_delete = true; //Mostrar boton Borrar
-        $this->m_can_update = true; //Mostrar boton Modificar
+        $this->m_can_add = false; //Mostrar boton Agregar
+        $this->m_can_delete = false; //Mostrar boton Borrar
+        $this->m_can_update = false; //Mostrar boton Modificar
         $this->m_can_check = false; //Mostrar checkbox
         $this->m_minimum_rows = 0; //Validacion: cantidad minima de filas
         $this->m_render_html = 'PARENT'; //Forma de generar el contenido HTML
@@ -268,9 +276,9 @@ class class_tic_ticket_organismos_th5 extends ctable_handler {
     	$this->m_button_close = true;// Boton cerrar
     	$this->m_button_repeat = false;// Boton repetir carga
     	$this->m_button_label = '';// Etiqueta del Boton Agregar
-        $this->m_can_add = true; //Mostrar boton Agregar
-        $this->m_can_delete = true; //Mostrar boton Borrar
-        $this->m_can_update = true; //Mostrar boton Modificar
+        $this->m_can_add = false; //Mostrar boton Agregar
+        $this->m_can_delete = false; //Mostrar boton Borrar
+        $this->m_can_update = false; //Mostrar boton Modificar
         $this->m_can_check = false; //Mostrar checkbox
         $this->m_minimum_rows = 0; //Validacion: cantidad minima de filas
         $this->m_render_html = 'PARENT'; //Forma de generar el contenido HTML
@@ -319,9 +327,9 @@ class class_tic_ticket_ciudadano_th6 extends ctable_handler {
     	$this->m_button_close = true;// Boton cerrar
     	$this->m_button_repeat = false;// Boton repetir carga
     	$this->m_button_label = '';// Etiqueta del Boton Agregar
-        $this->m_can_add = true; //Mostrar boton Agregar
-        $this->m_can_delete = true; //Mostrar boton Borrar
-        $this->m_can_update = true; //Mostrar boton Modificar
+        $this->m_can_add = false; //Mostrar boton Agregar
+        $this->m_can_delete = false; //Mostrar boton Borrar
+        $this->m_can_update = false; //Mostrar boton Modificar
         $this->m_can_check = false; //Mostrar checkbox
         $this->m_minimum_rows = 0; //Validacion: cantidad minima de filas
         $this->m_render_html = 'PARENT'; //Forma de generar el contenido HTML
@@ -374,9 +382,9 @@ class class_tic_ticket_ciudadano_reit_th7 extends ctable_handler {
     	$this->m_button_close = true;// Boton cerrar
     	$this->m_button_repeat = false;// Boton repetir carga
     	$this->m_button_label = '';// Etiqueta del Boton Agregar
-        $this->m_can_add = true; //Mostrar boton Agregar
-        $this->m_can_delete = true; //Mostrar boton Borrar
-        $this->m_can_update = true; //Mostrar boton Modificar
+        $this->m_can_add = false; //Mostrar boton Agregar
+        $this->m_can_delete = false; //Mostrar boton Borrar
+        $this->m_can_update = false; //Mostrar boton Modificar
         $this->m_can_check = false; //Mostrar checkbox
         $this->m_minimum_rows = 0; //Validacion: cantidad minima de filas
         $this->m_render_html = 'PARENT'; //Forma de generar el contenido HTML
@@ -466,13 +474,13 @@ class cfile_th8 extends ctable_handler {
 
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
-        $obj->GetField("doc_code")->SetDisplayValues(Array("Name"=>"doc_code", "Label"=>"Codigo", "Size"=>50, "Order"=>2));
-        $obj->GetField("doc_name")->SetDisplayValues(Array("Name"=>"doc_name", "Label"=>"Archivo", "Size"=>200, "Order"=>3, "Presentation"=>"TEXT", "IsVisible"=>true));
-        $obj->GetField("doc_storage")->SetDisplayValues(Array("Name"=>"doc_storage", "Label"=>"Archivo", "Size"=>200, "Order"=>7, "Presentation"=>"FILE"));
-        $obj->GetField("doc_tstamp")->SetDisplayValues(Array("Name"=>"doc_tstamp", "Label"=>"Fecha", "Type"=>"DATETIME", "Order"=>4, "Presentation"=>"DATETIME"));
-        $obj->GetField("doc_mime")->SetDisplayValues(Array("Name"=>"doc_mime", "Label"=>"Clase", "Size"=>50, "Order"=>5, "Presentation"=>"TEXT", "IsVisible"=>true));
-        $obj->GetField("doc_size")->SetDisplayValues(Array("Name"=>"doc_size", "Label"=>"Medida", "Type"=>"int", "Order"=>6, "Presentation"=>"TEXT", "IsVisible"=>true));
-        $obj->GetField("doc_note")->SetDisplayValues(Array("Name"=>"doc_note", "Label"=>"Nota", "Size"=>200, "Order"=>8, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>5));
+        $obj->GetField("doc_code")->SetDisplayValues(Array("Name"=>"doc_code", "Label"=>"Codigo", "Size"=>50, "Order"=>3));
+        $obj->GetField("doc_name")->SetDisplayValues(Array("Name"=>"doc_name", "Label"=>"Archivo", "Size"=>200, "Order"=>4, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $obj->GetField("doc_storage")->SetDisplayValues(Array("Name"=>"doc_storage", "Label"=>"Archivo", "Size"=>200, "Order"=>8, "Presentation"=>"FILE"));
+        $obj->GetField("doc_tstamp")->SetDisplayValues(Array("Name"=>"doc_tstamp", "Label"=>"Fecha", "Type"=>"DATETIME", "Order"=>5, "Presentation"=>"DATETIME"));
+        $obj->GetField("doc_mime")->SetDisplayValues(Array("Name"=>"doc_mime", "Label"=>"Clase", "Size"=>50, "Order"=>6, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $obj->GetField("doc_size")->SetDisplayValues(Array("Name"=>"doc_size", "Label"=>"Medida", "Type"=>"int", "Order"=>7, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $obj->GetField("doc_note")->SetDisplayValues(Array("Name"=>"doc_note", "Label"=>"Nota", "Size"=>200, "Order"=>9, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>5));
     }
 
 }
@@ -526,6 +534,8 @@ class class_tic_ticket_upd_m extends cclass_maint {
 
     function RenderJSIncludes() {
         $html = '';
+        $html.="<link rel='stylesheet' type='text/css' href='ticket_maint.css' media='screen,print' />";
+        $html.="<script type='text/javascript' src='ticket_maint.js'></script>";
 
         return $html;
     }

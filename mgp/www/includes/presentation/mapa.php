@@ -25,20 +25,19 @@ class CDH_MAPA extends CDataHandler
 	
 		if($fld->m_IsVisible) 
 		{	
-			$mapa = '<div id="mapa"><div id="'.$id.'"><img src="'.WEB_PATH.'/images/default/mapa.png"></div></div>';
+                    $mapa = '<div id="mapa"><div id="'.$id.'"><img src="'.WEB_PATH.'/images/default/mapa.png"></div></div>';
 
-            if($showlabel)
-			{
-				$html.="<div class=\"itm\"><div class=\"desc\">$fld->m_Label</div><div class=\"fldro\">$mapa</div></div>"."\n";
-				if($fld->m_Label=="")
-				{
-                    error_log("RenderReadOnly($fld->m_Name) no tiene etiqueta declarada");
-                }
-			} 
-			else 
-			{
-				$html.=$mapa;
-			}
+                    if($showlabel) {
+                        $html.="<div class=\"itm\"><div class=\"desc\">$fld->m_Label</div><div class=\"fldro\">$mapa</div></div>"."\n";
+                        if($fld->m_Label=="")
+                        {
+                            error_log("RenderReadOnly($fld->m_Name) no tiene etiqueta declarada");
+                        }
+                    } 
+                    else 
+                    {
+                            $html.=$mapa;
+                    }
 		}
 
 		return $html;

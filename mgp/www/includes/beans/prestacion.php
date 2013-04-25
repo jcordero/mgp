@@ -39,6 +39,9 @@ class prestacion {
         return $this->plazo_unit;
     }
 
+    function getLastAvance() {
+        return $this->avance[ count($this->avance)-1 ];
+    }
     
     function save($parent) {
         global $primary_db;
@@ -101,7 +104,7 @@ class prestacion {
     }
 
     /**
-     * Cargo una prestacion desde el ticket
+     * Cargo una prestacion desde el ticket que viene de la API de MiCiudad
      * @param type $ticket
      */
     function fromJSON($ticket) {
@@ -124,12 +127,9 @@ class prestacion {
         $avance = new avance();
         $avance->tav_nota = _g($ticket,'tic_nota_in');
         $avance->tav_tstamp_in = DatetoISO8601();
-        $avance->tav_tstamp_out = DatetoISO8601(); 
-        $avance->tic_estado_in = 'INICIADO';
-        $avance->tic_estado_out = 'INICIADO';
+        $avance->tic_estado_in = 'pendiente';
         $avance->tic_motivo = 'Ingreso desde movil';
         $avance->use_code_in = loadOperador();
-        $avance->use_code_out = loadOperador();        
         $this->avance[] = $avance;
         
         //Hay que determinar que roles hay que levantar desde la definicion del GIS de prestaciones.
@@ -149,6 +149,41 @@ class prestacion {
         $org->tor_description = $primary_db->QueryString("select tor_nombre from tic_organismos where tor_code='{$org->tor_code}'");
         $org->tto_figura = 'RESPONSABLE';        
         $this->organismos[] = $org;
+    }
+    
+    
+    function cambiar_estado($parent, $nuevo_estado,$nota) {
+        global $primary_db;
+        $errores = array();
+        
+        //Ajusto el ultimo avance
+        $ult_avance = $this->avance[ count($this->avance)-1 ];
+        $ult_avance->tav_tstamp_out = DatetoISO8601(); 
+        $ult_avance->tic_estado_out = $nuevo_estado;
+        $ult_avance->use_code_out = loadOperador('current');        
+        $ult_avance->update($parent, $this->tpr_code);
+                
+        //Agrego un avance nuevo al stack
+        $avance = new avance();
+        $avance->tav_nota = $nota;
+        $avance->tav_tstamp_in = DatetoISO8601();
+        $avance->tic_estado_in = $nuevo_estado;
+        $avance->tic_motivo = 'Cambio de estado';
+        $avance->use_code_in = loadOperador('current');
+        $this->avance[] = $avance;
+        $avance->save($parent, $this->tpr_code);
+        
+        //Cambio el estado a la prestacion
+        $this->ttp_estado = $nuevo_estado;
+        
+        //Salvo el cambio a la base
+        $sql2 = "update tic_ticket_prestaciones set ttp_estado=':ttp_estado:' WHERE tic_nro=:tic_nro: AND tpr_code=':tpr_code:'";
+        $params2 = array(
+            'tic_nro'             => $parent->getNro(), 
+            'tpr_code'            => $this->tpr_code, 
+            'ttp_estado'          => $nuevo_estado
+        );
+        $primary_db->do_execute($sql2,$errores,$params2);   
     }
 }
 ?>

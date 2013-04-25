@@ -1,0 +1,8 @@
+
+#mapa {
+position: absolute;
+left: 700px;
+top: -30px;
+z-index: 1;
+display: block;
+}
