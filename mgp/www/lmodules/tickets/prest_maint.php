@@ -269,13 +269,14 @@ class class_tic_prestaciones_cuest_th8 extends ctable_handler {
         $this->m_note = ""; //Nota
 
         $this->m_datafields['tpr_code']=1;
-        $this->m_datafields['tpr_orden']=2;
-        $this->m_datafields['tpr_preg']=3;
-        $this->m_datafields['tpr_tipo_preg']=4;
-        $this->m_datafields['tpr_opciones']=5;
-        $this->m_datafields['tpr_miciudad']=6;
+        $this->m_datafields['tcu_code']=2;
+        $this->m_datafields['tpr_orden']=3;
+        $this->m_datafields['tpr_preg']=4;
+        $this->m_datafields['tpr_tipo_preg']=5;
+        $this->m_datafields['tpr_opciones']=6;
+        $this->m_datafields['tpr_miciudad']=7;
 
-        $this->m_columns[1] = new ctable_column(1,'Orden',array('tpr_code','tpr_orden'));
+        $this->m_columns[1] = new ctable_column(1,'Orden',array('tpr_code','tcu_code','tpr_orden'));
         $this->m_columns[2] = new ctable_column(2,'Pregunta',array('tpr_preg'));
         $this->m_columns[3] = new ctable_column(3,'Tipo',array('tpr_tipo_preg'));
         $this->m_columns[4] = new ctable_column(4,'Opciones',array('tpr_opciones'));
@@ -285,6 +286,7 @@ class class_tic_prestaciones_cuest_th8 extends ctable_handler {
     public function getJsIncludes($obj) {
         $r=array();
         $r[]=$obj->GetField("tpr_code")->getJsIncludes();
+        $r[]=$obj->GetField("tcu_code")->getJsIncludes();
         $r[]=$obj->GetField("tpr_orden")->getJsIncludes();
         $r[]=$obj->GetField("tpr_preg")->getJsIncludes();
         $r[]=$obj->GetField("tpr_tipo_preg")->getJsIncludes();
@@ -296,6 +298,7 @@ class class_tic_prestaciones_cuest_th8 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
+        $obj->GetField("tcu_code")->SetDisplayValues(Array("Name"=>"tcu_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false, "Sequence"=>"tic_prestaciones_cuest"));
         $obj->GetField("tpr_orden")->SetDisplayValues(Array("Name"=>"tpr_orden", "Label"=>"Orden", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "IsMandatory"=>true, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true, "Cols"=>10));
         $obj->GetField("tpr_preg")->SetDisplayValues(Array("Name"=>"tpr_preg", "Label"=>"Pregunta", "Size"=>100, "IsForDB"=>true, "Order"=>104, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>100));
         $obj->GetField("tpr_tipo_preg")->SetDisplayValues(Array("Name"=>"tpr_tipo_preg", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>105, "IsMandatory"=>true, "Presentation"=>"CUESTOPCIONES", "IsVisible"=>true));

@@ -283,6 +283,7 @@
         <table relationclass="" classname="class_tic_prestaciones_cuest" title="Cuestionario" add="true" delete="true" update="true">
             <column title="Orden" order="1">
                 <field name="tpr_code" isvisible="false"/>
+                <field name="tcu_code" isvisible="false"/>
                 <field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true" cols="10"/>
            </column>
             <column title="Pregunta" order="2">
@@ -398,6 +399,7 @@
         <table relationclass="" classname="class_tic_prestaciones_cuest" title="Cuestionario" add="true" delete="true" update="true">
 			<column title="Orden" order="1">
 				<field name="tpr_code" isvisible="false"/>
+                                <field name="tcu_code" isvisible="false"/>
 				<field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true"/>
 			</column>
 			<column title="Pregunta" order="2">
