@@ -29,6 +29,8 @@ class class_tic_organismos extends cobjbase {
         $this->m_fields['tor_tipo'] = new CField(Array("Name"=>"tor_tipo", "Size"=>20, "IsForDB"=>true, "Order"=>109));
         $this->m_fields['tor_email'] = new CField(Array("Name"=>"tor_email", "Size"=>200, "IsForDB"=>true, "Order"=>110));
         $this->m_fields['tor_notificar'] = new CField(Array("Name"=>"tor_notificar", "Size"=>5, "IsForDB"=>true, "Order"=>111));
+        $this->m_fields['tmp_file1'] = new CField(Array("Name"=>"tmp_file1", "Size"=>200, "Order"=>12, "Presentation"=>"FILEUPLOAD"));
+        $this->m_fields['tmp_file2'] = new CField(Array("Name"=>"tmp_file2", "Size"=>200, "Order"=>13, "Presentation"=>"FILEUPLOAD"));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes

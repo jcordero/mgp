@@ -6,6 +6,9 @@
 		<parse in_file="../mgp.sql" tablename="tic_organismos"/>
 		<method objfactoryquerysuffix="order by tor_sigla"/>
 		<field name="tor_code" sequence="tic_organismos"/>
+                
+                <field name="tmp_file1" type="varchar" size="200" presentation="FILEUPLOAD"/>
+                <field name="tmp_file2" type="varchar" size="200" presentation="FILEUPLOAD"/>
 	</build>
 </make>
 
@@ -40,31 +43,30 @@
 	<build out_file="organ_maint.php" classname="class_tic_organismos" title="Mantenimiento de organismo" next="organismos.php?last=1&amp;OP=L" template_html="default.htm">
 		
 		<group title="Organismo" id="asunto">
-			<field name="tor_code" presentation="INT" label="Código" readonly="true"/>
-			<field name="tor_sigla" presentation="TEXT" label="Sigla" cols="10" ismandatory="true"/>
-			<field name="tor_nombre" presentation="TEXT" label="Nombre" ismandatory="true"/>
-            <field name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo" ismandatory="true"/>
-            <field name="tor_contacto" presentation="TEXTAREAp" label="Contacto" rows="4" cols="60"/>
+                    <field name="tor_code" presentation="INT" label="Código" readonly="true"/>
+                    <field name="tor_sigla" presentation="TEXT" label="Sigla" cols="10" ismandatory="true"/>
+                    <field name="tor_nombre" presentation="TEXT" label="Nombre" ismandatory="true"/>
+                    <field name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo" ismandatory="true"/>
+                    <field name="tor_contacto" presentation="TEXTAREA" label="Contacto" rows="4" cols="60"/>
 		</group>
 		
 		<group title="Ubicacion" id="ubicacion">
-			<field name="tor_padre" presentation="ORGANISMO" label="Organismo padre"/>
-		</group>
+                    <field name="tor_padre" presentation="ORGANISMO" label="Organismo padre"/>
+               </group>
 		
 		<group title="Estado" id="estado">
-			<field name="tor_estado" presentation="ACTIVO" label="Estado"/>
-			<field name="tor_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true"/>
-			<field name="use_code" presentation="USER" label="Operador" readonly="true"/>
+                    <field name="tor_estado" presentation="ACTIVO" label="Estado"/>
+                    <field name="tor_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true"/>
+                    <field name="use_code" presentation="USER" label="Operador" readonly="true"/>
 		</group>
 		
 		<group title="Alertas" id="alertas">
-			<field name="tor_email" presentation="EMAIL" label="EMail"/>
-			<field name="tor_notificar" presentation="SINO" label="Notificar?"/>
+                    <field name="tor_email" presentation="EMAIL" label="EMail"/>
+                    <field name="tor_notificar" presentation="SINO" label="Notificar?"/>
 		</group>
 		
 		<!-- Botones de accion para redireccionar después de salvar la página -->
 		<action operation="L" label="Listado de organismos" target="organismos.php?last=1&amp;OP=L"  note="Listado de organismos"/>
-		
 	</build>
 </make>
 
@@ -184,24 +186,25 @@
 <!-- CLASE PRESTACIONES -->
 <make object="class">
 	<build out_file="class_tic_prestaciones.php" classname="class_tic_prestaciones" classlabel="Prestaciones">
-		<parse in_file="../mgp.sql" tablename="tic_prestaciones"/>
-		<method objfactoryquerysuffix="order by tpr_detalle"/>
+            <parse in_file="../mgp.sql" tablename="tic_prestaciones"/>
+            <method objfactoryquerysuffix="order by tpr_detalle"/>
 		
-        <build classname="class_tic_prestaciones_cuest" classlabel="Cuestionario">
-			<parse in_file="../mgp.sql" tablename="tic_prestaciones_cuest"/>
-			<key parent="tpr_code" child="tpr_code"/>
-		</build>
+            <build classname="class_tic_prestaciones_cuest" classlabel="Cuestionario">
+                <parse in_file="../mgp.sql" tablename="tic_prestaciones_cuest"/>
+                <key parent="tpr_code" child="tpr_code"/>
+                <field name="tcu_code" sequence="tic_prestaciones_cuest"/>
+            </build>
 
-        <build classname="class_tic_prestaciones_gis" classlabel="GIS Acceso">
-			<parse in_file="../mgp.sql" tablename="tic_prestaciones_gis"/>
-			<key parent="tpr_code" child="tpr_code"/>
-            <field name="tpg_code" sequence="tic_prestaciones_gis"/>
-		</build>
+            <build classname="class_tic_prestaciones_gis" classlabel="GIS Acceso">
+                <parse in_file="../mgp.sql" tablename="tic_prestaciones_gis"/>
+                <key parent="tpr_code" child="tpr_code"/>
+                <field name="tpg_code" sequence="tic_prestaciones_gis"/>
+            </build>
 
-        <build classname="class_tic_prestaciones_rubros" classlabel="Rubros">
-			<parse in_file="../mgp.sql" tablename="tic_prestaciones_rubros"/>
-			<key parent="tpr_code" child="tpr_code"/>
-		</build>
+            <build classname="class_tic_prestaciones_rubros" classlabel="Rubros">
+                <parse in_file="../mgp.sql" tablename="tic_prestaciones_rubros"/>
+                <key parent="tpr_code" child="tpr_code"/>
+            </build>
 	</build>
 </make>
 

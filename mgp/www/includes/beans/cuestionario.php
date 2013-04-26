@@ -38,22 +38,36 @@ class cuestionario {
             return self::factoryDB ($tic_nro_ticket, $tpr_code);
     }
     
-    static function factoryJSON($ticket) {
+    static function factoryJSON($ticket,$parent,$prestacion) {
         global $primary_db;
         $res = array();
         
-        foreach( $ticket->ttp_cuestionario as $preg ) {
-            $cuest = new cuestionario();
-            
-            //Busco la pregunta loca segun el identificador de miciudad
-            $row = $primary_db->QueryArray("select * from tic_prestaciones_cuest where tpr_miciudad='{$preg->tpr_miciudad}'");
-            if($row) {
-                $cuest->tcu_code = $row['tcu_code'];
-                $cuest->tpr_miciudad = $preg->tpr_miciudad;
-                $cuest->tpr_preg = $row['tpr_preg'];
-                $cuest->tpr_tipo_preg = $row['tpr_tipo_preg'];
-                $cuest->tpr_respuesta = $preg->tpr_respuesta;       
-                $res[] = $cuest;
+        if(isset($ticket->ttp_cuestionario)) {
+            foreach( $ticket->ttp_cuestionario as $preg ) {
+                $cuest = new cuestionario();
+
+                //Busco la pregunta loca segun el identificador de miciudad
+                $row = $primary_db->QueryArray("select * from tic_prestaciones_cuest where tpr_miciudad='{$preg->tpr_miciudad}' and tpr_code='{$prestacion->tpr_code}'");
+                if($row) {
+                    $cuest->tcu_code = $row['tcu_code'];
+                    $cuest->tpr_miciudad = $preg->tpr_miciudad;
+                    $cuest->tpr_preg = $row['tpr_preg'];
+                    $cuest->tpr_tipo_preg = $row['tpr_tipo_preg'];
+                    
+                    if($row['tpr_tipo_preg']=='CHECKBOX')
+                        $respuesta = ($preg->tpr_respuesta==1 ? 'SI' : 'NO');
+                    else 
+                        $respuesta = $preg->tpr_respuesta;
+                        
+                    
+                    $cuest->tpr_respuesta = $respuesta;       
+                    $res[] = $cuest;
+                }
+                else
+                {
+                    //El atributo extendido de miCiudad no se encuentra
+                    $parent->addError("El atributo {$preg->tpr_miciudad} no se encuentra en el sistema.");
+                }
             }
         }
         

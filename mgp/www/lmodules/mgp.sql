@@ -472,12 +472,13 @@ create table tic_organismos (
 
 create table tic_prestaciones_cuest (
   tpr_code varchar(20) not null,
+  tcu_code int not null,
   tpr_orden int not null,
   tpr_preg varchar(100) null,
   tpr_tipo_preg varchar(20) null,
   tpr_opciones varchar(200) null,
   tpr_miciudad varchar(45) null,
-  constraint pk_tic_prestaciones_cuest primary key clustered (tpr_code, tpr_orden)
+  constraint pk_tic_prestaciones_cuest primary key clustered (tpr_code, tcu_code)
 )
 
 

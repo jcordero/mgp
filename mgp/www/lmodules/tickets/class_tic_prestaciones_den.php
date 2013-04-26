@@ -87,22 +87,23 @@ class class_tic_prestaciones_cuest extends cobjbase {
 
         //-- CField( Array(Parametros) )
         $this->m_fields['tpr_code'] = new CField(Array("Name"=>"tpr_code", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $this->m_fields['tpr_orden'] = new CField(Array("Name"=>"tpr_orden", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $this->m_fields['tpr_preg'] = new CField(Array("Name"=>"tpr_preg", "Size"=>100, "IsForDB"=>true, "Order"=>103));
-        $this->m_fields['tpr_tipo_preg'] = new CField(Array("Name"=>"tpr_tipo_preg", "Size"=>20, "IsForDB"=>true, "Order"=>104));
-        $this->m_fields['tpr_opciones'] = new CField(Array("Name"=>"tpr_opciones", "Size"=>200, "IsForDB"=>true, "Order"=>105));
-        $this->m_fields['tpr_miciudad'] = new CField(Array("Name"=>"tpr_miciudad", "Size"=>45, "IsForDB"=>true, "Order"=>106));
+        $this->m_fields['tcu_code'] = new CField(Array("Name"=>"tcu_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
+        $this->m_fields['tpr_orden'] = new CField(Array("Name"=>"tpr_orden", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "IsNullable"=>false));
+        $this->m_fields['tpr_preg'] = new CField(Array("Name"=>"tpr_preg", "Size"=>100, "IsForDB"=>true, "Order"=>104));
+        $this->m_fields['tpr_tipo_preg'] = new CField(Array("Name"=>"tpr_tipo_preg", "Size"=>20, "IsForDB"=>true, "Order"=>105));
+        $this->m_fields['tpr_opciones'] = new CField(Array("Name"=>"tpr_opciones", "Size"=>200, "IsForDB"=>true, "Order"=>106));
+        $this->m_fields['tpr_miciudad'] = new CField(Array("Name"=>"tpr_miciudad", "Size"=>45, "IsForDB"=>true, "Order"=>107));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes
 
         //Consultas particulares a la base de datos
-        $this->m_loaddb_sql = "SELECT tpr_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad FROM tic_prestaciones_cuest  WHERE tpr_code= :tpr_code_key: AND tpr_orden= :tpr_orden_key:";
-        $this->m_objfactory_sql = "SELECT tpr_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad FROM tic_prestaciones_cuest";
+        $this->m_loaddb_sql = "SELECT tpr_code, tcu_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad FROM tic_prestaciones_cuest  WHERE tpr_code= :tpr_code_key: AND tcu_code= :tcu_code_key:";
+        $this->m_objfactory_sql = "SELECT tpr_code, tcu_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad FROM tic_prestaciones_cuest";
         $this->m_objfactory_suffix_sql = "";
-        $this->m_savedb_update_sql = "UPDATE tic_prestaciones_cuest SET tpr_code= :tpr_code:, tpr_orden= :tpr_orden:, tpr_preg= :tpr_preg:, tpr_tipo_preg= :tpr_tipo_preg:, tpr_opciones= :tpr_opciones:, tpr_miciudad= :tpr_miciudad: WHERE tpr_code=:tpr_code_key: AND tpr_orden=:tpr_orden_key:";
-        $this->m_savedb_insert_sql = "INSERT INTO tic_prestaciones_cuest(tpr_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad) VALUES (:tpr_code:, :tpr_orden:, :tpr_preg:, :tpr_tipo_preg:, :tpr_opciones:, :tpr_miciudad:)";
-        $this->m_savedb_delete_sql = "DELETE FROM tic_prestaciones_cuest WHERE tpr_code=:tpr_code_key: AND tpr_orden=:tpr_orden_key:";
+        $this->m_savedb_update_sql = "UPDATE tic_prestaciones_cuest SET tpr_code= :tpr_code:, tcu_code= :tcu_code:, tpr_orden= :tpr_orden:, tpr_preg= :tpr_preg:, tpr_tipo_preg= :tpr_tipo_preg:, tpr_opciones= :tpr_opciones:, tpr_miciudad= :tpr_miciudad: WHERE tpr_code=:tpr_code_key: AND tcu_code=:tcu_code_key:";
+        $this->m_savedb_insert_sql = "INSERT INTO tic_prestaciones_cuest(tpr_code, tcu_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad) VALUES (:tpr_code:, :tcu_code:, :tpr_orden:, :tpr_preg:, :tpr_tipo_preg:, :tpr_opciones:, :tpr_miciudad:)";
+        $this->m_savedb_delete_sql = "DELETE FROM tic_prestaciones_cuest WHERE tpr_code=:tpr_code_key: AND tcu_code=:tcu_code_key:";
         $this->m_savedb_purge_sql = "DELETE FROM tic_prestaciones_cuest WHERE tpr_code=:tpr_code_key:";
         $this->m_savedb_total_sql = "SELECT COUNT(*) as cant FROM tic_prestaciones_cuest ";
     }

@@ -1,8 +1,8 @@
 <?php
 
 //$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
-//$url = "http://mgp/mgp/webservices/tickets";
-$url = "http://54.214.10.182/mgp/webservices/tickets";
+$url = "http://mgp/mgp/webservices/tickets";
+//$url = "http://54.214.10.182/mgp/webservices/tickets";
     
 $secret = 'hasdYR33n1j34j#4jn*(-s';
 
@@ -17,14 +17,17 @@ $ingreso_ticket = json_encode((object) array(
   'tic_coordy'          =>  -57.5345889139824,
   'tic_calle_nombre'    =>  'ALVEAR, CARLOS MARIA',
   'tic_nro_puerta'      =>  '345',
-  'tpr_code'            =>  '0101',
+  'tpr_code'            =>  '0201',
   'ciu_documento'       =>  'ARG DNI 20300300',
   'ciu_nombre'          =>  'JUAN CARLOS',
   'ciu_apellido'        =>  'PETRUZA',
-  'media'               =>  $foto,
+//  'media'               =>  $foto,
   
   'tic_nota_in'         =>  "una nota que se manda en el alta",
-  'id_luminaria'        =>  "123"  
+  'id_luminaria'        =>  "123",  
+  'ttp_cuestionario'        =>  array(
+                                array('tpr_miciudad'=>94, 'tpr_respuesta'=>1),
+                            )
 ));
 
 $data = http_build_query(array(

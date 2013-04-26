@@ -206,10 +206,10 @@ class class_tic_prestaciones_cuest_th5 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("tpr_orden")->SetDisplayValues(Array("Name"=>"tpr_orden", "Label"=>"Orden", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsMandatory"=>true, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("tpr_preg")->SetDisplayValues(Array("Name"=>"tpr_preg", "Label"=>"Pregunta", "Size"=>100, "IsForDB"=>true, "Order"=>103, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true));
-        $obj->GetField("tpr_tipo_preg")->SetDisplayValues(Array("Name"=>"tpr_tipo_preg", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>104, "IsMandatory"=>true, "Presentation"=>"CUESTOPCIONES", "IsVisible"=>true));
-        $obj->GetField("tpr_opciones")->SetDisplayValues(Array("Name"=>"tpr_opciones", "Label"=>"Opciones", "Size"=>200, "IsForDB"=>true, "Order"=>105, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4));
+        $obj->GetField("tpr_orden")->SetDisplayValues(Array("Name"=>"tpr_orden", "Label"=>"Orden", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "IsMandatory"=>true, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("tpr_preg")->SetDisplayValues(Array("Name"=>"tpr_preg", "Label"=>"Pregunta", "Size"=>100, "IsForDB"=>true, "Order"=>104, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $obj->GetField("tpr_tipo_preg")->SetDisplayValues(Array("Name"=>"tpr_tipo_preg", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>105, "IsMandatory"=>true, "Presentation"=>"CUESTOPCIONES", "IsVisible"=>true));
+        $obj->GetField("tpr_opciones")->SetDisplayValues(Array("Name"=>"tpr_opciones", "Label"=>"Opciones", "Size"=>200, "IsForDB"=>true, "Order"=>106, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4));
     }
 
 }

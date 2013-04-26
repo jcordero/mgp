@@ -71,29 +71,16 @@ body.inicio{background-position: 0 -120px;}
     font-size: 14px;
 }
 
-.thumb {
-    float: left;
-    margin-right: 10px;
-    position:relative;
-}
+.thumb {float: left;margin-right: 10px;position:relative;width:250px;}
+.thumb img{margin-left: 0px !important;}
+.thumb div {color: #AAAAAA;}
+.thumb button {float:right;}
+.thumb div.legend {margin-left: 128px;}
+.attach div.legend {margin-left: 175px;}
+.thumb .name {margin-top:5px;}
 
-.thumb img{
-    margin-left: 0px !important;  
-    max-width: 45px;
-}
+.table_thumb{ cursor: pointer;}
 
-.thumb div {
-    color: #AAAAAA;
-}
-
-.thumb div.legend{margin-left: 128px;}
-
-.thumb button {
-    margin-left: 128px;
-}
-.table_thumb{
-    cursor: pointer;
-}
 .table_thumb img {
     float: left;
     margin-right:5px;
@@ -104,6 +91,9 @@ body.inicio{background-position: 0 -120px;}
     line-height: 30px;
     margin-right: 3px;
 }
+
+#uploadDialog input, #uploadDialog textArea {width:500px!important;}
+#uploadDialog textArea {height:120px!important;}
 
 
 img {
@@ -1674,12 +1664,8 @@ ul.ui-autocomplete{position:absolute!important;}
 
 
 .legend {color:#888;font:italic 8pt Verdana,Arial,Sans-serif;}
-.attach {left:150px!important;top:-21px!important;}
-
 
 form#uploadForm, #alert_box {text-align:left!important;}
-#uploadForm input, #uploadForm textarea {width:490px;}
-#uploadForm textarea {width: 490px;height: 80px;}
 #uploadForm h2 {font-size:14px;}
 
 .k-state-selected, 

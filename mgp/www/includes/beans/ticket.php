@@ -115,6 +115,10 @@ class ticket {
         
         return $ret;
     }
+    
+    function addError($msg) {
+        $this->errors[] = $msg;
+    }
 
     function getStatus() {
         return (count($this->errors)===0 ? true : false);
@@ -129,7 +133,7 @@ class ticket {
      * @return type
      */    
      function fromJSON($ticket) {
-        
+        error_log("ticket::fromJSON() ticket->".print_r($ticket,true));
         if( $ticket->object==='ingreso_ticket') {
             $this->tic_tipo         = _g($ticket,'tic_tipo');
             $this->tic_tstamp_in    = _g($ticket,'tic_tstamp_in'); 
@@ -154,9 +158,7 @@ class ticket {
             $this->tic_lugar = $this->createLugar();
             
             //Agrego Prestacion
-            $prest = new prestacion();
-            $prest->fromJSON($ticket);
-            $this->prestaciones[] = $prest;
+            $this->prestaciones = prestacion::fromJSON($ticket,$this);
             
             //Agrego Ciudadano Solicitante
             $ciu = new solicitante();
@@ -169,7 +171,7 @@ class ticket {
             $this->solicitantes[] = $ciu;
                                 
             //Foto
-            $this->media = $ticket->media;
+            $this->media = _g($ticket,'media');
             
     //Defaults que hay que meter si no estan en el JSON
                 

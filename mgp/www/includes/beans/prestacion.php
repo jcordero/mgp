@@ -107,21 +107,16 @@ class prestacion {
      * Cargo una prestacion desde el ticket que viene de la API de MiCiudad
      * @param type $ticket
      */
-    function fromJSON($ticket) {
+    static function fromJSON($ticket, $parent) {
         global $primary_db;
+        $prest = new prestacion();
         
-        $this->tpr_code    = _g($ticket,'tpr_code');
-        $this->tru_code    = _g($ticket,'tru_code'); 
-        $this->tpr_description = $primary_db->QueryString("select tpr_detalle from tic_prestaciones where tpr_code='{$this->tpr_code}'");
-        $this->tru_description = ($this->tru_code!=='' ? $primary_db->QueryString("select tru_detalle from tic_rubros where tru_code='{$this->tru_code}'") : '');
+        $prest->tpr_code    = _g($ticket,'tpr_code');
+        $prest->tru_code    = _g($ticket,'tru_code'); 
+        $prest->tpr_description = $primary_db->QueryString("select tpr_detalle from tic_prestaciones where tpr_code='{$prest->tpr_code}'");
+        $prest->tru_description = ($prest->tru_code!=='' ? $primary_db->QueryString("select tru_detalle from tic_rubros where tru_code='{$prest->tru_code}'") : '');
                 
-        if(isset($ticket->ttp_cuestionario)) {
-            foreach( $ticket->ttp_cuestionario as $pr ) {
-                $cuest = new cuestionario(); 
-                $cuest->fromJSON($pr);
-                $this->cuestionario[] = $cuest;                
-            }
-        }
+        $prest->cuestionario = cuestionario::factoryJSON($ticket,$parent,$prest);
 
         //Cargo los valores por defecto
         $avance = new avance();
@@ -130,7 +125,7 @@ class prestacion {
         $avance->tic_estado_in = 'pendiente';
         $avance->tic_motivo = 'Ingreso desde movil';
         $avance->use_code_in = loadOperador();
-        $this->avance[] = $avance;
+        $prest->avance[] = $avance;
         
         //Hay que determinar que roles hay que levantar desde la definicion del GIS de prestaciones.
         
@@ -140,15 +135,18 @@ class prestacion {
         $org->tor_code = 1;
         $org->tor_description = $primary_db->QueryString("select tor_nombre from tic_organismos where tor_code='{$org->tor_code}'");
         $org->tto_figura = 'PRESTADOR';        
-        $this->organismos[] = $org;
+        $prest->organismos[] = $org;
 
         //RESPONSABLE
-        $org = new organismo();
-        $org->tor_activo = 'ACTIVO';
-        $org->tor_code = 1;
-        $org->tor_description = $primary_db->QueryString("select tor_nombre from tic_organismos where tor_code='{$org->tor_code}'");
-        $org->tto_figura = 'RESPONSABLE';        
-        $this->organismos[] = $org;
+        $org2 = new organismo();
+        $org2->tor_activo = 'ACTIVO';
+        $org2->tor_code = 1;
+        $org2->tor_description = $primary_db->QueryString("select tor_nombre from tic_organismos where tor_code='{$org2->tor_code}'");
+        $org2->tto_figura = 'RESPONSABLE';        
+        $prest->organismos[] = $org2;
+        
+        //En esta API solo se postea una prestacion
+        return array($prest);
     }
     
     
