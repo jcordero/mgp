@@ -561,6 +561,7 @@ td .itm .desc{
 .itm .fld input,
 .itm .fldro input{
     float: left; 
+    width: auto!important;
 }
 
 .fldb {clear:both;}

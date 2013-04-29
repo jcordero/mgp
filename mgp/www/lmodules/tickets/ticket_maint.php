@@ -177,7 +177,7 @@ class class_tic_ticket_prestaciones_th3 extends ctable_handler {
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
         $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACION", "IsNullable"=>false, "IsVisible"=>true));
         $obj->GetField("tru_code")->SetDisplayValues(Array("Name"=>"tru_code", "Label"=>"Rubro", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "Presentation"=>"RUBRO", "IsVisible"=>true));
-        $obj->GetField("ttp_cuestionario")->SetDisplayValues(Array("Name"=>"ttp_cuestionario", "Label"=>"Cuestionario", "Size"=>3000, "IsForDB"=>true, "Order"=>104, "Presentation"=>"CUESTIONARIO", "IsVisible"=>true));
+        $obj->GetField("ttp_cuestionario")->SetDisplayValues(Array("Name"=>"ttp_cuestionario", "Label"=>"Cuestionario", "Size"=>3000, "IsForDB"=>true, "Order"=>104, "Presentation"=>"TICKET::CUESTIONARIO", "IsVisible"=>true));
         $obj->GetField("ttp_prioridad")->SetDisplayValues(Array("Name"=>"ttp_prioridad", "Label"=>"Prioridad", "Size"=>20, "IsForDB"=>true, "Order"=>106, "Presentation"=>"PRIORIDAD", "IsVisible"=>true));
         $obj->GetField("ttp_estado")->SetDisplayValues(Array("Name"=>"ttp_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"ESTADO_TICKET", "IsVisible"=>true));
     }

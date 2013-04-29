@@ -240,7 +240,7 @@
 	<group title="Prestación" id="asunto">
             <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
             <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
-            <field name="tpr_ubicacion" presentation="UBICACION" label="Ubicación" ismandatory="true"/>
+            <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true"/>
             <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="true"/>
             <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false"/>
 	</group>
@@ -468,38 +468,60 @@
 <!-- CLASE TICKETS -->
 <make object="class">
 	<build out_file="class_tic_ticket.php" classname="class_tic_ticket" classlabel="Ticket">
-		<parse in_file="../mgp.sql" tablename="tic_ticket"/>
-        <field name="forms" type="int"/>
-        <field name="prestacion" type="varchar" size="20"/>
-        <field name="rubro" type="varchar" size="100"/>
-        <field name="cuestionario" type="varchar" size="3000"/>
+	<parse in_file="../mgp.sql" tablename="tic_ticket"/>
 
-        <field name="tipo_georef" type="varchar" size="50"/>
+            <field name="forms" type="int"/>
+            <field name="prestacion" type="varchar" size="20"/>
+            <field name="rubro" type="varchar" size="100"/>
+            <field name="cuestionario" type="varchar" size="3000"/>
 
-        <field name="mapa" type="int"/>
-        <field name="calle_nombre" type="varchar" size="100"/>
-        <field name="calle" type="int" />
-        <field name="callenro" type="int"/>
-        <field name="piso" type="int"/>
-        <field name="dpto" type="varchar" size="20"/>
-        <field name="nombre_fantasia" type="varchar" size="100"/>
-	
-		<field name="villa" type="varchar" size="100"/>
-		<field name="vilmanzana" type="varchar" size="20"/>
-		<field name="vilcasa" type="varchar" size="20"/>
-		
-        <field name="plaza" type="varchar" size="100"/>
+            <!-- TIPO DE BLOQUE DE GEOREF SEGUN LA PRESTACION -->
+            <field name="tipo_georef" type="varchar" size="50"/>
+
+            <!-- DOMICILIO -->
+            <field name="mapa" type="int"/>
+            <field name="calle_nombre" type="varchar" size="100"/>
+            <field name="calle" type="int" />
+            <field name="calle_nombre2" type="varchar" size="100"/>
+            <field name="calle2" type="int" />
+            <field name="callenro" type="int"/>
+            <field name="piso" type="int"/>
+            <field name="dpto" type="varchar" size="20"/>
+            <field name="nombre_fantasia" type="varchar" size="100"/>
+            <field name="alternativa" type="varchar" size="20"/>
+            
+            <!-- VILLA -->
+            <field name="villa" type="varchar" size="100"/>
+            <field name="vilmanzana" type="varchar" size="20"/>
+            <field name="vilcasa" type="varchar" size="20"/>
+
+            <!-- PLAZA --> 
+            <field name="plaza" type="varchar" size="100"/>
         
-        <field name="orgpublico" type="varchar" size="100"/>
-    	<field name="orgsector" type="varchar" size="100"/>
+            <!-- ORGANISMO PUBLICO -->
+            <field name="orgpublico" type="varchar" size="100"/>
+            <field name="orgsector" type="varchar" size="100"/>
 	
-        <field name="cementerio" type="varchar" size="100"/>
-      	<field name="sepultura" type="varchar" size="100"/>
-        <field name="sepsector" type="varchar" size="100"/>
-        <field name="sepcalle" type="varchar" size="100"/>
-        <field name="sepnumero" type="varchar" size="100"/>
-        <field name="sepfila" type="varchar" size="100"/>
+            <!-- CEMENTERIO -->
+            <field name="cementerio" type="varchar" size="100"/>
+            <field name="sepultura" type="varchar" size="100"/>
+            <field name="sepsector" type="varchar" size="100"/>
+            <field name="sepcalle" type="varchar" size="100"/>
+            <field name="sepnumero" type="varchar" size="100"/>
+            <field name="sepfila" type="varchar" size="100"/>
         
+            <!-- LUMINARIAS -->
+            <field name="mapa_lum" type="int"/>
+            <field name="calle_nombre_lum" type="varchar" size="100"/>
+            <field name="calle_lum" type="int" />
+            <field name="calle_nombre2_lum" type="varchar" size="100"/>
+            <field name="calle2_lum" type="int" />
+            <field name="callenro_lum" type="int"/>
+            <field name="tic_barrio_lum" type="varchar" size="100"/>
+            <field name="tic_cgpc_lum" type="varchar" size="100"/>
+            <field name="id_luminaria" type="varchar" size="100"/>
+            <field name="alternativa_lum" type="varchar" size="20"/>
+            
     </build>
 </make>
 
@@ -510,79 +532,96 @@
 
 <!-- INGRESO DE UN TICKET desde el call center -->
 <make object="table_maint">
-	<build out_file="tickets_maint_n.php" classname="class_tic_ticket" title="Alta de un ticket"
-	template_html="ticket.htm" default_operation="N" >
-
-    <include file="tickets_maint_n.js"/>
+    <build out_file="tickets_maint_n.php" classname="class_tic_ticket" title="Alta de un ticket" default_operation="N" template_html="ticket.htm" >
+        <include file="tickets_maint_n.js"/>
         <!-- Numero de ticket y año se asignan al salvar -->
 
         <!-- Problema primario -->
-		<group title="Asunto" id="reclamo" render_html="block">
+	<group title="Asunto" id="reclamo" render_html="block">
             <field name="forms" presentation="SEQUENCE" classparams="forms" isvisible="false"/>
 
             <field name="prestacion" presentation="PRESTACIONTREE" label="Prestación" cols="27" ismandatory="true" classparams="cuestionario"/>
-			<field name="rubro" presentation="RUBRO" label="Rubro" ismandatory="true" classparams="no_fill"/>
-			<field name="tic_nota_in" presentation="TEXTAREA" label="Observación" cols="60" rows="4"/>
+            <field name="rubro" presentation="RUBRO" label="Rubro" ismandatory="true" classparams="no_fill"/>
+            <field name="tic_nota_in" presentation="TEXTAREA" label="Observación" cols="60" rows="4"/>
             <field name="use_code" presentation="CURRENTUSER" label="Operador" isvisible="false"/>
             <field name="tipo_georef" presentation="TEXT" label="Tipo georeferencia" isvisible="false"/>
-            <field name="cuestionario" presentation="CUESTIONARIO" label="Cuestionario" isvisible="false" classparams="prestacion"/>
-			
-		</group>
+            <field name="cuestionario" presentation="TICKET::CUESTIONARIO" label="Cuestionario" isvisible="false" classparams="prestacion"/>		
+	</group>
 
         <!-- Ubicacion del problema -->
-		<group title="Ubicación DOMICILIO" id="domicilio" render_html="block">
-			<field name="calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
-			<field name="callenro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
+	<group title="Ubicación DOMICILIO" id="domicilio" render_html="block">
+            <field name="alternativa" presentation="TICKET::ALTERNATIVA_GEOREF" label="Alternativa"  initialvalue="NRO"/>
+            <field name="calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
             <field name="calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
+            
+            <field name="calle2" presentation="TICKET::CALLE" label="Cruza calle" cols="60" ismandatory="true" />
+            <field name="calle_nombre2" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
 
+            <field name="callenro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
+            
             <field name="piso" presentation="INT" label="Piso" cols="5" />
             <field name="dpto" presentation="TEXT" label="Departamento" cols="5" />
             <field name="nombre_fantasia" presentation="TEXT" label="Nom.fantasía" isvisible="false"/>
 
-			<field name="mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
-			<field name="tic_id_cuadra" presentation="TEXT" label="id cuadra" isvisible="false" readonly="true"/>
-            <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false" readonly="true"/>
-			<field name="tic_coordy" presentation="TEXT" label="y" isvisible="false" readonly="true"/>
+            <field name="mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
+            <field name="tic_id_cuadra" presentation="TEXT" label="id cuadra" isvisible="false" readonly="true"/>
+            <field name="tic_coordx" presentation="TEXT" label="lat" isvisible="false" readonly="true"/>
+            <field name="tic_coordy" presentation="TEXT" label="lng" isvisible="false" readonly="true"/>
 			
             <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
-			<field name="tic_cgpc" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
-		</group>
+            <field name="tic_cgpc" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
+        </group>
 
-		<group title="Ubicación VILLA" id="villa" render_html="block">
-			<field name="villa" presentation="VILLA" label="Villa" ismandatory="true" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
-			<field name="vilmanzana" presentation="TEXT" label="Manzana" cols="5" />
+        <group title="Ubicación VILLA" id="villa" render_html="block">
+            <field name="villa" presentation="VILLA" label="Villa" ismandatory="true" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
+            <field name="vilmanzana" presentation="TEXT" label="Manzana" cols="5" />
             <field name="vilcasa" presentation="TEXT" label="Casa" cols="5" />
-		</group>
+        </group>
 
-		<group title="Ubicación ORGANISMO PUBLICO" id="orgpublico" render_html="block">
-			<field name="orgpublico" presentation="ORGPUBLICO" label="Organismo público" ismandatory="true" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
-			<field name="orgsector" presentation="TEXT" label="Area o sector" />
-		</group>
+        <group title="Ubicación ORGANISMO PUBLICO" id="orgpublico" render_html="block">
+            <field name="orgpublico" presentation="ORGPUBLICO" label="Organismo público" ismandatory="true" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
+            <field name="orgsector" presentation="TEXT" label="Area o sector" />
+        </group>
 
-		<group title="Ubicación PLAZA" id="plaza" render_html="block">
-			<field name="plaza" presentation="PLAZA" label="Plaza o parque" ismandatory="true" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
-		</group>
+        <group title="Ubicación PLAZA" id="plaza" render_html="block">
+            <field name="plaza" presentation="PLAZA" label="Plaza o parque" ismandatory="true" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
+        </group>
 		
-		<group title="Ubicación CEMENTERIO" id="cementerio" render_html="block">
-			<field name="cementerio" presentation="CEMENTERIO" label="Cementerio" ismandatory="true" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
-			<field name="sepultura" presentation="SEPULTURA" label="Tipo de sepultura" />
+        <group title="Ubicación CEMENTERIO" id="cementerio" render_html="block">
+            <field name="cementerio" presentation="CEMENTERIO" label="Cementerio" ismandatory="true" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
+            <field name="sepultura" presentation="SEPULTURA" label="Tipo de sepultura" />
             <field name="sepsector" presentation="TEXT" label="Nombre panteon o boveda" cols="5" />
             <field name="sepcalle" presentation="TEXT" label="Calle" cols="5" />
             <field name="sepnumero" presentation="TEXT" label="Numero" cols="5" />
             <field name="sepfila" presentation="TEXT" label="Fila" cols="5" />
-		</group>
+        </group>
+
+        <group title="Ubicación LUMINARIA" id="luminaria" render_html="block">
+            <field name="alternativa_lum" presentation="TICKET::ALTERNATIVA_GEOREF" label="Alternativa" initialvalue="NRO"/>
+            <field name="calle_lum" presentation="TICKET::CALLE" label="Calle" cols="100" ismandatory="true" />
+            <field name="calle_nombre_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
+            
+            <field name="calle2_lum" presentation="TICKET::CALLE" label="Cruza calle" cols="100" ismandatory="true" />
+            <field name="calle_nombre2_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
+            
+            <field name="callenro_lum" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
+            <field name="mapa_lum" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
+            <field name="tic_barrio_lum" label="Barrio" presentation="TEXT" readonly="true"/>
+            <field name="tic_cgpc_lum" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
+            <field name="id_luminaria" label="Luminaria" presentation="TEXT" readonly="true" isvisible="true"/>
+        </group>
 		
 
-		<!-- Botones de accion para redireccionar después de salvar la página -->
-		<action operation="N" label="Nuevo ticket" target="tickets_maint_n.php?OP=N" note="Cargar nuevo ticket"/>
+        <!-- Botones de accion para redireccionar después de salvar la página -->
+        <action operation="N" label="Nuevo ticket" target="tickets_maint_n.php?OP=N" note="Cargar nuevo ticket"/>
 
-		<action operation="P" label="Imprimir comprobante" target="ticket_maint.php?OP=P" note="Imprimir comprobante">
-			<sendfield name="forms" classname="class_tic_ticket"/>
-			<sendfield name="tic_nro" classname="class_tic_ticket"/>
-		</action>
+        <action operation="P" label="Imprimir comprobante" target="ticket_maint.php?OP=P" note="Imprimir comprobante">
+            <sendfield name="forms" classname="class_tic_ticket"/>
+            <sendfield name="tic_nro" classname="class_tic_ticket"/>
+        </action>
 
-		<action operation="L" label="Consulta de tickets" target="tickets.php?last=1&amp;OP=L" note="Consulta de tickets"/>
-	</build>
+        <action operation="L" label="Consulta de tickets" target="tickets.php?last=1&amp;OP=L" note="Consulta de tickets"/>
+    </build>
 </make>
 
 
@@ -742,7 +781,7 @@
                 <field name="tru_code" presentation="RUBRO" label="Rubro"/>
             </column>
             <column title="Cuestionario" order="3">
-                <field name="ttp_cuestionario" presentation="CUESTIONARIO" label="Cuestionario"/>
+                <field name="ttp_cuestionario" presentation="TICKET::CUESTIONARIO" label="Cuestionario"/>
             </column>
             <column title="Prioridad" order="4">
                 <field name="ttp_prioridad" presentation="PRIORIDAD" label="Prioridad"/>

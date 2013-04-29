@@ -107,6 +107,6 @@ class cuestionario {
             $this->tpr_tipo_preg = $row['tpr_tipo_preg'];         
         }
     }
-
+    
 }
 ?>

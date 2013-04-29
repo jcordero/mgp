@@ -1,7 +1,7 @@
 <?php
 
-//$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
-$url = "http://mgp/mgp/webservices/tickets";
+$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
+//$url = "http://mgp/mgp/webservices/tickets";
 //$url = "http://54.214.10.182/mgp/webservices/tickets";
     
 $secret = 'hasdYR33n1j34j#4jn*(-s';
