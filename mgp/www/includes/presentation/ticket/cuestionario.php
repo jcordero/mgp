@@ -320,7 +320,7 @@ class CDH_CUESTIONARIO extends CDataHandler
         $re2 = $primary_db->do_execute($sql2);
         while( $row=$primary_db->_fetch_row($re2) )
         {
-            $h.='<div class="cuest"><div class"preg">'.$row['tpr_preg'].'</div><div class="resp">'.$row['tpr_respuesta'].'</div></div>';
+            $h.='<div class="cuest form-inline"><span class"preg">'.$row['tpr_preg'].':</span> <span class="resp">'.$row['tpr_respuesta'].'</span></div>';
         }
         $h.='</div>';
         return $h;

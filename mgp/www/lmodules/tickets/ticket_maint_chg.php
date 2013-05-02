@@ -497,13 +497,13 @@ class class_tic_ticket_upd_m extends cclass_maint {
 		$this->m_render_html = 'BLOCK';
 		$this->m_render_pdml = 'BLOCK';
 		$this->m_obj = new class_tic_ticket_upd();
-		$this->m_next_page = 'tickets.php?last=1&OP=L'; //Pagina a mostrar luego de enviar/cancelar el formulario
-		$this->m_this_page = 'ticket_maint.php';
+		$this->m_next_page = '/index.php'; //Pagina a mostrar luego de enviar/cancelar el formulario
+		$this->m_this_page = 'ticket_maint_chg.php';
     	$this->m_save_to_type = 'DB'; //Si el formulario accede directo a las tablas o hace una transaccion
     	$this->m_view = ''; //Si se presenta como sabana o como wizard
     	$this->m_operation_allow = 'VNMPSDB'; //Lista de operaciones permitidas
     	$this->m_operation_default = 'V'; //Operacion por defecto
-    	$this->m_title = 'Mantenimiento de un ticket';// Titulo del formulario
+    	$this->m_title = 'Cambio de estado de un ticket';// Titulo del formulario
     	$this->m_comment = '';// Comentario del formulario
     	$this->m_event_n = '';// Evento al ingresar nuevo
     	$this->m_event_m = '';// Evento al modificar
@@ -534,6 +534,7 @@ class class_tic_ticket_upd_m extends cclass_maint {
     function RenderJSIncludes() {
         $html = '';
         $html.="<link rel='stylesheet' type='text/css' href='ticket_maint.css' media='screen,print' />";
+        $html.="<script type='text/javascript' src='ticket_maint.js'></script>";
 
         return $html;
     }

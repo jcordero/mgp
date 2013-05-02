@@ -6,3 +6,6 @@ top: -30px;
 z-index: 1;
 display: block;
 }
+
+.cuest .resp { font-style: italic;}
+.cuest .preg { font-weight: bold;}

@@ -21,16 +21,11 @@ if(!class_exists('home_operator'))
 {
 	class home_operator
 	{
-		public function Render($context)
-		{
-			global $primary_db;
-			$content = array(); 
-			$errors = array(); 
-                     
-//Consulta de tickets
-            //$nro = new CField(array("presentation"=>"INT","name"=>"tickets_nro","label"=>"Número","isvisible"=>true,"cols"=>10,"search"=>"fix"));
-            //$anio = new CField(array("presentation"=>"INT","name"=>"tickets_anio","label"=>"Año","isvisible"=>true,"cols"=>10,"search"=>"fix"));
-            
+            public function Render($context)
+            {
+                $content = array(); 
+                $errors = array(); 
+                                 
          	$tab2 = '
          	<div id="offline" class="alert">
 	  				<button type="button" class="close" data-dismiss="alert">&times;</button>

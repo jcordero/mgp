@@ -78,7 +78,7 @@ class CDH_TICKETS extends CDataHandler
         
         function updateTicket($ticket) {
             global $sess;
-            return $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=M&tic_nro=".$ticket."&next=/index.php");
+            return $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint_chg.php?OP=M&tic_nro=".$ticket."&next=/index.php");
         }
 
 

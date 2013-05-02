@@ -37,14 +37,7 @@ class CDH_HOME extends CDataHandler
     {
         global $primary_db, $sess;
         $conjunto = array();
-        $url="";
-        $apellido="";
-        $nombres="";
-        $doc="";
-        $ani="";
-        $user_session = "";
-		$obj_cops = null;
-		$res = array();
+        $res = array();
 		
         list($doc,$apellido,$nombres,$ani,$user_session,$pais) = explode('|',$params);
         
@@ -144,44 +137,79 @@ class CDH_HOME extends CDataHandler
     }
 
     private function DOCtoPAIS($tipo_doc) {
-    	if($tipo_doc="CIBO") $pais=="Bolivia";
-        elseif($tipo_doc="CIBR") $pais=="Brasil";
-        elseif($tipo_doc="CICH") $pais=="Chile";
-        elseif($tipo_doc="CIPA") $pais=="Paraguay";
-        elseif($tipo_doc="CIPE") $pais=="Perú";
-        elseif($tipo_doc="CIUR") $pais=="Uruguay";
-        elseif($tipo_doc="CI" || $tipo_doc="LE" || $tipo_doc="DNI" ) $pais=="Argentina";
-		else $pais = ""; //$tipo_doc = "PAS";
-  		
-		return $pais;
+        
+    	switch($tipo_doc) {
+            case "CIBO":
+                $pais="Bolivia";
+                break;
+            case "CIBR":
+                $pais="Brasil";
+                break;
+            case "CICH":
+                $pais="Chile";
+                brea;
+            case "CIPA":
+                $pais="Paraguay";
+                break;
+            case "CIPE":
+                $pais="Perú";
+                break;
+            case "CIUR": 
+                $pais="Uruguay";
+                break;
+            case "CI":
+            case "LE":
+            case "DNI":
+                $pais="Argentina";
+                break;
+            default:
+                $pais = ""; //$tipo_doc = "PAS";
+        }
+        return $pais;
     }
     
     private function PAIStoDOC($pais, $tipo_doc) {
-    	if($pais=="Bolivia") $tipo_doc = "CIBO";
-        elseif($pais=="Brasil") $tipo_doc = "CIBR";
-        elseif($pais=="Chile") $tipo_doc = "CICH";
-        elseif($pais=="Paraguay") $tipo_doc = "CIPA";
-        elseif($pais=="Perú") $tipo_doc = "CIPE";
-        elseif($pais=="Uruguay") $tipo_doc = "CIUR";
-        elseif($pais=="Argentina") { /* Acepto cualquier tipo de documento */}
-		else $tipo_doc = "PAS";
-		
+    	switch($pais) {
+            case "Bolivia":
+                $tipo_doc = "CIBO";
+                break;
+            case "Brasil":
+                $tipo_doc = "CIBR";
+                break;
+            case "Chile":
+                $tipo_doc = "CICH";
+                break;
+            case "Paraguay":
+                $tipo_doc = "CIPA";
+                break;
+            case "Perú":
+                $tipo_doc = "CIPE";
+                break;
+            case "Uruguay":
+                $tipo_doc = "CIUR";
+                break;
+            case "Argentina":  
+                /* Acepto cualquier tipo de documento */
+                break;
+            default:
+                $tipo_doc = "PAS";
+        }
 		return $tipo_doc;
     }
     
     private function calcularEdad($nacimiento) {
     	try {
-    		//Nacimiento 22/09/1968
-    		list($a,$m,$d) = explode("-",$nacimiento);
-    		$ahora = date("Y");
-    		
-    		$edad = intval($ahora) - intval($a);
-			if($edad)
-	    		return $edad;
+            //Nacimiento 22/09/1968
+            list($a,$m,$d) = explode("-",$nacimiento);
+            $ahora = date("Y");
+
+            $edad = intval($ahora) - intval($a);
+            if($edad)
+                    return $edad;
     	}
     	catch(Exception $e)
     	{
-    		error_log("calcularEdad($nacimiento) $e");
+            error_log("calcularEdad($nacimiento) $e");
     	}
     	return 0;
     }
@@ -302,7 +330,6 @@ class CDH_HOME extends CDataHandler
         global $primary_db,$sess;
         $nro="";
         $anio="";
-        $ciu_code = "";
 
         $partes = explode('|',$params);
         if(count($partes)==2)
@@ -335,10 +362,10 @@ class CDH_HOME extends CDataHandler
         	$re = $primary_db->do_execute($sql);
 	        while( $row=$primary_db->_fetch_row($re) )
 	        {
-	            //Decodifico la direccion 
-        		$xml = htmlspecialchars_decode( $row["ubicacion"], ENT_QUOTES );
-        		$row = array_merge($row, array("ubicacion_text" => $this->ubicacionJSONToText($xml) ));
-            	$conjunto[] = $row;
+                    //Decodifico la direccion 
+                    $xml = htmlspecialchars_decode( $row["ubicacion"], ENT_QUOTES );
+                    $row = array_merge($row, array("ubicacion_text" => $this->ubicacionJSONToText($xml) ));
+                    $conjunto[] = $row;
 	        }
         }
         else
@@ -347,22 +374,22 @@ class CDH_HOME extends CDataHandler
             {
                 $sql = "SELECT * FROM v_ticket_ciu WHERE ciu_code='$ciu_code'";
             	$re = $primary_db->do_execute($sql);
-        		while( $row=$primary_db->_fetch_row($re) )
-        		{
-        			//Decodifico la direccion 
-        			$xml = htmlspecialchars_decode( $row["tic_lugar"], ENT_QUOTES );
-        			$conjunto[] = array(
-            				'tipo'			=> $row['tic_tipo'],
-            				'anio'			=> $row['tic_anio'],
-            				'numero'		=> $row['tic_numero'],
-            				'prestacion'	=> $row['tpr_detalle'],
-            				'ubicacion'		=> $row['tic_lugar'],
-            				'estado'		=> $row['tic_estado'],
-            				'ciudadano'		=> $row['ciu_nombres'].' '.$row['ciu_apellido'],
-            				'ciu_code'		=> $row['ciu_code'],
-        					'ubicacion_text'=> $this->ubicacionJSONToText($xml),
-            		);
-        		}
+                while( $row=$primary_db->_fetch_row($re) )
+                {
+                    //Decodifico la direccion 
+                    $xml = htmlspecialchars_decode( $row["tic_lugar"], ENT_QUOTES );
+                    $conjunto[] = array(
+                            'tipo'		=> $row['tic_tipo'],
+                            'anio'		=> $row['tic_anio'],
+                            'numero'		=> $row['tic_numero'],
+                            'prestacion'	=> $row['tpr_detalle'],
+                            'ubicacion'		=> $row['tic_lugar'],
+                            'estado'		=> $row['tic_estado'],
+                            'ciudadano'		=> $row['ciu_nombres'].' '.$row['ciu_apellido'],
+                            'ciu_code'		=> $row['ciu_code'],
+                            'ubicacion_text'    => $this->ubicacionJSONToText($xml),
+                    );
+                }
             }
         }
  
@@ -372,27 +399,26 @@ class CDH_HOME extends CDataHandler
         	//Ver reclamo -> Columna 100
         	if($elemento['tipo']=="RECLAMO")
         	{
-        		
-        		$url = $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=V&tic_anio={$elemento['anio']}&tic_nro={$elemento['numero']}&tic_tipo={$elemento['tipo']}");
-        		$conjunto[$key]['url_ver'] = $url;
-        		$conjunto[$key]['ver_reclamo'] = "Ver Reclamo";
-        		
-        		//Reiterar -> Columna 101
-        		$url = $sess->encodeURL("/lmodules/tickets/reclamos_reit.php?OP=M&anio={$elemento['anio']}&numero={$elemento['numero']}&derivacion=-");
-        		$conjunto[$key]['url_reiterar'] = $url;
-        		$conjunto[$key]['reiterar'] = "Reiterar";
-        		//$conjunto[$key]['reiterar'] = "";
-        		$conjunto[$key]['ver_ticket'] = "";
+                    $url1 = $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=V&tic_anio={$elemento['anio']}&tic_nro={$elemento['numero']}&tic_tipo={$elemento['tipo']}&next=/index.php");
+                    $conjunto[$key]['url_ver'] = $url1;
+                    $conjunto[$key]['ver_reclamo'] = "Ver Reclamo";
+
+                    //Reiterar -> Columna 101
+                    $url2 = $sess->encodeURL("/lmodules/tickets/reclamos_reit.php?OP=M&anio={$elemento['anio']}&numero={$elemento['numero']}&derivacion=-");
+                    $conjunto[$key]['url_reiterar'] = $url2;
+                    $conjunto[$key]['reiterar'] = "Reiterar";
+                    
+                    $conjunto[$key]['ver_ticket'] = "";
         	}
         	else 
         	{
-        		//Es una denuncia / solicitud / queja -> Columna 100
-        		$url = $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=V&tic_anio={$elemento['anio']}&tic_nro={$elemento['numero']}&tic_tipo={$elemento['tipo']}");
-        		$conjunto[$key]['url_ver'] = $url;
-        		
-        		$conjunto[$key]['ver_reclamo'] = "";
-        		$conjunto[$key]['reiterar'] = "";
-        		$conjunto[$key]['ver_ticket'] = "Ver Ticket";
+                    //Es una denuncia / solicitud / queja -> Columna 100
+                    $url3 = $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=V&tic_anio={$elemento['anio']}&tic_nro={$elemento['numero']}&tic_tipo={$elemento['tipo']}");
+                    $conjunto[$key]['url_ver'] = $url3;
+
+                    $conjunto[$key]['ver_reclamo'] = "";
+                    $conjunto[$key]['reiterar'] = "";
+                    $conjunto[$key]['ver_ticket'] = "Ver Ticket";
         	}
         }
         return json_encode($conjunto);
