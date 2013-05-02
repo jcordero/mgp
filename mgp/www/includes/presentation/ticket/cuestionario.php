@@ -177,8 +177,6 @@ class CDH_CUESTIONARIO extends CDataHandler
     function RenderTableEdit($cn,$frmname,$table="",$row=0,$ro=false,$name="",$suffix="")
     {
         $fld = $this->m_parent; //Este campo
-        $obj_tabla = $fld->m_parent; //Modelo (estoy en una tabla)
-        $obj = $obj_tabla->m_parent;
         
         if($name=="")
             $name = $this->getName($table,$row);
@@ -188,22 +186,21 @@ class CDH_CUESTIONARIO extends CDataHandler
         else
             $id = $frmname."_".$name;
 
-        
-        $obj_tpr_code = ($obj_tabla ? $obj_tabla->getField('tpr_code') : null);
-        $tpr_code = ($obj_tpr_code ? $obj_tpr_code->getValue() : '');
+        try {
+            $obj_tabla = $fld->m_parent; //Modelo (estoy en una tabla)
+            $obj = $obj_tabla->m_parent;
 
-        $obj_tic_nro = ($obj ? $obj->getField('tic_nro') : null);
-        $tic_nro = ($obj_tic_nro ? $obj_tic_nro->getValue() : '');
+            $obj_tpr_code = (($obj_tabla && method_exists($obj_tabla, 'getField')) ? $obj_tabla->getField('tpr_code') : null);
+            $tpr_code = ($obj_tpr_code ? $obj_tpr_code->getValue() : '');
 
-        
-//        error_log("CDH_CUESTIONARIO::RenderTableEdit(frmname=$frmname,table=$table,row=$row,name=$name,ro=".($ro ? 'si':'no').") tpr_code=$tpr_code tic_nro=$tic_nro \n"); 
-//            this=".get_class($this)." padre:".get_class($this->m_parent)."\n
-//            fld=".get_class($fld)." padre:".get_class($fld->m_parent)."\n
-//            obj_tabla=".get_class($obj_tabla)." padre:".get_class($obj)." ancestro del padre:".  get_parent_class($obj)."\n
-//            lista de campos del padre: ".print_r(array_keys($obj->m_fields),true)."\n
-//            valor del campo tic_nro:".$obj->m_fields['tic_nro']->readValue() 
-//        );
- 
+            $obj_tic_nro = (($obj && method_exists($obj, 'getField')) ? $obj->getField('tic_nro') : null);
+            $tic_nro = ($obj_tic_nro ? $obj_tic_nro->getValue() : '');
+        } catch (Exception $e) {
+            error_log('CDH_CUESTIONARIO::RenderTableEdit() '.$e->getMessage());
+            $tpr_code = '';
+            $tic_nro = 0;
+        }
+         
         
         //Compongo el valor del campo
         $mostrar = self::htmlVerCuestionario($tic_nro, $tpr_code);
