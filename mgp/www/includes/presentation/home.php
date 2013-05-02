@@ -45,7 +45,7 @@ class CDH_HOME extends CDataHandler
         if(strlen($doc)<=8 && $apellido=='' && $ani=="")
         {
             $this->setAnonimo();
-            return json_encode(array( "ciudadanos"=>$conjunto, "url"=>$url));
+            return json_encode(array( "ciudadanos"=>$conjunto, "url"=>''));
         }
 
         //Esta declarado el doc?, lo busco por ahi
@@ -127,10 +127,10 @@ class CDH_HOME extends CDataHandler
 
         //No hay datos locales... Pido que se carguen los datos a mano. (Ver como hacer que ser carguen desde el SIGEHOS)
         if(count($conjunto)==0)
-        {
             $url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/ciudadanos_maint_n.php?OP=N&tmp_doc={$doc}&ciu_tel_fijo={$ani}&ciu_tel_movil={$ani}&ciu_nacionalidad={$pais}");
-        }
-                
+        else
+            $url = '';
+        
         $resp = array("ciudadanos"=>$conjunto, "url"=>$url);
         error_log("HOME::doBuscar($params) RESPONDE: ".print_r($resp,true));
         return json_encode($resp);
@@ -348,28 +348,28 @@ class CDH_HOME extends CDataHandler
         //No hay datos para buscar... (ciu_code=0 es ciudadano ANONIMO)
        	if( $ciu_code=="" || $ciu_code==0)
         {
-        	//Hay un fulano logeado?
-           	return json_encode(array());
+            //Hay un fulano logeado?
+            return json_encode(array());
         }
 
         //Busco por codigo en los reclamos
         $conjunto = array();
         if($nro!="" && $anio!="")
         {        	            
-	        //Busco el ticket pedido
-	        $sql = "SELECT * FROM tic_ticket tic JOIN tic_ticket_prestaciones pre ON tic.tic_nro=pre.tic_nro
-	        		WHERE tic.tic_nro='{$nro}' AND tic.tic_anio='{$anio}'";
-        	$re = $primary_db->do_execute($sql);
-	        while( $row=$primary_db->_fetch_row($re) )
-	        {
-                    //Decodifico la direccion 
-                    $xml = htmlspecialchars_decode( $row["ubicacion"], ENT_QUOTES );
-                    $row = array_merge($row, array("ubicacion_text" => $this->ubicacionJSONToText($xml) ));
-                    $conjunto[] = $row;
-	        }
+            //Busco el ticket pedido
+            $sql = "SELECT * FROM tic_ticket tic JOIN tic_ticket_prestaciones pre ON tic.tic_nro=pre.tic_nro
+                            WHERE tic.tic_nro='{$nro}' AND tic.tic_anio='{$anio}'";
+            $re = $primary_db->do_execute($sql);
+            while( $row1=$primary_db->_fetch_row($re) )
+            {
+                //Decodifico la direccion 
+                $json = htmlspecialchars_decode( $row1["ubicacion"], ENT_QUOTES );
+                $conjunto[] = array_merge($row1, array("ubicacion_text" => $this->ubicacionJSONToText($json) ));
+            }
         }
         else
         {
+            //Busco por pertenecientes a un ciudadano
             if($ciu_code!='')
             {
                 $sql = "SELECT * FROM v_ticket_ciu WHERE ciu_code='$ciu_code'";
@@ -388,6 +388,7 @@ class CDH_HOME extends CDataHandler
                             'ciudadano'		=> $row['ciu_nombres'].' '.$row['ciu_apellido'],
                             'ciu_code'		=> $row['ciu_code'],
                             'ubicacion_text'    => $this->ubicacionJSONToText($xml),
+                            'tic_nro'           => $row['tic_nro'],
                     );
                 }
             }
@@ -404,7 +405,7 @@ class CDH_HOME extends CDataHandler
                     $conjunto[$key]['ver_reclamo'] = "Ver Reclamo";
 
                     //Reiterar -> Columna 101
-                    $url2 = $sess->encodeURL("/lmodules/tickets/reclamos_reit.php?OP=M&anio={$elemento['anio']}&numero={$elemento['numero']}&derivacion=-");
+                    $url2 = "javascript:reiterar({$elemento['tic_nro']})";
                     $conjunto[$key]['url_reiterar'] = $url2;
                     $conjunto[$key]['reiterar'] = "Reiterar";
                     
@@ -555,36 +556,31 @@ class CDH_HOME extends CDataHandler
     function doBuscarContactos($params)
     {
         global $primary_db,$sess;
-        $id="";
-        $desde="";
-        $hasta="";
-        $user_session = "";
-		$conjunto = array();
+        $conjunto = array();
 
-		//Expando los parametros
+	//Expando los parametros
         $partes = explode('|',$params);
         if(count($partes)==4)
         {
             $id = $partes[0];
             $desde = $partes[1];
             $hasta = $partes[2];
-            $user_session = $partes[3];
         }
         else
         {
-        	error_log("doBuscarContactos() ERROR Espero 4 parametros. Recibi: $params");
-        	return json_encode($conjunto);
+            error_log("doBuscarContactos() Consulta sin parametros. Recibi: $params");
+            $id=$this->m_person->person_id;
+            $desde="";
+            $hasta="";
         }
 
         //Es el usuario ANONIMO?
         if($id==0)
-        {
-        	return json_encode($conjunto);
-        }
+            return json_encode($conjunto);
                 
         //Busco los contactos de este usuario
         $sql = "SELECT cse_code,cse_ani,cse_tstamp,cse_duracion,us.use_name as use_code,cse_nota ";
-        $sql.= "FROM ciu_sesiones se LEFT OUTER JOIN sec_users us ON se.use_code=us.use_code WHERE ciu_code='$id' AND cse_duracion>0";
+        $sql.= "FROM ciu_sesiones se LEFT OUTER JOIN sec_users us ON se.use_code=us.use_code WHERE ciu_code='{$id}' AND cse_duracion>0";
         if($desde!="" && $hasta!="")
         {
             $sql.= " AND cse_tstamp between '$desde' and '$hasta'";

@@ -1,11 +1,20 @@
 
 #mapa {
-position: absolute;
-left: 700px;
-top: -30px;
-z-index: 1;
-display: block;
+    position: absolute;
+    left: 700px;
+    top: -30px;
+    display: block;
+    z-index: 10;
 }
+
+#mapa img {
+    z-index: 10;
+    width: 350px;
+    height: 250px;
+}
+
+.k-ie #mapa {left: 550px;}
 
 .cuest .resp { font-style: italic;}
 .cuest .preg { font-weight: bold;}
+

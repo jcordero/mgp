@@ -485,7 +485,7 @@ TD.log{ font: 10px 'Courier New', Courier, arial}
 
 .itm {
     border-bottom: 1px dotted #EEEEEE;
-    background: #fff;
+    /* background: #fff; */
     clear: both;
     color: #303030;
     font: 9pt arial,sans-serif;
@@ -493,6 +493,7 @@ TD.log{ font: 10px 'Courier New', Courier, arial}
     min-height: 28px;
     padding-bottom: 3px;
     padding-top: 5px;
+    z-index: 1;
 }
 
 .itm:nth-child(odd){
