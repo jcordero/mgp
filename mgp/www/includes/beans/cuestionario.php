@@ -108,5 +108,33 @@ class cuestionario {
         }
     }
     
+    
+    /**
+     * Cargo el cuestionario desde la UI
+     * 
+     * @global type $primary_db
+     * @param type $obj
+     * @param type $p
+     * @return \cuestionario
+     */
+    static function fromForm($obj, $p) {
+        global $primary_db;
+        $pregs = array();
+        
+        //Busco las preguntas del cuestionario que correponde a la prestación
+        $rs = $primary_db->do_execute("select * from tic_prestaciones_cuest where tpr_code='{$p->tpr_code}'");
+        while( $row = $primary_db->_fetch_row($rs) ) {
+            $c = new cuestionario();
+            $c->tcu_code = $row['tcu_code'];
+            $c->tpr_miciudad = $row['tpr_miciudad'];
+            $c->tpr_preg = $row['tpr_preg'];
+            $c->tpr_respuesta = $_POST['cuest_'.$c->tcu_code];
+            $c->tpr_tipo_preg = $row['tpr_tipo_preg'];        
+        
+            $pregs[] = $c;
+        }
+        
+        return $pregs;
+    }
 }
 ?>

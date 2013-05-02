@@ -34,9 +34,13 @@ $(document).ready(function() {
         if( $(this).val()==='NRO' ) {
             $('#calle2').hide();
             $('#callenro').show();
+            callenro.m_mandatory = true;
+            calle2.m_mandatory = false;
         } else {
             $('#callenro').hide();
             $('#calle2').show();
+            callenro.m_mandatory = false;
+            calle2.m_mandatory = true;
         }
         $('#m_calle2').val('');
         $('#m_callenro').val('');
@@ -47,9 +51,13 @@ $(document).ready(function() {
         if( $(this).val()==='NRO' ) {
             $('#calle2_lum').hide();
             $('#callenro_lum').show();
+            callenro_lum.m_mandatory = true;
+            calle2_lum.m_mandatory = false;
         } else {
             $('#callenro_lum').hide();
             $('#calle2_lum').show();
+            callenro_lum.m_mandatory = false;
+            calle2_lum.m_mandatory = true;
         }         
         $('#m_calle2_lum').val('');
         $('#m_callenro_lum').val('');
@@ -57,7 +65,6 @@ $(document).ready(function() {
 
     $('#valida_direccion').click(valida_direccion);
     $('#cambia_direccion').hide().click(cambia_direccion);
-    
     
     $('#valida_direccion_lum').click(valida_direccion_lum);
     $('#cambia_direccion_lum').hide().click(cambia_direccion_lum);

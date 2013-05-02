@@ -19,35 +19,37 @@ class class_tic_ticket_upd_den extends cobjbase {
 
         //-- CField( Array(Parametros) )
         $this->m_fields['tic_nro'] = new CField(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $this->m_fields['tic_anio'] = new CField(Array("Name"=>"tic_anio", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $this->m_fields['tic_tipo'] = new CField(Array("Name"=>"tic_tipo", "Size"=>20, "IsForDB"=>true, "Order"=>103, "IsNullable"=>false));
-        $this->m_fields['tic_tstamp_in'] = new CField(Array("Name"=>"tic_tstamp_in", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104));
-        $this->m_fields['use_code'] = new CField(Array("Name"=>"use_code", "Size"=>50, "IsForDB"=>true, "Order"=>105));
-        $this->m_fields['tic_nota_in'] = new CField(Array("Name"=>"tic_nota_in", "Size"=>500, "IsForDB"=>true, "Order"=>106));
-        $this->m_fields['tic_estado'] = new CField(Array("Name"=>"tic_estado", "Size"=>50, "IsForDB"=>true, "Order"=>107));
-        $this->m_fields['tic_lugar'] = new CField(Array("Name"=>"tic_lugar", "Size"=>1000, "IsForDB"=>true, "Order"=>108));
-        $this->m_fields['tic_barrio'] = new CField(Array("Name"=>"tic_barrio", "Size"=>50, "IsForDB"=>true, "Order"=>109));
-        $this->m_fields['tic_cgpc'] = new CField(Array("Name"=>"tic_cgpc", "Size"=>20, "IsForDB"=>true, "Order"=>110));
-        $this->m_fields['tic_coordx'] = new CField(Array("Name"=>"tic_coordx", "Type"=>"double", "IsForDB"=>true, "Order"=>111));
-        $this->m_fields['tic_coordy'] = new CField(Array("Name"=>"tic_coordy", "Type"=>"double", "IsForDB"=>true, "Order"=>112));
-        $this->m_fields['tic_id_cuadra'] = new CField(Array("Name"=>"tic_id_cuadra", "Type"=>"int", "IsForDB"=>true, "Order"=>113));
-        $this->m_fields['tic_forms'] = new CField(Array("Name"=>"tic_forms", "Type"=>"int", "IsForDB"=>true, "Order"=>114));
-        $this->m_fields['tic_canal'] = new CField(Array("Name"=>"tic_canal", "Size"=>20, "IsForDB"=>true, "Order"=>115));
-        $this->m_fields['tic_tstamp_plazo'] = new CField(Array("Name"=>"tic_tstamp_plazo", "Type"=>"datetime", "IsForDB"=>true, "Order"=>116));
-        $this->m_fields['tic_tstamp_cierre'] = new CField(Array("Name"=>"tic_tstamp_cierre", "Type"=>"datetime", "IsForDB"=>true, "Order"=>117));
-        $this->m_fields['tic_calle_nombre'] = new CField(Array("Name"=>"tic_calle_nombre", "Size"=>100, "IsForDB"=>true, "Order"=>118));
-        $this->m_fields['tic_nro_puerta'] = new CField(Array("Name"=>"tic_nro_puerta", "Type"=>"int", "IsForDB"=>true, "Order"=>119));
-        $this->m_fields['tic_nro_asociado'] = new CField(Array("Name"=>"tic_nro_asociado", "Type"=>"int", "IsForDB"=>true, "Order"=>120));
-        $this->m_fields['tic_identificador'] = new CField(Array("Name"=>"tic_identificador", "Size"=>45, "IsForDB"=>true, "Order"=>121));
-        $this->m_fields['mapa'] = new CField(Array("Name"=>"mapa", "Size"=>50, "Order"=>22));
-        $this->m_fields['acc_tpr_code'] = new CField(Array("Name"=>"acc_tpr_code", "Size"=>50, "Order"=>23));
-        $this->m_fields['acc_estado'] = new CField(Array("Name"=>"acc_estado", "Size"=>50, "Order"=>24));
-        $this->m_fields['acc_nota'] = new CField(Array("Name"=>"acc_nota", "Size"=>500, "Order"=>25));
-        $this->m_fields['acc_use_code'] = new CField(Array("Name"=>"acc_use_code", "Size"=>50, "Order"=>26));
-        $this->m_fields['acc_tstamp'] = new CField(Array("Name"=>"acc_tstamp", "Type"=>"datetime", "Order"=>27));
-        $this->m_fields['acc_tic_nro'] = new CField(Array("Name"=>"acc_tic_nro", "Type"=>"int", "Order"=>28));
-        $this->m_fields['acc_tic_anio'] = new CField(Array("Name"=>"acc_tic_anio", "Type"=>"int", "Order"=>29));
-        $this->m_fields['acc_tor_code'] = new CField(Array("Name"=>"acc_tor_code", "Type"=>"int", "Order"=>30));
+        $this->m_fields['tic_numero'] = new CField(Array("Name"=>"tic_numero", "Type"=>"int", "IsForDB"=>true, "Order"=>102));
+        $this->m_fields['tic_anio'] = new CField(Array("Name"=>"tic_anio", "Type"=>"int", "IsForDB"=>true, "Order"=>103));
+        $this->m_fields['tic_tipo'] = new CField(Array("Name"=>"tic_tipo", "Size"=>20, "IsForDB"=>true, "Order"=>104));
+        $this->m_fields['tic_tstamp_in'] = new CField(Array("Name"=>"tic_tstamp_in", "Type"=>"datetime", "IsForDB"=>true, "Order"=>105));
+        $this->m_fields['use_code'] = new CField(Array("Name"=>"use_code", "Size"=>50, "IsForDB"=>true, "Order"=>106));
+        $this->m_fields['tic_nota_in'] = new CField(Array("Name"=>"tic_nota_in", "Size"=>500, "IsForDB"=>true, "Order"=>107));
+        $this->m_fields['tic_estado'] = new CField(Array("Name"=>"tic_estado", "Size"=>50, "IsForDB"=>true, "Order"=>108));
+        $this->m_fields['tic_lugar'] = new CField(Array("Name"=>"tic_lugar", "Size"=>1000, "IsForDB"=>true, "Order"=>109));
+        $this->m_fields['tic_barrio'] = new CField(Array("Name"=>"tic_barrio", "Size"=>50, "IsForDB"=>true, "Order"=>110));
+        $this->m_fields['tic_cgpc'] = new CField(Array("Name"=>"tic_cgpc", "Size"=>20, "IsForDB"=>true, "Order"=>111));
+        $this->m_fields['tic_coordx'] = new CField(Array("Name"=>"tic_coordx", "Type"=>"double", "IsForDB"=>true, "Order"=>112));
+        $this->m_fields['tic_coordy'] = new CField(Array("Name"=>"tic_coordy", "Type"=>"double", "IsForDB"=>true, "Order"=>113));
+        $this->m_fields['tic_id_cuadra'] = new CField(Array("Name"=>"tic_id_cuadra", "Type"=>"int", "IsForDB"=>true, "Order"=>114));
+        $this->m_fields['tic_forms'] = new CField(Array("Name"=>"tic_forms", "Type"=>"int", "IsForDB"=>true, "Order"=>115));
+        $this->m_fields['tic_canal'] = new CField(Array("Name"=>"tic_canal", "Size"=>20, "IsForDB"=>true, "Order"=>116));
+        $this->m_fields['tic_tstamp_plazo'] = new CField(Array("Name"=>"tic_tstamp_plazo", "Type"=>"datetime", "IsForDB"=>true, "Order"=>117));
+        $this->m_fields['tic_tstamp_cierre'] = new CField(Array("Name"=>"tic_tstamp_cierre", "Type"=>"datetime", "IsForDB"=>true, "Order"=>118));
+        $this->m_fields['tic_calle_nombre'] = new CField(Array("Name"=>"tic_calle_nombre", "Size"=>100, "IsForDB"=>true, "Order"=>119));
+        $this->m_fields['tic_cruza_calle'] = new CField(Array("Name"=>"tic_cruza_calle", "Size"=>100, "IsForDB"=>true, "Order"=>120));
+        $this->m_fields['tic_nro_puerta'] = new CField(Array("Name"=>"tic_nro_puerta", "Type"=>"int", "IsForDB"=>true, "Order"=>121));
+        $this->m_fields['tic_nro_asociado'] = new CField(Array("Name"=>"tic_nro_asociado", "Type"=>"int", "IsForDB"=>true, "Order"=>122));
+        $this->m_fields['tic_identificador'] = new CField(Array("Name"=>"tic_identificador", "Size"=>45, "IsForDB"=>true, "Order"=>123));
+        $this->m_fields['mapa'] = new CField(Array("Name"=>"mapa", "Size"=>50, "Order"=>24));
+        $this->m_fields['acc_tpr_code'] = new CField(Array("Name"=>"acc_tpr_code", "Size"=>50, "Order"=>25));
+        $this->m_fields['acc_estado'] = new CField(Array("Name"=>"acc_estado", "Size"=>50, "Order"=>26));
+        $this->m_fields['acc_nota'] = new CField(Array("Name"=>"acc_nota", "Size"=>500, "Order"=>27));
+        $this->m_fields['acc_use_code'] = new CField(Array("Name"=>"acc_use_code", "Size"=>50, "Order"=>28));
+        $this->m_fields['acc_tstamp'] = new CField(Array("Name"=>"acc_tstamp", "Type"=>"datetime", "Order"=>29));
+        $this->m_fields['acc_tic_nro'] = new CField(Array("Name"=>"acc_tic_nro", "Type"=>"int", "Order"=>30));
+        $this->m_fields['acc_tic_anio'] = new CField(Array("Name"=>"acc_tic_anio", "Type"=>"int", "Order"=>31));
+        $this->m_fields['acc_tor_code'] = new CField(Array("Name"=>"acc_tor_code", "Type"=>"int", "Order"=>32));
 
         //--Contenedores de Clases dependientes
         $this->m_childs_classname['class_tic_ticket_prestaciones']='class_tic_ticket_prestaciones';
@@ -79,11 +81,11 @@ class class_tic_ticket_upd_den extends cobjbase {
 
 
         //Consultas particulares a la base de datos
-        $this->m_loaddb_sql = "SELECT tic_nro, tic_anio, tic_tipo, tic_tstamp_in, use_code, tic_nota_in, tic_estado, tic_lugar, tic_barrio, tic_cgpc, tic_coordx, tic_coordy, tic_id_cuadra, tic_forms, tic_canal, tic_tstamp_plazo, tic_tstamp_cierre, tic_calle_nombre, tic_nro_puerta, tic_nro_asociado, tic_identificador FROM tic_ticket  WHERE tic_nro= :tic_nro_key:";
-        $this->m_objfactory_sql = "SELECT tic_nro, tic_anio, tic_tipo, tic_tstamp_in, use_code, tic_nota_in, tic_estado, tic_lugar, tic_barrio, tic_cgpc, tic_coordx, tic_coordy, tic_id_cuadra, tic_forms, tic_canal, tic_tstamp_plazo, tic_tstamp_cierre, tic_calle_nombre, tic_nro_puerta, tic_nro_asociado, tic_identificador FROM tic_ticket";
+        $this->m_loaddb_sql = "SELECT tic_nro, tic_numero, tic_anio, tic_tipo, tic_tstamp_in, use_code, tic_nota_in, tic_estado, tic_lugar, tic_barrio, tic_cgpc, tic_coordx, tic_coordy, tic_id_cuadra, tic_forms, tic_canal, tic_tstamp_plazo, tic_tstamp_cierre, tic_calle_nombre, tic_cruza_calle, tic_nro_puerta, tic_nro_asociado, tic_identificador FROM tic_ticket  WHERE tic_nro= :tic_nro_key:";
+        $this->m_objfactory_sql = "SELECT tic_nro, tic_numero, tic_anio, tic_tipo, tic_tstamp_in, use_code, tic_nota_in, tic_estado, tic_lugar, tic_barrio, tic_cgpc, tic_coordx, tic_coordy, tic_id_cuadra, tic_forms, tic_canal, tic_tstamp_plazo, tic_tstamp_cierre, tic_calle_nombre, tic_cruza_calle, tic_nro_puerta, tic_nro_asociado, tic_identificador FROM tic_ticket";
         $this->m_objfactory_suffix_sql = "";
-        $this->m_savedb_update_sql = "UPDATE tic_ticket SET tic_nro= :tic_nro:, tic_anio= :tic_anio:, tic_tipo= :tic_tipo:, tic_tstamp_in= :tic_tstamp_in:, use_code= :use_code:, tic_nota_in= :tic_nota_in:, tic_estado= :tic_estado:, tic_lugar= :tic_lugar:, tic_barrio= :tic_barrio:, tic_cgpc= :tic_cgpc:, tic_coordx= :tic_coordx:, tic_coordy= :tic_coordy:, tic_id_cuadra= :tic_id_cuadra:, tic_forms= :tic_forms:, tic_canal= :tic_canal:, tic_tstamp_plazo= :tic_tstamp_plazo:, tic_tstamp_cierre= :tic_tstamp_cierre:, tic_calle_nombre= :tic_calle_nombre:, tic_nro_puerta= :tic_nro_puerta:, tic_nro_asociado= :tic_nro_asociado:, tic_identificador= :tic_identificador: WHERE tic_nro=:tic_nro_key:";
-        $this->m_savedb_insert_sql = "INSERT INTO tic_ticket(tic_nro, tic_anio, tic_tipo, tic_tstamp_in, use_code, tic_nota_in, tic_estado, tic_lugar, tic_barrio, tic_cgpc, tic_coordx, tic_coordy, tic_id_cuadra, tic_forms, tic_canal, tic_tstamp_plazo, tic_tstamp_cierre, tic_calle_nombre, tic_nro_puerta, tic_nro_asociado, tic_identificador) VALUES (:tic_nro:, :tic_anio:, :tic_tipo:, :tic_tstamp_in:, :use_code:, :tic_nota_in:, :tic_estado:, :tic_lugar:, :tic_barrio:, :tic_cgpc:, :tic_coordx:, :tic_coordy:, :tic_id_cuadra:, :tic_forms:, :tic_canal:, :tic_tstamp_plazo:, :tic_tstamp_cierre:, :tic_calle_nombre:, :tic_nro_puerta:, :tic_nro_asociado:, :tic_identificador:)";
+        $this->m_savedb_update_sql = "UPDATE tic_ticket SET tic_nro= :tic_nro:, tic_numero= :tic_numero:, tic_anio= :tic_anio:, tic_tipo= :tic_tipo:, tic_tstamp_in= :tic_tstamp_in:, use_code= :use_code:, tic_nota_in= :tic_nota_in:, tic_estado= :tic_estado:, tic_lugar= :tic_lugar:, tic_barrio= :tic_barrio:, tic_cgpc= :tic_cgpc:, tic_coordx= :tic_coordx:, tic_coordy= :tic_coordy:, tic_id_cuadra= :tic_id_cuadra:, tic_forms= :tic_forms:, tic_canal= :tic_canal:, tic_tstamp_plazo= :tic_tstamp_plazo:, tic_tstamp_cierre= :tic_tstamp_cierre:, tic_calle_nombre= :tic_calle_nombre:, tic_cruza_calle= :tic_cruza_calle:, tic_nro_puerta= :tic_nro_puerta:, tic_nro_asociado= :tic_nro_asociado:, tic_identificador= :tic_identificador: WHERE tic_nro=:tic_nro_key:";
+        $this->m_savedb_insert_sql = "INSERT INTO tic_ticket(tic_nro, tic_numero, tic_anio, tic_tipo, tic_tstamp_in, use_code, tic_nota_in, tic_estado, tic_lugar, tic_barrio, tic_cgpc, tic_coordx, tic_coordy, tic_id_cuadra, tic_forms, tic_canal, tic_tstamp_plazo, tic_tstamp_cierre, tic_calle_nombre, tic_cruza_calle, tic_nro_puerta, tic_nro_asociado, tic_identificador) VALUES (:tic_nro:, :tic_numero:, :tic_anio:, :tic_tipo:, :tic_tstamp_in:, :use_code:, :tic_nota_in:, :tic_estado:, :tic_lugar:, :tic_barrio:, :tic_cgpc:, :tic_coordx:, :tic_coordy:, :tic_id_cuadra:, :tic_forms:, :tic_canal:, :tic_tstamp_plazo:, :tic_tstamp_cierre:, :tic_calle_nombre:, :tic_cruza_calle:, :tic_nro_puerta:, :tic_nro_asociado:, :tic_identificador:)";
         $this->m_savedb_delete_sql = "DELETE FROM tic_ticket WHERE tic_nro=:tic_nro_key:";
         $this->m_savedb_purge_sql = "DELETE FROM tic_ticket";
         $this->m_savedb_total_sql = "SELECT COUNT(*) as cant FROM tic_ticket ";

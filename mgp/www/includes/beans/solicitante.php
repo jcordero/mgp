@@ -1,4 +1,5 @@
 <?php
+include_once 'beans/person_status.php';
 
 class solicitante {
     public $ciu_documento;
@@ -94,6 +95,29 @@ class solicitante {
          );
          $primary_db->do_execute($sql6,$errores,$params6);
         
+    }
+    
+    static function fromForm($obj) {
+        global $primary_db;
+        
+        //Ciudadano identificado
+        $ps = new person_status();
+        
+        $s = new solicitante();
+        $s->ciu_apellido = $ps->person_apellido;
+        $s->ciu_code = $ps->person_id;
+        $s->ciu_documento = $ps->person_doc;
+        $s->ciu_nombres = $ps->person_nombres;
+        
+        //Busco algunos datos que no tengo, en la base de datos
+        $row = $primary_db->QueryArray("select ciu_email,ciu_tel_fijo,ciu_tel_movil from ciu_ciudadanos where ciu_code='{$s->ciu_code}'");
+        if($row) {
+            $s->ciu_email = $row['ciu_email'];
+            $s->ciu_telefono_fijo = $row['ciu_tel_fijo'];
+            $s->ciu_telefono_movil = $row['ciu_tel_movil'];
+        }                
+        
+        return array($s);
     }
 }
 ?>

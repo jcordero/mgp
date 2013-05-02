@@ -94,7 +94,7 @@ class CDH_DIRECCION extends CDataHandler
                 }
                 
 		
-		error_log('CDH_DIRECCION::validarDireccion '.print_r($o,true));
+		//error_log('CDH_DIRECCION::validarDireccion '.print_r($o,true));
 		return json_encode($o);
 	}
 }

@@ -57,12 +57,27 @@ class ticket {
     /** Fecha en la que se cierra o cancela el ticket */
     public $tic_tstamp_cierre;
     
+    /** Tipo de geo referencia DOMICILIO, CEMENTERIO, VILLA, LUMINARIA, PLAZA, ORGAN.PUBLICO */
+    private $tipo_georef;
+ 
     /** Nombre del lugar, como Hospital Pirulo */
     private $tic_nombre_fantasia;
     
     /** Nombre de la calle */
     private $tic_calle_nombre;
+
+    /** Código de la calle */
+    private $tic_calle;
+
+    /** Nombre de la calle que cruza */
+    private $tic_calle_nombre2;
+
+    /** Código de la calle que cruza*/
+    private $tic_calle2;
     
+    /** Usa calle nro (NRO) o calle y calle (CALLE) */
+    private $alternativa;
+
     /** Numero de la puerta */
     private $tic_nro_puerta;
 
@@ -71,9 +86,6 @@ class ticket {
 
     /** Departamento */
     private $tic_dpto;
-
-    /** Nombre de la calle que se cruza */
-    private $tic_cruza_calle;
 
     /** Identificador de la luminaria */
     private $id_luminaria;
@@ -95,6 +107,29 @@ class ticket {
     
     /** Array de errores de proceso */
     private $errors;
+    
+    /** Villa */
+    private $villa;
+    private $vilmanzana;
+    private $vilcasa;
+         
+    /** Plaza */
+    private $plaza;
+    
+    /** Organismo publico */
+    private $orgpublico;
+    private $orgsector;
+    
+    /** Cementerio */
+    private $cementerio;
+    private $sepultura;
+    private $sepsector;
+    private $sepcalle;
+    private $sepnumero;
+    private $sepfila;
+
+    /** Identificador de cuadra */
+    private $id_cuadra;
     
     function __construct() {
         $this->prestaciones = array();
@@ -193,8 +228,7 @@ class ticket {
     static private function generaCodigoTicket($tipo,$anio)
     {
         global $primary_db;
-        $codigo = $primary_db->Sequence("$tipo-$anio");
-        return $codigo;
+        return $primary_db->Sequence("$tipo-$anio");
     }
     
     static private function addPhotoBase64($tic_nro, $media) {
@@ -464,42 +498,87 @@ class ticket {
     
     
     private function createLugar() {
-        global $primary_db;
 	
-        //Es una luminaria?
-        if($this->id_luminaria!=='') {
-            $geo = array(
-                'tipo'		=> 'LUMINARIA',
-                'calle_nombre' 	=> $primary_db->Filtrado($this->tic_calle_nombre),
-                'calle'         => 0,
-                'callenro' 	=> $primary_db->Filtrado($this->tic_nro_puerta),
-                'cruza_calle'   => $primary_db->Filtrado($this->tic_cruza_calle),
-                'barrio' 	=> $primary_db->Filtrado($this->tic_barrio),
-                'comuna' 	=> $primary_db->Filtrado($this->tic_cgpc),
-                'lat'		=> $primary_db->Filtrado($this->tic_coordx),
-                'lng'		=> $primary_db->Filtrado($this->tic_coordy),
-                'id_luminaria'  => $primary_db->Filtrado($this->id_luminaria),
-            );
-            
+        /** Tipo de geo referencia DOMICILIO, CEMENTERIO, VILLA, LUMINARIA, PLAZA, ORGAN.PUBLICO */
+        switch($this->tipo_georef) {
+            case "LUMINARIA":
+                $geo = array(
+                    'tipo'		=> 'LUMINARIA',
+                    'alternativa'       => $this->alternativa,
+                    'calle_nombre' 	=> $this->tic_calle_nombre,
+                    'calle'             => $this->tic_calle,
+                    'callenro'          => $this->tic_nro_puerta,
+                    'barrio'            => $this->tic_barrio,
+                    'comuna'            => $this->tic_cgpc,
+                    'lat'		=> $this->tic_coordx,
+                    'lng'		=> $this->tic_coordy,
+                    'id_luminaria'      => $this->id_luminaria,
+                    'calle_nombre2' 	=> $this->tic_calle_nombre2,
+                    'calle2'            => $this->tic_calle2,
+                );
+                break;
+            case "DOMICILIO":
+                $geo = array(
+                    'tipo'              => 'DOMICILIO',
+                    'alternativa'       => $this->alternativa,
+                    'calle_nombre'      => $this->tic_calle_nombre,
+                    'calle'             => $this->tic_calle,
+                    'callenro'          => $this->tic_nro_puerta,
+                    'piso'              => $this->tic_piso,
+                    'dpto'              => $this->tic_dpto,
+                    'nombre_fantasia'   => $this->tic_nombre_fantasia,
+                    'barrio'            => $this->tic_barrio,
+                    'comuna'            => $this->tic_cgpc,
+                    'lat'               => $this->tic_coordx,
+                    'lng'               => $this->tic_coordy,
+                    'calle_nombre2' 	=> $this->tic_calle_nombre2,
+                    'calle2'            => $this->tic_calle2,
+                );
+                break;
+            case "VILLA":
+                $geo = array(
+    			'tipo'		=> 'VILLA',
+	    		'villa' 	=> $this->villa,
+	    		'manzana' 	=> $this->vilmanzana,
+	    		'casa' 		=> $this->vilcasa,
+    			'lat'		=> $this->tic_coordx,
+    			'lng'		=> $this->tic_coordy,
+    		);
+                break;
+            case "PLAZA":
+                $geo = array(
+    			'tipo'          => 'PLAZA',
+    			'plaza'         => $this->plaza,
+                        'lat'           => $this->tic_coordx,
+    			'lng'           => $this->tic_coordy,
+    		);
+                break;
+            case "CEMENTERIO":
+                $geo = array(
+    			'tipo'		=> 'CEMENTERIO',
+	    		'cementerio' 	=> $this->cementerio,
+	    		'sepultura' 	=> $this->sepultura,
+	    		'sector' 	=> $this->sepsector,
+	    		'calle' 	=> $this->sepcalle,
+	    		'numero' 	=> $this->sepnumero,
+	    		'fila' 		=> $this->sepfila,
+    			'lat'		=> $this->tic_coordx,
+    			'lng'		=> $this->tic_coordy,
+    		);
+                break;
+            case "ORGAN.PUBLICO":
+                $geo = array(
+   			'tipo'          => 'ORGAN.PUBLICO',
+	    		'organismo'	=> $this->orgpublico,
+	    		'sector' 	=> $this->orgsector,
+    			'lat'		=> $this->tic_coordx,
+    			'lng'		=> $this->tic_coordy,
+    		);	
+                break;
+            default:
+                break;
         }
-        else
-        {
-            $geo = array(
-                'tipo'              => 'DOMICILIO',
-                'calle_nombre'      => $primary_db->Filtrado($this->tic_calle_nombre),
-                'calle'             => 0,
-                'callenro'          => $primary_db->Filtrado($this->tic_nro_puerta),
-                'cruza_calle'       => $primary_db->Filtrado($this->tic_cruza_calle),
-                'piso'              => $primary_db->Filtrado($this->tic_piso),
-                'dpto'              => $primary_db->Filtrado($this->tic_dpto),
-                'nombre_fantasia'   => $primary_db->Filtrado($this->tic_nombre_fantasia),
-                'barrio'            => $primary_db->Filtrado($this->tic_barrio),
-                'comuna'            => $primary_db->Filtrado($this->tic_cgpc),
-                'lat'               => $primary_db->Filtrado($this->tic_coordx),
-                'lng'               => $primary_db->Filtrado($this->tic_coordy),
-            );
-        }
-    	
+    	 
     	return $geo;
     }
     
@@ -637,6 +716,152 @@ class ticket {
         }    
     }
 
+    /** Ticket creado en la UI por un operador
+     * 
+     */
+    function fromForm($obj) {
+        
+        //Recupero los campos del form
+        $this->tic_nota_in = _F($obj,"tic_nota_in");
+                        
+        //ESTILO DE GEOREFERENCIA
+        $this->tipo_georef = _F($obj,"tipo_georef");
+        
+        switch($this->tipo_georef) {
+            case 'DIRECCION':        
+                $this->alternativa          = _F($obj,"alternativa");
+                $this->tic_barrio           = _F($obj,"tic_barrio");
+                $this->tic_cgpc             = _F($obj,"tic_cgpc");
+                $this->tic_coordx           = _F($obj,"tic_coordx");
+                $this->tic_coordy           = _F($obj,"tic_coordy");
+                $this->tic_nro_puerta       = _F($obj,"callenro");
+                $this->tic_calle_nombre     = _F($obj,"calle_nombre");
+                $this->tic_nombre_fantasia  = _F($obj,"nombre_fantasia");
+                $this->tic_calle_nombre2    = _F($obj,"calle_nombre2");
+                $this->tic_calle            = _F($obj,"calle");
+                $this->tic_calle2           = _F($obj,"calle2");
+                $this->id_cuadra            = _F($obj,"tic_id_cuadra");
+                break;
+            case 'VILLA':
+                $this->villa          = _F($obj,"villa");
+                $this->vilmanzana     = _F($obj,"vilmanzana");
+                $this->vilcasa        = _F($obj,"vilcasa");
+                $this->tic_coordx     = _F($obj,"tic_coordx");
+                $this->tic_coordy     = _F($obj,"tic_coordy");
+                break;
+            case 'PLAZA':
+                $this->plaza        = _F($obj,"plaza");
+                $this->tic_coordx   = _F($obj,"tic_coordx");
+                $this->tic_coordy   = _F($obj,"tic_coordy");
+                break;
+            case 'ORGA.PUBLICO':
+                $this->orgpublico     = _F($obj,"orgpublico");
+                $this->orgsector      = _F($obj,"orgsector");
+                $this->tic_coordx     = _F($obj,"tic_coordx");
+                $this->tic_coordy     = _F($obj,"tic_coordy");
+                break;
+            case 'CEMENTERIO':
+                $this->cementerio = _F($obj,"cementerio");
+                $this->sepultura  = _F($obj,"sepultura");
+                $this->sepsector  = _F($obj,"sepsector");
+                $this->sepcalle   = _F($obj,"sepcalle");
+                $this->sepnumero  = _F($obj,"sepnumero");
+                $this->sepfila    = _F($obj,"sepfila");
+                $this->tic_coordx = _F($obj,"tic_coordx");
+                $this->tic_coordy = _F($obj,"tic_coordy");
+                break;
+            case 'LUMINARIA':
+                $this->alternativa        = _F($obj,"alternativa_lum");
+                $this->tic_barrio         = _F($obj,"tic_barrio_lum");
+                $this->tic_cgpc           = _F($obj,"tic_cgpc_lum");
+                $this->tic_nro_puerta     = _F($obj,"callenro_lum");
+                $this->tic_calle_nombre   = _F($obj,"calle_nombre_lum");
+                $this->tic_calle_nombre2  = _F($obj,"calle_nombre2_lum");
+                $this->id_luminaria       = _F($obj,"id_luminaria");
+                $this->tic_calle          = _F($obj,"calle_lum");
+                $this->tic_calle2         = _F($obj,"calle2_lum");
+                $this->id_cuadra          = _F($obj,"tic_id_cuadra");
+                $this->tic_coordx         = _F($obj,"tic_coordx");
+                $this->tic_coordy         = _F($obj,"tic_coordy");
+
+                break;
+            default:
+                $this->addError('Opción de GEOREFERENCIA desconocida: '.$this->tipo_georef);
+        }
+        
+        //Tipo de prestacion y descripción
+        $this->prestaciones = prestacion::fromForm($obj);
+       
+        //Tipo de ticket es igual al tipo de la prestacion ingresada (RECLAMO, DENUNCIA,...)
+        $this->tic_tipo = $this->prestaciones[0]->getTipoPrestacion();
+
+        //Amplio la nota.
+        switch($this->tipo_georef) {
+            case "VILLA":
+                $this->tic_nota_in = trim($this->tic_nota_in)." En villa: {$this->villa} manzana: {$this->vilmanzana} casa: {$this->vilcasa}";
+                break;
+            case "PLAZA":
+                $this->tic_nota_in = trim($this->tic_nota_in)." En plaza: {$this->plaza}";
+                break;
+            case "CEMENTERIO":
+                $this->tic_nota_in = trim($this->tic_nota_in)." En cementerio: {$this->cementerio} sep: {$this->sepultura} sect: {$this->sepsector} calle: {$this->sepcalle} número: {$this->sepnumero} fila: {$this->sepfila}";
+                break;    
+            case "DOMICILIO":
+            case "LUMINARIA":
+                if($this->tic_nombre_fantasia!=='' && $this->tic_tipo=="RECLAMO")
+                    $this->tic_nota_in = trim($this->tic_nota_in)." Nombre fantasía: {$this->tic_nombre_fantasia}";
+                break;
+            default:
+                break;
+        }
+        
+        //Valido la altura de la calle
+        if($this->tic_nro_puerta=="")
+            $this->tic_nro_puerta = 1;
+        
+        //La altura de la calle no puede ser blanco, si no esta definido debe ser 0
+        $this->id_cuadra = ($this->id_cuadra=="" ? 0 : $this->id_cuadra);
+        
+        //Las coordeanadas no pueden estar en blanco
+        $this->tic_coordx = ($this->tic_coordx=="" ? 0 : $this->tic_coordx);
+        $this->tic_coordy = ($this->tic_coordy=="" ? 0 : $this->tic_coordy);
+        
+        //Creo la descripcion del lugar
+        $this->tic_lugar = $this->createLugar();
+        
+        //Usuario que esta creando el ticket
+        $this->solicitantes = solicitante::fromForm($obj);
+        
+        //Canal de ingreso del ticket
+        $this->tic_canal = $this->determinarCanal();
+                 
+    }
+    
+    //Determina el canal de ingreso, mirando en los atributos del usuario
+    private function determinarCanal()
+    {
+        $canal = "CALL";
+
+        //Reviso los grupos del usurio logeado busco uno que diga canal_
+        if( isset($_SESSION['groups']) )
+        {
+            $partes = explode(",",$_SESSION['groups']);
+            foreach($partes as $grupo)
+            {
+            	$grp = strtoupper(trim($grupo));
+                if( substr($grp,0,6)=="CANAL_" )
+                {
+                    $canal = substr($grupo,7);
+                    break;
+                }
+            }
+        }
+        
+        return $canal;
+    }
+
+       
+   
 }
 
 

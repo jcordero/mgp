@@ -124,6 +124,7 @@ function ocultar_bloques()
     	$(divdomicilio).hide();
     	calle.m_mandatory = false;
     	callenro.m_mandatory = false;	
+    	calle2.m_mandatory = false;
     }
     
     var divvilla = document.getElementById("bloque_villa");
@@ -160,7 +161,8 @@ function ocultar_bloques()
     	$(divluminaria).hide();
         calle_lum.m_mandatory = false;
         callenro_lum.m_mandatory = false;
-        id_luminaria.m_mandatory = false;    
+        id_luminaria.m_mandatory = false;
+        calle2_lum.m_mandatory = false;
     }
 
     

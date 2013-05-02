@@ -130,23 +130,31 @@ class CDH_CUESTIONARIO extends CDataHandler
     function RenderReadOnly($cn,$showlabel=false)
     {
             $fld = $this->m_parent;
-            $html="";
-            $val = $fld->getValue();
+            $obj_tabla = $fld->m_parent; //modelo (tabla)
+            //$obj = $obj_tabla->m_parent; //modelo
+            
+            //Busco la prestación en el modelo (estoy en una tabla) tpr_code
+            $tpr_code = $obj_tabla->getField('tpr_code')->getValue();
+            
+            //Busco el codigo de ticket
+            //$tic_nro = $obj->
+            error_log("CDH_CUESTIONARIO::RenderReadOnly() obj_tabla = instancia de ".  get_class($obj_tabla));
+            $html='';
             $name = "m_".$fld->m_Name;
 
             if($fld->m_IsVisible)
             {
-                $mostrar = $this->convertToHtml($val); //Paso del JSON a un HTML bonito
+                $cuest = self::htmlVerCuestionario($tic_nro, $tpr_code);
                 if($showlabel)
-                    $html="<div class=\"itm\"><div class=\"desc\">$fld->m_Label</div><div class=\"fldro\">$mostrar</div></div>"."\n";
+                    $html.="<div class=\"itm\"><div class=\"desc\">{$fld->m_Label}</div><div class=\"fldro\">{$cuest}</div></div>"."\n";
                 else
-                    $html=$mostrar;
+                    $html.=$cuest;
             }
             else
             {
                 //Campo oculto
                 $id = $name;
-                $html="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$val\"/>"."\n";
+                $html.="<input type=\"hidden\" name=\"{$name}\" id=\"{$id}\" value=\"{$val}\"/>"."\n";
             }
 
             return $html;
@@ -155,6 +163,7 @@ class CDH_CUESTIONARIO extends CDataHandler
 
     /**
      * Caso de que el campo este en el area de edicion de una tabla
+     * Es llamado por el objeto CField / Llamado por ctable_handler
      * 
      * @param type $cn
      * @param type $frmname
@@ -167,8 +176,10 @@ class CDH_CUESTIONARIO extends CDataHandler
      */
     function RenderTableEdit($cn,$frmname,$table="",$row=0,$ro=false,$name="",$suffix="")
     {
-        $fld = $this->m_parent;
-
+        $fld = $this->m_parent; //Este campo
+        $obj_tabla = $fld->m_parent; //Modelo (estoy en una tabla)
+        $obj = $obj_tabla->m_parent;
+        
         if($name=="")
             $name = $this->getName($table,$row);
 
@@ -177,21 +188,34 @@ class CDH_CUESTIONARIO extends CDataHandler
         else
             $id = $frmname."_".$name;
 
+        
+        $obj_tpr_code = ($obj_tabla ? $obj_tabla->getField('tpr_code') : null);
+        $tpr_code = ($obj_tpr_code ? $obj_tpr_code->getValue() : '');
+
+        $obj_tic_nro = ($obj ? $obj->getField('tic_nro') : null);
+        $tic_nro = ($obj_tic_nro ? $obj_tic_nro->getValue() : '');
+
+        
+//        error_log("CDH_CUESTIONARIO::RenderTableEdit(frmname=$frmname,table=$table,row=$row,name=$name,ro=".($ro ? 'si':'no').") tpr_code=$tpr_code tic_nro=$tic_nro \n"); 
+//            this=".get_class($this)." padre:".get_class($this->m_parent)."\n
+//            fld=".get_class($fld)." padre:".get_class($fld->m_parent)."\n
+//            obj_tabla=".get_class($obj_tabla)." padre:".get_class($obj)." ancestro del padre:".  get_parent_class($obj)."\n
+//            lista de campos del padre: ".print_r(array_keys($obj->m_fields),true)."\n
+//            valor del campo tic_nro:".$obj->m_fields['tic_nro']->readValue() 
+//        );
+ 
+        
         //Compongo el valor del campo
-        $xml = $fld->getValue();
-        $mostrar = $this->convertToHtml($xml);
+        $mostrar = self::htmlVerCuestionario($tic_nro, $tpr_code);
 
         //Si es read only, pongo el valor del campo dentro un HIDDEN, si no muestro el campo editable
         if($ro)
         {
-            $html="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"".htmlentities($xml,ENT_COMPAT,"UTF-8")."\"/>";
-
             //Si es read-only y visible, muestro un texto (si es invisible no muestro nada)
             if($fld->m_IsVisible)
             {
-                $html.="<div id=\"t$name\">$mostrar</div>";
+                $html.="<div id=\"t{$name}\">{$mostrar}</div>\n";
             }
-            $html.="\n";
         }
         else
         {
@@ -199,30 +223,8 @@ class CDH_CUESTIONARIO extends CDataHandler
             //Anulo la funcion de busqueda flexible asi no sale el indicador
             $fld->m_search="fix";
             $html = $this->RenderFilterForm($cn,$name,$id,$id);
-    }
-
-        return $html;
-    }
-
-
-    /** 
-     * Convierto el cuestionario en HTLM para poder mostrarlo en el formulario de consulta
-     * 
-     * @param type $json
-     * @return string
-     */
-    private function convertToHtml($json)
-    {
-        $html = '';
-        $c = json_decode($json);
-        if($c) {
-            foreach($c as $preg) {
-                $html.='<div class="preg_cuest">
-                            <div class="preg">'.$preg->tpr_preg.'</div>
-                            <div class="resp">'.$preg->tpr_resp.'</div>
-                        </div>';
-            }
         }
+
         return $html;
     }
 
@@ -239,14 +241,20 @@ class CDH_CUESTIONARIO extends CDataHandler
         global $primary_db;
 
         //Armo el Cuestionario
-        $html = '<div id="sub_prestaciones_cuest" class="tabla">';
-        $html.= '<div class="bloque">';
-        $html.= '<div id="subtit_prestaciones_cuest" class="titulo"><div class="titulo_texto">Cuestionario</div></div>';
-        $html.= '<table class="caja2">';
-        $html.= '<thead>';
-        $html.= '<tr><th>Pregunta</th><th>Opciones</th></tr>';
-        $html.= '</thead>';
-        $html.= '<tbody id="tbody_prestaciones_cuest">';
+        $html = '
+        <div id="sub_prestaciones_cuest" class="tabla">
+            <div class="bloque">
+                <div id="subtit_prestaciones_cuest" class="titulo">
+                    <div class="titulo_texto">Cuestionario</div>
+                </div>
+                <table class="caja2">
+                <thead>
+                    <tr>
+                        <th>Pregunta</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_prestaciones_cuest">';
 
         $sql2 = "SELECT tpr_code, tcu_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad FROM tic_prestaciones_cuest WHERE tpr_code='{$prestacion}'";
         $re2 = $primary_db->do_execute($sql2);
@@ -290,9 +298,9 @@ class CDH_CUESTIONARIO extends CDataHandler
             
             $html.= '<tr><td>'.$myrow['tpr_preg'].'</td><td>'.$buff.'</td></tr>';
         }
-        $html.= '</tbody>';
-        $html.= '</table></div>'; //Cierro bloque
-        $html.= '</div>';//Seccion
+        $html.= '</tbody>
+        </table></div>
+        </div>';//Seccion
 
         //Caso que no haya ninguna pregunta para esta prestacion...
         if($cant==0)
@@ -301,5 +309,21 @@ class CDH_CUESTIONARIO extends CDataHandler
         return $html;
     }
 
+    static function htmlVerCuestionario($ticket, $prestacion) {
+        global $primary_db;
+        
+        if($ticket==='' || $prestacion==='')
+                return '';
+        
+        $h = '<div class="cuestionario">';
+        $sql2 = "SELECT tic_nro, tpr_code, tcu_code, tpr_preg, tpr_tipo_preg, tpr_respuesta, tpr_miciudad FROM tic_ticket_cuestionario WHERE tpr_code='{$prestacion}' and tic_nro='{$ticket}'";
+        $re2 = $primary_db->do_execute($sql2);
+        while( $row=$primary_db->_fetch_row($re2) )
+        {
+            $h.='<div class="cuest"><div class"preg">'.$row['tpr_preg'].'</div><div class="resp">'.$row['tpr_respuesta'].'</div></div>';
+        }
+        $h.='</div>';
+        return $h;
+    }
 }
 ?>

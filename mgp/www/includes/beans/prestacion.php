@@ -18,8 +18,12 @@ class prestacion {
     public $avance;
     public $organismos;
     
+    /** Plazo (numerico) */
     private $plazo;
     private $plazo_unit;
+    
+    /** Tipo de prestacion: RECLAMO, DENUNCIA, SOLICITUD o QUEJA */
+    private $tpr_tipo; 
     
     function __construct() {
         $this->cuestionario = array(); 
@@ -29,6 +33,10 @@ class prestacion {
         $this->ttp_prioridad = '1.1';
         $this->plazo = 10;
         $this->plazo_unit = 'DAY';
+    }
+    
+    function getTipoPrestacion() {
+        return $this->tpr_tipo;
     }
     
     function getPlazo() {
@@ -182,6 +190,183 @@ class prestacion {
             'ttp_estado'          => $nuevo_estado
         );
         $primary_db->do_execute($sql2,$errores,$params2);   
+    }
+    
+    /**
+     * Cargar la prestacion desde la UI
+     * 
+     * @global type $primary_db
+     * @param type $obj
+     * @return type
+     */
+    static function fromForm($obj) {
+        global $primary_db;
+        
+        $p = new prestacion();
+        
+        //El formulario de alta solo tiene una prestacion
+        $p->tpr_code = _F($obj,"prestacion");
+        
+        $row = $primary_db->QueryArray("select tpr_tipo,tpr_detalle,tpr_plazo from tic_prestaciones where tpr_code='{$p->tpr_code}'");
+        if( $row )
+        {
+            $p->tpr_description = $row['tpr_detalle'];
+            $p->tpr_tipo = $row['tpr_tipo'];
+            
+            //El plazo viene en dos partes, una donde esta la cantidad y otra donde esta la unidad. Ejemplo: 2 dias
+            $plazo = explode(' ',$row['tpr_plazo']);
+            $p->plazo = (double) $plazo[0];
+            if(isset($plazo[1])) {
+                switch ($plazo[1]) {
+                    case 'Días':
+                        $p->plazo_unit = 'DAY';
+                        break;
+                    case 'Horas':
+                        $p->plazo_unit = 'HOUR';
+                        break;
+                    case 'Minutos':
+                        $p->plazo_unit = 'MINUTE';
+                        break;
+                    default:
+                        $p->plazo_unit = 'DAY';
+                }
+            } else {
+                $p->plazo_unit = 'DAY';
+            }
+        }
+        
+        
+        //Si es una denuncia entonces el rubro esta definido,
+        //busco la prioridad ahi. Caso contrario se inician todos los tickets
+        //con la misma prioridad.
+        //Si esta declarada la georeferencia ahi, entonces le doy precedencia sobre la declarada en la prestación
+        if($p->tpr_tipo=="DENUNCIA")
+        {
+            $p->tru_code = _F($obj,"rubro");
+            $p->tru_description = $primary_db->QueryString("select tru_detalle from tic_rubros where tru_code='{$p->tru_code}'");
+                    
+            $row = $primary_db->QueryArray("select tpr_prioridad,tor_code,tto_figura from tic_prestaciones_rubros where tpr_code='{$p->tpr_code}' and tru_code='{$p->tru_code}'");
+            if( $row )
+            {
+                $p->ttp_prioridad = $row['tpr_prioridad'];
+                $tor_code = $row['tor_code'];
+                $tto_figura= $row['tto_figura'];
+                
+                //Agrego el organismo indicado en el rubro
+                if($tor_code!='') {
+                    $org = new organismo();
+                    $org->tor_activo = 'ACTIVO';
+                    $org->tor_code = $tor_code;
+                    $org->tor_description = $primary_db->QueryString("select tor_nombre from tic_organismos where tor_code='{$tor_code}'");
+                    $org->tto_figura = $tto_figura;        
+                    $p->organismos[] = $org;
+                }
+            } 
+            
+            //Esta declarada la prioridad?
+            if($p->ttp_prioridad=="")
+            {
+                $p->ttp_prioridad = "1.1";
+            }
+        }
+        else
+        {
+            //Queja, Reclamo, Solicitud
+            $p->tru_code = 0;
+            $p->tru_description = '';
+            $p->ttp_prioridad = "1.1";
+        }
+
+        //Primer registro de avance de la prestacion
+        $avance = new avance();
+        $avance->tav_nota = _F($obj,'tic_nota_in');
+        $avance->tav_tstamp_in = DatetoISO8601();
+        $avance->tic_estado_in = 'pendiente';
+        $avance->tic_motivo = 'Ingreso por operador';
+        $avance->use_code_in = loadOperador();
+        $p->avance[] = $avance;
+        
+        //Hay que determinar que roles hay que levantar desde la definicion del GIS de prestaciones.
+        self::procesarGeoRef($obj, &$p);
+        
+        //Cuestionario de la prestacion
+        $p->cuestionario = cuestionario::fromForm($obj, $p);
+        
+        //retorno la prestacion
+        return array($p);
+    }
+    
+    /** Averiguo los organismos que deben ver o procesar este ticket
+     * 
+     * @global type $primary_db
+     * @param type $prestacion
+     * @param type $coordx
+     * @param type $coordy
+     * @return type
+     */
+    static function procesarGeoRef($obj, &$p)
+    {
+        global $primary_db;
+        
+        $sql = "select tpg.tpg_usa_gis, tpg.tpg_gis_campo, tpg.tpg_gis_valor, tpg.tor_code, tpg.tto_figura, tor_nombre FROM 
+                    tic_prestaciones_gis tpg JOIN tic_organismos tor ON tpg.tor_code=tor.tor_code
+                    WHERE tpg.tpr_code='{$p->tpr_code}'";
+        $re = $primary_db->do_execute($sql);
+        
+        $coordx = (double) _F($obj,"tic_coordx");
+        $coordy = (double) _F($obj,"tic_coordy");
+            
+        while( $row=$primary_db->_fetch_row($re) )
+        {
+            if( $row['tpg_usa_gis']=="NO" )
+            {
+                //No hace falta ir a la USIG, asigno organismo directamente
+                $o = new organismo();
+                $o->tor_activo = 'ACTIVO';
+                $o->tor_code = $row['tor_code'];
+                $o->tor_description = $row['tor_nombre'];
+                $o->tto_figura = $row['tto_figura'];
+                $p->organismos[] = $o;                
+            }
+            else
+            {
+                //Consulto la grilla en la usig
+                $valor = self::consultarGIS($row['tpg_gis_campo'], $coordx, $coordy);
+                
+                //La dirección se corresponde con la zona pedida en la regla?
+                if( strcasecmp($valor,$row['tpg_gis_valor'])==0 )
+                {
+                    $o = new organismo();
+                    $o->tor_activo = 'ACTIVO';
+                    $o->tor_code = $row['tor_code'];
+                    $o->tor_description = $row['tor_nombre'];
+                    $o->tto_figura = $row['tto_figura'];
+                    $p->organismos[] = $o;                
+                }
+            }
+        }
+    }
+
+    //Consultar en la USIG por la georeferenciacion de un punto
+    static function consultarGIS($grilla,$coordx,$coordy)
+    {
+        //Llamar al web service de GIS MGP
+        /*
+         * //Obtengo el nombre del server usado
+    	$host = $_SERVER["HTTP_HOST"];
+    	$ch = curl_init("http://$host/direcciones/proxyjson.php?method=consultarDelimitaciones&p1=$coordx&p2=$coordy&p3=".rawurlencode($grilla));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+		curl_setopt($ch, CURLOPT_TIMEOUT,20);
+    	$output = curl_exec($ch);
+		if($output=="")
+		{
+			return "";
+		}    	
+        $ans = json_decode($output);
+         */
+        return '';
     }
 }
 ?>

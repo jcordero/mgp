@@ -363,29 +363,32 @@ create table sho_ingresos (
 
 
 create table tic_ticket (
-  tic_nro int not null,
-  tic_anio int not null,
-  tic_tipo varchar(20) not null,
-  tic_tstamp_in datetime null,
-  use_code varchar(50) null,
-  tic_nota_in varchar(500) null,
-  tic_estado varchar(50) null,
-  tic_lugar varchar(1000) null,
-  tic_barrio varchar(50) null,
-  tic_cgpc varchar(20) null,
-  tic_coordx DOUBLE(11) null,
-  tic_coordy DOUBLE(11) null,
-  tic_id_cuadra int null,
-  tic_forms int null,
-  tic_canal varchar(20) null,
-  tic_tstamp_plazo datetime null,
-  tic_tstamp_cierre datetime null,
-  tic_calle_nombre varchar(100) null,
-  tic_nro_puerta int null,
-  tic_nro_asociado int null,
-  tic_identificador varchar(45) null,
-  constraint pk_tic_ticket primary key clustered (tic_nro)
+  tic_nro int NOT NULL,
+  tic_numero int NULL ,
+  tic_anio int NULL ,
+  tic_tipo varchar(20) NULL,
+  tic_tstamp_in datetime NULL,
+  use_code varchar(50) NULL,
+  tic_nota_in varchar(500) NULL,
+  tic_estado varchar(50) NULL,
+  tic_lugar varchar(1000) NULL,
+  tic_barrio varchar(50) NULL,
+  tic_cgpc varchar(20) NULL,
+  tic_coordx DOUBLE NULL,
+  tic_coordy DOUBLE NULL,
+  tic_id_cuadra int NULL,
+  tic_forms int NULL,
+  tic_canal varchar(20) NULL,
+  tic_tstamp_plazo datetime NULL,
+  tic_tstamp_cierre datetime NULL,
+  tic_calle_nombre varchar(100) NULL,
+  tic_cruza_calle varchar(100) NULL,
+  tic_nro_puerta int NULL,
+  tic_nro_asociado int NULL,
+  tic_identificador varchar(45) NULL,
+  constraint pk_tic_ticket primary key clustered (tic_nro) 
 )
+
 
 
 create table tic_prestaciones (

@@ -526,10 +526,6 @@
 </make>
 
 
-
-
-
-
 <!-- INGRESO DE UN TICKET desde el call center -->
 <make object="table_maint">
     <build out_file="tickets_maint_n.php" classname="class_tic_ticket" title="Alta de un ticket" default_operation="N" template_html="ticket.htm" >
@@ -554,7 +550,7 @@
             <field name="calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
             <field name="calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
             
-            <field name="calle2" presentation="TICKET::CALLE" label="Cruza calle" cols="60" ismandatory="true" />
+            <field name="calle2" presentation="TICKET::CALLE" label="Cruza calle" cols="60" ismandatory="false" />
             <field name="calle_nombre2" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
 
             <field name="callenro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
@@ -601,7 +597,7 @@
             <field name="calle_lum" presentation="TICKET::CALLE" label="Calle" cols="100" ismandatory="true" />
             <field name="calle_nombre_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
             
-            <field name="calle2_lum" presentation="TICKET::CALLE" label="Cruza calle" cols="100" ismandatory="true" />
+            <field name="calle2_lum" presentation="TICKET::CALLE" label="Cruza calle" cols="100" ismandatory="false" />
             <field name="calle_nombre2_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
             
             <field name="callenro_lum" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
@@ -736,7 +732,7 @@
 <make object="table_maint">
     <build out_file="ticket_maint.php" classname="class_tic_ticket_upd" title="Mantenimiento de un ticket" next="tickets.php?last=1&amp;OP=L" >
         <include file="ticket_maint.css"/>
-        <include file="ticket_maint.js"/>
+        <!-- <include file="ticket_maint.js"/> -->
         
         <!-- Ubicacion del problema -->
 	<group title="Ubicación" id="ubicacion" render_html="block">

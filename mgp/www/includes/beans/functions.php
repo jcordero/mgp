@@ -66,3 +66,8 @@
         else 
             return '';    
     }
+
+    function _F($obj, $campo) {
+        global $primary_db;
+        return $primary_db->Filtrado($obj->getField($campo)->getValue());
+    }
