@@ -863,6 +863,3 @@ class ticket {
        
    
 }
-
-
-?>

@@ -286,14 +286,11 @@ class prestacion {
         $avance->use_code_in = loadOperador();
         $p->avance[] = $avance;
         
-        //Hay que determinar que roles hay que levantar desde la definicion del GIS de prestaciones.
-        self::procesarGeoRef($obj, &$p);
-        
         //Cuestionario de la prestacion
         $p->cuestionario = cuestionario::fromForm($obj, $p);
         
-        //retorno la prestacion
-        return array($p);
+        //Hay que determinar que roles hay que levantar desde la definicion del GIS de prestaciones.
+        return array( self::procesarGeoRef($obj, $p) );        
     }
     
     /** Averiguo los organismos que deben ver o procesar este ticket
@@ -304,7 +301,7 @@ class prestacion {
      * @param type $coordy
      * @return type
      */
-    static function procesarGeoRef($obj, &$p)
+    static function procesarGeoRef($obj, $p)
     {
         global $primary_db;
         
@@ -345,14 +342,16 @@ class prestacion {
                 }
             }
         }
+        return $p;
     }
 
     //Consultar en la USIG por la georeferenciacion de un punto
     static function consultarGIS($grilla,$coordx,$coordy)
     {
-        //Llamar al web service de GIS MGP
         /*
-         * //Obtengo el nombre del server usado
+        //Llamar al web service de GIS MGP
+        
+        //Obtengo el nombre del server usado
     	$host = $_SERVER["HTTP_HOST"];
     	$ch = curl_init("http://$host/direcciones/proxyjson.php?method=consultarDelimitaciones&p1=$coordx&p2=$coordy&p3=".rawurlencode($grilla));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -365,8 +364,8 @@ class prestacion {
 			return "";
 		}    	
         $ans = json_decode($output);
+         
          */
         return '';
     }
 }
-?>
