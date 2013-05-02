@@ -76,6 +76,7 @@ class CDH_CUESTIONARIO extends CDataHandler
         }
 
         //Proceso cuestionario
+        $result = array();
         $sql = "SELECT tpr_code, tcu_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad FROM tic_prestaciones_cuest WHERE tpr_code='{$prestacion}'";
         $re = $primary_db->do_execute($sql);
         while( $myrow=$primary_db->_fetch_row($re) )

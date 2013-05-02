@@ -31,7 +31,6 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
     public function beforeSaveDB()
     {
         $obj = $this->m_data;
-        $this->m_can_save = false;
         $res = array();
         
         $ticket = new ticket();

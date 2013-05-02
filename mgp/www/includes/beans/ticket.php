@@ -382,40 +382,40 @@ class ticket {
          
          //Validacion de los datos recibidos. Datos minimos para crear un ticket
          if($this->tic_tipo==='')
-             $this->errors[] = "Campo obligatorio tic_tipo faltante";
+             $this->addError("Campo obligatorio tic_tipo faltante");
 
          if($this->tic_coordx==='')
-             $this->errors[] = "Campo obligatorio tic_coordx faltante";
+             $this->addError("Campo obligatorio tic_coordx faltante");
 
          if($this->tic_coordy==='')
-             $this->errors[] = "Campo obligatorio tic_coordy faltante";
+             $this->addError("Campo obligatorio tic_coordy faltante");
 
          if($this->tic_calle_nombre==='')
-             $this->errors[] = "Campo obligatorio tic_calle_nombre faltante";
+             $this->addError("Campo obligatorio tic_calle_nombre faltante");
 
          if($this->tic_nro_puerta==='' && $this->tic_cruza_calle==='')
-             $this->errors[] = "Campo obligatorio tic_nro_puerta o tic_cruza_calle faltante";
+             $this->addError("Campo obligatorio tic_nro_puerta o tic_cruza_calle faltante");
          
          //Prestacion
          if(!isset($this->prestaciones[0]))
-             $this->errors[] = "Debe incluir una prestacion como minimo";
+             $this->addError("Debe incluir una prestacion como minimo");
          elseif($this->prestaciones[0]->tpr_code==='')
-             $this->errors[] = "Campo obligatorio tpr_code faltante";
+             $this->addError("Campo obligatorio tpr_code faltante");
              
          //Solicitante
          if(!isset($this->solicitantes[0]))
-             $this->errors[] = "Debe incluir por lo menos un solicitante";
+             $this->addError("Debe incluir por lo menos un solicitante");
          else 
          {    
             $sol = $this->solicitantes[0];
             if($sol->ciu_documento==='')
-                $this->errors[] = "Campo obligatorio ciu_documento faltante";
+                $this->addError("Campo obligatorio ciu_documento faltante");
 
             if($sol->ciu_nombres==='')
-                $this->errors[] = "Campo obligatorio ciu_nombre faltante";
+                $this->addError("Campo obligatorio ciu_nombre faltante");
 
             if($sol->ciu_apellido==='')
-                $this->errors[] = "Campo obligatorio ciu_apellido faltante";
+                $this->addError("Campo obligatorio ciu_apellido faltante");
          }
          
          //Se produjo algun error?
@@ -576,6 +576,7 @@ class ticket {
     		);	
                 break;
             default:
+                $geo = array();
                 break;
         }
     	 
@@ -728,7 +729,7 @@ class ticket {
         $this->tipo_georef = _F($obj,"tipo_georef");
         
         switch($this->tipo_georef) {
-            case 'DIRECCION':        
+            case 'DOMICILIO':        
                 $this->alternativa          = _F($obj,"alternativa");
                 $this->tic_barrio           = _F($obj,"tic_barrio");
                 $this->tic_cgpc             = _F($obj,"tic_cgpc");
@@ -786,7 +787,7 @@ class ticket {
 
                 break;
             default:
-                $this->addError('Opción de GEOREFERENCIA desconocida: '.$this->tipo_georef);
+                $this->addError('Opción de GEOREFERENCIA desconocida: >'.$this->tipo_georef.'<');
         }
         
         //Tipo de prestacion y descripción
