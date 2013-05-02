@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:com="http://www.commsys.com.ar">
+<html lang="es">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-        <meta http-equiv="content-language" content="es" />
         <title>Reclamos Municipalidad de General Pueyrredón</title>
     <com:security/>
     <style>
@@ -126,7 +125,7 @@
         $(document).ready(function() {
             $('#login').focus();
             $("input:visible").keypress(function(e){
-                if(e.which==13) {
+                if(e.which===13) {
                     var form = $(this).parents('form:first');
                     form.submit();
                 }
