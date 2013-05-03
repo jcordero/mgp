@@ -333,22 +333,24 @@ class ticket {
      * Carga el ticket desde la base de datos.
      * @global type $primary_db
      */   
-    function load() {
+    function load($opcion='todo') {
         global $primary_db;
         
         //Esta el identificador cargadado?
-        if( $this->tic_identificador=='' ) { 
+        if( $this->tic_identificador=='' && ($this->tic_nro=='' || $this->tic_nro==0) ) { 
             return false; //No se puede cargar el registro, sin indicar primero cual se busca   
         } else {
-            $this->tic_nro = $primary_db->QueryString("select tic_nro from tic_ticket where tic_identificador='{$this->tic_identificador}'");
-            if( intval($this->tic_nro)==0 ) 
-                return false; //El ticket pedido no existe               
+            if($this->tic_nro==0 || $this->tic_nro=='') {
+                $this->tic_nro = $primary_db->QueryString("select tic_nro from tic_ticket where tic_identificador='{$this->tic_identificador}'");
+                if( intval($this->tic_nro)==0 ) 
+                    return false; //El ticket pedido no existe         
+            }      
         }
-        
-        
+                
         //Ya se en este punto que el ticket existe. Lo cargo ahora completo desde la base
         $row = $primary_db->QueryArray("select * from tic_ticket where tic_nro='{$this->tic_nro}'");
-    
+
+        $this->tic_identificador = $row['tic_identificador'];
         $this->tic_tipo = $row['tic_tipo'];
         $this->tic_nro_asociado = $row['tic_nro_asociado'];
         $this->tic_tstamp_in = DatetoISO8601($row['tic_tstamp_in']);
@@ -368,9 +370,12 @@ class ticket {
         $this->tic_cruza_calle = $row['tic_cruza_calle'];
        
         $this->prestaciones = prestacion::factory($this->tic_nro);
-        $this->solicitantes = solicitante::factory($this->tic_nro);
-        $this->reiteraciones = reiteracion::factory($this->tic_nro);
-        $this->asociados = asociado::factory($this->tic_nro);
+        
+        if($opcion=='todo') {
+            $this->solicitantes = solicitante::factory($this->tic_nro);
+            $this->reiteraciones = reiteracion::factory($this->tic_nro);
+            $this->asociados = asociado::factory($this->tic_nro);
+        }
         
         return true;
     }
@@ -862,5 +867,40 @@ class ticket {
     }
 
        
+    static function factoryByCiudadano($ciu_code, $parte='tickets') {
+        global $primary_db;        
+        $res = array();
+        
+        switch($parte) {
+            case 'tickets':
+
+                $rs = $primary_db->do_execute("select * from tic_ticket_ciudadano where ciu_code='{$ciu_code}'");
+                while( $row=$primary_db->_fetch_row($rs) )
+                {
+                    $tic_nro = $row['tic_nro'];
+
+                    $t = new ticket();
+                    $t->tic_nro = $tic_nro;
+                    $t->load('basico');
+                    $res[] = $t;
+                }
+                break;
+            case 'reiterados':
+                $rs2 = $primary_db->do_execute("select * from tic_ticket_ciudadano_reit where ciu_code='{$ciu_code}'");
+                while( $row2=$primary_db->_fetch_row($rs2) )
+                {
+                    $tic_nro = $row2['tic_nro'];
+
+                    $t = new ticket();
+                    $t->tic_nro = $tic_nro;
+                    $t->load('basico');
+                    $res = $t;
+                }
+                break;
+            default:
+        }
+        
+        return $res;
+    }
    
 }

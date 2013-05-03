@@ -143,7 +143,72 @@ class ciudadano {
         
     }
     
-    
+    function load($doc_nro='', $detalle='basico') {
+        global $primary_db;
+        
+        if($doc_nro!='') {
+            $this->documentos[] = $doc_nro;
+            $this->ciu_code = $primary_db->QueryString("select ciu_code from ciu_identificacion where ciu_nro_doc='{$doc_nro}'");
+        }
+
+        if($this->ciu_code==0 || $this->ciu_code=='') {
+            return false;
+        }
+        
+        $rs = $primary_db->do_execute("select * from ciu_ciudadanos where ciu_code='{$this->ciu_code}'");
+        $row = $primary_db->_fetch_row($rs);
+        if($row) {
+            $this->ciu_code = $row['ciu_code'];
+            $this->ciu_nombres = $row['ciu_nombres'];
+            $this->ciu_apellido = $row['ciu_apellido'];
+            $this->ciu_sexo = $row['ciu_sexo'];
+            $this->ciu_nacimiento = $row['ciu_nacimiento'];
+            $this->ciu_email = $row['ciu_email'];
+            $this->ciu_tel_fijo = $row['ciu_tel_fijo'];
+            $this->ciu_tel_movil = $row['ciu_tel_movil'];
+            $this->ciu_horario_cont = $row['ciu_horario_cont'];
+            $this->ciu_no_llamar = $row['ciu_no_llamar'];
+            $this->ciu_no_email = $row['ciu_no_email'];
+            $this->ciu_dir_calle = $row['ciu_dir_calle'];
+            $this->ciu_dir_nro = $row['ciu_dir_nro'];
+            $this->ciu_dir_piso = $row['ciu_dir_piso'];
+            $this->ciu_dir_dpto = $row['ciu_dir_dpto'];
+            $this->ciu_barrio = $row['ciu_barrio'];
+            $this->ciu_localidad = $row['ciu_localidad'];
+            $this->ciu_provincia = $row['ciu_provinicia'];
+            $this->ciu_pais = $row['ciu_pais'];
+            $this->ciu_cod_postal = $row['ciu_cod_postal'];
+            $this->ciu_cgpc = $row['ciu_cgpc'];
+            $this->ciu_coord_x = $row['ciu_coord_x'];
+            $this->ciu_coord_y = $row['ciu_coord_y'];
+            $this->ciu_trabaja = $row['ciu_trabaja'];
+            $this->ciu_nivel_estudio = $row['ciu_nivel_estudio'];
+            $this->ciu_profesion = $row['ciu_profesion'];
+            $this->ciu_ultimo_acceso = DatetoISO8601($row['ciu_ultimo_acceso']);
+            $this->ciu_canal_ingreso = $row['ciu_canal_ingreso'];
+            $this->use_code = loadOperador($row['use_code']);
+            $this->ciu_estado = $row['ciu_estado'];
+            $this->ciu_tstamp = DatetoISO8601($row['ciu_tstamp']);
+            $this->ciu_tipo_persona = $row['ciu_tipo_persona'];
+            $this->ciu_razon_social = $row['ciu_razon_social'];
+            $this->ciu_nacionalidad = $row['ciu_nacionalidad'];
+            
+            //Cargo los documentos
+            $this->documentos = array();
+            $rs2 = $primary_db->do_execute("select * from ciu_identificacion where ciu_code='{$this->ciu_code}'");
+            while( $row2 = $primary_db->_fetch_row($rs2) ) {
+                $this->documentos[] = $row2['ciu_nro_doc'];
+            }
+            
+            //Cargo los eventos
+            
+            //Cargo los tickets
+            $this->tickets = ticket::factoryByCiudadano($this->ciu_code, 'tickets');
+            $this->reiteraciones = ticket::factoryByCiudadano($this->ciu_code, 'reiterados');
+        }
+        
+        return true;
+    }
     
     
     
@@ -151,7 +216,8 @@ class ciudadano {
          global $primary_db;
         $sql="select * from ciu_ciudadanos  where ciu_code = $id ";
         $re = $primary_db->do_execute($sql);
-        if( $row=$primary_db->_fetch_array($re) )
+        $row=$primary_db->_fetch_array($re);
+        if( $row )
         {
              $a=array();
              foreach($row as $key => $value)
