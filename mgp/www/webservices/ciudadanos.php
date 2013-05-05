@@ -80,34 +80,3 @@ if($ret['resultado']!=='OK')
 echo json_encode($ret);
 exit;
 
-/*******************************************************************************/
-
-function consulta_ticket($tipo,$anio,$nro) {
-    /* TODO: Escribir consulta a objeto ticket
-     */
-    $ret = ticket::factoryByIdent($tipo, $nro, $anio);
-    return $ret;
-}
-
-function ingreso_ticket($ingreso_ticket) {
-    $tic = new ticket();
-    $tic->fromJSON($ingreso_ticket);
-    $tic->save();
-    
-    $resultado = $tic->getStatus() ? 'OK' : 'ERROR';
-    return array(
-        'resultado'         => $resultado,
-        'error'             => $tic->getErrorString(),
-        'tic_identificador' => $tic->tic_identificador
-    );
-}
-
-function actualizo_ticket($tipo,$anio,$nro,$cambio_estado_ticket) {
-    /* TODO: cambiar de estado el ticket
-     * 
-     */
-    $ret = array('resultado' => 'no implementado');
-    return $ret;
-}
-
-?>

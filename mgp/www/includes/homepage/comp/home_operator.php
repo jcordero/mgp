@@ -125,7 +125,7 @@ if(!class_exists('home_operator'))
 			//Bloque TALK
 			$t = new talk();
 			list($cnt,$err,$includes) = $t->Render($context);
-			
+                        
 			$content["home_operator"] = $cnt['talk'].$html;
 			return array( $content, $errors, $includes );
 		}

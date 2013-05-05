@@ -12,74 +12,78 @@ class CDH_DNI extends CDataHandler {
 		$fld->m_js_totext = "toTextDNI";
 		$fld->m_js_tovalue = "toTextDNI";
 		$fld->m_js_edit = "editDNI";
+                $fld->m_js_init = "initDNI";
 		$this->m_js_main_search="chg_dni";
 	}
 	
+        /** Generar HTML para formulario
+         * 
+         * @param type $cn
+         * @param type $name
+         * @param type $id
+         * @param type $pre
+         * @return string
+         */
 	public function RenderFilterForm($cn,$name="",$id="",$pre="")
 	{
 		if($name=="")
-		{
-			$name=$this->getName();
-		}
+                    $name=$this->getName();
+		
 		if($id=="")
-		{
-			$id=$name;
-		}
+                    $id=$name;
+		
 		$fld = $this->m_parent;
 	
 		$val = $this->getValue();
 		if(!$fld->m_IsVisible)
 		{
-			$html.="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$val\"/>";
+                    $html.="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$val\"/>";
 		}
 		else
 		{
-			//val = campo compuesto
-			//val1 = tipo de documento
-			//val2 = numero de documento
-			$lista = explode(' ', $val);
-			$val1 = (isset($lista[0]) ? $lista[0] : "");
-			$val2 = (isset($lista[1]) ? $lista[1] : "");
-			$val3 = (isset($lista[2]) ? $lista[2] : "");
-			
-			$html ="<div id=\"$fld->m_Name\" class=\"itm\">
-			<div class=\"desc\">$fld->m_Label</div>
-			<div class=\"fld\">
-				<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$val\"/>";
+                    //val = campo compuesto
+                    //val1 = tipo de documento
+                    //val2 = numero de documento
+                    $lista = explode(' ', $val);
+                    $val1 = (isset($lista[0]) ? $lista[0] : "");
+                    $val2 = (isset($lista[1]) ? $lista[1] : "");
+                    $val3 = (isset($lista[2]) ? $lista[2] : "");
+
+                    $html ="<div id=\"$fld->m_Name\" class=\"itm\">
+                    <div class=\"desc\">$fld->m_Label</div>
+                    <div class=\"fld\">
+                            <input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$val\"/>";
 	
-			if($fld->m_IsReadOnly)
-			{
-				$html.=" $val";
-			}
-			else
-			{
-				//Pais
-				$html.="<select name=\"p{$name}\" id=\"p{$id}\">";	
-				$rs = $cn->do_execute("SELECT cpa_code, cpa_descripcion FROM ciu_paises ORDER BY 2");
-				while($row=$cn->_fetch_row($rs)) {
-					$html.="<option value=\"{$row['cpa_code']}\" ".($val1==$row['cpa_code'] ? "selected" : "").">".$row['cpa_descripcion'];
-				}	
-				$html.="</select> ";
-				
-				//Tipo de documento
-				$html.="<select name=\"t{$name}\" id=\"t{$id}\">";
-				$html.="<option value=\"DNI\" ".($val2=="DNI" ? "selected" : "").">DNI";
-				$html.="<option value=\"LE\"  ".($val2=="LE"  ? "selected" : "").">LE";
-				$html.="<option value=\"LC\"  ".($val2=="LC"  ? "selected" : "").">LC";
-				$html.="<option value=\"PAS\" ".($val2=="PAS" ? "selected" : "").">PAS";
-				$html.="<option value=\"CI\"  ".($val2=="CI"  ? "selected" : "").">CI";
-				$html.="<option value=\"PRE\" ".($val2=="PRE" ? "selected" : "").">PRE";
-				$html.="</select> ";
-				
-				//Nro de documento
-				$html.=" <input type=\"text\" name=\"n{$name}\" id=\"n{$id}\" value=\"{$val3}\" maxlength=\"15\" size=\"12\" />";
-	
-				if($fld->m_ClassParams!="no_search")
-				{
-					$html.=" <img src=\"".WEB_PATH."/images/default/bt_go.gif\" onclick=\"chg_docid('$id')\" border=\"0\"> ";
-				}
-			}
-			$html.="</div></div>"."\n";
+                    if($fld->m_IsReadOnly)
+                    {
+                            $html.=" $val";
+                    }
+                    else
+                    {
+                            //Pais
+                            $html.="<select name=\"p{$name}\" id=\"p{$id}\" data-selected=\"{$val1}\">";	
+                            $html.=$this->getOptions();
+                            $html.="</select> ";
+
+                            //Tipo de documento
+                            $html.="<select name=\"t{$name}\" id=\"t{$id}\" data-selected=\"{$val2}\">
+                                <option value=\"DNI\">DNI
+                                <option value=\"LE\" >LE
+                                <option value=\"LC\" >LC
+                                <option value=\"PAS\">PAS
+                                <option value=\"CI\" >CI
+                                <option value=\"PRE\">PRE
+                            </select> ";
+
+                            //Nro de documento
+                            $html.=" <input type=\"text\" name=\"n{$name}\" id=\"n{$id}\" value=\"{$val3}\" maxlength=\"15\" size=\"12\" />";
+
+                            if($fld->m_ClassParams!="no_search")
+                            {
+                                $html.=" <img src=\"".WEB_PATH."/images/default/bt_go.gif\" onclick=\"chg_docid('$id')\" border=\"0\"> ";
+                            }
+                    }
+                    $html.="</div></div>"."\n";
 		}
 		return $html;
 	}
@@ -141,6 +145,27 @@ class CDH_DNI extends CDataHandler {
                 }
             }
             return json_encode($ret);
+        }
+        
+        private function getOptions() {
+            global $primary_db;
+           
+            if(function_exists('apc_fetch')) {
+                $opt = apc_fetch('CDH_DNI: lista_paises');
+                if($opt!==false)
+                    return $opt;
+            }
+            
+            $html='';
+            $rs = $primary_db->do_execute("SELECT cpa_code, cpa_descripcion FROM ciu_paises ORDER BY 2");
+            while($row=$primary_db->_fetch_row($rs)) {
+                $html.="<option value=\"{$row['cpa_code']}\">".$row['cpa_descripcion'];
+            }	
+            
+            if(function_exists('apc_store')) {
+                apc_store('CDH_DNI: lista_paises',$html);
+            }
+            return $html;
         }
 }
 ?>

@@ -21,7 +21,6 @@ if(!class_exists('talk_view'))
 		
 		public function Render($context)
 		{
-			global $sess,$primary_db;
 			
             $html = '
 <script type="text/javascript">

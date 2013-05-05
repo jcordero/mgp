@@ -101,6 +101,9 @@ if(!class_exists('talk'))
             
 			$content["talk"] = $style.$html;
 			$includes[] = '<script type="text/javascript" src="'.WEB_PATH.'/includes/home_call.js"></script>';
+                        $includes[] = '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ciudadano/dni.js"></script>';
+			$includes[] = '<script type="text/javascript">initDNI("m_person_doc", {});</script>';
+
 			$err = array();
 			return array( $content, $err, $includes );
 		}

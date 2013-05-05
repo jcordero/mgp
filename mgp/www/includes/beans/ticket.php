@@ -7,6 +7,7 @@ include_once 'beans/solicitante.php';
 include_once 'beans/reiteracion.php';
 include_once 'beans/asociado.php';
 include_once 'common/cmessaging.php';
+include_once 'beans/archivo.php';
 
 class ticket {
     /** Nro interno del ticket */
@@ -102,6 +103,9 @@ class ticket {
     /** Lista de tickets */
     public $asociados;
     
+    /** Array con los archivos adjuntos */
+    public $archivos;
+    
     /** Foto */
     private $media;
     
@@ -137,6 +141,7 @@ class ticket {
         $this->reiteraciones = array();
         $this->asociados = array();
         $this->errors = array();
+        $this->archivos = array();
     }
     
     function getErrors() {
@@ -375,6 +380,7 @@ class ticket {
             $this->solicitantes = solicitante::factory($this->tic_nro);
             $this->reiteraciones = reiteracion::factory($this->tic_nro);
             $this->asociados = asociado::factory($this->tic_nro);
+            $this->archivos = archivo::factory($this->tic_nro);
         }
         
         return true;

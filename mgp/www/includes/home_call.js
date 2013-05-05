@@ -18,7 +18,7 @@ $(document).ready(function() {
 
 function armar_home_page() {
 	try {
-		if(person.person_status=="IDENTIFICADO")
+		if(person.person_status==="IDENTIFICADO")
 		{
 			esperar();
 		    
@@ -39,7 +39,7 @@ function armar_home_page() {
 
 function armar_panel() {
 	//Indicador ANONIMO
-	if(person.person_status=="ANONIMO")
+	if(person.person_status==="ANONIMO")
 	{
 		$('#identificado').hide();
 		$('#talk_btn_anonimo').hide();
@@ -69,7 +69,7 @@ function armar_panel() {
 		$('#talk_btn_modificar').show();
 			    	
     	//Armo el texto de descripcion Nombre, Apellido y debajo Tipo y nro de doc
-    	var d = (person.person_doc!='' ? person.person_doc.split(' ') : ['ARG','DNI','']);
+    	var d = (person.person_doc!=='' ? person.person_doc.split(' ') : ['ARG','DNI','']);
     	var b="<h4>"+person.person_nombres+", "+person.person_apellido+"</h4>"+d[1]+" "+d[2]+" ("+d[0]+")";
 		b+="<br/>ID: <b>"+person.person_id+"</b>";    	
     	b+="<br/>Sexo: <b>"+person.person_sexo+"</b><br/>Edad: <b>"+person.person_edad+" años</b>";
@@ -77,7 +77,7 @@ function armar_panel() {
 	}
 
 	//Indicador EN ESPERA - CONECTADO
-	if(talk.talk_status=="EN ESPERA")
+	if(talk.talk_status==="EN ESPERA")
 	{
 		$('#talk_btn_terminar').hide();
 		$('#talk_status').html("EN ESPERA");
@@ -98,37 +98,38 @@ function armar_panel() {
 var g_goto = "";
 function boton_buscar()
 {
-	var pais = $('#pm_person_doc :selected').val();
+    var pais = $('#pm_person_doc :selected').val();
     var doc_tipo = $('#tm_person_doc').val();
     var doc_nro = $('#nm_person_doc').val();
     var nombres = '';
     var apellido = '';
     
-	if(doc_nro=="")
-	{
-		alert_box('Debe ingresar primero un número de documento','ATENCION');
-		return false;
-	}
+    if(doc_nro==="")
+    {
+        alert_box('Debe ingresar primero un número de documento','ATENCION');
+        return false;
+    }
 
-	//Pongo en espera...
-	esperar("Buscando datos del ciudadano...");
+    //Pongo en espera...
+    esperar("Buscando datos del ciudadano...");
 	
-	//Identificador compuesto del DOC
-	var doc = pais + " " + doc_tipo + " " + doc_nro;
-	person.person_doc = doc;
+    //Identificador compuesto del DOC
+    var doc = pais + " " + doc_tipo + " " + doc_nro;
+    person.person_doc = doc;
 	
     new rem_request(this,function(obj,json){
-    	listo();
-    	var jdata = eval('(' + json + ')');
+    	var jdata = JSON.parse(json);
     	if(!jdata)
         {
+            listo();
             alert_box("Buscar no retorna resultados","ERROR");
         }
         else
         {
             //si el array esta vacio... No hay coincidencias
-            if( jdata.url != "")
+            if(jdata.url!=='')
             {
+                listo();
             	g_goto = jdata.url;
                 confirm_box('Es la primera vez que se ingresa este documento. Se pasará a la pantalla de carga de datos personales.', "ATENCION",showCiudadano);
             }
@@ -137,17 +138,17 @@ function boton_buscar()
             	//Se identifico a la persona?
             	var p = jdata.ciudadanos[0];
             	person.person_status 	= 'IDENTIFICADO';
-            	person.person_doc 		= doc;
+            	person.person_doc 	= doc;
             	person.person_nombres 	= p.ciu_nombres;
             	person.person_apellido 	= p.ciu_apellido;
-            	person.person_id 		= p.ciu_code;
+            	person.person_id 	= p.ciu_code;
             	person.person_cops_id 	= p.cops_id;
-            	person.person_sexo 		= p.sexo;
-            	person.person_edad 		= p.edad;
-            	person.person_pais 		= p.pais;
+            	person.person_sexo 	= p.sexo;
+            	person.person_edad 	= p.edad;
+            	person.person_pais 	= p.pais;
             	            	                
-            	armar_home_page();
             	armar_panel();
+            	armar_home_page();
             }
         }	
     },"HOME","doBuscar",doc + '|' + nombres + '|' + apellido + '|' + talk.talk_ani + '||' + pais);

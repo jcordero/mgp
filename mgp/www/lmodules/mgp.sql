@@ -410,6 +410,7 @@ create table tic_prestaciones (
   tor_code_inspeccion int null,
   tor_code_verificacion int null,
   tpr_asociar_radio int null,
+  eev_task varchar(100) null,
   constraint pk_tic_prestaciones primary key clustered (tpr_code) 
 )
 
@@ -495,6 +496,7 @@ create table tic_prestaciones_gis (
   tpg_tstamp datetime null,
   use_code varchar(50) null,
   tto_figura varchar(50) null,
+  tpr_plazo varchar(20) null,
   constraint pk_tic_prestaciones_gis primary key clustered (tpr_code, tpg_code)
 )
 
@@ -700,7 +702,7 @@ create  table ciu_paises (
   constraint pk_ciu_paises primary key clustered (cpa_code) 
 )
 
-CREATE  tic_ticket_cuestionario (
+create table tic_ticket_cuestionario (
   tic_nro INT NOT NULL,
   tpr_code VARCHAR(20) NOT NULL,
   tcu_code INT NOT NULL,
@@ -709,5 +711,16 @@ CREATE  tic_ticket_cuestionario (
   tpr_respuesta TEXT NULL,
   tpr_miciudad VARCHAR(45) NULL,
   constraint pk_tic_ticket_cuestionario primary key clustered (tic_nro, tpr_code, tcu_code) 
- )
+)
+
+CREATE TABLE eve_events (
+  eev_code int NOT NULL ,
+  eev_tstamp_in DATETIME NULL,
+  eev_tstamp_out DATETIME NULL,
+  eev_task VARCHAR(100) NULL,
+  eev_data TEXT NULL,
+  eev_status VARCHAR(45) NULL,
+  eev_error_msg TEXT NULL,
+  constraint pk_eve_events primary key clustered (eev_code) 
+)
 

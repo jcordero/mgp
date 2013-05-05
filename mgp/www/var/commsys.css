@@ -641,12 +641,11 @@ html>body .itm .fld img,  html>body .itm .fldm img {
 }
 
 .note {
-    margin-left: 5px;
+    padding-left: 20px;
     line-height: 22px;
     color: #777777;
-    position: relative;
-    left:170px;
     font-style: italic;
+    float:left;
 }
 
 #cid_tiempo_maximo .note, #dden_v_domestica .note, #contenido_datos .note, table .boton
