@@ -1,7 +1,11 @@
 $(document).ready(function(){
     
     //Opciones
-    $.ajax('http://mgp/mgp/webservices/maestro/paises').done(function(json) {
+    var url = 'http://147.mardelplata.gob.ar/mgp/webservices/maestro/paises'; 
+    $.ajax({
+        url : url,
+        dataType : 'jsonp'
+    }).done(function(json) {
         var paises = JSON.parse(json);
         var p = '';
         var pl = paises.maestro.length;
@@ -20,8 +24,11 @@ $(document).ready(function(){
         var pais = $('#pais').val();
         var documento = $('#documento').val();
         var numero = $('#numero').val();
-        var url = 'http://mgp/mgp/webservices/ciudadanos/'+pais+'/'+documento+'/'+numero;
-        $.ajax(url).done(function(json) {
+        var url = 'http://147.mardelplata.gob.ar/mgp/webservices/ciudadanos/'+pais+'/'+documento+'/'+numero;
+        $.ajax({
+            url : url,
+            dataType : 'jsonp'
+        }).done(function(json) {
             var perfil = JSON.parse(json);
                         
             //Completo datos del ciudadano

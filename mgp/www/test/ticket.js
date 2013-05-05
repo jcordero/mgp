@@ -7,12 +7,15 @@ $(document).ready(function(){
     var tipo = p[0];
     var nro  = p[1];
     var anio = p[2];
-    var url = "http://mgp/mgp/webservices/tickets/"+tipo+"/"+anio+"/"+nro;
+    var url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets/"+tipo+"/"+anio+"/"+nro;
     
     $('#titulo').html(tipo+' '+nro+'/'+anio);
     
     //Recupero el ticket
-    $.ajax(url).done(function(json) {
+    $.ajax({
+        url : url,
+        dataType : 'jsonp'
+    }).done(function(json) {
         var resultado = JSON.parse(json);
         var ticket = resultado.ticket;
         
@@ -20,7 +23,6 @@ $(document).ready(function(){
     
         if(ticket.prestaciones.length>0)
             t+='<h3>Prestación: '+ticket.prestaciones[0].tpr_description+'</h3>';
-
 
         //Direccion
         if(ticket.tic_lugar) {

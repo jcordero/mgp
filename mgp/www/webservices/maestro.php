@@ -1,5 +1,6 @@
 <?php
 include_once 'common/sites.php';
+global $primary_db;
 
 ini_set("error_log", LOG_PATH.'api_web.log');
 error_log("\n------------------ INICIO PROCESO API -----------------------\n");
@@ -12,6 +13,7 @@ error_log("\n------------------ INICIO PROCESO API -----------------------\n");
 $ret['resultado'] = 'ERROR';
 $ret['error'] = '';
 $metodo = $_SERVER['REQUEST_METHOD'];   // GET, PUT 
+$callback = '';
 
 //validacion de la entrada
 if($metodo!="GET") {
@@ -23,6 +25,12 @@ if($metodo==='GET' && $ret['error']==='') {
     $p = explode('/', $_SERVER['REQUEST_URI']);
     $maestro = (isset($p[4]) ? strtoupper($p[4])    : '');  //Maestro           
     
+    //Viene una parte de callback JSONP?
+    if(isset($_GET['callback'])) {
+        $callback = $_GET['callback'];
+        $maestro = substr($maestro, 0, strpos('?')-1);
+    }
+        
     if($maestro!="PAISES" ) {
         $ret['error'] = 'El parametro maestro solo puede ser PAISES';
     }
@@ -42,7 +50,11 @@ ob_end_clean();
 
 if($ret['resultado']!=='OK')
     header('HTTP/1.0 400 Bad Request');
-            
-echo json_encode($ret);
+
+if($callback==='')
+    echo json_encode($ret);
+else
+    echo $callback.'('.json_encode($ret).')';
+
 exit;
 

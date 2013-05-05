@@ -21,6 +21,7 @@ error_log("\n------------------ INICIO PROCESO API -----------------------\n");
 $ret['resultado'] = 'ERROR';
 $ret['error'] = '';
 $metodo = $_SERVER['REQUEST_METHOD'];   // GET, PUT 
+$callback = '';
 
 //validacion de la entrada
 if($metodo!="GET" && $metodo!="PUT") {
@@ -31,8 +32,15 @@ if($metodo==='GET' && $ret['error']==='') {
     error_log("URL GET = ".$_SERVER['REQUEST_URI']);    
     $p = explode('/', $_SERVER['REQUEST_URI']);
     $tipo = strtoupper($p[4]);      //RECLAMO SOLICITUD DENUNCIA QUEJA           
-    $anio = intval($p[5]);          //Nro         
-    $nro = intval($p[6]);            //Nro   
+    $anio = intval($p[5]);          //Año         
+    
+    //Viene una parte de callback JSONP?
+    if(isset($_GET['callback'])) {
+        $callback = $_GET['callback'];
+        $nro = intval( substr($p[6], 0, strpos('?')-1) );
+    } else {
+        $nro = intval($p[6]);       //Nro   
+    }
     
     if($tipo!="RECLAMO" && $tipo!="SOLICITUD" && $tipo!="DENUNCIA" && $tipo!="QUEJA") {
         $ret['error'] = 'El parametro tipo solo puede ser RECLAMO, SOLICITUD, DENUNCIA o QUEJA';
@@ -86,7 +94,11 @@ if($ret['resultado']==='ERROR' && $ret['error']==='')
 if($ret['resultado']!=='OK')
     header('HTTP/1.0 400 Bad Request');
             
-echo json_encode($ret);
+if($callback==='')
+    echo json_encode($ret);
+else
+    echo $callback.'('.json_encode($ret).')';
+
 exit;
 
 /*******************************************************************************/
