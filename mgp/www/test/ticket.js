@@ -15,8 +15,7 @@ $(document).ready(function(){
     $.ajax({
         url : url,
         dataType : 'jsonp'
-    }).done(function(json) {
-        var resultado = JSON.parse(json);
+    }).done(function(resultado) {
         var ticket = resultado.ticket;
         
         var t = '<div class="row"><div class="span8">';

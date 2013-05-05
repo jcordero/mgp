@@ -5,8 +5,7 @@ $(document).ready(function(){
     $.ajax({
         url : url,
         dataType : 'jsonp'
-    }).done(function(json) {
-        var paises = JSON.parse(json);
+    }).done(function(paises) {
         var p = '';
         var pl = paises.maestro.length;
         for(var j=0;j<pl;j++) {
@@ -28,8 +27,7 @@ $(document).ready(function(){
         $.ajax({
             url : url,
             dataType : 'jsonp'
-        }).done(function(json) {
-            var perfil = JSON.parse(json);
+        }).done(function(perfil) {
                         
             //Completo datos del ciudadano
             var c = 'Tickets de ' + perfil.ciudadano.ciu_nombres + ' ' + perfil.ciudadano.ciu_apellido;

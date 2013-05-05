@@ -37,7 +37,7 @@ if($metodo==='GET' && $ret['error']==='') {
     //Viene una parte de callback JSONP?
     if(isset($_GET['callback'])) {
         $callback = $_GET['callback'];
-        $nro = intval( substr($p[6], 0, strpos('?')-1) );
+        $nro = intval( substr($p[6], 0, strpos($p[6],'?')) );
     } else {
         $nro = intval($p[6]);       //Nro   
     }

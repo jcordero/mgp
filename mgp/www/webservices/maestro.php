@@ -28,7 +28,7 @@ if($metodo==='GET' && $ret['error']==='') {
     //Viene una parte de callback JSONP?
     if(isset($_GET['callback'])) {
         $callback = $_GET['callback'];
-        $maestro = substr($maestro, 0, strpos('?')-1);
+        $maestro = substr($maestro, 0, strpos($maestro,'?'));
     }
         
     if($maestro!="PAISES" ) {

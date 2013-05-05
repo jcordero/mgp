@@ -20,6 +20,7 @@ error_log("\n------------------ INICIO PROCESO API -----------------------\n");
 $ret['resultado'] = 'ERROR';
 $ret['error'] = '';
 $metodo = $_SERVER['REQUEST_METHOD'];   // GET, PUT 
+$callback = '';
 
 //validacion de la entrada
 if($metodo!="GET") {
@@ -33,6 +34,9 @@ if($metodo==='GET' && $ret['error']==='') {
     $doc        = (isset($p[5]) ? strtoupper($p[5])    : '');  //Tipo doc         
     $nro        = (isset($p[6]) ? intval($p[6])        : 0);   //Nro doc   
     $detalle    = (isset($p[7]) ? strtoupper($p[7])    : '');  //Info detallada "EVENTOS" y "TICKETS"           
+    
+    if(isset($_GET['callback']))
+        $callback = $_GET['callback'];
     
     if( strlen($pais)!=3 )
         $ret['error'] = 'El parametro pais debe ser el codigo ISO 3 letras';
@@ -77,6 +81,10 @@ ob_end_clean();
 if($ret['resultado']!=='OK')
     header('HTTP/1.0 400 Bad Request');
             
-echo json_encode($ret);
+if($callback==='')
+    echo json_encode($ret);
+else
+    echo $callback.'('.json_encode($ret).')';
+
 exit;
 
