@@ -449,14 +449,14 @@ class ticket {
          $plazo_unit = $this->prestaciones[0]->getPlazoUnit();
 
          //Salvo el ticket (tic_ticket)
-         $sql1 = "insert into tic_ticket (tic_nro, tic_numero, tic_anio, tic_tipo, tic_tstamp_in, use_code, tic_nota_in, tic_estado, tic_lugar, tic_barrio, tic_cgpc, tic_coordx, tic_coordy, tic_id_cuadra, tic_forms, tic_canal, tic_tstamp_plazo, tic_tstamp_cierre, tic_calle_nombre, tic_nro_puerta, tic_nro_asociado, tic_identificador) 
-                    values (:tic_nro:, :tic_numero:, :tic_anio:, ':tic_tipo:', ':tic_tstamp_in:', ':use_code:', ':tic_nota_in:', 'ABIERTO', ':tic_lugar:', ':tic_barrio:', ':tic_cgpc:', :tic_coordx:, :tic_coordy:, 0, 0, 'movil', NOW() + INTERVAL :plazo: :plazo_unit:, null, ':tic_calle_nombre:', :tic_nro_puerta:, null, ':tic_identificador:')";
+         $sql1 = "insert into tic_ticket (tic_nro  ,tic_numero  ,tic_anio  ,tic_tipo    ,tic_tstamp_in    ,use_code    ,tic_nota_in    ,tic_estado,tic_lugar    ,tic_barrio    ,tic_cgpc    ,tic_coordx  ,tic_coordy  ,tic_id_cuadra,tic_forms,tic_canal    , tic_tstamp_plazo                     ,tic_tstamp_cierre,tic_calle_nombre    ,tic_nro_puerta  ,tic_nro_asociado,tic_identificador    ) 
+                                  values (:tic_nro:,:tic_numero:,:tic_anio:,':tic_tipo:',':tic_tstamp_in:',':use_code:',':tic_nota_in:','ABIERTO' ,':tic_lugar:',':tic_barrio:',':tic_cgpc:',:tic_coordx:,:tic_coordy:,0            ,0        ,':tic_canal:', NOW() + INTERVAL :plazo: :plazo_unit:,null             ,':tic_calle_nombre:',:tic_nro_puerta:,null            ,':tic_identificador:')";
          $params1 = array(
                 'tic_nro'           => $this->tic_nro,
                 'tic_numero'        => $tic_numero, 
                 'tic_anio'          => $tic_anio, 
                 'tic_tipo'          => $this->tic_tipo, 
-                'tic_tstamp_in'     => $this->tic_tstamp_in, 
+                'tic_tstamp_in'     => ISO8601toDate($this->tic_tstamp_in), 
                 'use_code'          => $sess->getUserId(), 
                 'tic_nota_in'       => $this->tic_nota_in, 
                 'tic_lugar'         => json_encode($this->tic_lugar), 
@@ -468,7 +468,8 @@ class ticket {
                 'plazo_unit'        => $plazo_unit, 
                 'tic_calle_nombre'  => $this->tic_calle_nombre, 
                 'tic_nro_puerta'    => $this->tic_nro_puerta, 
-                'tic_identificador' => $this->tic_identificador
+                'tic_identificador' => $this->tic_identificador,
+                'tic_canal'         => $this->tic_canal
          );
          $primary_db->do_execute($sql1,$errores,$params1);
          
@@ -735,7 +736,13 @@ class ticket {
         
         //Recupero los campos del form
         $this->tic_nota_in = _F($obj,"tic_nota_in");
-                        
+        
+        //Fecha de ingreso
+        $this->tic_tstamp_in = DatetoISO8601(_F($obj,"tic_tstamp_in"));
+
+        //Canal de ingreso
+        $this->tic_canal = 'call';
+        
         //ESTILO DE GEOREFERENCIA
         $this->tipo_georef = _F($obj,"tipo_georef");
         
@@ -806,26 +813,6 @@ class ticket {
        
         //Tipo de ticket es igual al tipo de la prestacion ingresada (RECLAMO, DENUNCIA,...)
         $this->tic_tipo = $this->prestaciones[0]->getTipoPrestacion();
-
-        //Amplio la nota.
-        switch($this->tipo_georef) {
-            case "VILLA":
-                $this->tic_nota_in = trim($this->tic_nota_in)." En villa: {$this->villa} manzana: {$this->vilmanzana} casa: {$this->vilcasa}";
-                break;
-            case "PLAZA":
-                $this->tic_nota_in = trim($this->tic_nota_in)." En plaza: {$this->plaza}";
-                break;
-            case "CEMENTERIO":
-                $this->tic_nota_in = trim($this->tic_nota_in)." En cementerio: {$this->cementerio} sep: {$this->sepultura} sect: {$this->sepsector} calle: {$this->sepcalle} número: {$this->sepnumero} fila: {$this->sepfila}";
-                break;    
-            case "DOMICILIO":
-            case "LUMINARIA":
-                if($this->tic_nombre_fantasia!=='' && $this->tic_tipo=="RECLAMO")
-                    $this->tic_nota_in = trim($this->tic_nota_in)." Nombre fantasía: {$this->tic_nombre_fantasia}";
-                break;
-            default:
-                break;
-        }
         
         //Valido la altura de la calle
         if($this->tic_nro_puerta=="")

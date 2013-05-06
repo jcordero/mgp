@@ -96,11 +96,15 @@ function m_prestacion_onSelect(row)
                 id_luminaria.m_mandatory = true;
                 
                 //Activo el mapa interactivo en el centro de MDQ
-                $('#m_mapa_lum').html('');
-                mapa_luminaria = L.map('m_mapa_lum').setView([-38.0086358938483,-57.5388003290637], 13);
-                
-                // add an OpenStreetMap tile layer
-                L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(mapa_luminaria);                
+                if(typeof mapa_luminaria.setView === 'undefined') {
+                    $('#m_mapa_lum').html('');
+                    mapa_luminaria = L.map('m_mapa_lum').setView([-38.0086358938483,-57.5388003290637], 13);
+
+                    // add an OpenStreetMap tile layer
+                    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(mapa_luminaria);
+                } else {
+                    mapa_luminaria.setView([-38.0086358938483,-57.5388003290637], 13);
+                }
             }
         }
 

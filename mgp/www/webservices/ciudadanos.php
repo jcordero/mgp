@@ -33,7 +33,7 @@ if($metodo==='GET' && $ret['error']==='') {
     $pais       = (isset($p[4]) ? strtoupper($p[4])    : '');  //Pais           
     $doc        = (isset($p[5]) ? strtoupper($p[5])    : '');  //Tipo doc         
     $nro        = (isset($p[6]) ? intval($p[6])        : 0);   //Nro doc   
-    $detalle    = (isset($p[7]) ? strtoupper($p[7])    : '');  //Info detallada "EVENTOS" y "TICKETS"           
+    $det        = (isset($p[7]) ? strtoupper($p[7])    : 'BASICO');  //Info detallada "BASICO" y "DETALLES"           
     
     if(isset($_GET['callback']))
         $callback = $_GET['callback'];
@@ -48,32 +48,29 @@ if($metodo==='GET' && $ret['error']==='') {
     if($nro==0) {
         $ret['error'] = 'El parametro Nro de Documento es invalido';
     }
+    
+    //Limpio la porqueria del string detalle
+    $d = explode('?',$det);
+    $detalle = $d[0];
+    
+    $c = new ciudadano();
+    $id = "$pais $doc $nro";
+    $ciu_code = $c->existe($id);
+    if( $ciu_code==0 ){
+        $ret['error'] = 'El ciudadano solicitado no existe';
+        error_log("Se solicita ciudadano $id que no existe");
+    } else {
+        $c->ciu_code = $ciu_code;
+        $c->load('',$detalle);
 
-    switch($detalle) {
-        case 'EVENTOS':
-            break;
-        case 'TICKETS':
-            break;
-        default:
-            $c = new ciudadano();
-            $id = "$pais $doc $nro";
-            $ciu_code = $c->existe($id);
-            if( $ciu_code==0 ){
-                $ret['error'] = 'El ciudadano solicitado no existe';
-                error_log("Se solicita ciudadano $id que no existe");
-            } else {
-                $c->ciu_code = $ciu_code;
-                $c->load();
-                
-                //Quito los datos confidenciales
-                $c->ciu_email = '...';
-                $c->ciu_tel_fijo = '...';
-                $c->ciu_tel_movil = '...';
-                
-                $ret['resultado'] = 'OK';
-                $ret['ciudadano'] = $c;           
-            }            
-    }   
+        //Quito los datos confidenciales
+        $c->ciu_email = '...';
+        $c->ciu_tel_fijo = '...';
+        $c->ciu_tel_movil = '...';
+
+        $ret['resultado'] = 'OK';
+        $ret['ciudadano'] = $c;           
+    }            
 }
 
 ob_end_clean();
