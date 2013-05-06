@@ -23,7 +23,7 @@ $(document).ready(function(){
         var pais = $('#pais').val();
         var documento = $('#documento').val();
         var numero = $('#numero').val();
-        var url = 'http://147.mardelplata.gob.ar/mgp/webservices/ciudadanos/'+pais+'/'+documento+'/'+numero;
+        var url = 'http://147.mardelplata.gob.ar/mgp/webservices/ciudadanos/'+pais+'/'+documento+'/'+numero+'/detalles';
         $.ajax({
             url : url,
             dataType : 'jsonp'
