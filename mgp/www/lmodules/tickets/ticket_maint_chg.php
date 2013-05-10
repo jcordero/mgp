@@ -533,8 +533,8 @@ class class_tic_ticket_upd_m extends cclass_maint {
 
     function RenderJSIncludes() {
         $html = '';
-        $html.="<link rel='stylesheet' type='text/css' href='ticket_maint.css' media='screen,print' />";
-        $html.="<script type='text/javascript' src='ticket_maint.js'></script>";
+        $html.="<link rel='stylesheet' type='text/css' href='ticket_maint_chg.css' media='screen,print' />";
+        $html.="<script type='text/javascript' src='ticket_maint_chg.js'></script>";
 
         return $html;
     }

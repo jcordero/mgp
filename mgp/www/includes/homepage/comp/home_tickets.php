@@ -92,11 +92,12 @@ if(!class_exists('home_tickets'))
                             var o = obj.tickets;
                             var l = o.length;
                             for(var j=0;j<l;j++) {
+                                var est_prest = (o[j].estado_prest=="resuelto" ? " badge-success" : " badge-warning");
                                 var h = "<tr><td>" + o[j].fecha + "<br>" + o[j].identificador + "</td>" +
                                         "<td>" + o[j].prestacion + "<br><span class=\"it\">" + o[j].nota + "</span></td>" +
                                         "<td>" + renderDireccion(o[j].direccion) + "</td>" +
                                         "<td>" + o[j].rol + "</td>" +
-                                        "<td>" + o[j].estado + "<br><span class=\"st\">" + o[j].estado_prest + "</span></td>" +
+                                        "<td><span class=\"badge badge-info\">" + o[j].estado + "</span><br><span class=\"badge"+est_prest+"\">" + o[j].estado_prest + "</span></td>" +
                                         "<td><button class=\"btn btn-small\" onclick=\"trabajar(\'" + o[j].ticket + "\')\">Trabajar</button></td></tr>";
                                 b.append(h);
                             }
@@ -114,7 +115,14 @@ if(!class_exists('home_tickets'))
                     function renderDireccion(o) {
                         if(o && o.lat && o.lng) {
                             var mapa = "<img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + o.lat + "&y=" + o.lng + "&w=250&h=250&r=250\'>";
-                            return o.calle_nombre + " " + o.callenro + " <a href=\"#\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i></a><br>Piso:" + o.piso + " Dpto:" + o.dpto + " Barrio:" + o.barrio;
+                            var d = o.calle_nombre + " " + o.callenro + " <a href=\"#\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i></a><br>";
+                            if(o.piso)
+                                d+=" Piso:" + o.piso;
+                            if(o.dpto)
+                                d+=" Dpto:" + o.dpto;
+                            if(o.barrio)    
+                                d+=" Barrio:" + o.barrio;
+                            return d;
                         } 
                         return "Sin dirección";
                     }

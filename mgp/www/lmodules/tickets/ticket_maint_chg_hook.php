@@ -1,10 +1,14 @@
 <?php
 include_once 'beans/ticket.php';
+include_once 'common/cfile.php';
+include_once 'beans/archivo.php';
+include_once 'beans/avance.php';
 
 class class_tic_ticket_upd_hooks extends cclass_maint_hooks
 {
     //Hago los cambios segun la operacion
     function beforeSaveDB() {
+        global $primary_db, $sess;
         $obj = $this->m_data;
         $err = array();
         
@@ -26,8 +30,23 @@ class class_tic_ticket_upd_hooks extends cclass_maint_hooks
                 $this->asociar($tic);
                 break;
             default:
-                $err[] = "MENSAJE: Operación no reconocida.";
+                //Solo agrego archivos adjuntos?
                 break;
+        }
+        
+        //Proceso los archivos adjuntos
+        if(count($err)===0) {
+            $tic_nro = $obj->getField("tic_nro")->getValue();
+            
+            //Agrego los archivos al ticket
+            $e = archivo::saveFormFiles($tic_nro);
+            if(count($e)>0) {
+                $err = array_merge($err, $e);
+            } else {
+                //Agrego un registro de actividad
+                //Como esta ahora, los avances se refieren a los cambios de estado del ticket
+                //Se podria agregar a los eventos del ciudadano (se agrego foto ... al ticket #/2013)
+            }  
         }
         
         return $err;

@@ -242,7 +242,7 @@
             <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
             <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true"/>
             <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="true"/>
-            <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false"/>
+            <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>
 	</group>
 
 	<group title="Ayuda y búsqueda" id="buscar">
@@ -277,6 +277,7 @@
 
         <group title="Asociación automática de tickets" id="asociar">
             <field name="tpr_asociar_radio" presentation="INT" label="Radio en metros" note="todos los tickets abiertos de esta prestación se asociarán si están próximos esta distacia"/>
+            <field name="eev_task" presentation="TEXT" label="Ruteo externo" note="completar para las prestaciones que se traten en un sistema integrado"/>
         </group>
 		
         <!-- CUESTIONARIO -->
@@ -317,12 +318,13 @@
                 <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
             </column>
             <column title="Figura" order="5">
-                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true"/>
+                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
+                <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="false"/>
+ 
+                <field name="tpg_tstamp" presentation="DATETIME" label="Fecha" isvisible="false" />
+                <field name="use_code" presentation="CURRENTUSER" label="Operador" isvisible="false" />
             </column>
-            <column title="Auditoria" order="6">
-                <field name="tpg_tstamp" presentation="DATETIME" label="Fecha" readonly="true" />
-                <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" />
-            </column>
+            
         </table>
 
         <!-- Rubros -->
@@ -338,7 +340,7 @@
                 <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
             </column>
             <column title="Figura" order="4">
-                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" initialvalue="RESPONSABLE"/>
+                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
             </column>
         </table>
 
@@ -465,7 +467,7 @@
 
 
 
-<!-- CLASE TICKETS -->
+<!-- CLASE TICKETS class_tic_ticket.php -->
 <make object="class">
 	<build out_file="class_tic_ticket.php" classname="class_tic_ticket" classlabel="Ticket">
 	<parse in_file="../mgp.sql" tablename="tic_ticket"/>
@@ -526,7 +528,7 @@
 </make>
 
 
-<!-- INGRESO DE UN TICKET desde el call center -->
+<!-- INGRESO DE UN TICKET desde el call center tickets_maint_n.php -->
 <make object="table_maint">
     <build out_file="tickets_maint_n.php" classname="class_tic_ticket" title="Alta de un ticket" default_operation="N" template_html="ticket.htm" >
         <include file="tickets_maint_n.js"/>
@@ -621,14 +623,14 @@
 </make>
 
 
-<!-- CLASE BUSCAR TICKETS -->
+<!-- CLASE BUSCAR TICKETS class_v_tickets1.php -->
 <make object="class">
 	<build out_file="class_v_tickets1.php" classname="class_v_tickets1" classlabel="Tickets">
 		<parse in_file="../mgp.sql" tablename="v_tickets"/>
     </build>
 </make>
 
-<!--  BUSCAR TICKETS -->
+<!--  BUSCAR TICKETS tickets.php -->
 <make object="search_and_list">
     <build out_file="tickets.php" classname="class_v_tickets1" title="Consulta de tickets"
         template_html="default.htm" >
@@ -671,7 +673,7 @@
     </build>
 </make>
 
-<!-- CLASE CONSULTA DE UN TICKET -->
+<!-- CLASE CONSULTA DE UN TICKET class_tic_ticket_upd.php -->
 <make object="class">
     <build out_file="class_tic_ticket_upd.php" classname="class_tic_ticket_upd" classlabel="Ticket">
 	<parse in_file="../mgp.sql" tablename="tic_ticket"/>
@@ -728,7 +730,7 @@
     </build>
 </make>
 
-<!-- FORMULARIO CONSULTA DE UN TICKET -->
+<!-- FORMULARIO CONSULTA DE UN TICKET ticket_maint.php -->
 <make object="table_maint">
     <build out_file="ticket_maint.php" classname="class_tic_ticket_upd" title="Mantenimiento de un ticket" next="tickets.php?last=1&amp;OP=L" >
         <include file="ticket_maint.css"/>
@@ -887,8 +889,8 @@
 <!-- FORMULARIO CAMBIO DE ESTADO DE UN TICKET -->
 <make object="table_maint">
     <build out_file="ticket_maint_chg.php" classname="class_tic_ticket_upd" title="Cambio de estado de un ticket" next="/index.php" >
-        <include file="ticket_maint.css"/>
-        <include file="ticket_maint.js"/>
+        <include file="ticket_maint_chg.css"/>
+        <include file="ticket_maint_chg.js"/>
         
         <!-- Ubicacion del problema -->
 	<group title="Ubicación" id="ubicacion" render_html="block">

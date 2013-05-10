@@ -25,10 +25,10 @@ class CDH_DIRECCION extends CDataHandler
 		{    
                     $obj = json_decode($val);
                     if($obj) {
-                        $mostrar .= ($obj->calle_nombre!='' ? 'Calle: '.$obj->calle_nombre.' '.$obj->callenro.'<br/>' : '');
-                        $mostrar .= ($obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
-                        $mostrar .= ($obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
-                        $mostrar .= ($obj->barrio!='' ? 'Barrio: '.$obj->barrio : '');
+                        $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? 'Calle: '.$obj->calle_nombre.' '.$obj->callenro.'<br/>' : '');
+                        $mostrar .= (isset($obj->piso) && $obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
+                        $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
+                        $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? 'Barrio: '.$obj->barrio : '');
                     }
             
                     if($showlabel)

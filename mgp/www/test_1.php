@@ -1,7 +1,7 @@
 <?php
 
-$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets/RECLAMO/2013/104";
-//$url = "http://mgp/mgp/webservices/tickets/RECLAMO/2013/21";
+//$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets/RECLAMO/2013/104";
+$url = "http://mgp/mgp/webservices/tickets/RECLAMO/2013/33";
 //$url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets/RECLAMO/2013/104";
 
 $secret = 'hasdYR33n1j34j#4jn*(-s';

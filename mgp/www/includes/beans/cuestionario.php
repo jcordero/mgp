@@ -37,13 +37,21 @@ class cuestionario {
         else 
             return self::factoryDB ($tic_nro_ticket, $tpr_code);
     }
-    
-    static function factoryJSON($ticket,$parent,$prestacion) {
+
+    /**
+     * 
+     * @global type $primary_db
+     * @param type $ticket_json
+     * @param type $ticket
+     * @param type $prestacion
+     * @return \cuestionario
+     */
+    static function factoryJSON($ticket_json,$ticket,$prestacion) {
         global $primary_db;
         $res = array();
         
-        if(isset($ticket->ttp_cuestionario)) {
-            foreach( $ticket->ttp_cuestionario as $preg ) {
+        if(isset($ticket_json->ttp_cuestionario)) {
+            foreach( $ticket_json->ttp_cuestionario as $preg ) {
                 $cuest = new cuestionario();
 
                 //Busco la pregunta loca segun el identificador de miciudad
@@ -66,7 +74,7 @@ class cuestionario {
                 else
                 {
                     //El atributo extendido de miCiudad no se encuentra
-                    $parent->addError("El atributo {$preg->tpr_miciudad} no se encuentra en el sistema.");
+                    $ticket->addError("El atributo {$preg->tpr_miciudad} no se encuentra en el sistema.");
                 }
             }
         }

@@ -8,6 +8,7 @@ include_once 'beans/reiteracion.php';
 include_once 'beans/asociado.php';
 include_once 'common/cmessaging.php';
 include_once 'beans/archivo.php';
+include_once 'beans/eventbus_event.php';
 
 class ticket {
     /** Nro interno del ticket */
@@ -173,7 +174,9 @@ class ticket {
      * @return type
      */    
      function fromJSON($ticket) {
-        error_log("ticket::fromJSON() ticket->".print_r($ticket,true));
+        
+         //error_log("ticket::fromJSON() ticket->".print_r($ticket,true));
+        
         if( $ticket->object==='ingreso_ticket') {
             $this->tic_tipo         = _g($ticket,'tic_tipo');
             $this->tic_tstamp_in    = _g($ticket,'tic_tstamp_in'); 
@@ -183,6 +186,11 @@ class ticket {
             if( $this->tic_tstamp_in==='' )
                 $this->tic_tstamp_in = DatetoISO8601('');
 
+            //Tipo de georeferencia
+            $this->id_luminaria     = _g($ticket,'id_luminaria');
+            $this->tipo_georef      = _g($ticket,'tipo_georef');
+            if($this->tipo_georef==='')
+                $this->tipo_georef = ($this->id_luminaria==='' ? 'DOMICILIO' : 'LUMINARIA');
             
             //Ubicacion
             $this->tic_barrio       = _g($ticket,'tic_barrio');
@@ -194,8 +202,7 @@ class ticket {
             $this->tic_nro_puerta   = _g($ticket,'tic_nro_puerta');
             $this->tic_piso         = _g($ticket,'tic_piso');
             $this->tic_dpto         = _g($ticket,'tic_dpto');
-            $this->id_luminaria     = _g($ticket,'id_luminaria');
-            $this->tic_lugar = $this->createLugar();
+            $this->tic_lugar        = $this->createLugar();
             
             //Agrego Prestacion
             $this->prestaciones = prestacion::fromJSON($ticket,$this);
@@ -236,7 +243,7 @@ class ticket {
         return $primary_db->Sequence("$tipo-$anio");
     }
     
-    static private function addPhotoBase64($tic_nro, $media) {
+    static private function addPhotoBase64($tic_nro, $media, $f_name='', $nota='', $mime='image/jpeg', $publico='SI') {
         global $primary_db,$sess;
         $errores = array();
         
@@ -249,23 +256,35 @@ class ticket {
         //Verifico que es una foto...
         
         //Datos de la foto
-        $f_name = "foto_movil.jpg"; 
-        $f_storage = md5($f_name.rand()).'.jpg';
+        if( $f_name==='' )
+            $f_name = "foto_movil.jpg";
+        
+        //Nombre en el storage
+        $ext = pathinfo($f_name, PATHINFO_EXTENSION);
+        $f_storage = md5($f_name.rand()).'.'.$ext;
         
         //Creo el lugar en el storage
         $f_path = _CFile::get_path($f_storage);
         file_put_contents($f_path.$f_storage, $f);
         
+        //Nota
+        if( $nota==='' )
+            $nota = 'Foto tomada con el móvil';
+                
         //La relaciono al ticket (doc_documents)
         $doc_code = 'ticket:'.$tic_nro;
-        $sql1 = "insert into doc_documents (doc_code, doc_storage, doc_name, doc_tstamp, doc_mime, doc_size, acl_code, use_code, doc_extension, doc_version, doc_note, doc_deleted, doc_public) 
-                    values (':doc_code:', ':doc_storage:', ':doc_name:', NOW(), 'image/jpeg', ':doc_size:', null, ':use_code:', '.jpg', '1', 'Foto tomada con el móvil', null, 'Y')";
+        $sql1 = "insert into doc_documents (doc_code    , doc_storage    , doc_name    , doc_tstamp, doc_mime    , doc_size    , acl_code, use_code    , doc_extension, doc_version, doc_note    , doc_deleted, doc_public) 
+                                    values (':doc_code:', ':doc_storage:', ':doc_name:', NOW()     , ':doc_mime:', ':doc_size:', null    , ':use_code:', ':doc_extension:'       , '1'        , ':doc_note:', null       , ':doc_public:')";
           $params1 = array(
               'doc_code'    =>  $doc_code, 
               'doc_storage' =>  $f_storage, 
               'doc_name'    =>  $f_name, 
               'doc_size'    =>  strlen($f), 
-              'use_code'    =>  $sess->getUserId() 
+              'use_code'    =>  $sess->getUserId(),
+              'doc_note'    =>  $nota,
+              'doc_public'  => ($publico==='SI' ? 'Y' : 'N'),
+              'doc_extension'=> $ext,
+              'doc_mime'    =>  $mime
           );
           $primary_db->do_execute($sql1,$errores,$params1);
           
@@ -309,6 +328,14 @@ class ticket {
         $this->tic_tipo = $t;
         $this->tic_identificador = "{$this->tic_tipo} {$tic_numero}/{$tic_anio}";
     }
+
+    /** Numero interno del ticket
+     * 
+     * @param type $tic_nro
+     */
+    function setNro($tic_nro) {
+        $this->tic_nro = $tic_nro;
+    }
     
     /**
      * Crea un ticket dado su tipo numero y año.
@@ -328,16 +355,43 @@ class ticket {
             return null;
     }
     
+    /** Numero interno del ticket
+     * 
+     * @return type
+     */
     function getNro() {
         return $this->tic_nro;
     }
-
     
+    /**
+     * Numero del ticket (del identificador)
+     * 
+     * @return type
+     */
+    function getNroTicket() {
+        // RECLAMO 4/2013
+        $p = explode(' ',  str_replace('/',' ',$this->tic_identificador));
+        return $p[1];
+    }
+
+    /**
+     * Año del ticket (del identificador)
+     * 
+     * @return type
+     */
+    function getAnioTicket() {
+        // RECLAMO 4/2013
+        $p = explode(' ',  str_replace('/',' ',$this->tic_identificador));
+        return $p[2];
+    }
     
     /**
      * Carga el ticket desde la base de datos.
+     * 
      * @global type $primary_db
-     */   
+     * @param type $opcion (todo, basico)
+     * @return boolean
+     */
     function load($opcion='todo') {
         global $primary_db;
         
@@ -371,23 +425,35 @@ class ticket {
         $this->tic_tstamp_plazo = DatetoISO8601($row['tic_tstamp_plazo']);
         $this->tic_tstamp_cierre = DatetoISO8601($row['tic_tstamp_cierre']);
         $this->tic_calle_nombre = $row['tic_calle_nombre'];
+        //$this->tic_calle = ...
         $this->tic_nro_puerta = $row['tic_nro_puerta'];
-        $this->tic_cruza_calle = $row['tic_cruza_calle'];
-       
+        $this->tic_calle_nombre2 = $row['tic_cruza_calle'];
+        //$this->tic_calle2 = ...
+        
         $this->prestaciones = prestacion::factory($this->tic_nro);
+        
+        if($opcion=='archivos' || $opcion=='todo') {
+            $this->archivos = archivo::factory($this->tic_nro);
+        }
         
         if($opcion=='todo') {
             $this->solicitantes = solicitante::factory($this->tic_nro);
             $this->reiteraciones = reiteracion::factory($this->tic_nro);
             $this->asociados = asociado::factory($this->tic_nro);
-            $this->archivos = archivo::factory($this->tic_nro);
         }
         
         return true;
     }
  
-    
-    function save() {
+    /**
+     * Crea un nuevo ticket en el sistema
+     *  Si el ticket va a un sistema externo, entonces se debe crear una entrada en el event bus
+     * 
+     * * @global type $primary_db
+     * @global type $sess
+     * @return boolean
+     */
+    function save($transaction=true) {
          global $primary_db,$sess;
          $errores=array();
          
@@ -434,7 +500,8 @@ class ticket {
              return false;
          
          //Salvo el ticket
-         $primary_db->beginTransaction();
+         if($transaction)
+             $primary_db->beginTransaction();
          
          //Codigo interno del ticket
          $this->tic_nro = $primary_db->Sequence("tic_tickets");
@@ -493,14 +560,17 @@ class ticket {
          if($this->media!=='') {
               self::addPhotoBase64($this->tic_nro, $this->media);
          }
-          
-         if (count($errores) > 0 ) {
-            $primary_db->rollbackTransaction();
-            $this->errors[] = 'Error al crear el ticket';
-         } else { 
-            $primary_db->commitTransaction();
+    
+         if($transaction) {
+            if( !$this->getStatus() ) {
+               $primary_db->rollbackTransaction();
+               $this->addError('Error al crear el ticket');
+               error_log("ticket::save() Errores: ".$this->getErrorString());
+               return false;
+            } else { 
+               $primary_db->commitTransaction();
+            }
          }
-          
          return true;
     }
     
@@ -597,23 +667,90 @@ class ticket {
     
     function prestacionesTerminadas() {
         $cerradas = 0;
-       
+        $total = count($this->prestaciones);
         foreach($this->prestaciones as $pres) {
-            if( $pres->ttp_estado==='cerrado' || $pres->ttp_estado==='rechazado' )
+            $estado = strtolower($pres->ttp_estado);
+            if( $estado==='cerrado' || $estado==='rechazado' )
                 $cerradas++;
         }
-        
-        return ($cerradas==count($this->prestaciones)-1 ? true : false);            
+        error_log("ticket::prestacionesTerminadas() Total:{$total} Cerradas:{$cerradas}");
+        return ($cerradas==$total ? true : false);            
     }
     
-    function cambiar_estado($tpr_code,$nuevo_estado,$nota) {
+    /**
+     * Cambio de estado y agregado de archivos desde JSON (api)
+     * 
+     * @global type $primary_db
+     * @param type $identificador
+     * @param type $avance_json
+     */
+    function cambiar_estado_fromJSON($identificador, $avance_json) {
+        global $primary_db;
+        
+        error_log("ticket::cambiar_estado_fromJSON(\$identificador=$identificador, \$avance_json)");
+        /*
+         * 
+         * VALIDAR CAMBIOS DE ESTADO IMPOSIBLES
+         * 
+         * VALIDAR Tipo de documento aceptable
+         */
+        $primary_db->beginTransaction();
+
+        $this->setIdent($identificador);
+        $this->load('archivos');
+        
+        //Cambio de estado de la prestacion
+        $avance = _g($avance_json, 'avance');
+        $tpr_code = (isset($avance->tpr_code) ? $avance->tpr_code : '');
+        $nuevo_estado = (isset($avance->tic_estado_in) ? $avance->tic_estado_in : '');
+        $fecha = (isset($avance->tav_tstamp_in) ? $avance->tav_tstamp_in : '');
+        $nota = (isset($avance->nota) ?  $avance->nota : '');
+                
+        if($tpr_code!=='' && $nuevo_estado!=='')
+            $this->cambiar_estado($tpr_code, $nuevo_estado, $nota, $fecha, false);
+        else
+            $this->addError('Es obligatorio indicar la prestacion y el estado');
+        
+        //Agrego los archivos (si el cambio de estado fue OK)
+        if($this->getStatus()) {
+
+            $archivos = _g($avance_json,'archivos');
+            if(is_array($archivos)) {
+                foreach($archivos as $arch) {
+                    //$tic_nro, $media, $f_name='', $nota='', $mime='image/jpeg', $publico='SI'
+                    $media      = (isset($arch->media) ? $arch->media : ''); 
+                    $nombre     = (isset($arch->nombre) ? $arch->nombre : 'foto.jpg'); 
+                    $nota       = (isset($arch->nota) ? $arch->nota : ''); 
+                    $tipo       = (isset($arch->tipo) ? $arch->tipo : 'image/jpeg'); 
+                    $publico    = (isset($arch->publico) ? $arch->publico : 'SI');
+                    
+                    if($media!='')
+                        self::addPhotoBase64($this->tic_nro, $media, $nombre, $nota, $tipo, $publico);
+                    else
+                        $this->addError ('Ha solicitado agregar un archivo vacío');
+                }
+            } else {
+                $this->addError("La propiedad archivos debe ser un array.");
+            }            
+        }
+        
+        if( $this->getStatus() ) {
+            $primary_db->commitTransaction();
+        } else {           
+            $primary_db->rollbackTransaction();
+            $this->addError('Error al agregar archivos al ticket');
+        }
+    }
+    
+    function cambiar_estado($tpr_code,$nuevo_estado,$nota,$fecha='',$transaction=true) {
         global $primary_db;
         $estado = strtolower($nuevo_estado);
         
-        error_log("ticket::cambiar_estado($tpr_code,$nuevo_estado,$nota)");
+        error_log("ticket::cambiar_estado($tpr_code,$estado,$nota,$fecha)");
         
         //Salvo el ticket
-        $primary_db->beginTransaction();
+        if($transaction)
+            $primary_db->beginTransaction();
          
         //Busco la prestacion a modificar
         foreach($this->prestaciones as $pres) {
@@ -621,45 +758,64 @@ class ticket {
         
                 //Modificar el estado de la prestacion del ticket
                 //Agregar un evento de avance a la prestacion
-                $pres->cambiar_estado($this,$nuevo_estado,$nota);
-                        
-                //Se cerro todo el ticket? Cambio de estado al ticket
-                $pres->ttp_estado = $estado;
-                if( $estado==='cerrado' || $estado==='rechazado' ) {
-                    if( $this->prestacionesTerminadas() ) {
-                        $this->tic_estado = 'CERRADO';
-                    }
-                }
-
-                //Grabo los cambios
-                $this->update();
-                
+                $pres->cambiar_estado($this,$estado,$nota);
+                                        
                 //Aviso al WS MiCiudad si el ticket es del canal movil.
                 if($this->tic_canal==='movil') {
-                    //Creo un evento para notificacion asincronica
+                    $ev = new eventbus_event();
+                    $ev->eev_task = 'miciudad';
+                    $ev->eev_data = array(
+                        'op'        =>  'cambio_estado',
+                        'ticket'    =>  $this->tic_nro,
+                        'prestacion'=>  $pres->tpr_code
+                    );
+                    $ev->save();        
                 }
-                    
+        
+                //Notifica al event bus (si la prestacion lo requiere)
+                $eev_task = $primary_db->QueryString("select eev_task from tic_prestaciones where tpr_code='{$pres->tpr_code}'");
+                if($eev_task!=='') {
+                    $ev = new eventbus_event();
+                    $ev->eev_task = $eev_task;
+                    $ev->eev_data = array(
+                        'op'        =>  'cambio_estado',
+                        'ticket'    =>  $this->tic_nro,
+                        'prestacion'=>  $pres->tpr_code
+                    );
+                    $ev->save();        
+                }                
+                
                 //Si se cerró el ticket, envio las notificaciones
-                if( $this->tic_estado=='CERRADO' ) {
-                    //Definicion de la prestacion
-                    $al_final = $primary_db->QueryString("select tpr_al_final from tic_prestaciones where tpr_code='{$pres->tpr_code}'");
+                if( $this->tic_estado=='ABIERTO' ) {
+                    if( $this->prestacionesTerminadas() ) {
+                        $this->tic_estado = 'CERRADO';
+                        error_log("ticket::cambiar_estado() CIERRO TICKET");
 
-                    //Aviso x mail si es el fin de la prestacion a los responsables
-                    if( $al_final!='' ) {
-                        $this->notificarEmail('aviso_cierre_interno', $pres, $nota, $al_final);                
+                        //Definicion de la prestacion
+                        $al_final = $primary_db->QueryString("select tpr_al_final from tic_prestaciones where tpr_code='{$pres->tpr_code}'");
+
+                        //Aviso x mail si es el fin de la prestacion a los responsables
+                        if( $al_final!='' ) {
+                            $this->notificarEmail('aviso_cierre_interno', $pres, $nota, $al_final);                
+                        }
+
+                        //Aviso x mail a los ciudadanos interesados (y registro esto en su historia)
+                        $this->notificarSolicitantes('aviso_cierre', $pres, $nota);
                     }
-
-                    //Aviso x mail a los ciudadanos interesados (y registro esto en su historia)
-                    $this->notificarSolicitantes('aviso_cierre', $pres, $nota);
                 }
+                
+                //Grabo los cambios (solo la parte del ticket
+                $this->update();
             }
         }
         
-        if(count($this->errors)>0) {
-            $primary_db->rollbackTransaction();
-            $this->errors[] = 'Error al crear el ticket';
-        } else { 
-            $primary_db->commitTransaction();
+        if($transaction) {
+            if(!$this->getStatus()) {
+                $primary_db->rollbackTransaction();
+                $this->addError('Error al cambiar de estado el ticket');
+            } else { 
+                $primary_db->commitTransaction();
+            }
         }
     }
     

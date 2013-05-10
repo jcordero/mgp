@@ -2,7 +2,6 @@
 /* Pagina de formulario generada automaticamente
  * Compilador PHPClass Version 2.6.18 (01/MAR/2012) UTF-8 / www.CommSys.com.ar
  */
-
 include_once "common/ctable_maint.php";
 include_once "class_tic_ticket_upd.php";
 
@@ -547,6 +546,4 @@ if(!defined('NO_RENDER'))
 {
     $f->CreatePage();
 }
-
-
 ?>

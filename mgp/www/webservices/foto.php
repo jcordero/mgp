@@ -12,6 +12,7 @@ error_log("\n------------------ INICIO PROCESO API -----------------------\n");
 $ret['resultado'] = 'ERROR';
 $ret['error'] = '';
 $metodo = $_SERVER['REQUEST_METHOD'];   // GET, PUT 
+$ext = '';
 
 //validacion de la entrada
 if($metodo!="GET") {
@@ -21,26 +22,34 @@ if($metodo!="GET") {
 if($metodo==='GET' && $ret['error']==='') {
     error_log("URL GET = ".$_SERVER['REQUEST_URI']);    
     $p = explode('/', $_SERVER['REQUEST_URI']);
-    $foto = (isset($p[4]) ? substr(strtoupper($p[4]),0,32)    : '');  //Foto           
+    $foto = (isset($p[4]) ? substr(strtolower($p[4]),0,37)    : '');  //Foto           
 
     if($foto==='' ) {
         return;
     }
     
     //Busco la foto en la carpeta de documentos
-    $arch = HOME_PATH.'documents/'.substr($foto,0,2).'/'.substr($foto,2,2).'/'.substr($foto,4,2).'/'.substr($foto,6,2).'/'.substr($foto,8,2).'/'.$foto.'.jpg';
+    $ext = pathinfo($arch,PATHINFO_EXTENSION);
+    $arch = HOME_PATH.'documents/'.substr($foto,0,2).'/'.substr($foto,2,2).'/'.substr($foto,4,2).'/'.substr($foto,6,2).'/'.substr($foto,8,2).'/'.$foto;
+    
 }
 else {
     exit();
 }
 
 if( file_exists($arch) )
-{ 
+{
+    //Tipo de archivo?
+    if( $ext==='jpg' || $ext==='jpeg' )
+        header("Content-Type: image/jpeg"); 
+    
+    if( $ext==='png' )
+        header("Content-Type: image/png"); 
+        
     header("Pragma: public"); // required 
     header("Expires: 0"); 
     header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
     header("Cache-Control: private",false); // required for certain browsers 
-    header("Content-Type: image/jpeg"); 
     header("Content-Disposition: inline"); 
     header("Content-Transfer-Encoding: binary"); 
    

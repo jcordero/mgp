@@ -80,6 +80,11 @@ if($metodo=='PUT' && $ret['error']==='') {
         }
 
         if(isset($obj->object)  && $obj->object=='cambio_estado_ticket') {
+            $p = explode('/', $_SERVER['REQUEST_URI']);
+            $tipo = strtoupper($p[4]);  //RECLAMO SOLICITUD DENUNCIA QUEJA           
+            $anio = intval($p[5]);      //Año         
+            $nro = intval($p[6]);       //Nro   
+
             $ret = actualizo_ticket($tipo,$anio,$nro,$obj);
         }
     }
@@ -116,19 +121,27 @@ function ingreso_ticket($ingreso_ticket) {
     $tic->save();
     
     $resultado = $tic->getStatus() ? 'OK' : 'ERROR';
+    $identificador = $tic->getStatus() ? $tic->tic_identificador : '';
+    
+    return array(
+        'resultado'         => $resultado,
+        'error'             => $tic->getErrorString(),
+        'tic_identificador' => $identificador
+    );
+}
+
+function actualizo_ticket($tipo,$anio,$nro,$cambio_estado_ticket) {
+    
+    $tic = new ticket();
+    $identificador = "{$tipo} {$nro}/{$anio}";
+    $tic->cambiar_estado_fromJSON($identificador, $cambio_estado_ticket);
+    $resultado = $tic->getStatus() ? 'OK' : 'ERROR';
+    
     return array(
         'resultado'         => $resultado,
         'error'             => $tic->getErrorString(),
         'tic_identificador' => $tic->tic_identificador
     );
-}
-
-function actualizo_ticket($tipo,$anio,$nro,$cambio_estado_ticket) {
-    /* TODO: cambiar de estado el ticket
-     * 
-     */
-    $ret = array('resultado' => 'no implementado');
-    return $ret;
 }
 
 ?>

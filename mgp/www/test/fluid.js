@@ -1,7 +1,12 @@
+
+//var site = 'http://mgp';
+var site = 'http://147.mardelplata.gob.ar';
+//var site = 'http://mgp.commsys.com.ar';
+
 $(document).ready(function(){
     
     //Opciones
-    var url = 'http://147.mardelplata.gob.ar/mgp/webservices/maestro/paises'; 
+    var url = site + '/mgp/webservices/maestro/paises'; 
     $.ajax({
         url : url,
         dataType : 'jsonp'
@@ -23,7 +28,7 @@ $(document).ready(function(){
         var pais = $('#pais').val();
         var documento = $('#documento').val();
         var numero = $('#numero').val();
-        var url = 'http://147.mardelplata.gob.ar/mgp/webservices/ciudadanos/'+pais+'/'+documento+'/'+numero+'/detalles';
+        var url = site + '/mgp/webservices/ciudadanos/'+pais+'/'+documento+'/'+numero+'/detalles';
         $.ajax({
             url : url,
             dataType : 'jsonp'

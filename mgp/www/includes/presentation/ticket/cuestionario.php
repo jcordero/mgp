@@ -178,6 +178,7 @@ class CDH_CUESTIONARIO extends CDataHandler
     function RenderTableEdit($cn,$frmname,$table="",$row=0,$ro=false,$name="",$suffix="")
     {
         $fld = $this->m_parent; //Este campo
+        $html = '';
         
         if($name=="")
             $name = $this->getName($table,$row);
@@ -220,7 +221,7 @@ class CDH_CUESTIONARIO extends CDataHandler
             //El campo es editable, se usa para editar un registro
             //Anulo la funcion de busqueda flexible asi no sale el indicador
             $fld->m_search="fix";
-            $html = $this->RenderFilterForm($cn,$name,$id,$id);
+            $html.=$this->RenderFilterForm($cn,$name,$id,$id);
         }
 
         return $html;

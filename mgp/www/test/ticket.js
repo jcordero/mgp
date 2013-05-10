@@ -1,3 +1,8 @@
+
+//var site = 'http://mgp';
+var site = 'http://147.mardelplata.gob.ar';
+//var site = 'http://mgp.commsys.com.ar';
+
 $(document).ready(function(){
     var id = unescape(window.location.hash).replace('/',' ').substr(1);
     var p =id.split(' ');
@@ -7,7 +12,7 @@ $(document).ready(function(){
     var tipo = p[0];
     var nro  = p[1];
     var anio = p[2];
-    var url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets/"+tipo+"/"+anio+"/"+nro;
+    var url = site+"/mgp/webservices/tickets/"+tipo+"/"+anio+"/"+nro;
     
     $('#titulo').html(tipo+' '+nro+'/'+anio);
     
@@ -95,7 +100,7 @@ function generarHTMLdeFotos(fotos) {
     f+='<div class="carousel-inner">';
     for(var j=0;j<fotos.length;j++) {
         var active = (j===0 ? 'active ' : '');
-        f+='<div class="'+active+'item"><center><img src="http://mgp/mgp/webservices/foto/'+fotos[j].doc_storage+'"></center>';
+        f+='<div class="'+active+'item"><center><img src="'+site+'/mgp/webservices/foto/'+fotos[j].doc_storage+'"></center>';
         f+='<div class="carousel-caption">'+fotos[j].doc_note+'</div></div>';
     }
     f+='</div>';
