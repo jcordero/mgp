@@ -2,16 +2,66 @@
 include_once 'beans/person_status.php';
 
 class solicitante {
+    /** Identificador del ciudadano
+     * PAIS TIPO NRO
+     * @var string 
+     */
     public $ciu_documento;
+    
+    /** Nombres del ciudadano
+     *
+     * @var string 
+     */
     public $ciu_nombres;
+    
+    /** Apellido del ciudadano
+     *
+     * @var string 
+     */
     public $ciu_apellido;
+    
+    /** Correo electronico
+     *
+     * @var string
+     */
     public $ciu_email;
+    
+    /** Telefono fijo
+     *
+     * @var string 
+     */
     public $ciu_telefono_fijo;
+    
+    /** Teléfono móvil
+     *
+     * @var string
+     */
     public $ciu_telefono_movil;
+    
+    /** Fecha de creacion
+     *
+     * @var date 
+     */
     public $ttc_tstamp;
+    
+    /** Nota
+     *
+     * @var string
+     */
     public $ttc_nota;
+    
+    /** Codigo interno del ciudadano
+     *
+     * @var int 
+     */
     private $ciu_code;
     
+    /** Crea un array de solicitantes que estan relacionados con este ticket
+     * 
+     * @global cdbdata $primary_db
+     * @param int $tic_nro
+     * @return solicitante[]
+     */
     static function factory($tic_nro) {
         global $primary_db;
         $ret = array();
@@ -30,13 +80,20 @@ class solicitante {
             $ciudadano->ciu_telefono_movil    = $row['ciu_tel_movil'];        
             $ciudadano->ttc_tstamp            = DatetoISO8601($row['ttc_tstamp']); 
             $ciudadano->ttc_nota              = $row['ttc_nota'];
+            $ciudadano->ciu_code              = $row['ciu_code'];
             
             $ret[] = $ciudadano;
         }
         return $ret;
     }
 
-    function save($parent) {
+    /** Salva el solicitante en la base
+     * 
+     * @global cdbdata $primary_db
+     * @global CSession $sess
+     * @param ticket $ticket
+     */
+    function save($ticket) {
         global $primary_db, $sess;
         $errores = array();
         
@@ -57,7 +114,7 @@ class solicitante {
                   'ciu_email'           => $this->ciu_email,
                   'ciu_tel_fijo'        => $this->ciu_telefono_fijo,
                   'ciu_tel_movil'       => $this->ciu_telefono_movil,
-                  'ciu_canal_ingreso'   => $parent->tic_canal,
+                  'ciu_canal_ingreso'   => $ticket->tic_canal,
                   'ciu_nacionalidad'    => $nac,
             );
             $primary_db->do_execute($sql1,$errores,$params1);
@@ -78,25 +135,33 @@ class solicitante {
         $sql5 = "insert into tic_ticket_ciudadano (tic_nro, ciu_code, ttc_tstamp, ttc_nota) 
                     values (:tic_nro:, :ciu_code:, NOW(), ':ttc_nota:')";
         $params5 = array(
-              'tic_nro'     => $parent->getNro(), 
+              'tic_nro'     => $ticket->getNro(), 
               'ciu_code'    => $this->ciu_code, 
-              'ttc_nota'    => $parent->tic_nota_in
+              'ttc_nota'    => $ticket->tic_nota_in
         );
         $primary_db->do_execute($sql5,$errores,$params5);
          
          //Creo un evento en el historial del ciudadano (ciu_historial_contactos)
-         $sql6 = "insert into ciu_historial_contactos (chi_code, ciu_code, cse_code, chi_fecha, chi_motivo, use_code, chi_canal, chi_nota) 
-                    values (:chi_code:, :ciu_code:, null, NOW(), 'Ingreso de ticket', ':use_code:', 'movil', ':chi_nota:')";
+         $sql6 = "insert into ciu_historial_contactos (chi_code  , ciu_code  , cse_code, chi_fecha, chi_motivo    , use_code    , chi_canal  , chi_nota    ) 
+                                               values (:chi_code:, :ciu_code:, null    , NOW()    , ':chi_motivo:', ':use_code:', 'chi_canal', ':chi_nota:')";
          $params6 = array(
-              'chi_code'    => $primary_db->Sequence('ciu_historial_contactos'), 
-              'ciu_code'    => $this->ciu_code, 
-              'use_code'    => $sess->getUserId(), 
-              'chi_nota'    => $parent->tic_nota_in
+              'chi_code'    =>  $primary_db->Sequence('ciu_historial_contactos'), 
+              'ciu_code'    =>  $this->ciu_code, 
+              'use_code'    =>  $sess->getUserId(), 
+              'chi_nota'    =>  $ticket->tic_nota_in,
+              'chi_motivo'  =>  'Ingreso '.$ticket->tic_identificador,
+              'chi_canal'   =>  $ticket->tic_canal
          );
          $primary_db->do_execute($sql6,$errores,$params6);
         
     }
     
+    /** Toma los datos del solicitante desde un formulario 
+     * 
+     * @global cdbdata $primary_db
+     * @param cdatatype $obj
+     * @return solicitante[]
+     */
     static function fromForm($obj) {
         global $primary_db;
         

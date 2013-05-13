@@ -1,3 +1,7 @@
+var last_marker_clicked = null;
+var luminariaOnIcon = null;
+var luminariaIcon = null;
+
 $(document).ready(function() {
     
     var divrubro = $("#rubro");
@@ -68,6 +72,20 @@ $(document).ready(function() {
     
     $('#valida_direccion_lum').click(valida_direccion_lum);
     $('#cambia_direccion_lum').hide().click(cambia_direccion_lum);
+    
+    luminariaOnIcon = L.icon({
+        iconUrl:    sess_web_path+'/images/mapicons/luminaria_on.png',
+        iconSize:     [32, 37], // size of the icon
+        iconAnchor:   [16, 38], // point of the icon which will correspond to marker's location
+        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+    luminariaIcon = L.icon({
+        iconUrl:    sess_web_path+'/images/mapicons/luminaria.png',
+        iconSize:     [32, 37], // size of the icon
+        iconAnchor:   [16, 38], // point of the icon which will correspond to marker's location
+        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+
 });
 
 
@@ -149,6 +167,8 @@ function cambia_direccion() {
     $('#valida_direccion').show();
 }
 
+
+
 function marker_click(e) {
     var marker = e.target;
     var pt = marker.getLatLng();
@@ -156,8 +176,38 @@ function marker_click(e) {
     for(var j=0;j<cant;j++) {
         var lum = lista_luminarias[j];
         if( lum.lng===pt.lng && lum.lat===pt.lat ) {
+            
+            //Cambio el icono del marker
+            if(last_marker_clicked!==null)
+                last_marker_clicked.setIcon(luminariaIcon);
+            marker.setIcon(luminariaOnIcon);
+            last_marker_clicked = marker;
+            
+            //Completo la direccion de la luminaria
             $('#m_id_luminaria').val(lum.id);
-            $('#lm_id_luminaria').html(lum.id + ' - ' + lum.dir + ' (' + lum.sit + ')');
+            $('#lm_id_luminaria').html(lum.id + ' (' + lum.sit + ')');
+            
+            //Cambio la direccion del reclamo
+            $('#m_tic_coordx').val(lum.lat);
+            $('#m_tic_coordy').val(lum.lng);
+            
+            $('#m_calle_lum').val(0);
+            $('#hm_calle_lum').val(lum.calle);
+            $('#hm_calle_lum').val(lum.calle);
+            $('#calle_lum .fldl').html(lum.calle);
+            
+            $('#m_calle_nombre_lum').val(lum.calle);
+            
+            $('#m_callenro_lum').val(lum.altura);
+            $('#callenro_lum .fldl').html(lum.altura);
+
+            $('#m_calle2_lum').val('');
+            $('#hm_calle2_lum').val('');
+            
+            $('#m_calle_nombre2_lum').val('');
+
+            //Validacion del campo
+            calle_lum.m_status = 'pass';
             break;
         }
     }
@@ -230,18 +280,16 @@ function valida_direccion_lum(){
             lista_luminarias = o.luminarias;
             $('#progreso').remove();
             
-            //Cargo el mapa 350 x 250px
-            //$('#m_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
-            mapa_luminaria.setView([o.latitud,o.longitud],16);
-            L.marker([o.latitud,o.longitud]).addTo(mapa_luminaria)
-                .bindPopup(o.calle + ' ' + o.nro);
+            //Cargo el mapa 350 x 250px con un marker azul en la dirección elegida
+            mapa_luminaria.setView([o.latitud,o.longitud],18);
+            L.marker([o.latitud,o.longitud]).addTo(mapa_luminaria).bindPopup(o.calle + ' ' + o.nro);
 
             //Creo los markers de las luminarias
+            
             var cant = o.luminarias.length;
             for(var j=0;j<cant;j++) {
                 var pt = o.luminarias[j];
-                L.marker([pt.lat,pt.lng]).addTo(mapa_luminaria)
-                .on('click',marker_click);
+                L.marker([pt.lat,pt.lng], {icon: luminariaIcon}).addTo(mapa_luminaria).on('click',marker_click);
                 //.bindPopup(pt.dir + '<br>id: '+ pt.id + '<br>Situación: '+pt.sit);
             }
             

@@ -82,7 +82,8 @@ class CDH_DIRECCION extends CDataHandler
                                 'id'    => (int) $lum->id,
                                 'lat'   => (double) $lum->latitud,
                                 'lng'   => (double) $lum->longitud,
-                                'dir'   => $lum->calle.' '.$lum->numero,
+                                'calle' => $lum->calle,
+                                'altura'=> $lum->numero,
                                 'sit'   => $lum->situacion
                             );
                     }

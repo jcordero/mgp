@@ -20,7 +20,6 @@ if(!class_exists('home_tickets'))
 	{
             public function Render($context)
             {
-                global $sess;
                 $includes = array();
                 $content = array();
                 $errors = array();    

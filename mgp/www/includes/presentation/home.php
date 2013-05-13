@@ -1,37 +1,40 @@
 <?php
-if(session_id() == "") 
-{
-	session_start();
-	error_log("CDH_HOME:: Sesion no iniciada...");
-}
+
 include_once "common/cdatatypes.php";
 include_once "beans/call_status.php";
 include_once "beans/person_status.php";
 include_once "common/csession.php";
+include_once "beans/ticket.php";
 
 class CDH_HOME extends CDataHandler
 {
     private $m_session;
     private $m_person;
-    
+
+    /** Construyo un presentation
+     * 
+     * @param cfield $parent
+     */
     function __construct($parent)
     {
-		parent::__construct($parent);
-		$fld = $this->m_parent;
+	parent::__construct($parent);
         $this->m_session = new call_status();
         $this->m_person = new person_status();
-	}
+    }
 
-	function setAnonimo($user_session='')
-	{
-		$this->m_person->reset();
-		$this->m_person->saveSession();        
- 	}
+    /** Borrar los datos de la persona con la que se estaba hablando
+     * 
+     */
+    function setAnonimo()
+    {
+        $this->m_person->reset();
+        $this->m_person->saveSession();        
+    }
 	
     /** Buscar un ciudadano en la base
      * Enviar en el parametro de entrada, separado por pipes, Documento + Apellido + Nombres + ANI + IDSesion
-     * @param $params
-     * @return unknown_type
+     * @param string $params
+     * @return json
      */
     function doBuscar($params)
     {
@@ -39,7 +42,8 @@ class CDH_HOME extends CDataHandler
         $conjunto = array();
         $res = array();
 		
-        list($doc,$apellido,$nombres,$ani,$user_session,$pais) = explode('|',$params);
+        //doc + '|' + nombres + '|' + apellido + '|' + talk.talk_ani + '|' + pais
+        list($doc,$nombres,$apellido,$ani,$pais) = explode('|',$params);
         
         //No hay datos para buscar...
         if(strlen($doc)<=8 && $apellido=='' && $ani=="")
@@ -125,7 +129,7 @@ class CDH_HOME extends CDataHandler
         $this->m_session->saveSession();
         $this->m_person->saveSession();
 
-        //No hay datos locales... Pido que se carguen los datos a mano. (Ver como hacer que ser carguen desde el SIGEHOS)
+        //No hay datos locales... Pido que se carguen los datos a mano.
         if(count($conjunto)==0)
             $url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/ciudadanos_maint_n.php?OP=N&tmp_doc={$doc}&ciu_tel_fijo={$ani}&ciu_tel_movil={$ani}&ciu_nacionalidad={$pais}");
         else
@@ -136,84 +140,46 @@ class CDH_HOME extends CDataHandler
         return json_encode($resp);
     }
 
-    private function DOCtoPAIS($tipo_doc) {
-        
-    	switch($tipo_doc) {
-            case "CIBO":
-                $pais="Bolivia";
-                break;
-            case "CIBR":
-                $pais="Brasil";
-                break;
-            case "CICH":
-                $pais="Chile";
-                brea;
-            case "CIPA":
-                $pais="Paraguay";
-                break;
-            case "CIPE":
-                $pais="Perú";
-                break;
-            case "CIUR": 
-                $pais="Uruguay";
-                break;
-            case "CI":
-            case "LE":
-            case "DNI":
-                $pais="Argentina";
-                break;
-            default:
-                $pais = ""; //$tipo_doc = "PAS";
-        }
-        return $pais;
-    }
-    
-    private function PAIStoDOC($pais, $tipo_doc) {
-    	switch($pais) {
-            case "Bolivia":
-                $tipo_doc = "CIBO";
-                break;
-            case "Brasil":
-                $tipo_doc = "CIBR";
-                break;
-            case "Chile":
-                $tipo_doc = "CICH";
-                break;
-            case "Paraguay":
-                $tipo_doc = "CIPA";
-                break;
-            case "Perú":
-                $tipo_doc = "CIPE";
-                break;
-            case "Uruguay":
-                $tipo_doc = "CIUR";
-                break;
-            case "Argentina":  
-                /* Acepto cualquier tipo de documento */
-                break;
-            default:
-                $tipo_doc = "PAS";
-        }
-		return $tipo_doc;
-    }
-    
+    /** Calcula la edad dada la fecha de nacimiento
+     * 
+     * @param strDate $nacimiento
+     * @return int
+     */
     private function calcularEdad($nacimiento) {
     	try {
             //Nacimiento 22/09/1968
             list($a,$m,$d) = explode("-",$nacimiento);
-            $ahora = date("Y");
-
-            $edad = intval($ahora) - intval($a);
-            if($edad)
-                    return $edad;
+            
+            //Dato actual
+            $anio = intval(date("Y"));
+            $mes = intval(date("n"));
+            $dia = intval(date("j"));
+            
+            //Años
+            $edad = $anio - intval($a);
+            
+            //Tengo que restar 1 año porque todavia no cumplió?
+            if( $mes - intval($m)<0 )
+                $edad--;
+            
+            //Mes del cumple, llegó el día?
+            if( $mes===intval($m) && ($dia-intval($d))<0 )
+                $edad--;
+            
+            return $edad;
     	}
     	catch(Exception $e)
     	{
-            error_log("calcularEdad($nacimiento) $e");
+            error_log("CDH_HOME::calcularEdad($nacimiento) ".$e->getMessage());
     	}
     	return 0;
     }
     
+    /** Convertir M o F a MASCULINO Y FEMENINO
+     * 
+     * @param string $sexo
+     * @return string
+     */
     private function convertToSexo($sexo) {
     	if($sexo=="M")
     		return "MASCULINO";
@@ -225,12 +191,11 @@ class CDH_HOME extends CDataHandler
     
     /** Anular los datos del ciudadano actual, para hacer la sesion anonima
      *  Enviar en el parametro el IDSesion
-     * @param $params
-     * @return string json
+     * @return json
      */
-    function doAnonimo($params='')
+    function doAnonimo()
     {
-        global $primary_db, $sess;
+        global $sess;
                 
         $this->setAnonimo();            
         $url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/sesion_cierre.php?OP=M");
@@ -238,75 +203,24 @@ class CDH_HOME extends CDataHandler
         return json_encode(array("url"=>$url));
     }
 
-	/** doNuevoTicket
-	 * 
-	 * @param $params
-	 * @return unknown_type
-	 */    
+    /** Crear un Nuevo Ticket
+     * 
+     * @param string $params
+     * @return json
+     */    
     function doNuevoTicket($params)
     {
-        $user_session = $params;
-        $url = "";
-        
-        if($user_session !="")
-        {
-            session_id($user_session);
-            
-            $sess = new CSession();
-        	$host = $_SERVER["HTTP_HOST"];
-        	$url = $sess->encodeURL(WEB_PATH."/lmodules/tickets/tickets_maint_n.php?OP=N");
-        }
-        else
-        {
-            error_log("doNuevoTicket Error no se indica sesion a modificar");
-        }
-
+        global $sess;
+        $url = $sess->encodeURL(WEB_PATH."/lmodules/tickets/tickets_maint_n.php?OP=N");
         return json_encode(array("url"=>$url));
     }
     
-	/** doNuevoTurno
-	 * 
-	 * @param $params
-	 * @return unknown_type
-	 */    
-    function doNuevoTurno($params)
-    {
-        list($user_session,$tipo) = explode("|",$params);
-        $url = "";
-        
-        if($user_session !="")
-        {
-            session_id($user_session);
-            
-            $sess = new CSession();
-        	$host = $_SERVER["HTTP_HOST"];
-
-        	if($tipo=="GENERAL")
-        		$target = "http://$host/lmodules/sigehos/nuevoturno.php?OP=N";
-        	elseif($tipo=="COPS")
-        		$target = "http://$host/lmodules/sigehos/nuevoturno_cops.php?OP=N";
-        	elseif($tipo=="SERVICIO")
-        		$target = "http://$host/lmodules/sigehos/nuevoturno_servicio.php?OP=N";
-        	elseif($tipo=="PROFESIONAL")
-        		$target = "http://$host/lmodules/sigehos/nuevoturno_profesional.php?OP=N";
-        	elseif($tipo=="PRIMERO")
-        		$target = "http://$host/lmodules/sigehos/nuevoturno_primero.php?OP=N";
- 	
-        	$url = $sess->encodeURL($target);
-        }
-        else
-        {
-            error_log("doNuevoTicket Error no se indica sesion a modificar");
-        }
-
-        return json_encode(array("url"=>$url));
-    }
     
     /** 
-     * doModificar datos del ciudadano logeado
+     * Modificar datos del ciudadano logeado
      * 
-     * @param $params
-     * @return unknown_type
+     * @param string $params
+     * @return json
      */
     
     function doModificar($params)
@@ -322,8 +236,9 @@ class CDH_HOME extends CDataHandler
      *  Busca en la base local los tickets de DENUNCIAS, SOLICITUDES y QUEJAS y en la base
      *  remota del SUR los reclamos.
      *  Mandar en el parametro, separado por pipes, el NUMERO +  AÑO del ticket buscado.
-     * @param $params
-     * @return string
+     * 
+     * @param string $params
+     * @return json
      */
     function doBuscarTickets($params)
     {
@@ -331,20 +246,23 @@ class CDH_HOME extends CDataHandler
         $nro="";
         $anio="";
 
+        // RECLAMO|31|2013
         $partes = explode('|',$params);
-        if(count($partes)==2)
+        if(count($partes)==3)
         {
-            $nro = $partes[0];
-            $anio = $partes[1];
+            $tipo = $partes[0];
+            $nro = $partes[1];
+            $anio = $partes[2];
         
             //No hay datos para buscar... 
-        	if( $nro=="" || $anio=="")
-        	{
+            if( $nro=="" || $anio=="")
+            {
             	return json_encode(array());
-        	}
+            }
         }
 
         $ciu_code = $this->m_person->person_id;
+        
         //No hay datos para buscar... (ciu_code=0 es ciudadano ANONIMO)
        	if( $ciu_code=="" || $ciu_code==0)
         {
@@ -354,17 +272,29 @@ class CDH_HOME extends CDataHandler
 
         //Busco por codigo en los reclamos
         $conjunto = array();
-        if($nro!="" && $anio!="")
+        if($nro!=="" && $anio!=="")
         {        	            
             //Busco el ticket pedido
-            $sql = "SELECT * FROM tic_ticket tic JOIN tic_ticket_prestaciones pre ON tic.tic_nro=pre.tic_nro
-                            WHERE tic.tic_nro='{$nro}' AND tic.tic_anio='{$anio}'";
+            $identificador = "{$tipo} {$nro}/{$anio}";
+            $sql = "SELECT * FROM v_ticket_ciu WHERE tic_identificador='{$identificador}'";
             $re = $primary_db->do_execute($sql);
             while( $row1=$primary_db->_fetch_row($re) )
             {
                 //Decodifico la direccion 
-                $json = htmlspecialchars_decode( $row1["ubicacion"], ENT_QUOTES );
-                $conjunto[] = array_merge($row1, array("ubicacion_text" => $this->ubicacionJSONToText($json) ));
+                $json = $primary_db->DesFiltrado( $row1["tic_lugar"] );                
+                $conjunto[] = array(
+                            'tipo'		=> $row1['tic_tipo'],
+                            'anio'		=> $row1['tic_anio'],
+                            'numero'		=> $row1['tic_numero'],
+                            'prestacion'	=> $row1['tpr_detalle'],
+                            'ubicacion'		=> $row1['tic_lugar'],
+                            'estado'		=> $row1['tic_estado'],
+                            'ciudadano'		=> $row1['ciu_nombres'].' '.$row1['ciu_apellido'],
+                            'ciu_code'		=> $row1['ciu_code'],
+                            'ubicacion'         => json_decode($json),
+                            'tic_nro'           => $row1['tic_nro'],
+                            'nota'              => $row1['tic_nota_in']
+                );
             }
         }
         else
@@ -372,12 +302,12 @@ class CDH_HOME extends CDataHandler
             //Busco por pertenecientes a un ciudadano
             if($ciu_code!='')
             {
-                $sql = "SELECT * FROM v_ticket_ciu WHERE ciu_code='$ciu_code'";
+                $sql = "SELECT * FROM v_ticket_ciu WHERE ciu_code='{$ciu_code}' order by tic_tstamp_in desc";
             	$re = $primary_db->do_execute($sql);
                 while( $row=$primary_db->_fetch_row($re) )
                 {
                     //Decodifico la direccion 
-                    $xml = htmlspecialchars_decode( $row["tic_lugar"], ENT_QUOTES );
+                    $json = $primary_db->DesFiltrado( $row["tic_lugar"] );
                     $conjunto[] = array(
                             'tipo'		=> $row['tic_tipo'],
                             'anio'		=> $row['tic_anio'],
@@ -387,8 +317,9 @@ class CDH_HOME extends CDataHandler
                             'estado'		=> $row['tic_estado'],
                             'ciudadano'		=> $row['ciu_nombres'].' '.$row['ciu_apellido'],
                             'ciu_code'		=> $row['ciu_code'],
-                            'ubicacion_text'    => $this->ubicacionJSONToText($xml),
+                            'ubicacion'         => json_decode($json),
                             'tic_nro'           => $row['tic_nro'],
+                            'nota'              => $row['tic_nota_in']
                     );
                 }
             }
@@ -397,30 +328,15 @@ class CDH_HOME extends CDataHandler
         //Agrego los botones...
         foreach($conjunto as $key=>$elemento)
         {
-        	//Ver reclamo -> Columna 100
-        	if($elemento['tipo']=="RECLAMO")
-        	{
-                    $url1 = $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=V&tic_anio={$elemento['anio']}&tic_nro={$elemento['numero']}&tic_tipo={$elemento['tipo']}&next=/index.php");
-                    $conjunto[$key]['url_ver'] = $url1;
-                    $conjunto[$key]['ver_reclamo'] = "Ver Reclamo";
-
-                    //Reiterar -> Columna 101
-                    $url2 = "javascript:reiterar({$elemento['tic_nro']})";
-                    $conjunto[$key]['url_reiterar'] = $url2;
-                    $conjunto[$key]['reiterar'] = "Reiterar";
-                    
-                    $conjunto[$key]['ver_ticket'] = "";
-        	}
-        	else 
-        	{
-                    //Es una denuncia / solicitud / queja -> Columna 100
-                    $url3 = $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=V&tic_anio={$elemento['anio']}&tic_nro={$elemento['numero']}&tic_tipo={$elemento['tipo']}");
-                    $conjunto[$key]['url_ver'] = $url3;
-
-                    $conjunto[$key]['ver_reclamo'] = "";
-                    $conjunto[$key]['reiterar'] = "";
-                    $conjunto[$key]['ver_ticket'] = "Ver Ticket";
-        	}
+            $url1 = $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=V&tic_anio={$elemento['anio']}&tic_nro={$elemento['numero']}&tic_tipo={$elemento['tipo']}&next=/index.php");
+            $conjunto[$key]['url_ver'] = $url1;
+            
+            //Solo los reclamos se pueden reiterar    
+            if($elemento['tipo']=="RECLAMO")
+            {
+                $url2 = "javascript:reiterar({$elemento['tic_nro']})";
+                $conjunto[$key]['url_reiterar'] = $url2;
+            }
         }
         return json_encode($conjunto);
     }
@@ -428,52 +344,37 @@ class CDH_HOME extends CDataHandler
     /** Iniciar una sesion.
      * NO SE ALTERA EL ESTADO DE IDENTIFICACION DE LA PERSONA. SOLO SE CAMBIA EL ESTADO DE LA CONEXION.
      * Enviar en el parametro, separado por pipes:
-     * ANI + IDSesion + CallReferenceID + entryPoint + skill
-     * @param $params
-     * @return string
+     * ANI + CallReferenceID + entryPoint + skill
+     * @param string $params
+     * @return json
      */
     function doIniciar($params)
     {
         global $primary_db,$sess;
-        $ani="";
-        $user_session = "";
         $ret_json = "";
-        $call_id = "";
-		$entry_point = "";
-		$skill = "";
-		
-		//Desarmo el parametro de entrada
+        	
+        //Desarmo el parametro de entrada
         $partes = explode('|',$params);
-        if(count($partes)==5)
+        if(count($partes)==4)
         {
             $ani = $partes[0];
-            $user_session = $partes[1];
-            $call_id = $partes[2];
-            $entry_point  = $partes[3];
-            $skill  = $partes[4];
+            $call_id = $partes[1];
+            $entry_point  = $partes[2];
+            $skill  = $partes[3];
         }
         else
         {
-        	error_log("doIniciar requiere 5 paramatros. Recibido: $params");
-        	return json_encode("Error: cantidad incorrecta de parametros");
+            error_log("doIniciar requiere 4 paramatros. Recibido: $params");
+            return json_encode("Error: cantidad incorrecta de parametros");
         }
         
         //Cargo la sesion
-        if($user_session=="")
-        {
-            //sin sesion no puedo hacer nada...
-            return json_encode("Error: sesion no especificada");
-        }
-        else
-        {
-            session_id($user_session);
-            $this->m_session->loadSession();
-        }
+        $this->m_session->loadSession();
 
         //Si hay una sesion abierta, para OTRO ani, la cierro y salgo
         if($this->m_session->talk_session!=0 && $this->m_session->talk_ani!=$ani )
         {
-            $this->doTerminar($user_session);
+            $this->doTerminar();
             return json_encode("Sesion cerrada");
         }
 
@@ -489,24 +390,16 @@ class CDH_HOME extends CDataHandler
         $use_code = $_SESSION["user_id"];
         
         //Pido un nuevo codigo de sesion
-        $sql = "call getnext('CIU_SESIONES')";
-        $re = $primary_db->do_execute($sql);
-        $conjunto = array();
-        if( $row=$primary_db->_fetch_row($re,0) )
-        {
-            $conjunto[] = $row;
-        }
-        $primary_db->_free_result($re);
-        $cse_code = $conjunto[0][0];
+        $cse_code = $primary_db->Sequence('CIU_SESIONES');
 		
         //Cierro cualquier sesion abandonada por este operador
-        $sql = "UPDATE ciu_sesiones SET cse_estado='ABANDONADA',cse_duracion=TIMESTAMPDIFF(SECOND,cse_tstamp,NOW())  WHERE cse_estado='ABIERTA' AND use_code='$use_code'";
-        $re = $primary_db->do_execute($sql);
+        $sql1 = "UPDATE ciu_sesiones SET cse_estado='ABANDONADA',cse_duracion=TIMESTAMPDIFF(SECOND,cse_tstamp,NOW())  WHERE cse_estado='ABIERTA' AND use_code='{$use_code}'";
+        $primary_db->do_execute($sql1);
         
         //Registro el inicio de la sesion
-        $sql = "INSERT INTO ciu_sesiones(cse_code,ciu_code,cse_ani,cse_tstamp,cse_duracion,use_code,cse_nota,cse_call_id,cse_skill,cse_estado) ";
-     	$sql.= "VALUES($cse_code,$ciu_code,'$ani',NOW(),0,'$use_code','','$call_id','$entry_point','ABIERTA')";
-        $re = $primary_db->do_execute($sql);
+        $sql2 = "INSERT INTO ciu_sesiones(cse_code ,ciu_code ,cse_ani,cse_tstamp,cse_duracion,use_code   ,cse_nota,cse_call_id,cse_skill     ,cse_estado) 
+                                   VALUES($cse_code,$ciu_code,'$ani' ,NOW()     ,0           ,'$use_code',''      ,'$call_id' ,'$entry_point','ABIERTA' )";
+        $primary_db->do_execute($sql2);
         
         //Seteo los resultados en la sesion
         $this->m_session->talk_session = $cse_code; //codigo de la nueva sesion retornado por procedure "nueva_sesion"
@@ -549,27 +442,26 @@ class CDH_HOME extends CDataHandler
    }
 
     /** Buscar contactos previos (sesiones) del ciudadano
-     * pasar en el parametro, separado por pipes: IDCiudadano + FechaInicio + FechaFin + IDSesion
+     * pasar en el parametro, separado por pipes:  FechaInicio + FechaFin 
      * @param $params
-     * @return unknown_type
+     * @return json
      */
     function doBuscarContactos($params)
     {
-        global $primary_db,$sess;
+        global $primary_db;
         $conjunto = array();
-
-	//Expando los parametros
+        $id = $this->m_person->person_id;
+	
+        //Expando los parametros
         $partes = explode('|',$params);
-        if(count($partes)==4)
+        if(count($partes)==2)
         {
-            $id = $partes[0];
-            $desde = $partes[1];
-            $hasta = $partes[2];
+            $desde = $partes[0];
+            $hasta = $partes[1];
         }
         else
         {
-            error_log("doBuscarContactos() Consulta sin parametros. Recibi: $params");
-            $id=$this->m_person->person_id;
+            error_log("CDH_HOME::doBuscarContactos() Consulta sin parametros. Recibi: $params");
             $desde="";
             $hasta="";
         }
@@ -579,33 +471,29 @@ class CDH_HOME extends CDataHandler
             return json_encode($conjunto);
                 
         //Busco los contactos de este usuario
-        $sql = "SELECT cse_code,cse_ani,cse_tstamp,cse_duracion,us.use_name as use_code,cse_nota ";
-        $sql.= "FROM ciu_sesiones se LEFT OUTER JOIN sec_users us ON se.use_code=us.use_code WHERE ciu_code='{$id}' AND cse_duracion>0";
+        $sql = "SELECT cse_code, chi_fecha, chi_motivo, use_code, chi_canal, chi_nota 
+            FROM ciu_historial_contactos  
+            WHERE ciu_code='{$id}'";
         if($desde!="" && $hasta!="")
         {
-            $sql.= " AND cse_tstamp between '$desde' and '$hasta'";
+            $sql.= " AND chi_fecha between '{$desde}' and '{$hasta}'";
         }
-        $sql.= " ORDER BY cse_tstamp desc";
+        $sql.= " ORDER BY chi_fecha desc";
 
         $re = $primary_db->do_execute($sql);
-        $j=0;
-        while( $row=$primary_db->_fetch_row($re,$j++) )
-        {
-        	$url = WEB_PATH."/lmodules/ciudadanos/sesion_maint.php?OP=V&cse_code=".$row['cse_code'];
-        	$ix = $sess->encodeURL($url);
-        	
-        	$conjunto[] = array( 
-        		"cse_tstamp" => $row['cse_tstamp'],
-        		"cse_duracion" => $row['cse_duracion'],
-        		"use_code" => $row['use_code'],
-        		"cse_ani" => $row['cse_ani'],
-        		"cse_nota" => $row['cse_nota'],
-        		"acciones" => "Detalle",
-        		"detalle" => $ix,
-        	);
+       
+        while( $row=$primary_db->_fetch_row($re) )
+        {        	
+            $conjunto[] = array( 
+                "fecha"         =>  $row['chi_fecha'],
+                "cse_code"      =>  ($row['cse_code']===null ? '' : $row['cse_code']),
+                "use_code"      =>  $row['use_code'],
+                "canal"         =>  $row['chi_canal'],
+                "nota"          =>  $row['chi_nota'],
+                "motivo"        =>  $row['chi_motivo']
+            );
         }
-		$primary_db->_free_result($re);
-		
+        	
         return json_encode($conjunto);
     }
 
@@ -827,91 +715,18 @@ class CDH_HOME extends CDataHandler
 	
 	
     
-    /** doNuevaOrientacion
-	 * 
-	 * @param $params
-	 * @return unknown_type
-	 */    
-    function doNuevaOrientacion($params)
-    {
-        $user_session = $params;
-        $url = "";
+    /** Reitera un ticket
+     * 
+     * @param type $tic_nro
+     */ 
+    function reiterarTicket($params) {
+        list($tic_nro, $nota) = explode('|',$params);
         
-        if($user_session !="")
-        {
-            session_id($user_session);
-            
-            $sess = new CSession();
-        	$host = $_SERVER["HTTP_HOST"];
-        	$url = $sess->encodeURL("http://$host/lmodules/censo/orientacion_maint.php");
-        }
-        else
-        {
-            error_log("doNuevaOrientacion Error no se indica sesion a modificar");
-        }
-
-        return json_encode(array("url"=>$url));
-    }
-    
-    function doBuscarOrientacion($params)
-    {
-        global $primary_db;
-        $id="";
-        $user_session = "";
-		$conjunto = array();
-		
-		//Expando los parametros
-        $partes = explode('|',$params);
-        if(count($partes)==2)
-        {
-            $id = $partes[0];
-            $user_session = $partes[1];
-        }
-        else
-        {
-        	error_log("doBuscarOrientacion() ERROR Espero 2 parametros. Recibi: $params");
-        	return json_encode($conjunto);
-        }
-        	
-        //Es el usuario ANONIMO? -> No tengo nada que responder
-        if($id==0)
-        {
-        	return json_encode($conjunto);
-        }
+        $t = new ticket();
+        $t->setNro($tic_nro);
+        $t->load();
+        $t->reiterar($nota,$this->m_person->person_doc, 'call');
         
-        //Busco las orientaciones de este usuario
-        $sql = "SELECT cor_tstamp,cor_motivo,cor_nota 
-        	FROM cen_orientacion 
-        	WHERE ciu_code='$id' ORDER BY cor_tstamp desc";
-
-        $re = $primary_db->do_execute($sql);
-        $j=0;
-        while( $row=$primary_db->_fetch_row($re,$j++) )
-        {
-            $conjunto[] = array( 
-            	"cor_tstamp" => $row['cor_tstamp'],
-            	"cor_motivo" => $row['cor_motivo'], 
-            	"cor_nota" => $row['cor_nota'],
- 	        );
-        }
-		$primary_db->_free_result($re);		
-				
-        return json_encode( $conjunto );
+        return '';
     }
-
-    
-
-    private function ubicacionJSONToText($json)
-    {
-		$mostrar = '';
-    	$obj = json_decode($json);
-		if($obj) {
-			$mostrar = '
-				Calle: '.$obj->calle_nombre.' '.$obj->callenro.'<br/>
-				Barrio: '.$obj->barrio;
-		}    
-    	return $mostrar;
-    }
-    
 }
-?>

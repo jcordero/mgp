@@ -1,16 +1,67 @@
 <?php
 
 class reiteracion {
+    /** Identificador del ciudadano
+     * PAIS TIPO NRO
+     * @var string 
+     */
     public $ciu_documento;
+    
+    /** Nombres del ciudadano
+     *
+     * @var string
+     */
     public $ciu_nombres;
+    
+    /** Apellido del ciudadano
+     *
+     * @var string
+     */
     public $ciu_apellido;
+    
+    /** Correo electronico del ciudadano
+     *
+     * @var string
+     */
     public $ciu_email;
+    
+    /** Número de telefono fijo
+     *
+     * @var string
+     */
     public $ciu_telefono_fijo;
+    
+    /** Número de telefono celular
+     *
+     * @var string 
+     */
     public $ciu_telefono_movil;
+    
+    /** Fecha del evento
+     * 
+     * @var date 
+     */
     public $ttc_tstamp;
+    
+    /** Nota al momento de la reiteracion
+     *
+     * @var string
+     */
     public $ttc_nota;
     
+    /**
+     * Codigo interno del ciudadano
+     * @var int 
+     */
+    private $ciu_code;
     
+    
+    /** Crea un array de objetos reiteración relacionados al ticket
+     * 
+     * @global cdbdata $primary_db
+     * @param int $tic_nro
+     * @return array reiteracion
+     */
     static function factory($tic_nro) {
         global $primary_db;
         $ret = array();
@@ -19,8 +70,9 @@ class reiteracion {
                 WHERE tci.tic_nro='{$tic_nro}'";
         $rs = $primary_db->do_execute($sql);
         while( $row=$primary_db->_fetch_row($rs) ) {
-            $ciudadano = new solicitante();                
+            $ciudadano = new reiteracion();                
             
+            $ciudadano->ciu_code              = $row['ciu_code'];
             $ciudadano->ciu_documento         = $primary_db->QueryString("select ciu_nro_doc from ciu_identificacion where ciu_code='{$row['ciu_code']}' limit 1");
             $ciudadano->ciu_nombres           = $row['ciu_nombres'];
             $ciudadano->ciu_apellido          = $row['ciu_apellido'];
@@ -35,7 +87,13 @@ class reiteracion {
         return $ret;
     } 
     
-    function save($parent) {
+    /** Salva una reiteracion
+     * Debe estar declarado ciu_documento y ttc_nota como minimo
+     * @global cdbdata $primary_db
+     * @global type $sess
+     * @param ticket $ticket
+     */
+    function save($ticket) {
         global $primary_db, $sess;
         $errores = array();
         
@@ -56,7 +114,7 @@ class reiteracion {
                   'ciu_email'           => $this->ciu_email,
                   'ciu_tel_fijo'        => $this->ciu_telefono_fijo,
                   'ciu_tel_movil'       => $this->ciu_telefono_movil,
-                  'ciu_canal_ingreso'   => $parent->tic_canal,
+                  'ciu_canal_ingreso'   => $ticket->tic_canal,
                   'ciu_nacionalidad'    => $nac,
             );
             $primary_db->do_execute($sql1,$errores,$params1);
@@ -68,31 +126,32 @@ class reiteracion {
                   'ciu_nro_doc'         => $this->ciu_documento, 
             );
             $primary_db->do_execute($sql2,$errores,$params2);
-            
         }
         
         //El ciudadano esta identificado o creado...
         
-        //Lo asocio al ciudadano que lo reporta (tic_ticket_ciudadano)
-        $sql5 = "insert into tic_ticket_ciudadano (tic_nro, ciu_code, ttc_tstamp, ttc_nota) 
+        //Lo asocio al ciudadano que lo reporta (tic_ticket_ciudadano_reit)
+        $sql5 = "insert into tic_ticket_ciudadano_reit (tic_nro, ciu_code, ttc_tstamp, ttc_nota) 
                     values (:tic_nro:, :ciu_code:, NOW(), ':ttc_nota:')";
         $params5 = array(
-              'tic_nro'     => $parent->getNro(), 
+              'tic_nro'     => $ticket->getNro(), 
               'ciu_code'    => $this->ciu_code, 
-              'ttc_nota'    => $parent->tic_nota_in
+              'ttc_nota'    => $this->ttc_nota
         );
         $primary_db->do_execute($sql5,$errores,$params5);
          
-         //Creo un evento en el historial del ciudadano (ciu_historial_contactos)
-         $sql6 = "insert into ciu_historial_contactos (chi_code, ciu_code, cse_code, chi_fecha, chi_motivo, use_code, chi_canal, chi_nota) 
-                    values (:chi_code:, :ciu_code:, null, NOW(), 'Ingreso de ticket', ':use_code:', 'movil', ':chi_nota:')";
-         $params6 = array(
-              'chi_code'    => $primary_db->Sequence('ciu_historial_contactos'), 
-              'ciu_code'    => $this->ciu_code, 
-              'use_code'    => $sess->getUserId(), 
-              'chi_nota'    => $parent->tic_nota_in
-         );
-         $primary_db->do_execute($sql6,$errores,$params6);
+        //Creo un evento en el historial del ciudadano (ciu_historial_contactos)
+        $sql6 = "insert into ciu_historial_contactos (chi_code  , ciu_code  , cse_code, chi_fecha, chi_motivo    , use_code    , chi_canal    , chi_nota    ) 
+                                               values (:chi_code:, :ciu_code:, null    , NOW()    , ':chi_motivo:', ':use_code:', ':chi_canal:', ':chi_nota:')";
+        $params6 = array(
+              'chi_code'    =>  $primary_db->Sequence('ciu_historial_contactos'), 
+              'ciu_code'    =>  $this->ciu_code, 
+              'use_code'    =>  $sess->getUserId(), 
+              'chi_nota'    =>  $this->ttc_nota,
+              'chi_motivo'  =>  'Reiteración de '.$ticket->tic_identificador,
+              'chi_canal'   =>  $ticket->tic_canal
+        );
+        $primary_db->do_execute($sql6,$errores,$params6);
         
     }
 

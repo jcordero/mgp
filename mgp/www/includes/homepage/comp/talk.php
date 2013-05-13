@@ -50,25 +50,25 @@ if(!class_exists('talk'))
 	                    
 <div id="talk" class="row">
 	<div class="span7">
-		<div id="talk_search">';
+            <div id="talk_search">';
 			    
-	        //Esto genera los campos pm_person_doc (pais) tm_person_doc (tipo doc) y nm_person_doc (nro doc)    
-            $doc = new CField(array("presentation"=>"CIUDADANO::DNI","name"=>"person_doc","label"=>"Doc.","isvisible"=>true,"classparams"=>"no_search","value"=>$this->m_person->person_doc,"initialvalue"=>"ARG DNI "));
+	    //Esto genera los campos pm_person_doc (pais) tm_person_doc (tipo doc) y nm_person_doc (nro doc)    
+            $doc = new CField(array("presentation"=>"CIUDADANO::DNI","name"=>"person_doc","label"=>"","isvisible"=>true,"classparams"=>"no_search","value"=>$this->m_person->person_doc,"initialvalue"=>"ARG DNI "));
             $doc->NewInstance($primary_db);
             $html.=$doc->RenderFilterForm($primary_db);
             
             $html.= '
-	    	<div class="offset5"><button onclick="boton_buscar()" class="btn btn-primary"><i class="icon-search"></i>  Buscar</button></div>
-		</div>
+                <button onclick="boton_buscar()" class="btn btn-primary"><i class="icon-search"></i>  Buscar</button>
+            </div>
 		
-	 	<div id="identificado" class="row">
-	    		<div id="talk_nominal" class="span4"></div>            
-				<div id="talk_actions" class="span2">
-				    <button id="talk_btn_anonimo" 	onclick="boton_anonimo()"   class="btn"><i class="icon-off"></i> Anónimo</button>
-				    <button id="talk_btn_modificar" onclick="boton_modificar()" class="btn"><i class="icon-edit"></i> Modificar</button>
-				    <button id="talk_btn_terminar"  onclick="boton_terminar()"  class="btn">Terminar</button>        
-				</div>        
-	        </div>
+            <div id="identificado" class="row">
+                <div id="talk_nominal" class="span4"></div>            
+                <div id="talk_actions" class="span2">
+                    <button id="talk_btn_anonimo" 	onclick="boton_anonimo()"   class="btn"><i class="icon-off"></i> Anónimo</button>
+                    <button id="talk_btn_modificar" onclick="boton_modificar()" class="btn"><i class="icon-edit"></i> Modificar</button>
+                    <button id="talk_btn_terminar"  onclick="boton_terminar()"  class="btn">Terminar</button>        
+                </div>        
+            </div>
 	</div>    
 	
 
@@ -95,14 +95,18 @@ if(!class_exists('talk'))
     #indicadores button {margin:3px;width:90%;}
     #talk_btn_anonimo, #talk_btn_modificar, #talk_btn_terminar {display:none}
     #talk_actions {margin-top:10px;margin-bottom:10px;}
-    #talk_actions button {margin-bottom:10px;}            
+    #talk_actions button {margin-bottom:10px;}       
+    #nm_person_doc {width:100px;}
+    #talk_search div {display: inline-block;margin-top:3px;}
+    #talk_search button {margin-top: -10px;}
+    
 </style>
             ';
             
 			$content["talk"] = $style.$html;
 			$includes[] = '<script type="text/javascript" src="'.WEB_PATH.'/includes/home_call.js"></script>';
                         $includes[] = '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ciudadano/dni.js"></script>';
-			$includes[] = '<script type="text/javascript">initDNI("m_person_doc", {});</script>';
+			$includes[] = '<script type="text/javascript">initDNI("person_doc", {});</script>';
 
 			$err = array();
 			return array( $content, $err, $includes );

@@ -30,13 +30,13 @@ var gClipContent = "";
 function miraClipboard()
 {
     var ClipContent = window.clipboardData.getData('Text');
-    if(  ClipContent!=null && ClipContent.length>3 && ClipContent!=gClipContent)
+    if(  ClipContent!==null && ClipContent.length>3 && ClipContent!==gClipContent)
     {
         gClipContent = ClipContent;
         
         //Cambio el clipboard
         var partes = ClipContent.split("|");
-        if( partes.length==4 )
+        if( partes.length===4 )
         {
             //Limpio el clipboard
             window.clipboardData.clearData('Text');

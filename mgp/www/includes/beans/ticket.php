@@ -1052,4 +1052,35 @@ class ticket {
         return $res;
     }
    
+    /** Reiterar un ticket
+     * 
+     * @global cdbdata $primary_db
+     * @param string $nota
+     * @param string $documento
+     * @param string $canal
+     * @return boolean
+     */
+    function reiterar($nota, $documento, $canal) {
+        global $primary_db;
+        
+        $primary_db->beginTransaction();
+        $this->tic_canal = $canal;
+        
+        $r = new reiteracion();
+        $r->ciu_documento = $documento;
+        $r->ttc_nota = $nota;
+        $r->save($this);
+        $this->reiteraciones[] = $r;
+        
+        if( !$this->getStatus() ) {
+            $primary_db->rollbackTransaction();
+            $this->addError('Error al reiterar el ticket');
+            error_log("ticket::reiterar() Errores: ".$this->getErrorString());
+            return false;
+        } else { 
+            $primary_db->commitTransaction();
+        }
+        
+        return true;
+    }
 }

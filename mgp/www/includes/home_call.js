@@ -1,6 +1,7 @@
 /* 
  * Funciones usadas en la home page del call center
  */
+var g_goto = "";
 
 $(document).ready(function() {
 	
@@ -16,86 +17,90 @@ $(document).ready(function() {
     $("#m_calls_fecha_hasta").kendoDatePicker();
 });
 
+/** Armar la home. Muestra los tickets del fulano y los contactos anteriores
+ * 
+ * @returns {void}
+ */
 function armar_home_page() {
-	try {
-		if(person.person_status==="IDENTIFICADO")
-		{
-			esperar();
-		    
-		    //Cargo los tickets abiertos por el ciudadano
-		    buscar_tickets_ciudadano();
+    try {
+        if(person.person_status==="IDENTIFICADO")
+        {
+            //Cargo los tickets abiertos por el ciudadano
+            buscar_tickets_ciudadano();
 
-		    //Busco los contactos (sesiones anteriores)
-		    boton_buscar_contactos();
-		
-		    listo();
-		}
-	}
-	catch(err) {
-	    listo();
-	    alert_box(err,"ATENCION");
-	}
+            //Busco los contactos (sesiones anteriores)
+            boton_buscar_contactos();
+        }
+    }
+    catch(err) {
+        alert_box(err,"ATENCION");
+    }
 }
 
+/** Armar el panel con los datos del ciudadano
+ * 
+ * @returns {void}
+ */
 function armar_panel() {
-	//Indicador ANONIMO
-	if(person.person_status==="ANONIMO")
-	{
-		$('#identificado').hide();
-		$('#talk_btn_anonimo').hide();
-		$('#talk_btn_modificar').hide();
-		$('#turnos').hide();
-		$('#tickets').hide();
-		$('#calls').hide();
-		$('#ciudadanos').hide();
-		$('#person_status').html("ANONIMO");
-		$('#person_status').removeClass("btn-success");
-		$('#talk_search').show();
-		$('#offline').show();		
-	}	
-	else
-	{
-		$('#talk_search').hide();
-		$('#offline').hide();
-		$('#turnos').show();
-		$('#tickets').show();
-		$('#calls').show();
-		$('#ciudadanos').show();
+    //Indicador ANONIMO
+    if(person.person_status==="ANONIMO")
+    {
+        $('#identificado').hide();
+        $('#talk_btn_anonimo').hide();
+        $('#talk_btn_modificar').hide();
+        $('#turnos').hide();
+        $('#tickets').hide();
+        $('#calls').hide();
+        $('#ciudadanos').hide();
+        $('#person_status').html("ANONIMO");
+        $('#person_status').removeClass("btn-success");
+        $('#talk_search').show();
+        $('#offline').show();		
+    }	
+    else
+    {
+        $('#talk_search').hide();
+        $('#offline').hide();
+        $('#turnos').show();
+        $('#tickets').show();
+        $('#calls').show();
+        $('#ciudadanos').show();
 
-		$('#person_status').html("IDENTIFICADO");
-		$('#person_status').addClass("btn-success");
-		$('#identificado').show();
-		$('#talk_btn_anonimo').show();
-		$('#talk_btn_modificar').show();
-			    	
-    	//Armo el texto de descripcion Nombre, Apellido y debajo Tipo y nro de doc
-    	var d = (person.person_doc!=='' ? person.person_doc.split(' ') : ['ARG','DNI','']);
-    	var b="<h4>"+person.person_nombres+", "+person.person_apellido+"</h4>"+d[1]+" "+d[2]+" ("+d[0]+")";
-		b+="<br/>ID: <b>"+person.person_id+"</b>";    	
-    	b+="<br/>Sexo: <b>"+person.person_sexo+"</b><br/>Edad: <b>"+person.person_edad+" años</b>";
-    	$("#talk_nominal").html(b);
-	}
+        $('#person_status').html("IDENTIFICADO");
+        $('#person_status').addClass("btn-success");
+        $('#identificado').show();
+        $('#talk_btn_anonimo').show();
+        $('#talk_btn_modificar').show();
 
-	//Indicador EN ESPERA - CONECTADO
-	if(talk.talk_status==="EN ESPERA")
-	{
-		$('#talk_btn_terminar').hide();
-		$('#talk_status').html("EN ESPERA");
-		$('#talk_status').css("background","#DDD");
-	}
-	else
-	{
-		$('#talk_btn_terminar').show();
-		$('#talk_status').html("CONECTADO");
-		$('#talk_status').css("background","#AFA");
-	}
+        //Armo el texto de descripcion Nombre, Apellido y debajo Tipo y nro de doc
+        var d = (person.person_doc!=='' ? person.person_doc.split(' ') : ['ARG','DNI','']);
+        var b="<h4>"+person.person_nombres+", "+person.person_apellido+"</h4>"+d[1]+" "+d[2]+" ("+d[0]+")";
+        b+="<br/>Sexo: <b>"+person.person_sexo+"</b><br/>Edad: <b>"+person.person_edad+" años</b>";
+        $("#talk_nominal").html(b);
+    }
+
+    //Indicador EN ESPERA - CONECTADO
+    if(talk.talk_status==="EN ESPERA")
+    {
+        $('#talk_btn_terminar').hide();
+        $('#talk_status').html("EN ESPERA");
+        $('#talk_status').css("background","#DDD");
+    }
+    else
+    {
+        $('#talk_btn_terminar').show();
+        $('#talk_status').html("CONECTADO");
+        $('#talk_status').css("background","#AFA");
+    }
 }
-//IDENTIFICACION DEL CIUDADANO
 
-//Buscar entre los ciudadanos registrados previamente
-//por documento o por nombre y apellido
-//Si mas de uno, se debe elegir cual de todos es o bien ingresar uno nuevo
-var g_goto = "";
+
+/** IDENTIFICACION DEL CIUDADANO 
+ * - Buscar entre los ciudadanos registrados previamente por documento o por nombre y apellido. 
+ * Si mas de uno, se debe elegir cual de todos es o bien ingresar uno nuevo
+ * 
+ * @returns {Boolean}
+ */
 function boton_buscar()
 {
     var pais = $('#pm_person_doc :selected').val();
@@ -130,8 +135,9 @@ function boton_buscar()
             if(jdata.url!=='')
             {
                 listo();
-            	g_goto = jdata.url;
-                confirm_box('Es la primera vez que se ingresa este documento. Se pasará a la pantalla de carga de datos personales.', "ATENCION",showCiudadano);
+                confirm_box('Es la primera vez que se ingresa este documento. Se pasará a la pantalla de carga de datos personales.', "ATENCION",function(){
+                    irA(jdata.url);
+                });
             }
             else
             {
@@ -149,26 +155,23 @@ function boton_buscar()
             	            	                
             	armar_panel();
             	armar_home_page();
+                listo();
             }
         }	
-    },"HOME","doBuscar",doc + '|' + nombres + '|' + apellido + '|' + talk.talk_ani + '||' + pais);
+    },"HOME","doBuscar",doc + '|' + nombres + '|' + apellido + '|' + talk.talk_ani + '|' + pais);
 }
 
-
-//Muestra la pagina de carga de datos para un nuevo ciudadano
-function showCiudadano()
-{
-    document.location.href = g_goto;	
-}
-
-//Iniciar la sesion con el ciudadano identificado
+/** Iniciar la sesion con el ciudadano identificado
+ * 
+ * @returns {void}
+ */
 function boton_iniciar()
 {
-    var session = $('#m_user_session').val();
     var ani = $('#m_talk_ani').val();
-    var params = ani + '|' + session + "| ";
+    //$ani | $call_id | $entry_point | $skill 
+    var params = ani + "|||";
     new rem_request(this,function(obj,json){
-    	if(json=="")
+    	if(json==='')
         {
             alert_box("Iniciar no retorna resultados", "ERROR");
         }
@@ -178,98 +181,112 @@ function boton_iniciar()
             //Sesion abierta -> ya esta abierta la sesion para este ANI
             //Sesion cerrada -> mostrar la pagina de cierre de sesion
             //Array() -> Lista de ciudadanos que son candidatos por haber usado el ANI anteriormente
-        	var jdata = eval('(' + json + ')');
+            var jdata = JSON.parse(json);
         	
-        	if(jdata=="Sesion abierta")
-            {
+            if(jdata==="Sesion abierta" || jdata==="Sesion arrastrada")
                 return;
-            }
-            if(jdata=="Sesion arrastrada")
-            {
-                return;
-            }
-            if(jdata=="Sesion cerrada")
+            
+            if(jdata==="Sesion cerrada")
             {
                 document.location = sess_web_path+'/lmodules/ciudadanos/sesion_cierre.php';
                 return;
             }  
+            
+            //Recargo la home
             document.location = sess_web_path+'/index.php';
         }	
     },"HOME","doIniciar",params);
 }
 
-//Cerrar la sesion actual
+/** Cerrar la sesion actual
+ * 
+ * @returns {undefined}
+ */
 function boton_terminar()
 {
-    var session = $('#m_user_session').val();
     new rem_request(this,function(obj,json){
-    	if(json=="")
+    	if(json==='')
         {
             alert_box("Terminar no retorna resultados", "ERROR");
         }
         else
         {
-        	var jdata = eval('(' + json + ')');
-        	document.location = jdata.url;
+            var jdata = JSON.parse(json);
+            document.location = jdata.url;
         }	
-    },"HOME","doTerminar",session);
+    },"HOME","doTerminar",'');
 }
 
-//Iniciar una sesion anonima
+/** Iniciar una sesion anonima
+ * 
+ * @returns {void}
+ */
 function boton_anonimo()
 {
     new rem_request(this,function(obj,json){
-    	if(json=="")
+    	if(json==='')
         {
             alert_box("doAnonimo no retorna resultados", "ERROR");
         }
         else
         {
-        	//vuelvo a la home page        
-        	document.location = sess_web_path+"/index.php";
+            //vuelvo a la home page        
+            document.location = sess_web_path+"/index.php";
         }	
     },"HOME","doAnonimo",'');
 }
 
-//Modificar o completar los datos del ciudadano identificado
+/** Modificar o completar los datos del ciudadano identificado
+ * 
+ * @returns {void}
+ */
 function boton_modificar()
 {
     new rem_request(this,function(obj,json){
-    	if(json=="")
+    	if(json==="")
         {
             alert_box("doModificar no retorna resultados", "ERROR");
         }
         else
         {
-        	var jdata = eval('(' + json + ')');
+            var jdata = JSON.parse(json);
             document.location.href = jdata.url;
         }	
     },"HOME","doModificar",'');
 }
 
+/** Buscar el ANI de la llamada en la base
+ * 
+ * @returns {void}
+ */
 function boton_buscar_ani()
 {
     var ani = $('#m_ciudadanos_ani').val();
     buscar_ani(ani,"0","",""); //No cambia el estado de la conexion, otro valor si lo hace
 }
 
-//Buscar ciudadanos que hayan usado un ANI
-//Llamado por boton_buscar_ani() y por miraClipboard()
+/** Buscar ciudadanos que hayan usado un ANI - Llamado por boton_buscar_ani() y por miraClipboard()
+ * 
+ * @param {string} ani
+ * @param {string} entry_point
+ * @param {string} call_id
+ * @param {string} skill
+ * @returns {void}
+ */
 function buscar_ani(ani,entry_point,call_id,skill)
 {
-    var session = $('#m_user_session').val();
-    var params =  ani + '|' + entry_point + '|' + session + '|' + call_id + '|' + skill;
+    var params =  ani + '|' + entry_point + '|' + call_id + '|' + skill;
     new rem_request(this,function(obj,json){
-    	if(json=="")
+    	if(json==='')
         {
             alert_box("BuscarContactos no retorna resultados", "ERROR");
         }
         else
         {
-        	var jdata = eval('(' + json + ')');
+            var jdata = JSON.parse(json);
         	
             //Inicio de sesion automatico por CTI
-            if(entry_point!="0")
+            if(entry_point!=="0")
             {
                 if(jdata.length)
                 {
@@ -305,8 +322,10 @@ function buscar_ani(ani,entry_point,call_id,skill)
     },"HOME","doBuscarAni",params);
 }
 
-//BUSCAR CONTACTOS
-//Buscar otros contactos(sesiones) de este ciudadano
+/** BUSCAR CONTACTOS - Buscar otros contactos(sesiones) de este ciudadano
+ * 
+ * @returns {void}
+ */
 function boton_buscar_contactos()
 {
     var fecha_desde = $('#m_calls_fecha_desde').val();
@@ -314,20 +333,22 @@ function boton_buscar_contactos()
     
     var params =  fecha_desde + '|' + fecha_hasta;
     new rem_request(this,function(obj,json) {
-    	if(json=="")
+    	if(json==='')
         {
             alert_box("BuscarContactos no retorna resultados", "ERROR");
         }
         else
         {
-        	var jdata = eval('(' + json + ')');
+            var jdata = JSON.parse(json);
             completar_tabla_contactos(jdata);
         }
     },"HOME","doBuscarContactos",params);
 }
 
-//BUSCAR TICKETS
-//Buscar cualquier ticket.
+/** BUSCAR TICKETS - Buscar cualquier ticket
+ * 
+ * @returns {void}
+ */
 function boton_buscar_tickets()
 {
     var tipo = $('#m_tickets_tipo').val();
@@ -336,272 +357,303 @@ function boton_buscar_tickets()
     
     var params =  tipo + '|' + nro + '|' + anio;
     new rem_request(this,function(obj,json){
-    	if(json=="")
+    	if(json==='')
         {
             alert_box("BuscarTickets no retorna resultados", "ERROR");
         }
         else
         {
-        	var jdata = eval('(' + json + ')');
-        	completar_tabla_tickets(jdata);
+            var jdata = JSON.parse(json);
+            completar_tabla_tickets(jdata);
         }	
     },"HOME","doBuscarTickets",params);
 }
 
-
-//Buscar tickets del ciudadano.
+/** Buscar tickets del ciudadano
+ * 
+ * @returns {void}
+ */
 function buscar_tickets_ciudadano()
 {
-	var id = $('#m_person_id').val();
-    if(id==0 || id=="")
+    var id = $('#m_person_id').val();
+    if(id===0 || id==="")
     {
     	completar_tabla_tickets(null);
     	return;
     }
     new rem_request(this, function(obj,json){
-    	if(json=="")
+    	if(json==='')
         {
             alert_box("BuscarTickets no retorna resultados","ERROR");
         }
         else
         {
-        	var jdata = eval('(' + json + ')');
-        	completar_tabla_tickets(jdata);
+            var jdata = JSON.parse(json);
+            completar_tabla_tickets(jdata);
         }
     },"HOME","doBuscarTickets",id);
 }
 
-//NUEVO TICKET
+/** NUEVO TICKET
+ * 
+ * @returns {void}
+ */
 function boton_nuevo_ticket()
 {
-	var session = $('#m_user_session').val();
     new rem_request(this,function(obj,json){
-    	if(json=="")
+        if(json=="")
         {
             alert_box("doNuevoTicket no retorna resultados","ERROR");
         }
         else
         {
-        	var jdata = eval('(' + json + ')');
+            var jdata = JSON.parse(json);
             document.location.href = jdata.url;
         }	
-    },"HOME","doNuevoTicket",session);
+    },"HOME","doNuevoTicket",'');
 }
 
 
 
 
 
-//UTILIDADES
-//Completar una tabla, dado un array 2D. En el parametro tabla
-//se espera recibir un nodo <TBODY>
+/** UTILIDADES - Completar una tabla, dado un array 2D. En el parametro tabla se espera recibir un nodo <TBODY>
+ * 
+ * @param {json} datos
+ * @returns {void}
+ */
 function completar_tabla_tickets(datos)
 {
-	var j=0;
-	var b = "<table class=\"table table-striped\">" +
-			"  <thead>" +
-			"    <tr>" +
-			"		<th>Tipo</th>" +
-			"		<th>Estado</th>" +
-			"		<th>Nro</th>" +
-			"		<th>Año</th>" +
-			"		<th>Prestación</th>" +
-			"		<th>Ubicación</th>" +
-			"		<th>Acción</th>" +
-			"	 </tr>" +
-			"  </thead>" +
-			"  <tbody>";
+    var j=0;
+    var b = "<table class=\"table table-striped\">" +
+                    "  <thead>" +
+                    "    <tr>" +
+                    "		<th>Tipo</th>" +
+                    "		<th>Estado</th>" +
+                    "		<th>Nro</th>" +
+                    "		<th>Año</th>" +
+                    "		<th>Prestación</th>" +
+                    "		<th>Ubicación</th>" +
+                    "		<th>Acción</th>" +
+                    "	 </tr>" +
+                    "  </thead>" +
+                    "  <tbody>";
 	
-	if(datos) 
-	{
-		for(j=0;j<datos.length;j++)
-		{
-			b+="<tr>" +
-			   "  <td>"+datos[j].tipo+"</td>" + 
-			   "  <td>"+datos[j].estado+"</td>" +
-			   "  <td>"+datos[j].numero+"</td>" +
-			   "  <td>"+datos[j].anio+"</td>" +
-			   "  <td>"+datos[j].prestacion+"</td>" +
-			   "  <td>"+datos[j].ubicacion_text+"</td>" +
-			   "  <td>";
-			if(datos[j].ver_ticket!="")
-			{
-				b+="<button onclick=\"clickTicket1('"+datos[j].url_ver+"')\" class=\"btn\">Ver</button>  ";
-			}
-			if(datos[j].ver_reclamo!="")
-			{
-				b+="<button onclick=\"clickTicket2('"+datos[j].url_ver+"')\" class=\"btn\">Ver</button>  ";
-			}
-			if(datos[j].reiterar!="")
-			{
-				b+="<button onclick=\"clickTicket3('"+datos[j].url_reiterar+"')\" class=\"btn\">Reiterar</button>";
-			}		
-			b+="  </td>" +
-			   "</tr>";
-		}
-	}
-	if(j==0)
-	{
-		b+='<tr><td colspan="7">Sin datos</td></tr>';
-	}
-	b+="</tbody></table>";
-	
-	$("#tickets_tbl").html(b);		
+    if(datos) 
+    {
+        for(j=0;j<datos.length;j++)
+        {
+            var estado = datos[j].estado==='ABIERTO' ? '<span class="badge badge-info">Abierto</span>' : '<span class="badge badge-success">Cerrado</span>';
+            b+="<tr>" +
+               "  <td>"+datos[j].tipo+"</td>" + 
+               "  <td>"+estado+"</td>" +
+               "  <td>"+datos[j].numero+"</td>" +
+               "  <td>"+datos[j].anio+"</td>" +
+               "  <td>"+datos[j].prestacion+"<br/><em>"+datos[j].nota+"<em></td>" +
+               "  <td>"+renderDireccion(datos[j].ubicacion)+"</td>" +
+               "  <td>";
+            if(datos[j].url_ver!=="")
+                b+="<button onclick=\"irA('"+datos[j].url_ver+"')\" class=\"btn\">Ver</button>  ";
+
+            if(datos[j].url_reiterar!=="")
+                b+="<button onclick=\"irA('"+datos[j].url_reiterar+"')\" class=\"btn\">Reiterar</button>";
+            
+            b+="  </td>" +
+               "</tr>";
+        }
+    }
+    if(j===0)
+    {
+        b+='<tr><td colspan="7">Sin datos</td></tr>';
+    }
+    b+="</tbody></table>";
+
+    $("#tickets_tbl").html(b);		
+    $("#tickets_tbl a").popover();
 }
 
+/** Genera el HTML con la direccion
+ * 
+ * @param {object} objDir
+ * @returns {string}
+ */
+function renderDireccion(objDir) {
+    if(objDir && objDir.lat && objDir.lng) {
+        var mapa = "<img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + objDir.lat + "&y=" + objDir.lng + "&w=250&h=250&r=250\'>";
+        var d = objDir.calle_nombre + " " + objDir.callenro + " <a href=\"#\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i></a><br>";
+        if(objDir.piso)
+            d+=" Piso:" + objDir.piso;
+        if(objDir.dpto)
+            d+=" Dpto:" + objDir.dpto;
+        if(objDir.barrio)    
+            d+=" Barrio:" + objDir.barrio;
+        return d;
+    } 
+    return "Sin dirección";
+}
 
-function clickTicket1(url)
+/** Hacer la transcicion a la pagina
+ * 
+ * @param {string} url
+ * @returns {void}
+ */
+function irA(url)
 {
     document.location = url;
 }	
     
-function clickTicket2(url)
-{
-	document.location = url;
-}
-    
-function clickTicket3(url)
-{
-	document.location = url;
-}
 
-function cancelaTurno(ix)
-{
-	document.location = ix;
-}
-
-
-//Traer detalle del contacto mostrado (o sea la actividad realizada durante una sesion X)
-function getContacto(ix)
-{
-	document.location = ix;
-}
-
-//Traer detalle del ciudadano, como para editar el perfil
-function getCiudadano(ix)
-{    
-	document.location = ix;
-}
-
-
-//Cuando hay ambiguedad, se debe elegir el ciudadano correcto y luego se llama a esta funcion
-//Que define al usuario conectado
+/** Cuando hay ambiguedad, se debe elegir el ciudadano correcto y luego se llama a esta funcion - Que define al usuario conectado
+ * 
+ * @param {string} ciu_code
+ * @returns {undefined}
+ */
 function setSession(ciu_code)
 {
     var params =  ciu_code + '|' + '';
-    var json = rem_sync_request("HOME","doSetSession",params);
-    var jdata = eval('(' + json + ')');
-    if(!jdata)
-    {
-        alert_box("setSession no retorna resultados", "ERROR");
-    }
-    else
-    {
-        document.location = sess_web_path+"/index.php";
-    }
+    new rem_request(this, function(obj,json){
+        var jdata = JSON.parse(json);
+        if(!jdata)
+        {
+            alert_box("setSession no retorna resultados", "ERROR");
+        }
+        else
+        {
+            document.location = sess_web_path+"/index.php";
+        }    
+    },"HOME","doSetSession",params);
 }
 
+/** Completar la tabla de contactos previos
+ * 
+ * @param {object} datos
+ * @returns {void}
+ */
 function completar_tabla_contactos(datos)
 {
-	var j=0;
-	var b = "<table class=\"table table-striped\">" +
-			"	<thead>" +
-			"		<tr>" +
-			"			<th>Fecha</th>" +
-			"			<th>Sesión</th>" +
-			"			<th>Operador</th>" +
-			"			<th>Teléfono</th>" +
-			"			<th>Nota</th>" +
-			"			<th>Acciones</th>" +
-			"		</tr>" +
-			"	</thead>" +
-			"  <tbody>";
-	if(datos)
-	{
-		for(j=0;j<datos.length;j++)
-		{
-			b+="<tr><td>"+datos[j].cse_tstamp+"</td>";
-			b+="<td>"+datos[j].cse_duracion+"</td>";
-			b+="<td>"+datos[j].use_code+"</td>";
-			b+="<td>"+datos[j].cse_ani+"</td>";
-			b+="<td>"+datos[j].cse_nota+"</td>";
-			
-			if(datos[j].acciones=="Detalle")
-			{
-				b+="<td><button onclick=\"getContacto('"+datos[j].detalle+"')\" class=\"btn\">Ver Contacto</button></td></tr>";
-			}
-			else
-			{	
-				b+="<td></td></tr>";
-			}
-		}
-	}
-	if(j==0)
-	{
-		b+='<tr><td colspan="6">Sin datos</td></tr>';
-	}
-	b+="</tbody></table>";
-	
-	$("#calls_tbl").html(b);
+    var j=0;
+    var b = "<table class=\"table table-striped\">" +
+                    "	<thead>" +
+                    "		<tr>" +
+                    "			<th>Fecha</th>" +
+                    "			<th>Sesión</th>" +
+                    "			<th>Motivo</th>" +
+                    "			<th>Nota</th>" +
+                    "			<th>Canal</th>" +
+                    "			<th>Acciones</th>" +
+                    "		</tr>" +
+                    "	</thead>" +
+                    "  <tbody>";
+    if(datos)
+    {
+        for(j=0;j<datos.length;j++)
+        {
+            b+="<tr><td>"+datos[j].fecha+"</td>";
+            b+="<td>"+datos[j].cse_code+"</td>";
+            b+="<td>"+datos[j].motivo+"</td>";
+            b+="<td>"+datos[j].nota+"</td>";
+            b+="<td>"+datos[j].canal+"</td>";
+
+            //Acciones    
+            b+="<td></td></tr>";
+        }
+    }
+    if(j===0)
+    {
+        b+='<tr><td colspan="6">Sin datos</td></tr>';
+    }
+    b+="</tbody></table>";
+
+    $("#calls_tbl").html(b);
 }
 
 
-
+/** Completar todos los fulanos que matchean con este ANI 
+ * 
+ * @param {object} datos
+ * @returns {void}
+ */
 function completar_tabla_ani(datos)
 {
-	var j=0;
-	var b = "<table class=\"table table-striped\">" +
-			"	<thead>" +
-			"		<tr>" +
-			"			<th>Apellido</th>" +
-			"			<th>Nombre</th>" +
-			"			<th>Documento</th>" +
-			"			<th>Acción</th>" +
-			"		</tr>" +
-			"	</thead>" +
-			"  <tbody>";
-	if(datos)
-	{
-		for(j=0;j<datos.length;j++)
-		{
-			b+="<tr><td>"+datos[j].ciu_apellido+"</td>";
-			b+="<td>"+datos[j].ciu_nombres+"</td>";
-			b+="<td>"+datos[j].ciu_doc_nro+"</td>";
-			
-			b+="<td>";
-			
-			if(datos[j].btn_detalle!="")
-			{
-				b+="<button onclick=\"tabla_ani_click1('"+datos[j].detalle+"')\" class=\"btn\">Detalles</button>";
-			}
-	
-			if(datos[j].btn_sesion!="")
-			{
-				b+="<button onclick=\"tabla_ani_click2('"+datos[j].sesion+"')\" class=\"btn\">Sesión</button>";
-			}
+    var j=0;
+    var b = "<table class=\"table table-striped\">" +
+                    "	<thead>" +
+                    "		<tr>" +
+                    "			<th>Apellido</th>" +
+                    "			<th>Nombre</th>" +
+                    "			<th>Documento</th>" +
+                    "			<th>Acción</th>" +
+                    "		</tr>" +
+                    "	</thead>" +
+                    "  <tbody>";
+    if(datos)
+    {
+        for(j=0;j<datos.length;j++)
+        {
+            b+="<tr><td>"+datos[j].ciu_apellido+"</td>";
+            b+="<td>"+datos[j].ciu_nombres+"</td>";
+            b+="<td>"+datos[j].ciu_doc_nro+"</td>";
 
-			b+="</td></tr>";
-		}
-	}
-	if(j==0)
-	{
-		b+='<tr><td colspan="4">Sin datos</td></tr>';
-	}
-	b+="</tbody></table>";
-	
-	$("#ciudadanos_tbl").html(b);	
+            b+="<td>";
+
+            if(datos[j].btn_detalle!=="")
+            {
+                b+="<button onclick=\"getCiudadano('"+datos[j].detalle+"')\" class=\"btn\">Detalles</button>";
+            }
+
+            if(datos[j].btn_sesion!=="")
+            {
+                b+="<button onclick=\"setSession('"+datos[j].sesion+"')\" class=\"btn\">Sesión</button>";
+            }
+
+            b+="</td></tr>";
+        }
+    }
+    if(j===0)
+    {
+        b+='<tr><td colspan="4">Sin datos</td></tr>';
+    }
+    b+="</tbody></table>";
+
+    $("#ciudadanos_tbl").html(b);	
 }
 
-//ix = ciudadano
-function tabla_ani_click1(ix)
-{
-    getCiudadano(ix);
+/** Reiterar el ticket 
+ * Muestro un dialog para confirmar la reiteración y registrar una nota
+ * 
+ * @param {int} tic_nro codigo interno del ticket
+ * @returns {void}
+ */
+function reiterar(tic_nro) {
+    //Muestro el dialogo de reiteracion
+    var h = '<div class="modal hide fade" id="reiteracion_dialog"> \n\
+        <div class="modal-header"> \n\
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> \n\
+          <h3>Reiterar ticket</h3> \n\
+        </div> \n\
+        <div class="modal-body"> \n\
+            <div class="control-group"> \n\
+                <label class="control-label" for="reitNota">Nota</label> \n\
+                <div class="controls"> \n\
+                    <textarea id="reitNota"></textarea> \n\
+                </div> \n\
+            </div> \n\
+        </div> \n\
+        <div class="modal-footer"> \n\
+          <button class="btn" data-dismiss="modal">Cancelar</button> \n\
+          <button class="btn btn-primary">Confirmar</button> \n\
+        </div> \n\
+    </div>';
+    $(document.body).append(h);
+    $('#reiteracion_dialog').modal();
+    $('#reiteracion_dialog .btn-primary').click(function(){
+        $('#reiteracion_dialog').modal('hide');
+        //Pido la reiteracion el backend
+        var nota = $('#reitNota').val();
+        new rem_request(this,function(obj,json){
+            //No responde nada
+            $('#reiteracion_dialog').html('').remove();
+        },"HOME","reiterarTicket",tic_nro + '|' + nota);
+    });
+ 
 }
-
-//id = session
-function tabla_ani_click2(id)
-{
-   setSession(id);
-}
-
-

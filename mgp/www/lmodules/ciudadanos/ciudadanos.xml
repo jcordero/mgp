@@ -137,77 +137,76 @@
 
 	<!-- Formulario Ingreso de Ciudadanos -->
 	<make object="table_maint">
-		<build out_file="ciudadanos_maint_n.php" classname="ciu_ciudadanos_n" title="Ciudadano" public="false">
-			<include file="ciudadanos.css"/>
-			<include file="ciudadanos.js"/>
+            <build out_file="ciudadanos_maint_n.php" classname="ciu_ciudadanos_n" title="Ciudadano" public="false">
+                <include file="ciudadanos.css"/>
+                <include file="ciudadanos.js"/>
+
+                <!-- Datos personales -->
+                <group title="Datos identificatorios" id="datos_personales" render_html="block">
+                    <field name="ciu_code" presentation="SEQUENCE" label="Cod.ciudadano" cols="20" classparams="ciu_ciudadanos" readonly="true" />
+                    <field name="ciu_tipo_persona" presentation="TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
+                    <field name="ciu_nombres" presentation="TEXT" label="Nombre" ismandatory="true" />
+                    <field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
+                    <field name="ciu_sexo" presentation="SEXO" label="Género"  ismandatory="true" />
+                    <field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
+                    <field name="tmp_doc" presentation="CIUDADANO::DNI" label="Documento" classparams="{'nombre':'ciu_nombres','apellido':'ciu_apellido','direccion':'ciu_dir_calle','ocupacion':'ciu_profesion','genero':'ciu_sexo','localidad':'ciu_localidad','provincia':'ciu_provincia','barrio':'ciu_barrio'}"/>
+                    <field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" />
+                    <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
+                </group>
                         
-			<!-- Datos personales -->
-			<group title="Datos identificatorios" id="datos_personales" render_html="block">
-				<field name="ciu_code" presentation="SEQUENCE" label="Cod.ciudadano" cols="20" classparams="ciu_ciudadanos" readonly="true" />
-				<field name="ciu_tipo_persona" presentation="TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
-				<field name="ciu_nombres" presentation="TEXT" label="Nombre" ismandatory="true" />
-				<field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
-				<field name="ciu_sexo" presentation="SEXO" label="Género"  ismandatory="true" />
-				<field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
-                                <field name="tmp_doc" presentation="CIUDADANO::DNI" label="Documento"/>
-				<field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" />
-                                <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
-			</group>
-                        
-                        <!-- Ubicacion del problema -->
-                        <group title="Dirección" id="direccion" render_html="block">
-                            <field name="tmp_mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
-                            <field name="ciu_dir_calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
-                            <field name="ciu_dir_nro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
-                            <field name="tmp_calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
-                            <field name="ciu_dir_piso" presentation="INT" label="Piso" cols="5" />
-                            <field name="ciu_dir_dpto" presentation="TEXT" label="Departamento" cols="5" />
-                            <field name="ciu_cod_postal" presentation="TEXT" label="Codigo Postal" ismandatory="false" />
-                            <field name="ciu_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
-                            <field name="ciu_localidad" presentation="TEXT" label="Localidad" cols="20" initialvalue="Mar del Plata" isvisible="false"/>
-                            <field name="ciu_provincia" presentation="TEXT" label="Provincia" cols="20" initialvalue="BUENOS AIRES" isvisible="false"/>
-                            <field name="ciu_pais" presentation="TEXT" label="Pais" ismandatory="false" cols="20" initialvalue="ARGENTINA" isvisible="false"/>
-                            
-                            <field name="ciu_coord_x" presentation="TEXT" label="x" isvisible="false" readonly="true"/>
-                            <field name="ciu_coord_y" presentation="TEXT" label="y" isvisible="false" readonly="true"/>
-                        </group>
+                <!-- Ubicacion del problema -->
+                <group title="Dirección" id="direccion" render_html="block">
+                    <field name="tmp_mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
+                    <field name="ciu_dir_calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
+                    <field name="ciu_dir_nro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
+                    <field name="tmp_calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
+                    <field name="ciu_dir_piso" presentation="INT" label="Piso" cols="5" />
+                    <field name="ciu_dir_dpto" presentation="TEXT" label="Departamento" cols="5" />
+                    <field name="ciu_cod_postal" presentation="TEXT" label="Codigo Postal" ismandatory="false" />
+                    <field name="ciu_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
+                    <field name="ciu_localidad" presentation="TEXT" label="Localidad" cols="20" initialvalue="Mar del Plata" isvisible="false"/>
+                    <field name="ciu_provincia" presentation="TEXT" label="Provincia" cols="20" initialvalue="BUENOS AIRES" isvisible="false"/>
+                    <field name="ciu_pais" presentation="TEXT" label="Pais" ismandatory="false" cols="20" initialvalue="ARGENTINA" isvisible="false"/>
+
+                    <field name="ciu_coord_x" presentation="TEXT" label="x" isvisible="false" readonly="true"/>
+                    <field name="ciu_coord_y" presentation="TEXT" label="y" isvisible="false" readonly="true"/>
+                </group>
 
                         
+                <!-- Datos personales - Contacto-->
+                <group title="Datos de contacto" id="contacto" render_html="block">
+                    <field name="ciu_no_email" presentation="SINO" 	label="Contacto por mail?" initialvalue="NO"/>
+                    <field name="ciu_no_llamar" presentation="SINO"  label="Contacto por teléfono?" initialvalue="NO"/>
+                    <field name="ciu_horario_cont" presentation="TEXT" label="Horario de Contacto" />
+                    <field name="ciu_tel_fijo" presentation="PHONE" label="Telefono Fijo" />
+                    <field name="ciu_tel_movil" presentation="PHONE" label="Telefono Movil" />
+                    <field name="ciu_email" presentation="EMAIL" label="E-Mail" />
+                </group>
 
-			<!-- Datos personales - Contacto-->
-			<group title="Datos de contacto" id="contacto" render_html="block">
-				<field name="ciu_no_email" presentation="SINO" 	label="Contacto por mail?" initialvalue="NO"/>
-				<field name="ciu_no_llamar" presentation="SINO"  label="Contacto por teléfono?" initialvalue="NO"/>
-				<field name="ciu_horario_cont" presentation="TEXT" label="Horario de Contacto" />
-				<field name="ciu_tel_fijo" presentation="PHONE" label="Telefono Fijo" />
-				<field name="ciu_tel_movil" presentation="PHONE" label="Telefono Movil" />
-				<field name="ciu_email" presentation="EMAIL" label="E-Mail" />
-			</group>
+                <!-- Informacion adicional laboral/estudios -->
+                <group title="Información Laboral/Estudios" id="laboral" render_html="block">
+                    <field name="ciu_trabaja" presentation="SINO" label="Trabaja" />
+                    <field name="ciu_nivel_estudio" presentation="NIVEL_ESTUDIO" label="Nivel de Estudios" />
+                    <field name="ciu_profesion" presentation="TEXT" label="Profesion" />
+                </group>
 
-			<!-- Informacion adicional laboral/estudios -->
-			<group title="Información Laboral/Estudios" id="laboral" render_html="block">
-				<field name="ciu_trabaja" presentation="SINO" label="Trabaja" />
-				<field name="ciu_nivel_estudio" presentation="NIVEL_ESTUDIO" label="Nivel de Estudios" />
-                <field name="ciu_profesion" presentation="TEXT" label="Profesion" />
-            </group>
+                <!-- Auditoria -->
+                <group title="Auditoría" id="audit" render_html="block">
+                    <field name="ciu_tstamp" presentation="DATETIME" label="Fecha de ingreso" cols="20" isvisible="true" readonly="true" classparams="force" />
+                    <field name="ciu_canal_ingreso" presentation="CANALDEINGRESO" label="Canal de Ingreso" ismandatory="false" cols="20" isvisible="true" initialvalue="CALL" readonly="true"/>
+                    <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" ismandatory="false" cols="20" isvisible="true" />
+                    <field name="ciu_estado" presentation="ESTADO_CIUDADANO" label="Estado" ismandatory="false" cols="20" initialvalue="ACTIVO" isvisible="false" />
+                </group>
 
-			<!-- Auditoria -->
-			<group title="Auditoría" id="audit" render_html="block">
-				<field name="ciu_tstamp" presentation="DATETIME" label="Fecha de ingreso" cols="20" isvisible="true" readonly="true" classparams="force" />
-				<field name="ciu_canal_ingreso" presentation="CANALDEINGRESO" label="Canal de Ingreso" ismandatory="false" cols="20" isvisible="true" initialvalue="CALL" readonly="true"/>
-				<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" ismandatory="false" cols="20" isvisible="true" />
-				<field name="ciu_estado" presentation="ESTADO_CIUDADANO" label="Estado" ismandatory="false" cols="20" initialvalue="ACTIVO" isvisible="false" />
-			</group>
+                <!-- Documentos -->
+                <table relationclass="" classname="ciu_identificacion" title="Documentos" add="true" delete="true" update="true">
+                    <column title="Documento" order="1">
+                        <field name="ciu_code" isvisible="false"/>
+                        <field name="ciu_nro_doc" presentation="CIUDADANO::DNI" label="Documento"/>
+                    </column>
+                </table>
 
-			<!-- Documentos -->
-			<table relationclass="" classname="ciu_identificacion" title="Documentos" add="true" delete="true" update="true">
-                <column title="Documento" order="1">
-                    <field name="ciu_code" isvisible="false"/>
-                    <field name="ciu_nro_doc" presentation="CIUDADANO::DNI" label="Documento"/>
-                </column>
-            </table>
-
-		</build>
+            </build>
 	</make>
 
 

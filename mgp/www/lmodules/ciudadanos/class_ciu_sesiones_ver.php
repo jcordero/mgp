@@ -78,16 +78,17 @@ class class_ciu_historial_contactos extends cobjbase {
         $this->m_fields['chi_motivo'] = new CField(Array("Name"=>"chi_motivo", "Size"=>100, "IsForDB"=>true, "Order"=>105));
         $this->m_fields['use_code'] = new CField(Array("Name"=>"use_code", "Size"=>50, "IsForDB"=>true, "Order"=>106));
         $this->m_fields['chi_canal'] = new CField(Array("Name"=>"chi_canal", "Size"=>50, "IsForDB"=>true, "Order"=>107));
+        $this->m_fields['chi_nota'] = new CField(Array("Name"=>"chi_nota", "Type"=>"text", "IsForDB"=>true, "Order"=>108));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes
 
         //Consultas particulares a la base de datos
-        $this->m_loaddb_sql = "SELECT chi_code, ciu_code, cse_code, chi_fecha, chi_motivo, use_code, chi_canal FROM ciu_historial_contactos  WHERE chi_code= :chi_code_key: AND ciu_code= :ciu_code_key:";
-        $this->m_objfactory_sql = "SELECT chi_code, ciu_code, cse_code, chi_fecha, chi_motivo, use_code, chi_canal FROM ciu_historial_contactos";
+        $this->m_loaddb_sql = "SELECT chi_code, ciu_code, cse_code, chi_fecha, chi_motivo, use_code, chi_canal, chi_nota FROM ciu_historial_contactos  WHERE chi_code= :chi_code_key: AND ciu_code= :ciu_code_key:";
+        $this->m_objfactory_sql = "SELECT chi_code, ciu_code, cse_code, chi_fecha, chi_motivo, use_code, chi_canal, chi_nota FROM ciu_historial_contactos";
         $this->m_objfactory_suffix_sql = "";
-        $this->m_savedb_update_sql = "UPDATE ciu_historial_contactos SET chi_code= :chi_code:, ciu_code= :ciu_code:, cse_code= :cse_code:, chi_fecha= :chi_fecha:, chi_motivo= :chi_motivo:, use_code= :use_code:, chi_canal= :chi_canal: WHERE chi_code=:chi_code_key: AND ciu_code=:ciu_code_key:";
-        $this->m_savedb_insert_sql = "INSERT INTO ciu_historial_contactos(chi_code, ciu_code, cse_code, chi_fecha, chi_motivo, use_code, chi_canal) VALUES (:chi_code:, :ciu_code:, :cse_code:, :chi_fecha:, :chi_motivo:, :use_code:, :chi_canal:)";
+        $this->m_savedb_update_sql = "UPDATE ciu_historial_contactos SET chi_code= :chi_code:, ciu_code= :ciu_code:, cse_code= :cse_code:, chi_fecha= :chi_fecha:, chi_motivo= :chi_motivo:, use_code= :use_code:, chi_canal= :chi_canal:, chi_nota= :chi_nota: WHERE chi_code=:chi_code_key: AND ciu_code=:ciu_code_key:";
+        $this->m_savedb_insert_sql = "INSERT INTO ciu_historial_contactos(chi_code, ciu_code, cse_code, chi_fecha, chi_motivo, use_code, chi_canal, chi_nota) VALUES (:chi_code:, :ciu_code:, :cse_code:, :chi_fecha:, :chi_motivo:, :use_code:, :chi_canal:, :chi_nota:)";
         $this->m_savedb_delete_sql = "DELETE FROM ciu_historial_contactos WHERE chi_code=:chi_code_key: AND ciu_code=:ciu_code_key:";
         $this->m_savedb_purge_sql = "DELETE FROM ciu_historial_contactos";
         $this->m_savedb_total_sql = "SELECT COUNT(*) as cant FROM ciu_historial_contactos ";

@@ -38,6 +38,8 @@ $(document).ready(function(){
             return;
     	}
 
+        //$calle,$calle2,$altura,$luminarias,$alternativa
+        var params = calle + '||' + altura + '||NRO';
     	new rem_request(this,function(obj,json){
     		var o = JSON.parse(json);
     		//Actualizo los valores
@@ -59,7 +61,7 @@ $(document).ready(function(){
     		    		
     		direccion_validada();
     		
-    	},"TICKET::DIRECCION","validarDireccion", calle+'|'+altura);
+    	},"TICKET::DIRECCION","validarDireccion", params);
     });
 
     $('#cambia_direccion').click(function(){
@@ -85,14 +87,9 @@ $(document).ready(function(){
 
 
     //Busco el DNI en la base de datos
-    var pais = $('#pm_tmp_doc').val();
-    var tipo = $('#tm_tmp_doc').val(); 
-    var nro = $('#nm_tmp_doc').val();
-    var doc = pais + ' ' + tipo + ' ' + nro;
-    if( OP==='N' && pais==='ARG') {
-        new rem_request(this,function(obj,json){
-            console.log('Busqueda de DNI: ' + json);
-        },"CIUDADANO::DNI","ajaxBuscarDNI",doc);
+    if(OP==='N') {
+        initDNI('tmp_doc', null);
+        chg_docid(document.getElementById('bm_tmp_doc'));
     }
 });
 

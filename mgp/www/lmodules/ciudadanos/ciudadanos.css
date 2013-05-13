@@ -1,3 +1,4 @@
 @CHARSET "UTF-8";
 
-#mapa {position:absolute;margin-left:520px;}
+#mapa {position:absolute;margin-left:520px;display:block;}
+#valida_direccion, #cambia_direccion {margin-left: 150px;}

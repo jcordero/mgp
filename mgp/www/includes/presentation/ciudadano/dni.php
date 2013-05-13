@@ -12,7 +12,7 @@ class CDH_DNI extends CDataHandler {
 		$fld->m_js_totext = "toTextDNI";
 		$fld->m_js_tovalue = "toTextDNI";
 		$fld->m_js_edit = "editDNI";
-                $fld->m_js_init = "initDNI";
+                $fld->m_js_initial = "initDNI";
 		$this->m_js_main_search="chg_dni";
 	}
 	
@@ -80,7 +80,7 @@ class CDH_DNI extends CDataHandler {
 
                             if($fld->m_ClassParams!="no_search")
                             {
-                                $html.=" <img src=\"".WEB_PATH."/images/default/bt_go.gif\" onclick=\"chg_docid('$id')\" border=\"0\"> ";
+                                $html.=" <img id=\"b{$id}\" src=\"".WEB_PATH."/images/default/bt_go.gif\" onclick=\"chg_docid(this)\" border=\"0\"> ";
                             }
                     }
                     $html.="</div></div>"."\n";
@@ -122,25 +122,27 @@ class CDH_DNI extends CDataHandler {
             return '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ciudadano/dni.js"></script>';
 	}
         
-        function ajaxBuscarDNI($p) {
+        function buscarPadron($p) {
             global $padron_db;
             list($pais,$tipo,$nro) = explode(' ',$p);
             $nro = intval($nro);
             $ret = array('resultado'=>'no encontrado');
-            if($pais=='ARG') {
-                $row = $padron_db->QueryArray("SELECT matricula,apelnom,direcc,clase,ocup,sexo,tipo,localidad,provincia FROM padron_2007 where matricula={$nro}");
+            if($pais==='ARG') {
+                $row = $padron_db->QueryArray("SELECT matricula,apelnom,direcc,clase,ocup,sexo,tipo,localidad,provincia,depto FROM padron_2007 where matricula={$nro}");
                 if($row) {
+                    list($apellido, $nombre) = explode(' ',$row['apelnom'],2);
+                    $genero = $row['sexo']==='F' ? 'FEMENINO' : 'MASCULINO';
                     $ret = array(
                         'resultado'     => 'encontrado',
                         'nro'           => $row['matricula'],
-                        'nombre'        => $row['apelnom'],
+                        'nombre'        => $nombre,
+                        'apellido'      => $apellido,
                         'direccion'     => $row['direcc'],
-                        'clase'         => $row['clase'],
                         'ocupacion'     => $row['ocup'],
-                        'genero'        => $row['sexo'],
-                        'tipo_doc'      => $row['tipo'],
+                        'genero'        => $genero,
                         'localidad'     => $row['localidad'],
                         'provincia'     => $row['provincia'],
+                        'barrio'        => $row['depto']
                     );
                 }
             }

@@ -15,7 +15,8 @@ class CDH_PRESTACIONTREE extends CDH_KTREE
         $this->m_fill_branch_sql = "SELECT tpr_code,tpr_detalle,tpr_tipo FROM tic_prestaciones WHERE tpr_estado='ACTIVO' and tpr_code like '<val>%' and length(tpr_code)=length('<val>')+2 order by tpr_detalle";
         $this->m_js_main_search="chg_prestacion";
         $this->m_js_helper_search="chg_prestacion_h";	
-        $this->m_fill_sql = "SELECT tpr_code,tpr_detalle,tpr_tipo FROM tic_prestaciones WHERE tpr_estado='ACTIVO' order by length(tpr_code)";
+        $this->m_fill_sql = "SELECT tpr_code,tpr_detalle,tpr_tipo FROM tic_prestaciones WHERE tpr_estado='ACTIVO' order by cast(tpr_code as UNSIGNED INTEGER)";
+        $this->m_show_key = true;
     }
 
     /**
