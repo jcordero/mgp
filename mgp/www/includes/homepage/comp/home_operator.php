@@ -28,9 +28,9 @@ if(!class_exists('home_operator'))
                                  
          	$tab2 = '
          	<div id="offline" class="alert">
-	  				<button type="button" class="close" data-dismiss="alert">&times;</button>
-	  				<strong>Atención!</strong>
-	  				Debe identificar al ciudadano al iniciar la atención 
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Atención!</strong>
+                            Debe identificar al ciudadano al iniciar la atención 
 			</div>
 	
          	<div id="tickets" class="container">

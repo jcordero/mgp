@@ -83,8 +83,8 @@
                 <!-- Ubicacion del problema -->
                 <group title="Dirección" id="direccion" render_html="block">
                     <field name="tmp_mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
-                    <field name="ciu_dir_calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
-                    <field name="ciu_dir_nro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
+                    <field name="ciu_dir_calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="false" />
+                    <field name="ciu_dir_nro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="false" />
                     <field name="tmp_calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
                     <field name="ciu_dir_piso" presentation="INT" label="Piso" cols="5" />
                     <field name="ciu_dir_dpto" presentation="TEXT" label="Departamento" cols="5" />
@@ -161,8 +161,8 @@
                 <!-- Ubicacion del problema -->
                 <group title="Dirección" id="direccion" render_html="block">
                     <field name="tmp_mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
-                    <field name="ciu_dir_calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
-                    <field name="ciu_dir_nro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
+                    <field name="ciu_dir_calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="false" />
+                    <field name="ciu_dir_nro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="false" />
                     <field name="tmp_calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
                     <field name="ciu_dir_piso" presentation="INT" label="Piso" cols="5" />
                     <field name="ciu_dir_dpto" presentation="TEXT" label="Departamento" cols="5" />

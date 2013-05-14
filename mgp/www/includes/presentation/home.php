@@ -276,16 +276,19 @@ class CDH_HOME extends CDataHandler
         {        	            
             //Busco el ticket pedido
             $identificador = "{$tipo} {$nro}/{$anio}";
-            $sql = "SELECT * FROM v_ticket_ciu WHERE tic_identificador='{$identificador}'";
+            $sql = "SELECT *,datediff(NOW(),tic_tstamp_plazo) as vencido FROM v_ticket_ciu WHERE tic_identificador='{$identificador}'";
             $re = $primary_db->do_execute($sql);
             while( $row1=$primary_db->_fetch_row($re) )
             {
                 //Decodifico la direccion 
-                $json = $primary_db->DesFiltrado( $row1["tic_lugar"] );                
+                $json = $primary_db->DesFiltrado( $row1["tic_lugar"] );   
+                
+                //Ultima reiteracion
+                $ultima_reiteracion = $primary_db->QueryString("select ttc_tstamp from tic_ticket_ciudadano_reit where tic_nro='{$row['tic_nro']} order by ttc_tstamp desc limit 1'");    
+                
                 $conjunto[] = array(
                             'tipo'		=> $row1['tic_tipo'],
-                            'anio'		=> $row1['tic_anio'],
-                            'numero'		=> $row1['tic_numero'],
+                            'identificador'	=> $identificador,
                             'prestacion'	=> $row1['tpr_detalle'],
                             'ubicacion'		=> $row1['tic_lugar'],
                             'estado'		=> $row1['tic_estado'],
@@ -293,7 +296,14 @@ class CDH_HOME extends CDataHandler
                             'ciu_code'		=> $row1['ciu_code'],
                             'ubicacion'         => json_decode($json),
                             'tic_nro'           => $row1['tic_nro'],
-                            'nota'              => $row1['tic_nota_in']
+                            'nota'              => $row1['tic_nota_in'],
+                            'ingreso'           => $row['tic_tstamp_in'],
+                            'reiterado'         => $ultima_reiteracion,
+                            'estimado'          => $row['tic_tstamp_plazo'],
+                            'cerrado'           => $row['tic_tstamp_cierre'],
+                            'vencido'           => $row['vencido'], //Dias vencido. Esta mal si >0
+                            'anio'              => $row['tic_anio'],
+                            'numero'            => $row['tic_numero'],
                 );
             }
         }
@@ -302,16 +312,25 @@ class CDH_HOME extends CDataHandler
             //Busco por pertenecientes a un ciudadano
             if($ciu_code!='')
             {
-                $sql = "SELECT * FROM v_ticket_ciu WHERE ciu_code='{$ciu_code}' order by tic_tstamp_in desc";
+                $sql = "SELECT *,datediff(NOW(),tic_tstamp_plazo) as vencido FROM v_ticket_ciu WHERE ciu_code='{$ciu_code}' order by tic_tstamp_in desc";
             	$re = $primary_db->do_execute($sql);
                 while( $row=$primary_db->_fetch_row($re) )
                 {
                     //Decodifico la direccion 
                     $json = $primary_db->DesFiltrado( $row["tic_lugar"] );
+                    
+                    //Ultima reiteracion
+                    $ultima_reiteracion = $primary_db->QueryString("select ttc_tstamp from tic_ticket_ciudadano_reit where tic_nro='{$row['tic_nro']} order by ttc_tstamp desc limit 1'");    
+
+                    //Vencido
+                    if($row['tic_estado']==='ABIERTO')
+                        $vencido = $row['vencido'];
+                    else
+                        $vencido = 0;
+                    
                     $conjunto[] = array(
                             'tipo'		=> $row['tic_tipo'],
-                            'anio'		=> $row['tic_anio'],
-                            'numero'		=> $row['tic_numero'],
+                            'identificador'	=> $row['tic_identificador'],
                             'prestacion'	=> $row['tpr_detalle'],
                             'ubicacion'		=> $row['tic_lugar'],
                             'estado'		=> $row['tic_estado'],
@@ -319,7 +338,14 @@ class CDH_HOME extends CDataHandler
                             'ciu_code'		=> $row['ciu_code'],
                             'ubicacion'         => json_decode($json),
                             'tic_nro'           => $row['tic_nro'],
-                            'nota'              => $row['tic_nota_in']
+                            'nota'              => $row['tic_nota_in'],
+                            'ingreso'           => $row['tic_tstamp_in'],
+                            'reiterado'         => $ultima_reiteracion,
+                            'estimado'          => $row['tic_tstamp_plazo'],
+                            'cerrado'           => ($row['tic_tstamp_cierre']==null ? '' : $row['tic_tstamp_cierre']),
+                            'vencido'           => $vencido, //Dias vencido. Esta mal si >0
+                            'anio'              => $row['tic_anio'],
+                            'numero'            => $row['tic_numero'],
                     );
                 }
             }

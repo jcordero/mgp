@@ -433,11 +433,10 @@ function completar_tabla_tickets(datos)
     var b = "<table class=\"table table-striped\">" +
                     "  <thead>" +
                     "    <tr>" +
-                    "		<th>Tipo</th>" +
+                    "		<th>Ticket</th>" +
                     "		<th>Estado</th>" +
-                    "		<th>Nro</th>" +
-                    "		<th>Año</th>" +
-                    "		<th>Prestación</th>" +
+                    "		<th>Fechas</th>" +
+                    "		<th>Prestaciones</th>" +
                     "		<th>Ubicación</th>" +
                     "		<th>Acción</th>" +
                     "	 </tr>" +
@@ -449,11 +448,14 @@ function completar_tabla_tickets(datos)
         for(j=0;j<datos.length;j++)
         {
             var estado = datos[j].estado==='ABIERTO' ? '<span class="badge badge-info">Abierto</span>' : '<span class="badge badge-success">Cerrado</span>';
+            var cerrado = datos[j].cerrado!=='' ? "<br> Cerrado: "+datos[j].cerrado : '';
+            var reiterado = datos[j].reiterado!=='' ? "<br>Reiterado: "+datos[j].reiterado : '';
+            var v = parseInt(datos[j].vencido);
+            var vencido = v>0 ? '<br><span class="badge badge-important">Vencido '+v+(v===1 ? ' día' : ' días')+'</span>' : '';
             b+="<tr>" +
-               "  <td>"+datos[j].tipo+"</td>" + 
-               "  <td>"+estado+"</td>" +
-               "  <td>"+datos[j].numero+"</td>" +
-               "  <td>"+datos[j].anio+"</td>" +
+               "  <td>"+datos[j].identificador+"</td>" + 
+               "  <td>"+estado+vencido+"</td>" +
+               "  <td>Ingreso: "+datos[j].ingreso+"<br>Estimado: "+datos[j].estimado+reiterado+cerrado+"</td>" +
                "  <td>"+datos[j].prestacion+"<br/><em>"+datos[j].nota+"<em></td>" +
                "  <td>"+renderDireccion(datos[j].ubicacion)+"</td>" +
                "  <td>";
