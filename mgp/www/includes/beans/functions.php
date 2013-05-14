@@ -71,3 +71,28 @@
         global $primary_db;
         return $primary_db->Filtrado($obj->getField($campo)->getValue());
     }
+
+    function calcularEdad($nacimiento) {
+    	try {
+            //Nacimiento 22/09/1968
+            $nacimiento = str_replace('/', '-', $nacimiento);
+            list($a,$m,$d) = explode("-",$nacimiento);
+            if($d>31)
+    		list($d,$m,$a) = explode("-",$nacimiento);
+    		
+            $ahora = date("Y");
+            $anios = intval($ahora) - intval($a);
+            
+            //Ya cumplio?
+            if( date("n")<$m || (date("n")==$m && date("j")<$d))
+                $anios--;
+            
+            if($anios)
+	    	return $anios;
+    	}
+    	catch(Exception $e)
+    	{
+    		error_log("calcularEdad($nacimiento) $e");
+    	}
+    	return 0;
+   }

@@ -46,7 +46,7 @@ if(!class_exists('home_operator'))
          		
          		<div class="row">
             		<div class="span6">            		
-	            		<form class="form-inline">
+	            		<div class="form-inline">
 			          		<select class="input-medium" id="m_tickets_tipo">
 			          			<option value="RECLAMO">RECLAMO
 			          			<option value="SOLICITUD">SOLICITUD
@@ -56,7 +56,7 @@ if(!class_exists('home_operator'))
 			          		<input type="text" class="input-small" placeholder="Número" id="m_tickets_nro">
   							<input type="text" class="input-small" placeholder="Año" id="m_tickets_anio">
 			          		<button onclick="boton_buscar_tickets()" class="btn"><i class="icon-search"></i> Buscar</button>
-	            		</form>
+	            		</div>
             		</div>
             	</div>
             	

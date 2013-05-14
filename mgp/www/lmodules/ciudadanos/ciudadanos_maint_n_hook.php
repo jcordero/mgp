@@ -1,6 +1,7 @@
 <?php
 include_once "beans/call_status.php";
 include_once "beans/person_status.php";
+include_once "beans/functions.php";
 
 class ciu_ciudadanos_n_hooks extends cclass_maint_hooks
 {
@@ -31,7 +32,7 @@ class ciu_ciudadanos_n_hooks extends cclass_maint_hooks
             $m_person->person_doc = $tmp_doc;
             $m_person->person_id = $ciu_code;
             $m_person->person_sexo = $sexo;
-            $m_person->person_edad = $this->calcularEdad($nacimiento);
+            $m_person->person_edad = calcularEdad($nacimiento);
             $m_person->person_pais = $ciu_nacionalidad;
    
             $m_person->saveSession();
@@ -54,32 +55,4 @@ class ciu_ciudadanos_n_hooks extends cclass_maint_hooks
         
         return array($contenido,$errores);
     }
-    
-         
-   private function calcularEdad($nacimiento) {
-    	try {
-            //Nacimiento 22/09/1968
-            $nacimiento = str_replace('/', '-', $nacimiento);
-            list($a,$m,$d) = explode("-",$nacimiento);
-            if($d>31)
-    		list($d,$m,$a) = explode("-",$nacimiento);
-    		
-            $ahora = date("Y");
-            $anios = intval($ahora) - intval($a);
-            
-            //Ya cumplio?
-            if( date("n")<$m || (date("n")==$m && date("j")<$d))
-                $anios--;
-            
-            if($anios)
-	    	return $anios;
-    	}
-    	catch(Exception $e)
-    	{
-    		error_log("calcularEdad($nacimiento) $e");
-    	}
-    	return 0;
-   }
-    
 }
-?>

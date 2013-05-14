@@ -63,10 +63,10 @@ if(!class_exists('talk'))
 		
             <div id="identificado" class="row">
                 <div id="talk_nominal" class="span4"></div>            
-                <div id="talk_actions" class="span2">
-                    <button id="talk_btn_anonimo" 	onclick="boton_anonimo()"   class="btn"><i class="icon-off"></i> Anónimo</button>
+                <div id="talk_actions">
+                    <button id="talk_btn_anonimo" onclick="boton_anonimo()" class="btn"><i class="icon-off"></i> Anónimo</button>
                     <button id="talk_btn_modificar" onclick="boton_modificar()" class="btn"><i class="icon-edit"></i> Modificar</button>
-                    <button id="talk_btn_terminar"  onclick="boton_terminar()"  class="btn">Terminar</button>        
+                    <button id="talk_btn_terminar" onclick="boton_terminar()" class="btn">Terminar</button>        
                 </div>        
             </div>
 	</div>    
@@ -94,7 +94,7 @@ if(!class_exists('talk'))
     #identificado {border:solid 1px #ccc;border-radius:5px;background:#efefef;margin-top:10px;margin-bottom:10px;padding-bottom:5px;}
     #indicadores button {margin:3px;width:90%;}
     #talk_btn_anonimo, #talk_btn_modificar, #talk_btn_terminar {display:none}
-    #talk_actions {margin-top:10px;margin-bottom:10px;}
+    #talk_actions {margin-top:10px;margin-bottom:10px;width:120px;float:right;}
     #talk_actions button {margin-bottom:10px;}       
     #nm_person_doc {width:100px;}
     #talk_search div {display: inline-block;margin-top:3px;}

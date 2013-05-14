@@ -211,7 +211,7 @@ class CDH_HOME extends CDataHandler
     function doNuevoTicket($params)
     {
         global $sess;
-        $url = $sess->encodeURL(WEB_PATH."/lmodules/tickets/tickets_maint_n.php?OP=N");
+        $url = $sess->encodeURL(WEB_PATH."/lmodules/tickets/tickets_maint_n.php?OP=N&next=".WEB_PATH."/index.php");
         return json_encode(array("url"=>$url));
     }
     
@@ -227,7 +227,7 @@ class CDH_HOME extends CDataHandler
     {
     	global $sess;
         $doc = $this->m_person->person_id;            
-        $url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/ciudadanos_maint.php?OP=M&ciu_code={$doc}");
+        $url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/ciudadanos_maint.php?OP=M&ciu_code={$doc}&next=".WEB_PATH."/index.php");
         return json_encode(array("url"=>$url));
     }
     
