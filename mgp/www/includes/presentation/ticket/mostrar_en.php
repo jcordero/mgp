@@ -7,10 +7,10 @@ class CDH_MOSTRAR_EN extends CDH_CHECKBOXES
 	{
 		parent::__construct($parent);
 		$this->m_array = array(
-				'web' 			=> 'Web',
-				'movil' 		=> 'Móviles',
-				'telefono'		=> 'Télefono',
-				'en persona'	=> 'En persona'
+                    'web' 		=> 'Web',
+                    'movil' 		=> 'Móviles',
+                    'telefono'		=> 'Télefono',
+                    'en persona'	=> 'En persona'
 		);
 	}
 }

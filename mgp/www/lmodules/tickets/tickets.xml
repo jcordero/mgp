@@ -355,110 +355,110 @@
 <make object="table_maint">
 	<build out_file="prest_maint_n.php" classname="class_tic_prestaciones" title="Mantenimiento de prestacion" next="prestaciones.php?last=1&amp;OP=L" template_html="default.htm">
 
-		<group title="Prestación" id="asunto">
-			<field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
-            <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
-            <field name="tpr_ubicacion" presentation="UBICACION" label="Ubicación" ismandatory="true" initialvalue="DOMICILIO"/>
-            <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="true"/>
-            <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false"/>
+	<group title="Prestación" id="asunto">
+            <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
+            <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true" initialvalue="RECLAMO"/>
+            <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true" initialvalue="DOMICILIO"/>
+            <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="true" initialvalue="2 Días"/>
+            <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>
         </group>
 
-		<group title="Clasificación" id="ubicacion">
+	<group title="Clasificación" id="ubicacion">
             <field name="tpr_code" presentation="TEXT" label="Código" ismandatory="true" cols="10" note="ej: 0102 para rama 01 subrama 02"/>
-		</group>
+	</group>
 
-		<group title="Búsqueda" id="buscar">
+	<group title="Búsqueda" id="buscar">
             <field name="tpr_metadata" presentation="TEXTAREA" label="Descripción" rows="5" cols="60"/>
-			<field name="tpr_keywords" presentation="TEXT" label="Palabras clave"/>
-		</group>
+            <field name="tpr_keywords" presentation="TEXT" label="Palabras clave"/>
+        </group>
 
-		<group title="Estado" id="estado">
-			<field name="tpr_estado" presentation="ACTIVO" label="Estado" initialvalue="ACTIVO"/>
-			<field name="tpr_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true" classparams="force"/>
-			<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true"/>
-		</group>
+        <group title="Estado" id="estado">
+            <field name="tpr_estado" presentation="ACTIVO" label="Estado" initialvalue="ACTIVO"/>
+            <field name="tpr_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true" classparams="force"/>
+            <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true"/>
+        </group>
 
-		<group title="Administración delegada" id="admin">
-			<field name="tpr_admin" presentation="TICKET::ORGANISMO" label="Administrable por" note="codigo de organismo"/>
-		</group>
+        <group title="Administración delegada" id="admin">
+            <field name="tpr_admin" presentation="TICKET::ORGANISMO" label="Administrable por" note="codigo de organismo"/>
+        </group>
 
-		<group title="Notificaciones" id="notifica">
-			<field name="tpr_al_inicio" presentation="TEXT" label="Al inicio"/>
-			<field name="tpr_al_final" presentation="TEXT" label="Al final"/>
-			<field name="tpr_al_vencimiento" presentation="TEXT" label="Al vencimiento"/>
-		</group>
+        <group title="Notificaciones" id="notifica">
+            <field name="tpr_al_inicio" presentation="TEXT" label="Al inicio"/>
+            <field name="tpr_al_final" presentation="TEXT" label="Al final"/>
+            <field name="tpr_al_vencimiento" presentation="TEXT" label="Al vencimiento"/>
+        </group>
 
-		<group title="Estados optativos" id="estados_opt">
-			<field name="tor_code_inspeccion" presentation="TICKET::ORGANISMO" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
-			<field name="tor_code_verificacion" presentation="TICKET::ORGANISMO" label="Al final certificación" note="código de organismo que hace la certificación"/>
-		</group>
+        <group title="Estados optativos" id="estados_opt">
+            <field name="tor_code_inspeccion" presentation="TICKET::ORGANISMO" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
+            <field name="tor_code_verificacion" presentation="TICKET::ORGANISMO" label="Al final certificación" note="código de organismo que hace la certificación"/>
+        </group>
 
-		<group title="Asociación automática de tickets" id="asociar">
-			<field name="tpr_asociar_radio" presentation="INT" label="Radio en metros" note="todos los tickets abiertos de esta prestación se asociarán si están próximos esta distacia"/>
-		</group>
+        <group title="Asociación automática de tickets" id="asociar">
+            <field name="tpr_asociar_radio" presentation="INT" label="Radio en metros" note="todos los tickets abiertos de esta prestación se asociarán si están próximos esta distacia"/>
+        </group>
 
         <!-- CUESTIONARIO -->
         <table relationclass="" classname="class_tic_prestaciones_cuest" title="Cuestionario" add="true" delete="true" update="true">
-			<column title="Orden" order="1">
-				<field name="tpr_code" isvisible="false"/>
-                                <field name="tcu_code" isvisible="false"/>
-				<field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true"/>
-			</column>
-			<column title="Pregunta" order="2">
-				<field name="tpr_preg" presentation="TEXT" label="Pregunta" ismandatory="true"/>
-			</column>
-			<column title="Tipo" order="3">
-				<field name="tpr_tipo_preg" presentation="CUESTOPCIONES" label="Tipo" ismandatory="true"/>
-			</column>
-			<column title="Opciones" order="4">
-				<field name="tpr_opciones" presentation="TEXTAREA" ROWS="4" COLS="50" label="Opciones" />
-			</column>
-		</table>
+            <column title="Orden" order="1">
+                <field name="tpr_code" isvisible="false"/>
+                <field name="tcu_code" isvisible="false"/>
+                <field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true"/>
+            </column>
+            <column title="Pregunta" order="2">
+                <field name="tpr_preg" presentation="TEXT" label="Pregunta" ismandatory="true"/>
+            </column>
+            <column title="Tipo" order="3">
+                <field name="tpr_tipo_preg" presentation="CUESTOPCIONES" label="Tipo" ismandatory="true"/>
+            </column>
+            <column title="Opciones" order="4">
+                <field name="tpr_opciones" presentation="TEXTAREA" ROWS="4" COLS="50" label="Opciones" />
+            </column>
+        </table>
 
         <!-- GIS -->
         <table relationclass="" classname="class_tic_prestaciones_gis" title="GIS" add="true" delete="true" update="true">
-			<column title="Campo" order="1">
-				<field name="tpr_code" isvisible="false"/>
+            <column title="Campo" order="1">
+                <field name="tpr_code" isvisible="false"/>
                 <field name="tpg_code" isvisible="false"/>
-				<field name="tpg_gis_campo" presentation="GISGRILLA" label="Campo" />
-			</column>
-			<column title="Valor" order="2">
-				<field name="tpg_gis_valor" presentation="TEXT" label="Valor" />
-			</column>
-			<column title="Usar GIS?" order="3">
-				<field name="tpg_usa_gis" presentation="SINO" label="Usar GIS?" ismandatory="true"/>
-			</column>
-			<column title="Organismo" order="4">
-				<field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
-			</column>
+                <field name="tpg_gis_campo" presentation="GISGRILLA" label="Campo" />
+            </column>
+            <column title="Valor" order="2">
+                <field name="tpg_gis_valor" presentation="TEXT" label="Valor" />
+            </column>
+            <column title="Usar GIS?" order="3">
+                <field name="tpg_usa_gis" presentation="SINO" label="Usar GIS?" ismandatory="true"/>
+            </column>
+            <column title="Organismo" order="4">
+                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
+            </column>
             <column title="Figura" order="5">
-				<field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true"/>
-			</column>
+                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true"/>
+            </column>
             <column title="Auditoria" order="6">
-				<field name="tpg_tstamp" presentation="DATETIME" label="Fecha" readonly="true" />
+                <field name="tpg_tstamp" presentation="DATETIME" label="Fecha" readonly="true" />
                 <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" />
-			</column>
-		</table>
+            </column>
+        </table>
 
         <!-- Rubros -->
         <table relationclass="" classname="class_tic_prestaciones_rubros" title="Rubros relacionados" add="true" delete="true" update="true">
-			<column title="Rubro" order="1">
-				<field name="tpr_code" isvisible="false"/>
-				<field name="tru_code" presentation="RUBRO" label="Rubro" />
-			</column>
-			<column title="Prioridad" order="2">
-				<field name="tpr_prioridad" presentation="PRIORIDAD" label="Prioridad" />
-			</column>
-			<column title="Organismo" order="3">
-				<field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
-			</column>
+            <column title="Rubro" order="1">
+                <field name="tpr_code" isvisible="false"/>
+                <field name="tru_code" presentation="RUBRO" label="Rubro" />
+            </column>
+            <column title="Prioridad" order="2">
+                <field name="tpr_prioridad" presentation="PRIORIDAD" label="Prioridad" />
+            </column>
+            <column title="Organismo" order="3">
+                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
+            </column>
             <column title="Figura" order="4">
-				<field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" initialvalue="RESPONSABLE"/>
-			</column>			
-		</table>
+                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" initialvalue="RESPONSABLE"/>
+            </column>			
+        </table>
 
-		<!-- Botones de accion para redireccionar después de salvar la página -->
-		<action operation="L" label="Listado de prestaciones" target="prestaciones.php?last=1&amp;OP=L"  note="Listado de prestaciones"/>
+        <!-- Botones de accion para redireccionar después de salvar la página -->
+        <action operation="L" label="Listado de prestaciones" target="prestaciones.php?last=1&amp;OP=L"  note="Listado de prestaciones"/>
         <action operation="N" label="Nueva prestación" target="prest_maint_n.php?OP=N"  note="Nueva prestación"/>
 
 	</build>
@@ -552,7 +552,7 @@
             <field name="calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
             <field name="calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
             
-            <field name="calle2" presentation="TICKET::CALLE" label="Cruza calle" cols="60" ismandatory="false" />
+            <field name="calle2" presentation="TICKET::CALLE" label="Cruza calle" cols="60" ismandatory="true" />
             <field name="calle_nombre2" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
 
             <field name="callenro" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
@@ -599,7 +599,7 @@
             <field name="calle_lum" presentation="TICKET::CALLE" label="Calle" cols="100" ismandatory="true" />
             <field name="calle_nombre_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
             
-            <field name="calle2_lum" presentation="TICKET::CALLE" label="Cruza calle" cols="100" ismandatory="false" />
+            <field name="calle2_lum" presentation="TICKET::CALLE" label="Cruza calle" cols="100" ismandatory="true" />
             <field name="calle_nombre2_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
             
             <field name="callenro_lum" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />

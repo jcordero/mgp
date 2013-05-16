@@ -579,7 +579,8 @@ td .itm .desc{
 .itm .fldm label,
 .itm .fld label,
 .itm .fldro label{
-    margin-right: 7px;
+    margin-right: 15px;
+    margin-left: 5px;
 }
 
 .tree_body {
@@ -625,6 +626,7 @@ td .itm .desc{
 .itm .fld textarea {
     font: 12px arial,sans-serif;
     width: 440px;
+    display:inline-block;
 }
 
 /*IMAGENES dentro de los formularios [calendario, flechita de ajax, etc] */
@@ -645,7 +647,7 @@ html>body .itm .fld img,  html>body .itm .fldm img {
     line-height: 22px;
     color: #777777;
     font-style: italic;
-    float:left;
+    display: inline-block;
 }
 
 #cid_tiempo_maximo .note, #dden_v_domestica .note, #contenido_datos .note, table .boton

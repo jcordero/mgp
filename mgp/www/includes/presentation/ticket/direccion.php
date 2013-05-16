@@ -26,45 +26,69 @@ class CDH_DIRECCION extends CDataHandler
                         error_log( "direccion.php coordenada_calle_altura() ->".$exception );
                         return json_encode(array("resultado"	=> 	"error"));
                     }
+                    
+                    //Recupero el barrio
+                    try
+                    {
+                        $b = $client->barrio_por_calle_altura($calle, $altura);
+                    }
+                    catch (SoapFault $exception)
+                    {
+                        error_log( "direccion.php barrio_por_calle_altura() ->".$exception );
+                        return json_encode(array("resultado"	=> 	"error"));
+                    }		
                 }
                 else
                 {
                     try
                     {
-                        $r = $client->coordenada_calle_altura($calle, $calle2);
+                        $r = $client->coordenada_calle_calle($calle, $calle2);
                     }
                     catch (SoapFault $exception)
                     {
-                        error_log( "direccion.php coordenada_calle_altura() ->".$exception );
+                        error_log( "direccion.php coordenada_calle_calle() ->".$exception );
+                        return json_encode(array("resultado"	=> 	"error"));
+                    }
+                    
+                    //Recupero el barrio
+                    try
+                    {
+                        $b = $client->barrio_por_calle_calle($calle, $calle2);
+                        error_log( "direccion.php barrio_por_calle_calle() ->".print_r($b,true) );
+                    }
+                    catch (SoapFault $exception)
+                    {
+                        error_log( "direccion.php barrio_por_calle_calle() ->".$exception );
                         return json_encode(array("resultado"	=> 	"error"));
                     }
                 }
                 
                 
-		//Recupero el barrio
-		try
-		{
-                    $b = $client->barrio_por_calle_altura($calle, $altura);
-		}
-		catch (SoapFault $exception)
-		{
-                    error_log( "direccion.php barrio_por_calle_altura() ->".$exception );
-                    return json_encode(array("resultado"	=> 	"error"));
-		}		
 		
 		//Busco el nombre de la calle posta
-		$row = $primary_db->QueryArray("select gca_codigo,gca_descripcion from geo_calles where gca_codigo='{$calle}'");
+		$row1 = $primary_db->QueryArray("select gca_codigo,gca_descripcion from geo_calles where gca_codigo='{$calle}'");
 
+                if($calle2!=='')
+                    $row2 = $primary_db->QueryArray("select gca_codigo,gca_descripcion from geo_calles where gca_codigo='{$calle2}'");
+                else
+                    $row2 = array('gca_descripcion'=>'', 'gca_codigo'=>0);
+                
+                //Es una direccion imposible?
+                if( $r->lat=="0" && $r->lng=="0" )
+                    $resultado = "error";
+                else
+                    $resultado = "ok";
+                
                 $o = array(
-			"resultado"	=> 	"ok",	
+			"resultado"	=> 	$resultado,	
 			"latitud" 	=> 	$r->lat,
 			"longitud"	=>	$r->lng,
 			"barrio"	=>	$b->nombrebarrio,
-			"calle"		=>	$row['gca_descripcion'],
-			"cod_calle"	=> 	$row['gca_codigo'],
+			"calle"		=>	$row1['gca_descripcion'],
+			"cod_calle"	=> 	$row1['gca_codigo'],
                         "nro"           =>      $altura,
-                        "calle2"        =>      '',
-                        "cod_calle2"    =>      0
+                        "calle2"        =>      $row2['gca_descripcion'],
+                        "cod_calle2"    =>      $row2['gca_codigo'],
 		);
 
                 

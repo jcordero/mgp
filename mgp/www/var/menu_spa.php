@@ -7,7 +7,7 @@
 	
 	$buff = '<ul id="menu">';
         if($this->haveRight($primary_db,'menu.archivo.inicio')) { 
-            $buff.='<li>Inicio';
+        	$buff.="<li>Inicio";
         	$buff.='<ul>';
         	$buff.="<li><a href=\"/mgp/index.php\">Inicio</a>";
         	$buff.='</li>';
@@ -18,8 +18,7 @@
         	$buff.='</ul>';
         }
         if($this->haveRight($primary_db,'menu.archivo.ciudadanos')) { 
-            $buff.="</li>";
-            $buff.='<li>Ciudadanos';
+        	$buff.="<li>Ciudadanos";
         	$buff.='<ul>';
             if($this->haveRight($primary_db,'menu.archivo.ciudadanos')) { 
             	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/ciudadanos/ciudadanos.php?OP=V')."\">Ciudadanos</a>";
@@ -30,8 +29,7 @@
         	$buff.='</ul>';
         }
         if($this->haveRight($primary_db,'menu.archivo.tickets')) { 
-            $buff.="</li>";
-            $buff.='<li>Tickets';
+        	$buff.="<li>Tickets";
         	$buff.='<ul>';
             if($this->haveRight($primary_db,'menu.archivo.tickets.nuevo')) { 
             	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/tickets_maint_n.php?OP=N')."\">Nuevo ticket</a>";
@@ -89,85 +87,8 @@
             }
         	$buff.='</ul>';
         }
-        if($this->haveRight($primary_db,'menu.archivo.denuncias')) { 
-            $buff.="</li>";
-            $buff.='<li>Denuncias';
-        	$buff.='<ul>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/dennovedades.php?OP=V')."\">Consulta de novedades</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/denabiertas.php?OP=V')."\">Consulta de denuncias</a>";
-        	$buff.='</li>';
-            if($this->haveRight($primary_db,'menu.archivo.denuncias.adm')) { 
-            	$buff.="<li>Prestaciones";
-            	$buff.='<ul>';
-                if($this->haveRight($primary_db,'menu.archivo.denuncias.adm')) { 
-                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/denprestaciones.php?OP=V')."\">Listar prestaciones</a>";
-                	$buff.='</li>';
-                }
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/denprest_maint_n.php?OP=N')."\">Nueva prestación</a>";
-            	$buff.='</li>';
-            	$buff.='</ul>';
-            	$buff.='</li>';
-            }
-            if($this->haveRight($primary_db,'menu.archivo.denuncias.adm')) { 
-            	$buff.="<li>Rubros";
-            	$buff.='<ul>';
-                if($this->haveRight($primary_db,'menu.archivo.denuncias.adm')) { 
-                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/rubros.php?OP=V')."\">Listar rubros</a>";
-                	$buff.='</li>';
-                }
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/rubro_maint_n.php?OP=N')."\">Nuevo rubro</a>";
-            	$buff.='</li>';
-            	$buff.='</ul>';
-            	$buff.='</li>';
-            }
-        	$buff.='</ul>';
-        }
-        if($this->haveRight($primary_db,'menu.archivo.reclamos')) { 
-            $buff.="</li>";
-            $buff.='<li>Reclamos';
-        	$buff.='<ul>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/recnovedades.php?OP=V')."\">Consulta de novedades</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/recabiertos.php?OP=V')."\">Consulta de reclamos</a>";
-        	$buff.='</li>';
-            if($this->haveRight($primary_db,'menu.archivo.denuncias.adm')) { 
-            	$buff.="<li>Prestaciones";
-            	$buff.='<ul>';
-                if($this->haveRight($primary_db,'menu.archivo.denuncias.adm')) { 
-                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/recprestaciones.php?OP=V')."\">Listar prestaciones</a>";
-                	$buff.='</li>';
-                }
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/recprest_maint_n.php?OP=N')."\">Nueva prestacion</a>";
-            	$buff.='</li>';
-            	$buff.='</ul>';
-            	$buff.='</li>';
-            }
-        	$buff.='</ul>';
-        }
-        if($this->haveRight($primary_db,'menu.archivo.solicitudes')) { 
-            $buff.="</li>";
-            $buff.='<li>Solicitudes';
-        	$buff.='<ul>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/solnovedades.php?OP=V')."\">Consulta de novedades</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/solabiertas.php?OP=V')."\">Consulta de solicitudes</a>";
-        	$buff.='</li>';
-        	$buff.='</ul>';
-        }
-        if($this->haveRight($primary_db,'menu.archivo.quejas')) { 
-            $buff.="</li>";
-            $buff.='<li>Quejas';
-        	$buff.='<ul>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/quenovedades.php?OP=V')."\">Consulta de novedades</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/queabiertas.php?OP=V')."\">Consulta de quejas</a>";
-        	$buff.='</li>';
-        	$buff.='</ul>';
-        }
         if($this->haveRight($primary_db,'menu.archivo.administracion')) { 
-            $buff.="</li>";
-            $buff.='<li>Administración';
+        	$buff.="<li>Administración";
         	$buff.='<ul>';
             if($this->haveRight($primary_db,'menu.archivo.administracion.home')) { 
             	$buff.="<li>Home page";
@@ -377,6 +298,10 @@
             	$buff.="<li><a href=\"".$this->encodeURL('/mgp/modules/rss/articles_maint.php?OP=N')."\">Nuevo articulo</a>";
             	$buff.='</li>';
             	$buff.='</ul>';
+            	$buff.='</li>';
+            }
+            if($this->haveRight($primary_db,'menu.archivo.administracion.eventbus')) { 
+            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/modules/eventbus/events.php?OP=X')."\">Ver actividad en EventBus</a>";
             	$buff.='</li>';
             }
             if($this->haveRight($primary_db,'menu.archivo.administracion.eventos')) { 

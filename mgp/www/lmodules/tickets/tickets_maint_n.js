@@ -95,7 +95,7 @@ function valida_direccion() {
     var altura = $('#m_callenro').val();
     var alternativa = $('#m_alternativa').val();
     	
-    if(calle==='') {
+    if(calle.length!==5) {
         alert_box('Debe completar la calle antes de validar la dirección');
     return;
     }
@@ -105,7 +105,7 @@ function valida_direccion() {
         return;
     }
 
-    if(calle2==='' && alternativa==='CALLE') {
+    if(calle2.length!==5 && alternativa==='CALLE') {
         alert_box('Debe completar la calle que cruza antes de validar la dirección');
         return;
     }
@@ -114,32 +114,36 @@ function valida_direccion() {
 
     new rem_request(this,function(obj,json){
             var o = JSON.parse(json);
-            //Actualizo los valores
-            $('#m_tic_coordx').val(o.latitud);
-            $('#m_tic_coordy').val(o.longitud);
-            $('#m_tic_barrio').val(o.barrio);
-            $('#lm_tic_barrio').html(o.barrio);
-
-            $('#m_calle').val(o.cod_calle);
-            $('#hm_calle').val(o.calle);
-            $('#m_calle_nombre').val(o.calle);
-
-            $('#m_calle2').val(o.cod_calle2);
-            $('#hm_calle2').val(o.calle2);
-            $('#m_calle_nombre2').val(o.calle2);
-
-            //Cargo el mapa 350 x 250px
-            /* GoogleMaps
-             * $('#m_mapa img').attr('src','http://maps.googleapis.com/maps/api/staticmap?center='+o.longitud+','+o.latitud+'&zoom=17&size=350x250&maptype=roadmap&markers=color:blue%7Clabel:%7C'+o.longitud+','+o.latitud+'&sensor=false');
-             * 
-             * OpenStreetMap
-             * $('#m_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
-             */
             $('#mapa .progress').remove();
-            $('#m_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
+            if(o.resultado==='ok') {
+                //Actualizo los valores
+                $('#m_tic_coordx').val(o.latitud);
+                $('#m_tic_coordy').val(o.longitud);
+                $('#m_tic_barrio').val(o.barrio);
+                $('#lm_tic_barrio').html(o.barrio);
 
-            direccion_validada();
+                $('#m_calle').val(o.cod_calle);
+                $('#hm_calle').val(o.calle);
+                $('#m_calle_nombre').val(o.calle);
 
+                $('#m_calle2').val(o.cod_calle2);
+                $('#hm_calle2').val(o.calle2);
+                $('#m_calle_nombre2').val(o.calle2);
+
+                //Cargo el mapa 350 x 250px
+                /* GoogleMaps
+                 * $('#m_mapa img').attr('src','http://maps.googleapis.com/maps/api/staticmap?center='+o.longitud+','+o.latitud+'&zoom=17&size=350x250&maptype=roadmap&markers=color:blue%7Clabel:%7C'+o.longitud+','+o.latitud+'&sensor=false');
+                 * 
+                 * OpenStreetMap
+                 * $('#m_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
+                 */
+                $('#m_mapa img').attr('src','http://maps.googleapis.com/maps/api/staticmap?center='+o.latitud+','+o.longitud+'&zoom=17&size=350x250&maptype=roadmap&markers=color:blue%7Clabel:%7C'+o.latitud+','+o.longitud+'&sensor=false');
+                direccion_validada();
+            }
+            else
+            {
+                alert_box("La dirección indicada no existe", "Validar dirección");
+            }
     },"TICKET::DIRECCION","validarDireccion", calle+'|'+calle2+'|'+altura+'|NO|'+alternativa);
 }
 
@@ -182,6 +186,13 @@ function marker_click(e) {
                 last_marker_clicked.setIcon(luminariaIcon);
             marker.setIcon(luminariaOnIcon);
             last_marker_clicked = marker;
+
+            //Me aseguro que la modalidad sea calle y altura
+            $('#m_alternativa_lum').val('NRO');
+            $('#calle2_lum').hide();
+            $('#callenro_lum').show();
+            callenro_lum.m_mandatory = true;
+            calle2_lum.m_mandatory = false;
             
             //Completo la direccion de la luminaria
             $('#m_id_luminaria').val(lum.id);
@@ -191,7 +202,7 @@ function marker_click(e) {
             $('#m_tic_coordx').val(lum.lat);
             $('#m_tic_coordy').val(lum.lng);
             
-            $('#m_calle_lum').val(0);
+          
             $('#hm_calle_lum').val(lum.calle);
             $('#hm_calle_lum').val(lum.calle);
             $('#calle_lum .fldl').html(lum.calle);
@@ -201,16 +212,12 @@ function marker_click(e) {
             $('#m_callenro_lum').val(lum.altura);
             $('#callenro_lum .fldl').html(lum.altura);
 
-            $('#m_calle2_lum').val('');
-            $('#hm_calle2_lum').val('');
-            
-            $('#m_calle_nombre2_lum').val('');
-
             //Validacion del campo
             calle_lum.m_status = 'pass';
             break;
         }
     }
+    $('#alert_luminaria').remove();
 }
 
 function direccion_validada() {
@@ -244,7 +251,7 @@ function valida_direccion_lum(){
     var altura = $('#m_callenro_lum').val();
     var alternativa = $('#m_alternativa_lum').val();
 
-    if(calle==='') {
+    if(calle.length!==5) {
         alert_box('Debe completar la calle antes de validar la dirección');
     return;
     }
@@ -254,7 +261,7 @@ function valida_direccion_lum(){
         return;
     }
 
-    if(calle2==='' && alternativa==='CALLE') {
+    if(calle2.length!==5 && alternativa==='CALLE') {
         alert_box('Debe completar la calle que cruza antes de validar la dirección');
         return;
     }
@@ -263,52 +270,52 @@ function valida_direccion_lum(){
 
     new rem_request(this,function(obj,json){
             var o = JSON.parse(json);
-
-            //Actualizo los valores
-            $('#m_tic_coordx').val(o.latitud);
-            $('#m_tic_coordy').val(o.longitud);
-            $('#m_tic_barrio_lum').val(o.barrio);
-            $('#lm_tic_barrio_lum').html(o.barrio);
-            $('#m_calle_lum').val(o.cod_calle);
-            $('#hm_calle_lum').val(o.calle);
-            $('#m_calle_nombre_lum').val(o.calle);
-
-            $('#m_calle2_lum').val(o.cod_calle2);
-            $('#hm_calle2_lum').val(o.calle2);
-            $('#m_calle_nombre2_lum').val(o.calle2);
-
-            lista_luminarias = o.luminarias;
             $('#progreso').remove();
-            
-            //Cargo el mapa 350 x 250px con un marker azul en la dirección elegida
-            mapa_luminaria.setView([o.latitud,o.longitud],18);
-            L.marker([o.latitud,o.longitud]).addTo(mapa_luminaria).bindPopup(o.calle + ' ' + o.nro);
+            if(o.resultado==='ok') {
+                //Actualizo los valores
+                $('#m_tic_coordx').val(o.latitud);
+                $('#m_tic_coordy').val(o.longitud);
+                $('#m_tic_barrio_lum').val(o.barrio);
+                $('#lm_tic_barrio_lum').html(o.barrio);
+                $('#m_calle_lum').val(o.cod_calle);
 
-            //Creo los markers de las luminarias
+                $('#hm_calle_lum').val(o.calle);
+                $('#m_calle_nombre_lum').val(o.calle);
+
+                $('#m_calle2_lum').val(o.cod_calle2);
+
+                $('#hm_calle2_lum').val(o.calle2);
+                $('#m_calle_nombre2_lum').val(o.calle2);
+
+                lista_luminarias = o.luminarias;
             
-            var cant = o.luminarias.length;
-            for(var j=0;j<cant;j++) {
-                var pt = o.luminarias[j];
-                L.marker([pt.lat,pt.lng], {icon: luminariaIcon}).addTo(mapa_luminaria).on('click',marker_click);
-                //.bindPopup(pt.dir + '<br>id: '+ pt.id + '<br>Situación: '+pt.sit);
+                //Cargo el mapa 350 x 250px con un marker azul en la dirección elegida
+                mapa_luminaria.setView([o.latitud,o.longitud],18);
+                L.marker([o.latitud,o.longitud]).addTo(mapa_luminaria).bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''));
+
+                //Creo los markers de las luminarias
+                var cant = o.luminarias.length;
+                for(var j=0;j<cant;j++) {
+                    var pt = o.luminarias[j];
+                    L.marker([pt.lat,pt.lng], {icon: luminariaIcon}).addTo(mapa_luminaria).on('click',marker_click);
+                    //.bindPopup(pt.dir + '<br>id: '+ pt.id + '<br>Situación: '+pt.sit);
+                }
+            
+                direccion_validada_lum();
+                setAlertLuminaria();
+            }         
+            else
+            {
+                alert_box("La dirección indicada no existe", "Validar dirección");
             }
-            
-            direccion_validada_lum();
-            
-            $('#contenido_luminaria').append('<div class="alert alert-block" style="width: 700px;"> \n\
-                <button type="button" class="close" data-dismiss="alert">&times;</button> \n\
-                <h4>Atención!</h4> \n\
-                    Debe seleccionar una luminaria en el mapa para terminar la georefencia y poder salvar el ticket. \n\
-                </div>');
-
     },"TICKET::DIRECCION","validarDireccion", calle+'|'+calle2+'|'+altura+'|SI|'+alternativa);
 }
 
 function cambia_direccion_lum(){
-    $('#contenido_luminaria .alert').remove();
     
     //Oculto los campos read only
     $('#calle_lum .fldl').hide();
+    $('#calle2_lum .fldl').hide();
     $('#callenro_lum .fldl').hide();
 
     //Muestro los campo editables
@@ -322,14 +329,31 @@ function cambia_direccion_lum(){
     //Muestro los botones
     $('#cambia_direccion_lum').hide();
     $('#valida_direccion_lum').show();
+    
+    $('#m_id_luminaria').val('');
+    $('#lm_id_luminaria').html('');
+
+    setAlertLuminaria();
+}
+
+function setAlertLuminaria() {
+    if( $('#alert_luminaria').length===0 )
+    $('#contenido_luminaria').append('<div id="alert_luminaria" class="alert alert-block" style="width: 700px;"> \n\
+                <button type="button" class="close" data-dismiss="alert">&times;</button> \n\
+                <h4>Atención!</h4> \n\
+                    Debe seleccionar una luminaria en el mapa para terminar la georefencia y poder salvar el ticket. \n\
+                </div>');
 }
 
 function direccion_validada_lum() {
     //Oculto la calle y altura
     $('#alternativa_lum').hide();
+    
     $('#calle_lum .fldm input').hide();
     $('#calle_lum .fldm img').hide();
+    
     $('#callenro_lum .fldm input').hide();
+    
     $('#calle2_lum .fldm input').hide();
     $('#calle2_lum .fldm img').hide();
     
@@ -341,6 +365,10 @@ function direccion_validada_lum() {
     //Cambio los botones
     $('#valida_direccion_lum').hide();
     $('#cambia_direccion_lum').show();
+    
+     calle2_lum.m_status = 'pass';
+     calle_lum.m_status = 'pass';
+     callenro_lum.m_status = 'pass';
 }
 
 var mapa_luminaria = {};

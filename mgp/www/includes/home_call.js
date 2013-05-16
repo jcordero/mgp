@@ -487,7 +487,14 @@ function completar_tabla_tickets(datos)
 function renderDireccion(objDir) {
     if(objDir && objDir.lat && objDir.lng) {
         var mapa = "<img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + objDir.lat + "&y=" + objDir.lng + "&w=250&h=250&r=250\'>";
-        var d = objDir.calle_nombre + " " + objDir.callenro + " <a href=\"#\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i></a><br>";
+        var d = '';
+        
+        if(objDir.alternativa=='CALLE') 
+            d+= objDir.calle_nombre + ' y '+ objDir.calle_nombre2;
+        else
+            d+= objDir.calle_nombre + " " + objDir.callenro; 
+
+            d+=" <a href=\"#\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i></a><br>";
         if(objDir.piso)
             d+=" Piso:" + objDir.piso;
         if(objDir.dpto)
