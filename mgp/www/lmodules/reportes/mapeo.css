@@ -1,0 +1,13 @@
+/* 
+    Document   : mapeo
+    Created on : 17-may-2013, 9:47:18
+    Author     : jcordero
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#reporte_mapa {width:100%;height:500px;}

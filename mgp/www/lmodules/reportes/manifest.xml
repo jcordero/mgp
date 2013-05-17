@@ -1,0 +1,18 @@
+﻿
+<module name="Reportes" version="1.0" release="15/05/2013">
+
+<right name="menu.archivo.reportes" note="Permiso para usar modulo de reportes"/>
+
+<menu language="spa">
+
+<menuitem name="Reportes" order="4" pda="false" right="menu.archivo.reportes">
+    <menuitem name="Mapeo" action="/lmodules/reportes/mapeo.php?OP=N" order="1" />
+    <menuitem name="Ticket por prestación" action="/lmodules/reportes/por_prestacion.php?OP=N" order="2"/>
+    <menuitem name="Ticket por barrio" action="/lmodules/reportes/por_barrio.php?OP=N" order="3"/>
+    <menuitem name="Tiempo de ejecución" action="/lmodules/reportes/por_tiempos.php?OP=N" order="4"/>
+    
+    <menuitem name="Listar indicadores" action="/lmodules/reportes/indicadores.php?OP=V" order="5"/>  
+</menuitem>
+</menu>
+
+</module>

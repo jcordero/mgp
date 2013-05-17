@@ -304,7 +304,6 @@ create table sec_users (
   use_phone3 varchar(30) null,
   use_location varchar(100) null,
   use_rss varchar(100) null,
-  codcli_bej varchar(50) null,
   use_layout varchar(500) null,
   use_passact datetime null,
   constraint pk_sec_users primary key clustered (use_code) 

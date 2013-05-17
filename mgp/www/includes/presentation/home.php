@@ -5,6 +5,7 @@ include_once "beans/call_status.php";
 include_once "beans/person_status.php";
 include_once "common/csession.php";
 include_once "beans/ticket.php";
+include_once "beans/functions.php";
 
 class CDH_HOME extends CDataHandler
 {
@@ -85,7 +86,7 @@ class CDH_HOME extends CDataHandler
            	"ciu_apellido"	=>	$row['ciu_apellido'],
             	"ciu_doc_nro"	=> 	$row['ciu_nro_doc'],
             	"sexo"		=>	$row['ciu_sexo'],
-            	"edad"		=>	$this->calcularEdad($row['ciu_nacimiento']),
+            	"edad"		=>	calcularEdad($row['ciu_nacimiento']),
             	"cops_id"	=> 	0,
             	"pais"		=> 	$row['ciu_nacionalidad']
             );
@@ -140,40 +141,6 @@ class CDH_HOME extends CDataHandler
         return json_encode($resp);
     }
 
-    /** Calcula la edad dada la fecha de nacimiento
-     * 
-     * @param strDate $nacimiento
-     * @return int
-     */
-    private function calcularEdad($nacimiento) {
-    	try {
-            //Nacimiento 22/09/1968
-            list($a,$m,$d) = explode("-",$nacimiento);
-            
-            //Dato actual
-            $anio = intval(date("Y"));
-            $mes = intval(date("n"));
-            $dia = intval(date("j"));
-            
-            //Años
-            $edad = $anio - intval($a);
-            
-            //Tengo que restar 1 año porque todavia no cumplió?
-            if( $mes - intval($m)<0 )
-                $edad--;
-            
-            //Mes del cumple, llegó el día?
-            if( $mes===intval($m) && ($dia-intval($d))<0 )
-                $edad--;
-            
-            return $edad;
-    	}
-    	catch(Exception $e)
-    	{
-            error_log("CDH_HOME::calcularEdad($nacimiento) ".$e->getMessage());
-    	}
-    	return 0;
-    }
     
     /** Convertir M o F a MASCULINO Y FEMENINO
      * 

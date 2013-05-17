@@ -73,6 +73,10 @@
     }
 
     function calcularEdad($nacimiento) {
+        
+        if($nacimiento=='')
+            return 0;
+        
     	try {
             //Nacimiento 22/09/1968
             $nacimiento = str_replace('/', '-', $nacimiento);
@@ -92,7 +96,7 @@
     	}
     	catch(Exception $e)
     	{
-    		error_log("calcularEdad($nacimiento) $e");
+            error_log("calcularEdad($nacimiento) $e");
     	}
     	return 0;
    }
