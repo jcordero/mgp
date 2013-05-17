@@ -11,3 +11,5 @@ root {
 }
 
 #reporte_mapa {width:100%;height:500px;}
+#reporte_mapa label { width: auto; display:inline; }
+#reporte_mapa img { max-width: none; max-height: none; }
