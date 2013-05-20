@@ -18,8 +18,10 @@ class reportes extends cobjbase {
         //Extensiones a esta clase
 
         //-- CField( Array(Parametros) )
-        $this->m_fields['tmp_barrio'] = new CField(Array("Name"=>"tmp_barrio", "Size"=>50, "Order"=>1));
-        $this->m_fields['tmp_fecha'] = new CField(Array("Name"=>"tmp_fecha", "Size"=>50, "Order"=>2));
+        $this->m_fields['tmp_prestacion'] = new CField(Array("Name"=>"tmp_prestacion", "Size"=>50, "Order"=>1));
+        $this->m_fields['tmp_estado'] = new CField(Array("Name"=>"tmp_estado", "Size"=>50, "Order"=>2));
+        $this->m_fields['tmp_barrio'] = new CField(Array("Name"=>"tmp_barrio", "Size"=>50, "Order"=>3));
+        $this->m_fields['tmp_fecha'] = new CField(Array("Name"=>"tmp_fecha", "Size"=>50, "Order"=>4));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes

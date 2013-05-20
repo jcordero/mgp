@@ -29,8 +29,8 @@ class filtro_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("reportes")->GetField("tmp_barrio")->SetDisplayValues(Array("Name"=>"tmp_barrio", "Label"=>"Barrio", "Size"=>50, "Order"=>1, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"reportes"));
-        $this->getClass("reportes")->GetField("tmp_fecha")->SetDisplayValues(Array("Name"=>"tmp_fecha", "Label"=>"Fecha", "Size"=>50, "Order"=>2, "Presentation"=>"DATERANGE", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_barrio")->SetDisplayValues(Array("Name"=>"tmp_barrio", "Label"=>"Barrio", "Size"=>50, "Order"=>3, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_fecha")->SetDisplayValues(Array("Name"=>"tmp_fecha", "Label"=>"Fecha", "Size"=>50, "Order"=>4, "Presentation"=>"DATERANGE", "IsVisible"=>true, "Class"=>"reportes"));
     }
 }
 }

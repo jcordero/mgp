@@ -350,6 +350,7 @@ class prestacion {
         
         //El formulario de alta solo tiene una prestacion
         $p->tpr_code = _F($obj,"prestacion");
+        $p->ttp_estado = 'pendiente';
         
         //Datos de la prestacion
         $row = $primary_db->QueryArray("select tpr_tipo,tpr_detalle,tpr_plazo from tic_prestaciones where tpr_code='{$p->tpr_code}'");

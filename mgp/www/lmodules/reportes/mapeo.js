@@ -27,6 +27,7 @@ function ejecutar_consulta() {
     var barrio = $('#m_tmp_barrio').val();
     var fecha_desde  = $('#m_tmp_fecha').val();
     var fecha_hasta  = $('#hm_tmp_fecha').val();
+    
     new rem_request(this,function(obj,json){
         var jdata = JSON.parse(json);
 
@@ -34,8 +35,10 @@ function ejecutar_consulta() {
         for (var i = 0; i < jdata.length; i++) {
           var ticket = jdata[i];
           var latLng = new google.maps.LatLng(ticket.lat,ticket.lng);
-          var marker = new google.maps.Marker({ position: latLng });
+          var marker = new google.maps.Marker({ position: latLng, title:ticket.id });
           markers.push(marker);
+          google.maps.event.addListener(marker, 'click', mostrar_ticket);
+
         }
         var markerCluster = new MarkerClusterer(map, markers);
 
@@ -43,5 +46,14 @@ function ejecutar_consulta() {
 }
     
     
+function mostrar_ticket(ev) {
+    var marker = this;
+    new rem_request(this,function(obj,html){
+        var infowindow = new google.maps.InfoWindow({
+            content: html
+        });
+        infowindow.open(map,marker);    
+    },"REPORTES::REPORTES","getTicketInfo",marker.title);
+}
     
     

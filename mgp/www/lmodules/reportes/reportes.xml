@@ -4,6 +4,8 @@
 	<make object="class">
             <build out_file="class_reportes.php" classname="reportes" classlabel="Reportes">
                 <parse tablename="reportes" />
+                    <field name="tmp_prestacion" type="varchar" size="50" isfordb="false" />
+                    <field name="tmp_estado" type="varchar" size="50" isfordb="false" />
                     <field name="tmp_barrio" type="varchar" size="50" isfordb="false" />
                     <field name="tmp_fecha" type="varchar" size="50" isfordb="false" />
 		</build>
@@ -20,8 +22,10 @@
 
                 <!-- Datos personales -->
                 <group title="Filtro" id="filtro" render_html="block">
-                    <field name="tmp_barrio" presentation="TEXT" label="Barrio" />
-                    <field name="tmp_fecha" presentation="DATERANGE" label="Fecha" />
+                    <field name="tmp_prestacion" presentation="REPORTES::PRESTACIONES" label="Prestación" />
+                    <field name="tmp_estado" presentation="REPORTES::ESTADO_TICKET" label="Estado" />
+                    <field name="tmp_barrio" presentation="REPORTES::BARRIO" label="Barrio" />
+                    <field name="tmp_fecha" presentation="DATERANGE" label="Fecha ingreso" />
                 </group>
                 
 		</build>

@@ -22,6 +22,8 @@ class filtro_gr extends cform_group {
         $this->m_css_prefix = '';// Prefijo CSS
 
         //Campos del grupo
+        $this->m_fields[] = 'reportes:tmp_prestacion';
+        $this->m_fields[] = 'reportes:tmp_estado';
         $this->m_fields[] = 'reportes:tmp_barrio';
         $this->m_fields[] = 'reportes:tmp_fecha';
 
@@ -29,8 +31,10 @@ class filtro_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("reportes")->GetField("tmp_barrio")->SetDisplayValues(Array("Name"=>"tmp_barrio", "Label"=>"Barrio", "Size"=>50, "Order"=>1, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"reportes"));
-        $this->getClass("reportes")->GetField("tmp_fecha")->SetDisplayValues(Array("Name"=>"tmp_fecha", "Label"=>"Fecha", "Size"=>50, "Order"=>2, "Presentation"=>"DATERANGE", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_prestacion")->SetDisplayValues(Array("Name"=>"tmp_prestacion", "Label"=>"Prestación", "Size"=>50, "Order"=>1, "Presentation"=>"REPORTES::PRESTACIONES", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_estado")->SetDisplayValues(Array("Name"=>"tmp_estado", "Label"=>"Estado", "Size"=>50, "Order"=>2, "Presentation"=>"REPORTES::ESTADO_TICKET", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_barrio")->SetDisplayValues(Array("Name"=>"tmp_barrio", "Label"=>"Barrio", "Size"=>50, "Order"=>3, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_fecha")->SetDisplayValues(Array("Name"=>"tmp_fecha", "Label"=>"Fecha ingreso", "Size"=>50, "Order"=>4, "Presentation"=>"DATERANGE", "IsVisible"=>true, "Class"=>"reportes"));
     }
 }
 }
