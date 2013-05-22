@@ -13,7 +13,44 @@ class CDH_REPORTES extends CDataHandler {
         global $primary_db;
         $conjunto = array();
         
-        $rs = $primary_db->do_execute("select * from tic_ticket");
+        $opc = json_decode($p);
+      
+        $sql = "select tic_coordx,tic_coordy,tic_identificador from tic_ticket tic join tic_ticket_prestaciones tpr on tic.tic_nro=tpr.tic_nro left outer join tic_ticket_organismos tor on tpr.tic_nro=tor.tic_nro and tpr.tpr_code=tor.tpr_code WHERE 1=1 ";
+        
+        //Prestaciones
+        if($opc->prestacion!='')
+            $sql.=" and tpr.tpr_code like '{$opc->prestacion}%'";
+        
+        //Estado
+        if($opc->estado_ticket!='')
+            $sql.=" and tic_estado='{$opc->estado_ticket}'";
+
+        if($opc->estado_prestacion!='')
+            $sql.=" and ttp_estado='{$opc->estado_prestacion}'";
+
+        //Barrio
+        if($opc->barrio!='')
+            $sql.=" and tic_barrio='{$opc->barrio}'";
+
+        //Canal 
+        if($opc->canal!='')
+            $sql.=" and tic_canal='{$opc->canal}'";
+        
+        //Organismo
+        if($opc->organismo!='')
+            $sql.=" and tor_code='{$opc->organismo}'";
+        
+        //Fecha desde
+        if($opc->fecha_desde!='')
+            $sql.=" and tic_tstamp_in > STR_TO_DATE('{$opc->fecha_desde}', '%d/%m/%Y')";
+            
+            
+        //Fecha hasta
+        if($opc->fecha_hasta!='')
+            $sql.=" and tic_tstamp_in <= STR_TO_DATE('{$opc->fecha_hasta}', '%d/%m/%Y')";
+        
+        
+        $rs = $primary_db->do_execute($sql);
         while( $row=$primary_db->_fetch_row($rs) ) {
             $conjunto[] = array(
                 'lat'=>$row['tic_coordx'],
@@ -46,6 +83,55 @@ class CDH_REPORTES extends CDataHandler {
     }
     
     function getIndicadores($p) {
+        global $primary_db;
+        $opc = json_decode($p);
+        
+        $valores = array();
+        $dias = array();
+        $sql = "select count(*), DATE(tic_tstamp_in) from tic_ticket tic join tic_ticket_prestaciones tpr on tic.tic_nro=tpr.tic_nro left outer join tic_ticket_organismos tor on tpr.tic_nro=tor.tic_nro and tpr.tpr_code=tor.tpr_code WHERE 1=1 ";
+        
+        //Prestaciones
+        if($opc->prestacion!='')
+            $sql.=" and tpr.tpr_code like '{$opc->prestacion}%'";
+        
+        //Estado
+        if($opc->estado_ticket!='')
+            $sql.=" and tic_estado='{$opc->estado_ticket}'";
+
+        if($opc->estado_prestacion!='')
+            $sql.=" and ttp_estado='{$opc->estado_prestacion}'";
+
+        //Barrio
+        if($opc->barrio!='')
+            $sql.=" and tic_barrio='{$opc->barrio}'";
+
+        //Canal 
+        if($opc->canal!='')
+            $sql.=" and tic_canal='{$opc->canal}'";
+        
+        //Organismo
+        if($opc->organismo!='')
+            $sql.=" and tor_code='{$opc->organismo}'";
+        
+        //Fecha desde
+        if($opc->fecha_desde!='')
+            $sql.=" and tic_tstamp_in > STR_TO_DATE('{$opc->fecha_desde}', '%d/%m/%Y')";
+            
+            
+        //Fecha hasta
+        if($opc->fecha_hasta!='')
+            $sql.=" and tic_tstamp_in <= STR_TO_DATE('{$opc->fecha_hasta}', '%d/%m/%Y')";
+        
+        //Orden
+        $sql.=" GROUP BY DATE(tic_tstamp_in) ORDER by 2";
+        
+        $rs = $primary_db->do_execute($sql);
+        while( $row=$primary_db->_fetch_row($rs) ) {
+            $valores[] = (double) $row[0];
+            $fecha = explode('-',$row[1]);
+            $dias[] = $fecha[2]."/".$fecha[1];
+        }
+
         $r = array(
             'chart' => array(
                 'type'          => 'line',
@@ -61,7 +147,8 @@ class CDH_REPORTES extends CDataHandler {
                 'x'     =>  -20
             ),
             'xAxis' => array(
-                'categories'    => array('A','B','C')
+                /* DIAS */
+                'categories'    => $dias
             ),
             'yAxis' => array(
                 'title'     => array(
@@ -90,66 +177,11 @@ class CDH_REPORTES extends CDataHandler {
             'series'    => array(
                 array(
                     'name'  => 'tickets',
-                    'data'  => array(7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6)
+                    /* Medicion por día */
+                    'data'  => $valores
                 )
             )
         );
-        /* {
-            chart: {
-                type: 'line',
-                marginRight: 130,
-                marginBottom: 25
-            },
-            title: {
-                text: 'Monthly Average Temperature',
-                x: -20 //center
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com',
-                x: -20
-            },
-            xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            },
-            yAxis: {
-                title: {
-                    text: 'Temperature (°C)'
-                },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }]
-            },
-            tooltip: {
-                valueSuffix: '°C'
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -10,
-                y: 100,
-                borderWidth: 0
-            },
-            series: [{
-                name: 'Tokyo',
-                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-            }, {
-                name: 'New York',
-                data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-            }, {
-                name: 'Berlin',
-                data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-            }, {
-                name: 'London',
-                data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-            }]
-        });
-    });
-         * 
-         */
         return json_encode($r);
     } 
     

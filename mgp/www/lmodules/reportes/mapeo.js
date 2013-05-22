@@ -35,6 +35,12 @@ function ejecutar_consulta() {
     var barrio = $('#m_tmp_barrio').val();
     var fecha_desde  = $('#m_tmp_fecha').val();
     var fecha_hasta  = $('#hm_tmp_fecha').val();
+    var prestacion = $('#m_tmp_prestacion').val();
+    var estado_ticket = $('#m_tmp_estado_ticket').val();
+    var estado_prestacion = $('#m_tmp_estado_prestacion').val();
+    var canal = $('#m_tmp_canal').val();
+    var organismo = $('#m_tmp_organismo').val();
+    var params = {'barrio':barrio, 'fecha_desde':fecha_desde, 'fecha_hasta':fecha_hasta, 'prestacion':prestacion, 'estado_ticket':estado_ticket, 'estado_prestacion':estado_prestacion, 'canal':canal, 'organismo':organismo };
     
     $('#bloque_filtro .contenido').collapse('hide');
     
@@ -52,7 +58,7 @@ function ejecutar_consulta() {
         }
         var markerCluster = new MarkerClusterer(map, markers);
 
-    },"REPORTES::REPORTES","getTickets",barrio+'|'+fecha_desde+'|'+fecha_hasta);
+    },"REPORTES::REPORTES","getTickets",JSON.stringify(params));
 }
     
     
