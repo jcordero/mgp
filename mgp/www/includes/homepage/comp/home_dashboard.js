@@ -1,10 +1,9 @@
+var map = null;
 
 $(document).ready(function(){
-    completar_html();
     initialize(); 
+    ejecutar_consulta();
 });
-
-var map = null;
 
 function initialize() {
     var center = new google.maps.LatLng(-37.995114083904, -57.544226218087);
@@ -18,32 +17,21 @@ function initialize() {
 
 }
 
-function completar_html() {
-    $('#payload').append('<div id="reporte_mapa"></div>');
-    $('#actionSubmit').attr('onclick',null).click(ejecutar_consulta);
-    $('#actionSubmit').html('Graficar');
-    $('#bloque_filtro .titulo').addClass('accordion-heading').html('<a class="titulo_texto" href="#" onclick="plegar()">Filtro</a>');
-    $('#bloque_filtro .contenido').addClass('accordion-body');
-    $('#bloque_filtro').addClass('accordion');
-}
-    
-function plegar() {
-    $('#bloque_filtro .contenido').collapse('toggle');
-}   
 
 function ejecutar_consulta() {
-    var barrio = $('#m_tmp_barrio').val();
-    var fecha_desde  = $('#m_tmp_fecha').val();
-    var fecha_hasta  = $('#hm_tmp_fecha').val();
-    
-    $('#bloque_filtro .contenido').collapse('hide');
     
     new rem_request(this,function(obj,json){
         var jdata = JSON.parse(json);
 
+        //Contadores
+        $('#cAbiertos').html(jdata.contadores.abiertos);
+        $('#cCerrados').html(jdata.contadores.cerrados);
+        $('#cVencidos').html(jdata.contadores.vencidos);
+        
+        var tickets = jdata.tickets;
         var markers = [];
-        for (var i = 0; i < jdata.length; i++) {
-          var ticket = jdata[i];
+        for (var i = 0; i < tickets.length; i++) {
+          var ticket = tickets[i];
           var latLng = new google.maps.LatLng(ticket.lat,ticket.lng);
           var marker = new google.maps.Marker({ position: latLng, title:ticket.id });
           markers.push(marker);
@@ -52,7 +40,7 @@ function ejecutar_consulta() {
         }
         var markerCluster = new MarkerClusterer(map, markers);
 
-    },"REPORTES::REPORTES","getTickets",barrio+'|'+fecha_desde+'|'+fecha_hasta);
+    },"HOME::DASHBOARD","getTickets",'');
 }
     
     
@@ -65,5 +53,5 @@ function mostrar_ticket(ev) {
         infowindow.open(map,marker);    
     },"REPORTES::REPORTES","getTicketInfo",marker.title);
 }
-    
-    
+
+

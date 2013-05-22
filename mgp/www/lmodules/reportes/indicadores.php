@@ -25,10 +25,10 @@ class indicadores_sl extends csearchandlist {
 		$this->m_render_html = 'BLOCK';
 		$this->m_render_pdml = 'BLOCK';
 
-        $this->m_search_fields = array('tin_code','tin_nombre','tin_estado','tin_tstamp','use_code');
+        $this->m_search_fields = array('tin_code','tin_nombre');
 
-        $this->addAction(6,"indicador_maint.php?OP=V",array(new caction_param('tin_code')),"","ver","V","","");
-        $this->addAction(6,"indicador_maint.php?OP=M",array(new caction_param('tin_code')),"","modificar","M","","");
+        $this->addAction(3,"indicador_maint.php?OP=V",array(new caction_param('tin_code')),"","ver","V","","");
+        $this->addAction(3,"indicador_maint.php?OP=M",array(new caction_param('tin_code')),"","modificar","M","","");
     }
 
     //Inicializo la parte de busqueda
@@ -38,9 +38,6 @@ class indicadores_sl extends csearchandlist {
     /* Campos de busqueda */
         $this->m_obj->GetField("tin_code")->SetDisplayValues(Array("Name"=>"tin_code", "Label"=>"Codigo", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true));
         $this->m_obj->GetField("tin_nombre")->SetDisplayValues(Array("Name"=>"tin_nombre", "Label"=>"Nombre", "Size"=>100, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsVisible"=>true));
-        $this->m_obj->GetField("tin_estado")->SetDisplayValues(Array("Name"=>"tin_estado", "Label"=>"Estado", "Size"=>45, "IsForDB"=>true, "Order"=>105, "Presentation"=>"ACTIVO", "IsVisible"=>true));
-        $this->m_obj->GetField("tin_tstamp")->SetDisplayValues(Array("Name"=>"tin_tstamp", "Label"=>"Creado", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATERANGE", "IsVisible"=>true));
-        $this->m_obj->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>103, "Presentation"=>"USER", "IsVisible"=>true, "InitialValue"=>" "));
     }
 
 }
@@ -80,57 +77,6 @@ class col102 extends ccolumn
     }
 }
 
-class col105 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Estado';
-        $this->m_order = '105';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'tin_estado';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tin_estado", "Label"=>"Estado", "Size"=>45, "IsForDB"=>true, "Order"=>105, "Presentation"=>"ACTIVO", "IsVisible"=>true));
-    }
-}
-
-class col104 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Creado';
-        $this->m_order = '104';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'tin_tstamp';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tin_tstamp", "Label"=>"Creado", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATERANGE", "IsVisible"=>true, "IsReadOnly"=>true));
-    }
-}
-
-class col103 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Operador';
-        $this->m_order = '103';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'use_code';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>103, "Presentation"=>"USER", "IsVisible"=>true, "IsReadOnly"=>true));
-    }
-}
-
 class indicadores_table extends ctable
 {
     function __construct($parent)
@@ -143,9 +89,6 @@ class indicadores_table extends ctable
         //Agrego las columnas a la tabla
         $this->m_cols[101] = new col101($this);
         $this->m_cols[102] = new col102($this);
-        $this->m_cols[105] = new col105($this);
-        $this->m_cols[104] = new col104($this);
-        $this->m_cols[103] = new col103($this);
     }
 
 }

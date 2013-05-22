@@ -19,9 +19,12 @@ class reportes extends cobjbase {
 
         //-- CField( Array(Parametros) )
         $this->m_fields['tmp_prestacion'] = new CField(Array("Name"=>"tmp_prestacion", "Size"=>50, "Order"=>1));
-        $this->m_fields['tmp_estado'] = new CField(Array("Name"=>"tmp_estado", "Size"=>50, "Order"=>2));
-        $this->m_fields['tmp_barrio'] = new CField(Array("Name"=>"tmp_barrio", "Size"=>50, "Order"=>3));
-        $this->m_fields['tmp_fecha'] = new CField(Array("Name"=>"tmp_fecha", "Size"=>50, "Order"=>4));
+        $this->m_fields['tmp_estado_ticket'] = new CField(Array("Name"=>"tmp_estado_ticket", "Size"=>50, "Order"=>2));
+        $this->m_fields['tmp_estado_prestacion'] = new CField(Array("Name"=>"tmp_estado_prestacion", "Size"=>50, "Order"=>3));
+        $this->m_fields['tmp_barrio'] = new CField(Array("Name"=>"tmp_barrio", "Size"=>50, "Order"=>4));
+        $this->m_fields['tmp_fecha'] = new CField(Array("Name"=>"tmp_fecha", "Size"=>50, "Order"=>5));
+        $this->m_fields['tmp_canal'] = new CField(Array("Name"=>"tmp_canal", "Size"=>50, "Order"=>6));
+        $this->m_fields['tmp_organismo'] = new CField(Array("Name"=>"tmp_organismo", "Size"=>50, "Order"=>7));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes

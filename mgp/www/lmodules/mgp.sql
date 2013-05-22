@@ -640,9 +640,7 @@ create table ciu_identificacion (
 create table tic_indicadores (
   tin_code int not null,
   tin_nombre varchar(100) null,
-  use_code varchar(50) null,
-  tin_tstamp datetime null,
-  tin_estado varchar(45) null,
+  tin_traza varchar(200) null,
   constraint pk_tic_indicadores primary key clustered (tin_code) 
 )
 
@@ -651,11 +649,14 @@ create table tic_ind_medidas (
   tin_code int not null,
   tor_code int not null,
   tim_tstamp datetime not null,
-  tim_valor int null,
+  tpr_code VARCHAR(20) NULL,
+  tic_canal VARCHAR(20) NULL,
+  tic_estado VARCHAR(50) NULL,
+  tic_barrio VARCHAR(50) NULL,
+  ttp_estado VARCHAR(50) NULL,  
+  tim_valor double null,
   constraint pk_tic_ind_medidas primary key clustered (tin_code, tor_code, tim_tstamp) 
 )
-
-
 
 
 create table v_tickets (

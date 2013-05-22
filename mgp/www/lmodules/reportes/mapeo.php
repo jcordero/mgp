@@ -23,8 +23,11 @@ class filtro_gr extends cform_group {
 
         //Campos del grupo
         $this->m_fields[] = 'reportes:tmp_prestacion';
-        $this->m_fields[] = 'reportes:tmp_estado';
+        $this->m_fields[] = 'reportes:tmp_estado_ticket';
+        $this->m_fields[] = 'reportes:tmp_estado_prestacion';
         $this->m_fields[] = 'reportes:tmp_barrio';
+        $this->m_fields[] = 'reportes:tmp_canal';
+        $this->m_fields[] = 'reportes:tmp_organismo';
         $this->m_fields[] = 'reportes:tmp_fecha';
 
     }
@@ -32,9 +35,12 @@ class filtro_gr extends cform_group {
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
         $this->getClass("reportes")->GetField("tmp_prestacion")->SetDisplayValues(Array("Name"=>"tmp_prestacion", "Label"=>"Prestación", "Size"=>50, "Order"=>1, "Presentation"=>"REPORTES::PRESTACIONES", "IsVisible"=>true, "Class"=>"reportes"));
-        $this->getClass("reportes")->GetField("tmp_estado")->SetDisplayValues(Array("Name"=>"tmp_estado", "Label"=>"Estado", "Size"=>50, "Order"=>2, "Presentation"=>"REPORTES::ESTADO_TICKET", "IsVisible"=>true, "Class"=>"reportes"));
-        $this->getClass("reportes")->GetField("tmp_barrio")->SetDisplayValues(Array("Name"=>"tmp_barrio", "Label"=>"Barrio", "Size"=>50, "Order"=>3, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true, "Class"=>"reportes"));
-        $this->getClass("reportes")->GetField("tmp_fecha")->SetDisplayValues(Array("Name"=>"tmp_fecha", "Label"=>"Fecha ingreso", "Size"=>50, "Order"=>4, "Presentation"=>"DATERANGE", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_estado_ticket")->SetDisplayValues(Array("Name"=>"tmp_estado_ticket", "Label"=>"Estado ticket", "Size"=>50, "Order"=>2, "Presentation"=>"REPORTES::ESTADO_TICKET", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_estado_prestacion")->SetDisplayValues(Array("Name"=>"tmp_estado_prestacion", "Label"=>"Estado prestacion", "Size"=>50, "Order"=>3, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_barrio")->SetDisplayValues(Array("Name"=>"tmp_barrio", "Label"=>"Barrio", "Size"=>50, "Order"=>4, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_canal")->SetDisplayValues(Array("Name"=>"tmp_canal", "Label"=>"Canal", "Size"=>50, "Order"=>6, "Presentation"=>"REPORTES::CANAL", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_organismo")->SetDisplayValues(Array("Name"=>"tmp_organismo", "Label"=>"Organismo", "Size"=>50, "Order"=>7, "Presentation"=>"REPORTES::ORGANISMO", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_fecha")->SetDisplayValues(Array("Name"=>"tmp_fecha", "Label"=>"Fecha ingreso", "Size"=>50, "Order"=>5, "Presentation"=>"DATERANGE", "IsVisible"=>true, "Class"=>"reportes"));
     }
 }
 }

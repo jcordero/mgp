@@ -20,19 +20,17 @@ class indicadores extends cobjbase {
         //-- CField( Array(Parametros) )
         $this->m_fields['tin_code'] = new CField(Array("Name"=>"tin_code", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
         $this->m_fields['tin_nombre'] = new CField(Array("Name"=>"tin_nombre", "Size"=>100, "IsForDB"=>true, "Order"=>102));
-        $this->m_fields['use_code'] = new CField(Array("Name"=>"use_code", "Size"=>50, "IsForDB"=>true, "Order"=>103));
-        $this->m_fields['tin_tstamp'] = new CField(Array("Name"=>"tin_tstamp", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104));
-        $this->m_fields['tin_estado'] = new CField(Array("Name"=>"tin_estado", "Size"=>45, "IsForDB"=>true, "Order"=>105));
+        $this->m_fields['tin_traza'] = new CField(Array("Name"=>"tin_traza", "Size"=>200, "IsForDB"=>true, "Order"=>103));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes
 
         //Consultas particulares a la base de datos
-        $this->m_loaddb_sql = "SELECT tin_code, tin_nombre, use_code, tin_tstamp, tin_estado FROM tic_indicadores  WHERE tin_code= :tin_code_key:";
-        $this->m_objfactory_sql = "SELECT tin_code, tin_nombre, use_code, tin_tstamp, tin_estado FROM tic_indicadores";
+        $this->m_loaddb_sql = "SELECT tin_code, tin_nombre, tin_traza FROM tic_indicadores  WHERE tin_code= :tin_code_key:";
+        $this->m_objfactory_sql = "SELECT tin_code, tin_nombre, tin_traza FROM tic_indicadores";
         $this->m_objfactory_suffix_sql = "";
-        $this->m_savedb_update_sql = "UPDATE tic_indicadores SET tin_code= :tin_code:, tin_nombre= :tin_nombre:, use_code= :use_code:, tin_tstamp= :tin_tstamp:, tin_estado= :tin_estado: WHERE tin_code=:tin_code_key:";
-        $this->m_savedb_insert_sql = "INSERT INTO tic_indicadores(tin_code, tin_nombre, use_code, tin_tstamp, tin_estado) VALUES (:tin_code:, :tin_nombre:, :use_code:, :tin_tstamp:, :tin_estado:)";
+        $this->m_savedb_update_sql = "UPDATE tic_indicadores SET tin_code= :tin_code:, tin_nombre= :tin_nombre:, tin_traza= :tin_traza: WHERE tin_code=:tin_code_key:";
+        $this->m_savedb_insert_sql = "INSERT INTO tic_indicadores(tin_code, tin_nombre, tin_traza) VALUES (:tin_code:, :tin_nombre:, :tin_traza:)";
         $this->m_savedb_delete_sql = "DELETE FROM tic_indicadores WHERE tin_code=:tin_code_key:";
         $this->m_savedb_purge_sql = "DELETE FROM tic_indicadores";
         $this->m_savedb_total_sql = "SELECT COUNT(*) as cant FROM tic_indicadores ";

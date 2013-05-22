@@ -24,7 +24,7 @@ class indicador_gr extends cform_group {
         //Campos del grupo
         $this->m_fields[] = 'indicadores:tin_code';
         $this->m_fields[] = 'indicadores:tin_nombre';
-        $this->m_fields[] = 'indicadores:tin_estado';
+        $this->m_fields[] = 'indicadores:tin_traza';
 
     }
 
@@ -32,36 +32,7 @@ class indicador_gr extends cform_group {
         //SetDisplayValues($attributes) 
         $this->getClass("indicadores")->GetField("tin_code")->SetDisplayValues(Array("Name"=>"tin_code", "Label"=>"Codigo", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"INT", "IsNullable"=>false, "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"indicadores"));
         $this->getClass("indicadores")->GetField("tin_nombre")->SetDisplayValues(Array("Name"=>"tin_nombre", "Label"=>"Nombre", "Size"=>100, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"indicadores"));
-        $this->getClass("indicadores")->GetField("tin_estado")->SetDisplayValues(Array("Name"=>"tin_estado", "Label"=>"Estado", "Size"=>45, "IsForDB"=>true, "Order"=>105, "Presentation"=>"ACTIVO", "IsVisible"=>true, "Class"=>"indicadores"));
-    }
-}
-}
-
-
-if( !class_exists('audit_gr') ) {
-class audit_gr extends cform_group {
-    function __construct($parent) {
-        parent::__construct($parent);
-        $this->m_title = 'Auditoria'; //Titulo del grupo
-        $this->m_order = 1; //Orden de presentacion de este grupo
-        $this->m_id = 'audit'; //Id para los wizards
-        $this->m_note = ''; //Nota
-        $this->m_image = ''; //Imagen
-        $this->m_render_html = 'BLOCK'; //Forma de generar el contenido HTML
-        $this->m_render_pdml = 'PARENT'; //Forma de generar el contenido PDF
-        $this->m_comment = '';// Comentario del formulario
-        $this->m_css_prefix = '';// Prefijo CSS
-
-        //Campos del grupo
-        $this->m_fields[] = 'indicadores:tin_tstamp';
-        $this->m_fields[] = 'indicadores:use_code';
-
-    }
-
-    public function InitializeInstance() {
-        //SetDisplayValues($attributes) 
-        $this->getClass("indicadores")->GetField("tin_tstamp")->SetDisplayValues(Array("Name"=>"tin_tstamp", "Label"=>"Creado", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"indicadores"));
-        $this->getClass("indicadores")->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>103, "Presentation"=>"USER", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"indicadores"));
+        $this->getClass("indicadores")->GetField("tin_traza")->SetDisplayValues(Array("Name"=>"tin_traza", "Label"=>"Traza", "Size"=>200, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"indicadores"));
     }
 }
 }
@@ -95,7 +66,6 @@ class indicadores_m extends cclass_maint {
 
         //Grupos
 		$this->m_handler[0] = new indicador_gr($this);
-		$this->m_handler[1] = new audit_gr($this);
 
     }
 

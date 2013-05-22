@@ -5,10 +5,13 @@
             <build out_file="class_reportes.php" classname="reportes" classlabel="Reportes">
                 <parse tablename="reportes" />
                     <field name="tmp_prestacion" type="varchar" size="50" isfordb="false" />
-                    <field name="tmp_estado" type="varchar" size="50" isfordb="false" />
+                    <field name="tmp_estado_ticket" type="varchar" size="50" isfordb="false" />
+                    <field name="tmp_estado_prestacion" type="varchar" size="50" isfordb="false" />
                     <field name="tmp_barrio" type="varchar" size="50" isfordb="false" />
                     <field name="tmp_fecha" type="varchar" size="50" isfordb="false" />
-		</build>
+                    <field name="tmp_canal" type="varchar" size="50" isfordb="false" />
+                    <field name="tmp_organismo" type="varchar" size="50" isfordb="false" />
+   		</build>
 	</make>
 
 
@@ -20,11 +23,13 @@
                 <include file="http://maps.google.com/maps/api/js?key=AIzaSyDbNPUeZ1qDaGdShuVhRIT9Cgb_NZzuPRw&amp;sensor=false"/>
                 <include file="markerclusterer.js"/>
 
-                <!-- Datos personales -->
                 <group title="Filtro" id="filtro" render_html="block">
                     <field name="tmp_prestacion" presentation="REPORTES::PRESTACIONES" label="Prestación" />
-                    <field name="tmp_estado" presentation="REPORTES::ESTADO_TICKET" label="Estado" />
+                    <field name="tmp_estado_ticket" presentation="REPORTES::ESTADO_TICKET" label="Estado ticket" />
+                    <field name="tmp_estado_prestacion" presentation="REPORTES::ESTADO_PRESTACION" label="Estado prestacion" />
                     <field name="tmp_barrio" presentation="REPORTES::BARRIO" label="Barrio" />
+                    <field name="tmp_canal" presentation="REPORTES::CANAL" label="Canal" />
+                    <field name="tmp_organismo" presentation="REPORTES::ORGANISMO" label="Organismo" />
                     <field name="tmp_fecha" presentation="DATERANGE" label="Fecha ingreso" />
                 </group>
                 
@@ -32,52 +37,26 @@
 	</make>
 
 
-        <!-- Formulario Reporte x Prestacion -->
+        <!-- Formulario Reporte x Indicador -->
 	<make object="table_maint">
-            <build out_file="por_prestacion.php" classname="reportes" title="Reporte por prestación">
-                <include file="por_prestacion.css"/>
-                <include file="por_prestacion.js"/>
-
-                <!-- Datos personales -->
+            <build out_file="por_indicador.php" classname="reportes" title="Reporte por indicador">
+                <include file="por_indicador.css"/>
+                <include file="por_indicador.js"/>
+                <include file="../../common/Highcharts-3/js/highcharts.js"/>
+                    
                 <group title="Filtro" id="filtro" render_html="block">
-                    <field name="tmp_barrio" presentation="TEXT" label="Barrio" />
-                    <field name="tmp_fecha" presentation="DATERANGE" label="Fecha" />
+                    <field name="tmp_prestacion" presentation="REPORTES::PRESTACIONES" label="Prestación" />
+                    <field name="tmp_estado_ticket" presentation="REPORTES::ESTADO_TICKET" label="Estado ticket" />
+                    <field name="tmp_estado_prestacion" presentation="REPORTES::ESTADO_PRESTACION" label="Estado prestacion" />
+                    <field name="tmp_barrio" presentation="REPORTES::BARRIO" label="Barrio" />
+                    <field name="tmp_canal" presentation="REPORTES::CANAL" label="Canal" />
+                    <field name="tmp_organismo" presentation="REPORTES::ORGANISMO" label="Organismo" />
+                    <field name="tmp_fecha" presentation="DATERANGE" label="Fecha ingreso" />
                 </group>
                 
 		</build>
 	</make>
 
-
-        <!-- Formulario Reporte x Barrio -->
-	<make object="table_maint">
-            <build out_file="por_barrio.php" classname="reportes" title="Reporte por barrio">
-                <include file="por_barrio.css"/>
-                <include file="por_barrio.js"/>
-
-                <!-- Datos personales -->
-                <group title="Filtro" id="filtro" render_html="block">
-                    <field name="tmp_barrio" presentation="TEXT" label="Barrio" />
-                    <field name="tmp_fecha" presentation="DATERANGE" label="Fecha" />
-                </group>
-                
-            </build>
-	</make>
-
-
-        <!-- Formulario Reporte x Tiempos de ejecucion -->
-	<make object="table_maint">
-            <build out_file="por_tiempos.php" classname="reportes" title="Reporte por tiempos de ejecucción">
-                <include file="por_tiempos.css"/>
-                <include file="por_tiempos.js"/>
-
-                <!-- Datos personales -->
-                <group title="Filtro" id="filtro" render_html="block">
-                    <field name="tmp_barrio" presentation="TEXT" label="Barrio" />
-                    <field name="tmp_fecha" presentation="DATERANGE" label="Fecha" />
-                </group>
-                
-            </build>
-	</make>
 
 
 	<!-- Clase indicadores  -->
@@ -93,15 +72,9 @@
 			
                 <searchfield name="tin_code" presentation="INT" label="Codigo"/>
                 <searchfield name="tin_nombre" presentation="TEXT" label="Nombre" />
-                <searchfield name="tin_estado" presentation="ACTIVO" label="Estado" />
-                <searchfield name="tin_tstamp" presentation="DATERANGE" label="Creado" />
-                <searchfield name="use_code" presentation="USER" label="Operador" initialvalue=" "/>
 
                 <listfield name="tin_code" presentation="INT" label="Codigo" readonly="true"/>
                 <listfield name="tin_nombre" presentation="TEXT" label="Nombre" />
-                <listfield name="tin_estado" presentation="ACTIVO" label="Estado" />
-                <listfield name="tin_tstamp" presentation="DATERANGE" label="Creado" readonly="true" />
-                <listfield name="use_code" presentation="USER" label="Operador" readonly="true" />
 
                 <action operation="V" label="ver" 	target="indicador_maint.php?OP=V" >
                     <sendfield classname="indicadores" name="tin_code" />
@@ -124,14 +97,9 @@
                 <group title="Indicador" id="indicador" render_html="block">
                     <field name="tin_code" presentation="INT" label="Codigo" readonly="true"/>
                     <field name="tin_nombre" presentation="TEXT" label="Nombre" />
-                    <field name="tin_estado" presentation="ACTIVO" label="Estado" />
+                    <field name="tin_traza" presentation="TEXT" label="Traza" readonly="true"/>
                 </group>
-                
-                <group title="Auditoria" id="audit" render_html="block">
-                    <field name="tin_tstamp" presentation="DATETIME" label="Creado" readonly="true" />
-                    <field name="use_code" presentation="USER" label="Operador" readonly="true" />
-                </group>
-                
+                                
             </build>
 	</make>
 

@@ -33,11 +33,7 @@
         	$buff.='<ul>';
         	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/mapeo.php?OP=N')."\">Mapeo</a>";
         	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/por_prestacion.php?OP=N')."\">Ticket por prestación</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/por_barrio.php?OP=N')."\">Ticket por barrio</a>";
-        	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/por_tiempos.php?OP=N')."\">Tiempo de ejecución</a>";
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/por_indicador.php?OP=N')."\">Reporte por indicador</a>";
         	$buff.='</li>';
         	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/indicadores.php?OP=V')."\">Listar indicadores</a>";
         	$buff.='</li>';
