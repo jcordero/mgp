@@ -19,8 +19,9 @@ class ciu_ciudadanos_n_hooks extends cclass_maint_hooks
         $p->person_sexo     = $obj->getField("ciu_sexo")->getValue();
         $p->person_edad     = calcularEdad($obj->getField("ciu_nacimiento")->getValue());
         $p->person_pais     = $obj->getField("ciu_nacionalidad")->getValue();
-        
         $p->saveSession();
+
+        //$errores[] =  "MENSAJE: Un error inventado";
         
         return array($contenido,$errores);
     }

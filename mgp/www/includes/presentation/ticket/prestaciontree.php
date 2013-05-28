@@ -10,7 +10,7 @@ class CDH_PRESTACIONTREE extends CDH_KTREE
     function __construct($parent) 
     {
         parent::__construct($parent);
-        $this->m_ajax_call="PRESTACIONTREE";
+        $this->m_ajax_call="TICKET::PRESTACIONTREE";
         $this->m_helper_sql="SELECT tpr_detalle FROM tic_prestaciones WHERE tpr_code='<val>'";
         $this->m_fill_branch_sql = "SELECT tpr_code,tpr_detalle,tpr_tipo FROM tic_prestaciones WHERE tpr_estado='ACTIVO' and tpr_code like '<val>%' and length(tpr_code)=length('<val>')+2 order by tpr_detalle";
         $this->m_js_main_search="chg_prestacion";
@@ -25,7 +25,7 @@ class CDH_PRESTACIONTREE extends CDH_KTREE
      */
     function getJsIncludes()
     {	
-        $r[]= '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/prestaciontree.js"></script>';
+        $r[]= '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ticket/prestaciontree.js"></script>';
         $r[]= parent::getJsIncludes();
         return $r;
     }

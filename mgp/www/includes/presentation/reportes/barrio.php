@@ -134,6 +134,9 @@ class CDH_BARRIO extends CDH_SELECTARRAY
                     "AREA CENTRO" 
                 );
 
+                //Ordeno los barrios alfabeticamente
+                asort($barrios);
+                
                 foreach($barrios as $n)
                     $this->m_array[$n] = $n; 
 	}

@@ -67,7 +67,7 @@ class ubicacion_gr extends cform_group {
         $this->getClass("class_tic_georef")->GetField("tge_calle_nombre")->SetDisplayValues(Array("Name"=>"tge_calle_nombre", "Label"=>"Nombre Calle", "Size"=>100, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_georef"));
         $this->getClass("class_tic_georef")->GetField("tge_altura")->SetDisplayValues(Array("Name"=>"tge_altura", "Label"=>"Altura Calle", "Type"=>"int", "IsForDB"=>true, "Order"=>104, "Presentation"=>"INT", "IsVisible"=>true, "Class"=>"class_tic_georef"));
         $this->getClass("class_tic_georef")->GetField("tge_cgpc")->SetDisplayValues(Array("Name"=>"tge_cgpc", "Label"=>"CGPC", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_georef"));
-        $this->getClass("class_tic_georef")->GetField("tge_barrio")->SetDisplayValues(Array("Name"=>"tge_barrio", "Label"=>"Barrio", "Size"=>100, "IsForDB"=>true, "Order"=>109, "Presentation"=>"BARRIOS", "IsVisible"=>true, "Class"=>"class_tic_georef"));
+        $this->getClass("class_tic_georef")->GetField("tge_barrio")->SetDisplayValues(Array("Name"=>"tge_barrio", "Label"=>"Barrio", "Size"=>100, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true, "Class"=>"class_tic_georef"));
     }
 }
 }

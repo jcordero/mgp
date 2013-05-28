@@ -35,7 +35,7 @@ class ubicacion_gr extends cform_group {
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
         $this->getClass("class_tic_ticket_upd")->GetField("tic_lugar")->SetDisplayValues(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>1000, "IsForDB"=>true, "Order"=>109, "Presentation"=>"DIRECCION", "IsVisible"=>true, "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Size"=>50, "Order"=>24, "Presentation"=>"MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Size"=>50, "Order"=>24, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_id_cuadra")->SetDisplayValues(Array("Name"=>"tic_id_cuadra", "Label"=>"x", "Type"=>"int", "IsForDB"=>true, "Order"=>114, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"double", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_coordy")->SetDisplayValues(Array("Name"=>"tic_coordy", "Label"=>"y", "Type"=>"double", "IsForDB"=>true, "Order"=>113, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
@@ -111,7 +111,7 @@ class estado_gr extends cform_group {
         $this->getClass("class_tic_ticket_upd")->GetField("tic_tstamp_in")->SetDisplayValues(Array("Name"=>"tic_tstamp_in", "Label"=>"Ingreso ticket", "Type"=>"datetime", "IsForDB"=>true, "Order"=>105, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_tstamp_plazo")->SetDisplayValues(Array("Name"=>"tic_tstamp_plazo", "Label"=>"Plazo estimado", "Type"=>"datetime", "IsForDB"=>true, "Order"=>117, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_tstamp_cierre")->SetDisplayValues(Array("Name"=>"tic_tstamp_cierre", "Label"=>"Cierre ticket", "Type"=>"datetime", "IsForDB"=>true, "Order"=>118, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_estado")->SetDisplayValues(Array("Name"=>"tic_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_estado")->SetDisplayValues(Array("Name"=>"tic_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"REPORTES::ESTADO_TICKET", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_nota_in")->SetDisplayValues(Array("Name"=>"tic_nota_in", "Label"=>"Nota al ingreso", "Size"=>500, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tmp_accion")->SetDisplayValues(Array("Name"=>"tmp_accion", "Size"=>50, "Order"=>25, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tmp_nuevo_estado")->SetDisplayValues(Array("Name"=>"tmp_nuevo_estado", "Size"=>50, "Order"=>26, "Class"=>"class_tic_ticket_upd"));
@@ -175,11 +175,11 @@ class class_tic_ticket_prestaciones_th3 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACION", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"REPORTES::PRESTACIONES", "IsNullable"=>false, "IsVisible"=>true));
         $obj->GetField("tru_code")->SetDisplayValues(Array("Name"=>"tru_code", "Label"=>"Rubro", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "Presentation"=>"RUBRO", "IsVisible"=>true));
         $obj->GetField("ttp_cuestionario")->SetDisplayValues(Array("Name"=>"ttp_cuestionario", "Label"=>"Cuestionario", "Size"=>3000, "IsForDB"=>true, "Order"=>104, "Presentation"=>"TICKET::CUESTIONARIO", "IsVisible"=>true));
         $obj->GetField("ttp_prioridad")->SetDisplayValues(Array("Name"=>"ttp_prioridad", "Label"=>"Prioridad", "Size"=>20, "IsForDB"=>true, "Order"=>106, "Presentation"=>"PRIORIDAD", "IsVisible"=>true));
-        $obj->GetField("ttp_estado")->SetDisplayValues(Array("Name"=>"ttp_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"ESTADO_TICKET", "IsVisible"=>true));
+        $obj->GetField("ttp_estado")->SetDisplayValues(Array("Name"=>"ttp_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
     }
 
 }
@@ -247,10 +247,10 @@ class class_tic_avance_th4 extends ctable_handler {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
         $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado inicial", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"ESTADO_TICKET", "IsVisible"=>true));
+        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado inicial", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"REPORTES::ESTADO_TICKET", "IsVisible"=>true));
         $obj->GetField("tav_tstamp_in")->SetDisplayValues(Array("Name"=>"tav_tstamp_in", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATETIME", "IsVisible"=>true));
         $obj->GetField("use_code_in")->SetDisplayValues(Array("Name"=>"use_code_in", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"USER", "IsVisible"=>true));
-        $obj->GetField("tic_estado_out")->SetDisplayValues(Array("Name"=>"tic_estado_out", "Label"=>"Estado final", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"ESTADO_TICKET", "IsVisible"=>true));
+        $obj->GetField("tic_estado_out")->SetDisplayValues(Array("Name"=>"tic_estado_out", "Label"=>"Estado final", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::ESTADO_TICKET", "IsVisible"=>true));
         $obj->GetField("tav_tstamp_out")->SetDisplayValues(Array("Name"=>"tav_tstamp_out", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>110, "Presentation"=>"DATETIME", "IsVisible"=>true));
         $obj->GetField("use_code_out")->SetDisplayValues(Array("Name"=>"use_code_out", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"USER", "IsVisible"=>true));
         $obj->GetField("tav_nota")->SetDisplayValues(Array("Name"=>"tav_nota", "Label"=>"Nota", "Size"=>1000, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4, "Cols"=>60));

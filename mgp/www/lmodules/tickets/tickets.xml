@@ -538,7 +538,7 @@
 	<group title="Asunto" id="reclamo" render_html="block">
             <field name="forms" presentation="SEQUENCE" classparams="forms" isvisible="false"/>
 
-            <field name="prestacion" presentation="PRESTACIONTREE" label="Prestación" cols="27" ismandatory="true" classparams="cuestionario"/>
+            <field name="prestacion" presentation="TICKET::PRESTACIONTREE" label="Prestación" cols="27" ismandatory="true" classparams="cuestionario"/>
             <field name="rubro" presentation="RUBRO" label="Rubro" ismandatory="true" classparams="no_fill"/>
             <field name="tic_nota_in" presentation="TEXTAREA" label="Observación" cols="60" rows="4"/>
             <field name="use_code" presentation="CURRENTUSER" label="Operador" isvisible="false"/>
@@ -548,6 +548,7 @@
 
         <!-- Ubicacion del problema -->
 	<group title="Ubicación DOMICILIO" id="domicilio" render_html="block">
+            <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
             <field name="alternativa" presentation="TICKET::ALTERNATIVA_GEOREF" label="Alternativa"  initialvalue="NRO"/>
             <field name="calle" presentation="TICKET::CALLE" label="Calle" cols="60" ismandatory="true" />
             <field name="calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
@@ -561,7 +562,6 @@
             <field name="dpto" presentation="TEXT" label="Departamento" cols="5" />
             <field name="nombre_fantasia" presentation="TEXT" label="Nom.fantasía" isvisible="false"/>
 
-            <field name="mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
             <field name="tic_id_cuadra" presentation="TEXT" label="id cuadra" isvisible="false" readonly="true"/>
             <field name="tic_coordx" presentation="TEXT" label="lat" isvisible="false" readonly="true"/>
             <field name="tic_coordy" presentation="TEXT" label="lng" isvisible="false" readonly="true"/>
@@ -595,6 +595,7 @@
         </group>
 
         <group title="Ubicación LUMINARIA" id="luminaria" render_html="block">
+            <field name="mapa_lum" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
             <field name="alternativa_lum" presentation="TICKET::ALTERNATIVA_GEOREF" label="Alternativa" initialvalue="NRO"/>
             <field name="calle_lum" presentation="TICKET::CALLE" label="Calle" cols="100" ismandatory="true" />
             <field name="calle_nombre_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
@@ -603,7 +604,6 @@
             <field name="calle_nombre2_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
             
             <field name="callenro_lum" presentation="TICKET::ALTURA" label="Altura" cols="5" ismandatory="true" />
-            <field name="mapa_lum" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
             <field name="tic_barrio_lum" label="Barrio" presentation="TEXT" readonly="true"/>
             <field name="tic_cgpc_lum" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
             <field name="id_luminaria" label="Luminaria" presentation="TEXT" readonly="true" isvisible="true"/>
@@ -637,29 +637,29 @@
 
 	<searchfield name="tic_identificador" presentation="TEXT" label="Identificador" cols="45"/>
         <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10" initialvalue="2013" />
-	<searchfield name="tic_tipo" presentation="PRESTACIONTIPO" label="Tipo" search="fix"/>
-        <searchfield name="ttp_estado" presentation="ESTADO_DENUNCIA" label="Estado"/>
+	<searchfield name="tic_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" search="fix" initialvalue="RECLAMO"/>
+        <searchfield name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
         <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
-	<searchfield name="tor_code" presentation="ORGANISMO" label="Organismo"/>
-	<searchfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
+	<searchfield name="tor_code" presentation="REPORTES::ORGANISMO" label="Organismo"/>
+	<searchfield name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestacion"/>
 	<searchfield name="tru_code" presentation="RUBRO" label="Rubro"/>
 	<searchfield name="tic_calle_nombre" presentation="TEXT" label="Calle"/>
 	<searchfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
-	<searchfield name="tic_barrio" presentation="BARRIOS" label="Barrio"/>
+	<searchfield name="tic_barrio" presentation="REPORTES::BARRIO" label="Barrio"/>
 		
         <listfield name="tic_nro" presentation="TEXT" isvisible="false"/>
         <listfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
         <listfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
 	<listfield name="tic_tipo" presentation="TEXT" label="Tipo"/>
-        <listfield name="ttp_estado" presentation="ESTADO_DENUNCIA" label="Estado"/>
+        <listfield name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
         <listfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
-        <listfield name="tpr_code" presentation="PRESTACION" label="Prestacion"/>
+        <listfield name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestacion"/>
         <listfield name="tru_code" presentation="RUBRO" label="Rubro"/>
         <listfield name="tic_calle_nombre" presentation="TEXT" label="Calle"/>
         <listfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
-        <listfield name="tic_barrio" presentation="BARRIOS" label="Barrio"/>
+        <listfield name="tic_barrio" presentation="REPORTES::BARRIO" label="Barrio"/>
         <listfield name="tic_nota_in" presentation="TEXT" label="Nota"/>
-        <listfield name="tor_code" presentation="ORGANISMO" label="Organismo"/>
+        <listfield name="tor_code" presentation="REPORTES::ORGANISMO" label="Organismo"/>
         <listfield name="tto_figura" presentation="TEXT" label="Rol"/>
 
 		
@@ -738,7 +738,7 @@
         <!-- Ubicacion del problema -->
 	<group title="Ubicación" id="ubicacion" render_html="block">
             <field name="tic_lugar" presentation="DIRECCION" label="Dirección" />
-            <field name="mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
+            <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
             <field name="tic_id_cuadra" presentation="TEXT" label="x" isvisible="false"/>
             <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
             <field name="tic_coordy" presentation="TEXT" label="y" isvisible="false"/>
@@ -758,7 +758,7 @@
             <field name="tic_tstamp_in" presentation="DATETIME" label="Ingreso ticket" readonly="true" />
             <field name="tic_tstamp_plazo" presentation="DATETIME" label="Plazo estimado" readonly="true"/>
             <field name="tic_tstamp_cierre" presentation="DATETIME" label="Cierre ticket" readonly="true"/>
-            <field name="tic_estado" presentation="TEXT" label="Estado" readonly="true"/>
+            <field name="tic_estado" presentation="REPORTES::ESTADO_TICKET" label="Estado" readonly="true"/>
             <field name="tic_nota_in" presentation="TEXT" label="Nota al ingreso" readonly="true"/>
             
             <field name="tmp_accion" isvisible="false"/>
@@ -771,7 +771,7 @@
         <table relationclass="" classname="class_tic_ticket_prestaciones" title="Prestaciones" add="false" delete="false" update="false">
             <column title="Prestación" order="1">
                 <field name="tic_nro" isvisible="false"/>
-                <field name="tpr_code" presentation="PRESTACION" label="Prestación"/>
+                <field name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestación"/>
             </column>
             <column title="Rubro" order="2">
                 <field name="tru_code" presentation="RUBRO" label="Rubro"/>
@@ -783,7 +783,7 @@
                 <field name="ttp_prioridad" presentation="PRIORIDAD" label="Prioridad"/>
             </column>
             <column title="Estado" order="5">
-                <field name="ttp_estado" presentation="ESTADO_TICKET" label="Estado"/>
+                <field name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
             </column>
         </table>
 
@@ -794,12 +794,12 @@
                 <field name="tpr_code" isvisible="false"/>
             </column>
             <column title="Est.Inicial" order="2">
-                <field name="tic_estado_in" presentation="ESTADO_TICKET" label="Estado inicial"/>
+                <field name="tic_estado_in" presentation="REPORTES::ESTADO_TICKET" label="Estado inicial"/>
                 <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
                 <field name="use_code_in" presentation="USER" label="Operador"/>
             </column>
             <column title="Est.Final" order="3">
-                <field name="tic_estado_out" presentation="ESTADO_TICKET" label="Estado final"/>
+                <field name="tic_estado_out" presentation="REPORTES::ESTADO_TICKET" label="Estado final"/>
                 <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha"/>
                 <field name="use_code_out" presentation="USER" label="Operador"/>
             </column>
@@ -895,7 +895,7 @@
         <!-- Ubicacion del problema -->
 	<group title="Ubicación" id="ubicacion" render_html="block">
             <field name="tic_lugar" presentation="DIRECCION" label="Dirección" />
-            <field name="mapa" presentation="MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
+            <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
             <field name="tic_id_cuadra" presentation="TEXT" label="x" isvisible="false"/>
             <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
             <field name="tic_coordy" presentation="TEXT" label="y" isvisible="false"/>
@@ -928,7 +928,7 @@
         <table relationclass="" classname="class_tic_ticket_prestaciones" title="Prestaciones" add="false" delete="false" update="false">
             <column title="Prestación" order="1">
                 <field name="tic_nro" isvisible="false"/>
-                <field name="tpr_code" presentation="PRESTACION" label="Prestación"/>
+                <field name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestación"/>
             </column>
             <column title="Rubro" order="2">
                 <field name="tru_code" presentation="RUBRO" label="Rubro"/>
@@ -940,7 +940,7 @@
                 <field name="ttp_prioridad" presentation="PRIORIDAD" label="Prioridad"/>
             </column>
             <column title="Estado" order="5">
-                <field name="ttp_estado" presentation="ESTADO_TICKET" label="Estado"/>
+                <field name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
             </column>
         </table>
 
@@ -951,12 +951,12 @@
                 <field name="tpr_code" isvisible="false"/>
             </column>
             <column title="Est.Inicial" order="2">
-                <field name="tic_estado_in" presentation="ESTADO_TICKET" label="Estado inicial"/>
+                <field name="tic_estado_in" presentation="REPORTES::ESTADO_TICKET" label="Estado inicial"/>
                 <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
                 <field name="use_code_in" presentation="USER" label="Operador"/>
             </column>
             <column title="Est.Final" order="3">
-                <field name="tic_estado_out" presentation="ESTADO_TICKET" label="Estado final"/>
+                <field name="tic_estado_out" presentation="REPORTES::ESTADO_TICKET" label="Estado final"/>
                 <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha"/>
                 <field name="use_code_out" presentation="USER" label="Operador"/>
             </column>
@@ -1069,8 +1069,8 @@
 		<listfield name="tge_otra_denominacion" presentation="TEXT" label="Otra Den."/>
 		<listfield name="tge_calle_nombre" presentation="TEXT" label="Calle"/>
 		<listfield name="tge_altura" presentation="INT" label="Altura"/>
-		<listfield name="tge_cgpc" presentation="TEXT" label="CGPC"/>
-		<listfield name="tge_barrio" presentation="BARRIOS" label="Barrio"/>
+		<listfield name="tge_cgpc" presentation="TEXT" label="Comuna"/>
+		<listfield name="tge_barrio" presentation="REPORTES::BARRIO" label="Barrio"/>
 		
 		<action label="ver" target="georef_maint.php?OP=V" operation="V">
 			<sendfield classname="class_tic_georef" name="tge_tipo"/>
@@ -1101,7 +1101,7 @@
 			<field name="tge_calle_nombre" presentation="TEXT" label="Nombre Calle" />
 			<field name="tge_altura" presentation="INT" label="Altura Calle" />
 			<field name="tge_cgpc" presentation="TEXT" label="CGPC" />
-			<field name="tge_barrio" presentation="BARRIOS" label="Barrio" />
+			<field name="tge_barrio" presentation="REPORTES::BARRIO" label="Barrio" />
 		</group>
 		
 		<group title="Mapa" id="mapa">

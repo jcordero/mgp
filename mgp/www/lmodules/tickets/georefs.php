@@ -133,7 +133,7 @@ class col108 extends ccolumn
     function __construct($parent)
     {
         parent::__construct($parent);
-        $this->m_title = 'CGPC';
+        $this->m_title = 'Comuna';
         $this->m_order = '108';
         $this->m_isvisible = true;
         $this->m_align = 'left';
@@ -141,7 +141,7 @@ class col108 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tge_cgpc", "Label"=>"CGPC", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TEXT", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tge_cgpc", "Label"=>"Comuna", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 }
 
@@ -158,7 +158,7 @@ class col109 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tge_barrio", "Label"=>"Barrio", "Size"=>100, "IsForDB"=>true, "Order"=>109, "Presentation"=>"BARRIOS", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tge_barrio", "Label"=>"Barrio", "Size"=>100, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true));
     }
 }
 

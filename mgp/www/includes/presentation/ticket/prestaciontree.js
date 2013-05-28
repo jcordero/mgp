@@ -53,7 +53,7 @@ function m_prestacion_onSelect(row)
                         }
                         var jdata2 = eval('(' + json + ')');
                         fillCombo(objrubro,jdata2,objrubro.id,"tru_code","","tru_detalle");    
-                    },"PRESTACIONTREE","getRubroPrest",codigo);
+                    },"TICKET::PRESTACIONTREE","getRubroPrest",codigo);
                  }
             }
 
@@ -67,6 +67,20 @@ function m_prestacion_onSelect(row)
                 divobj = $("#bloque_domicilio").show();
                 calle.m_mandatory = true;
                 callenro.m_mandatory = true;
+                
+                //Activo el mapa interactivo en el centro de MDQ
+                if(typeof mapa_domicilio.setView === 'undefined') {
+                    $('#m_mapa').html('');
+                    mapa_domicilio = L.map('m_mapa').setView([-38.0086358938483,-57.5388003290637], 13);
+
+                    // add an OpenStreetMap tile layer
+                    var osm = new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+                    var ggl = new L.Google();
+                    mapa_domicilio.addLayer(osm);
+                    mapa_domicilio.addControl(new L.Control.Layers( {'OSM':osm, 'Google':ggl}, {}));
+                } else {
+                    mapa_domicilio.setView([-38.0086358938483,-57.5388003290637], 13);
+                }
             }
             else if(georef==="VILLA")
             {
@@ -101,7 +115,10 @@ function m_prestacion_onSelect(row)
                     mapa_luminaria = L.map('m_mapa_lum').setView([-38.0086358938483,-57.5388003290637], 13);
 
                     // add an OpenStreetMap tile layer
-                    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(mapa_luminaria);
+                    var osm = new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+                    var ggl = new L.Google();
+                    mapa_luminaria.addLayer(osm);
+                    mapa_luminaria.addControl(new L.Control.Layers( {'OSM':osm, 'Google':ggl}, {}));
                 } else {
                     mapa_luminaria.setView([-38.0086358938483,-57.5388003290637], 13);
                 }
@@ -114,7 +131,7 @@ function m_prestacion_onSelect(row)
             cuest.innerHTML = jdata[1];
         }
     
-    },"PRESTACIONTREE","getDetails",codigo);
+    },"TICKET::PRESTACIONTREE","getDetails",codigo);
     
 }
 

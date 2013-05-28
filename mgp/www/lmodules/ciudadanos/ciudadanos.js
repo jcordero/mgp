@@ -1,8 +1,8 @@
 $(document).ready(function(){
 
     //campos extra en las direcciones
-    $('#ciu_dir_calle .fldm').append('<div class="fldl"></div>');
-    $('#ciu_dir_nro .fldm').append('<div class="fldl"></div>');
+    $('#ciu_dir_calle .fld').append('<div class="fldl"></div>');
+    $('#ciu_dir_nro .fld').append('<div class="fldl"></div>');
     $('#ciu_dir_piso .fld').append('<div class="fldl"></div>');
     $('#ciu_dir_dpto .fld').append('<div class="fldl"></div>');
     $('#ciu_cod_postal .fld').append('<div class="fldl"></div>');
@@ -12,18 +12,7 @@ $(document).ready(function(){
         $('#contenido_direccion').after(
             '<div><button class="btn" id="valida_direccion">Validar Dirección</button> <button class="btn hide" id="cambia_direccion">Cambiar Dirección</button></div>');
     }
-    
-    /* Inicializacion del mapa para ver y modificar */
-    if(OP==='V' || OP==='M') {
-        //Deben estar las coordenadas activas
-        var lat = $('#m_ciu_coord_x').val();
-    	var lng = $('#m_ciu_coord_y').val();
-        if(lat!=='' && lng!=='') {
-            $('#m_tmp_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + lat + "&y=" + lng + "&w=350&h=250&r=250");
-            direccion_validada();
-        }
-    }
-    
+        
     $('#valida_direccion').click(function(){
     	var calle = $('#m_ciu_dir_calle').val();
     	var altura = $('#m_ciu_dir_nro').val();
@@ -91,13 +80,25 @@ $(document).ready(function(){
         initDNI('tmp_doc', null);
         chg_docid(document.getElementById('bm_tmp_doc'));
     }
+    
+    /* Inicializacion del mapa para ver y modificar */
+    if(OP==='V' || OP==='M') {
+        //Deben estar las coordenadas activas
+        var lat = $('#m_ciu_coord_x').val();
+    	var lng = $('#m_ciu_coord_y').val();
+        if(lat!=='' && lng!=='') {
+            $('#m_tmp_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + lat + "&y=" + lng + "&w=350&h=250&r=250");
+            direccion_validada();
+        }
+    }
+
 });
 
 function direccion_validada() {
     //Oculto la calle y altura
-    $('#ciu_dir_calle .fldm input').hide();
-    $('#ciu_dir_calle .fldm img').hide();
-    $('#ciu_dir_nro .fldm input').hide();
+    $('#ciu_dir_calle .fld input').hide();
+    $('#ciu_dir_calle .fld img').hide();
+    $('#ciu_dir_nro .fld input').hide();
     $('#ciu_dir_piso .fld input').hide();
     $('#ciu_dir_dpto .fld input').hide();
     $('#ciu_cod_postal .fld input').hide();
