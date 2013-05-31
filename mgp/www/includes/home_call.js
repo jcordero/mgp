@@ -75,7 +75,8 @@ function armar_panel() {
         //Armo el texto de descripcion Nombre, Apellido y debajo Tipo y nro de doc
         var d = (person.person_doc!=='' ? person.person_doc.split(' ') : ['ARG','DNI','']);
         var b="<h4>"+person.person_nombres+", "+person.person_apellido+"</h4>"+d[1]+" "+d[2]+" ("+d[0]+")";
-        b+="<br/>Sexo: <b>"+person.person_sexo+"</b><br/>";
+        if(person.person_sexo!=='')
+            b+="<br/>Género: <b>"+person.person_sexo+"</b><br/>";
         if(person.person_edad>0 && person.person_edad<200)
             b+="Edad: <b>"+person.person_edad+" años</b>";
         $("#talk_nominal").html(b);

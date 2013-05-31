@@ -30,20 +30,25 @@ if(!class_exists('talk_view'))
 <div class="container">
 	<div class="row" id="identificado">
 		<div class="span4">
-			<h4>'.$this->m_person->person_nombres.' '.$this->m_person->person_apellido.'</h4>
+                    Ciudadano:<br>
+                    <h4>'.$this->m_person->person_nombres.' '.$this->m_person->person_apellido.'</h4>
 		</div>
 		<div class="span4">
-			Doc.: '.$this->m_person->person_doc.'<br/>
-			Edad: '.$this->m_person->person_edad.'<br/>
-			Género :'.$this->m_person->person_sexo.'
+			<b>Doc.:</b> '.$this->m_person->person_doc.'<br/>';
+            if($this->m_person->person_edad>0 && $this->m_person->person_edad<200)
+                $html.='<b>Edad:</b> '.$this->m_person->person_edad.'<br/>';
+            
+            if($this->m_person->person_sexo!=='')
+                $html.='<b>Género:</b> '.$this->m_person->person_sexo;
+            
+            $html.='
 		</div>
 	</div>
-</div>	
-            ';
+</div>';
 	                    
             $style = '
 <style>
-    #identificado {border:solid 1px #ccc;border-radius:5px;background:#efefef;margin-top:10px;margin-bottom:10px;padding-bottom:5px;text-align:left;}
+    #identificado {border:solid 1px #ccc;border-radius:5px;background:#efefef;margin-top:10px;margin-bottom:10px;padding-bottom:5px;text-align:left;padding-top:5px;}
 </style>
             ';
             

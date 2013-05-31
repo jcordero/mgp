@@ -4,6 +4,8 @@ var luminariaIcon = null;
 var mapa_luminaria = {};
 var mapa_domicilio = {};
 var lista_luminarias = [];
+var marker_domicilio = null;
+var marker_luminarias = null;
 
 $(document).ready(function() {
     
@@ -115,11 +117,11 @@ function valida_direccion() {
         return;
     }
 
-    $('#mapa').append('<div class="progress progress-striped active"><div class="bar" style="width:100%;"></div></div>');
+    $('#m_mapa').parent().append('<div id="progress1" class="progress progress-striped active"><div class="bar" style="width:100%;"></div></div>');
 
     new rem_request(this,function(obj,json){
             var o = JSON.parse(json);
-            $('#mapa .progress').remove();
+            $('#progress1').remove();
             if(o.resultado==='ok') {
                 //Actualizo los valores
                 $('#m_tic_coordx').val(o.latitud);
@@ -145,8 +147,11 @@ function valida_direccion() {
                 //$('#m_mapa img').attr('src','http://maps.googleapis.com/maps/api/staticmap?center='+o.latitud+','+o.longitud+'&zoom=17&size=350x250&maptype=roadmap&markers=color:blue%7Clabel:%7C'+o.latitud+','+o.longitud+'&sensor=false');
                 
                 mapa_domicilio.setView([o.latitud,o.longitud],18);
-                L.marker([o.latitud,o.longitud]).addTo(mapa_domicilio).bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''));
-
+                if(marker_domicilio===null)
+                    marker_domicilio = L.marker([o.latitud,o.longitud]).addTo(mapa_domicilio).bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''));
+                else
+                    marker_domicilio.setLatLng([o.latitud,o.longitud]).unbindPopup().bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : '')).update();
+                
                 direccion_validada();
             }
             else
@@ -178,6 +183,9 @@ function cambia_direccion() {
     //Muestro los botones
     $('#cambia_direccion').hide();
     $('#valida_direccion').show();
+    
+    //Reseteo el mapa
+    mapa_domicilio = crearMapa('m_mapa');
 }
 
 
@@ -233,11 +241,11 @@ function valida_direccion_lum(){
         return;
     }
 
-    $('#valida_direccion_lum').after('<div id="progreso" class="progress progress-striped active"><div class="bar" style="width:100%;"></div></div>');
+    $('#m_mapa_lum').parent().append('<div id="progress" class="progress progress-striped active"><div class="bar" style="width:100%;"></div></div>');
 
     new rem_request(this,function(obj,json){
         var o = JSON.parse(json);
-        $('#progreso').remove();
+        $('#progress').remove();
         if(o.resultado==='ok') {
             //Actualizo los valores
             $('#m_tic_coordx').val(o.latitud);
@@ -256,10 +264,10 @@ function valida_direccion_lum(){
 
             lista_luminarias = o.luminarias;
 
-            //Cargo el mapa 350 x 250px con un marker azul en la dirección elegida
+            //Cargo el mapa con un marker azul en la dirección elegida
             mapa_luminaria.setView([o.latitud,o.longitud],18);
-            L.marker([o.latitud,o.longitud]).addTo(mapa_luminaria).bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''));
-
+            marker_luminarias = L.marker([o.latitud,o.longitud]).addTo(mapa_luminaria).bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''));
+            
             //Creo los markers de las luminarias
             var cant = o.luminarias.length;
             for(var j=0;j<cant;j++) {
@@ -301,7 +309,24 @@ function cambia_direccion_lum(){
     $('#m_id_luminaria').val('');
     $('#lm_id_luminaria').html('');
 
+    //Reseteo el mapa
+    mapa_luminaria = crearMapa('m_mapa_lum');
+
     setAlertLuminaria();
+}
+
+function crearMapa(id) {
+    var p = $('#'+id).parent();
+    $('#'+id).remove();
+    p.append('<div id="' + id + '"></div>');
+    var mapa = new L.map(id).setView([-38.0086358938483,-57.5388003290637], 13);
+
+    // add an OpenStreetMap tile layer
+    var osm = new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+    var ggl = new L.Google();
+    mapa.addLayer(osm);
+    mapa.addControl(new L.Control.Layers( {'Vista calles':osm, 'Vista satélite':ggl}, {}));
+    return mapa;
 }
 
 

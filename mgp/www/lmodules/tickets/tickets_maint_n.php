@@ -36,7 +36,7 @@ class reclamo_gr extends cform_group {
         //SetDisplayValues($attributes) 
         $this->getClass("class_tic_ticket")->GetField("forms")->SetDisplayValues(Array("Name"=>"forms", "Type"=>"int", "Order"=>24, "Presentation"=>"SEQUENCE", "ClassParams"=>"forms", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("prestacion")->SetDisplayValues(Array("Name"=>"prestacion", "Label"=>"Prestación", "Size"=>20, "Order"=>25, "IsMandatory"=>true, "Presentation"=>"TICKET::PRESTACIONTREE", "IsVisible"=>true, "Cols"=>27, "ClassParams"=>"cuestionario", "Class"=>"class_tic_ticket"));
-        $this->getClass("class_tic_ticket")->GetField("rubro")->SetDisplayValues(Array("Name"=>"rubro", "Label"=>"Rubro", "Size"=>100, "Order"=>26, "IsMandatory"=>true, "Presentation"=>"RUBRO", "IsVisible"=>true, "ClassParams"=>"no_fill", "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("rubro")->SetDisplayValues(Array("Name"=>"rubro", "Label"=>"Rubro", "Size"=>100, "Order"=>26, "Presentation"=>"RUBRO", "IsVisible"=>true, "ClassParams"=>"no_fill", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("tic_nota_in")->SetDisplayValues(Array("Name"=>"tic_nota_in", "Label"=>"Observación", "Size"=>500, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4, "Cols"=>60, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("use_code")->SetDisplayValues(Array("Name"=>"use_code", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"CURRENTUSER", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("tipo_georef")->SetDisplayValues(Array("Name"=>"tipo_georef", "Label"=>"Tipo georeferencia", "Size"=>50, "Order"=>28, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket"));
@@ -83,11 +83,11 @@ class domicilio_gr extends cform_group {
         //SetDisplayValues($attributes) 
         $this->getClass("class_tic_ticket")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Type"=>"int", "Order"=>29, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("alternativa")->SetDisplayValues(Array("Name"=>"alternativa", "Label"=>"Alternativa", "Size"=>20, "Order"=>38, "Presentation"=>"TICKET::ALTERNATIVA_GEOREF", "IsVisible"=>true, "Class"=>"class_tic_ticket", "InitialValue"=>"NRO"));
-        $this->getClass("class_tic_ticket")->GetField("calle")->SetDisplayValues(Array("Name"=>"calle", "Label"=>"Calle", "Type"=>"int", "Order"=>31, "IsMandatory"=>true, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>60, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("calle")->SetDisplayValues(Array("Name"=>"calle", "Label"=>"Calle", "Type"=>"int", "Order"=>31, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>60, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("calle_nombre")->SetDisplayValues(Array("Name"=>"calle_nombre", "Label"=>"Nombre de la calle", "Size"=>100, "Order"=>30, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
-        $this->getClass("class_tic_ticket")->GetField("calle2")->SetDisplayValues(Array("Name"=>"calle2", "Label"=>"Cruza calle", "Type"=>"int", "Order"=>33, "IsMandatory"=>true, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>60, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("calle2")->SetDisplayValues(Array("Name"=>"calle2", "Label"=>"Cruza calle", "Type"=>"int", "Order"=>33, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>60, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("calle_nombre2")->SetDisplayValues(Array("Name"=>"calle_nombre2", "Label"=>"Nombre de la calle", "Size"=>100, "Order"=>32, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
-        $this->getClass("class_tic_ticket")->GetField("callenro")->SetDisplayValues(Array("Name"=>"callenro", "Label"=>"Altura", "Type"=>"int", "Order"=>34, "IsMandatory"=>true, "Presentation"=>"TICKET::ALTURA", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("callenro")->SetDisplayValues(Array("Name"=>"callenro", "Label"=>"Altura", "Type"=>"int", "Order"=>34, "Presentation"=>"TICKET::ALTURA", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("piso")->SetDisplayValues(Array("Name"=>"piso", "Label"=>"Piso", "Type"=>"int", "Order"=>35, "Presentation"=>"INT", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("dpto")->SetDisplayValues(Array("Name"=>"dpto", "Label"=>"Departamento", "Size"=>20, "Order"=>36, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("nombre_fantasia")->SetDisplayValues(Array("Name"=>"nombre_fantasia", "Label"=>"Nom.fantasía", "Size"=>100, "Order"=>37, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket"));
@@ -124,7 +124,7 @@ class villa_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket")->GetField("villa")->SetDisplayValues(Array("Name"=>"villa", "Label"=>"Villa", "Size"=>100, "Order"=>39, "IsMandatory"=>true, "Presentation"=>"VILLA", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("villa")->SetDisplayValues(Array("Name"=>"villa", "Label"=>"Villa", "Size"=>100, "Order"=>39, "Presentation"=>"VILLA", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("vilmanzana")->SetDisplayValues(Array("Name"=>"vilmanzana", "Label"=>"Manzana", "Size"=>20, "Order"=>40, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("vilcasa")->SetDisplayValues(Array("Name"=>"vilcasa", "Label"=>"Casa", "Size"=>20, "Order"=>41, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
     }
@@ -154,7 +154,7 @@ class orgpublico_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket")->GetField("orgpublico")->SetDisplayValues(Array("Name"=>"orgpublico", "Label"=>"Organismo público", "Size"=>100, "Order"=>43, "IsMandatory"=>true, "Presentation"=>"ORGPUBLICO", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("orgpublico")->SetDisplayValues(Array("Name"=>"orgpublico", "Label"=>"Organismo público", "Size"=>100, "Order"=>43, "Presentation"=>"ORGPUBLICO", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("orgsector")->SetDisplayValues(Array("Name"=>"orgsector", "Label"=>"Area o sector", "Size"=>100, "Order"=>44, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
     }
 }
@@ -182,7 +182,7 @@ class plaza_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket")->GetField("plaza")->SetDisplayValues(Array("Name"=>"plaza", "Label"=>"Plaza o parque", "Size"=>100, "Order"=>42, "IsMandatory"=>true, "Presentation"=>"PLAZA", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("plaza")->SetDisplayValues(Array("Name"=>"plaza", "Label"=>"Plaza o parque", "Size"=>100, "Order"=>42, "Presentation"=>"PLAZA", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
     }
 }
 }
@@ -214,7 +214,7 @@ class cementerio_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket")->GetField("cementerio")->SetDisplayValues(Array("Name"=>"cementerio", "Label"=>"Cementerio", "Size"=>100, "Order"=>45, "IsMandatory"=>true, "Presentation"=>"CEMENTERIO", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("cementerio")->SetDisplayValues(Array("Name"=>"cementerio", "Label"=>"Cementerio", "Size"=>100, "Order"=>45, "Presentation"=>"CEMENTERIO", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("sepultura")->SetDisplayValues(Array("Name"=>"sepultura", "Label"=>"Tipo de sepultura", "Size"=>100, "Order"=>46, "Presentation"=>"SEPULTURA", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("sepsector")->SetDisplayValues(Array("Name"=>"sepsector", "Label"=>"Nombre panteon o boveda", "Size"=>100, "Order"=>47, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("sepcalle")->SetDisplayValues(Array("Name"=>"sepcalle", "Label"=>"Calle", "Size"=>100, "Order"=>48, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
@@ -257,11 +257,11 @@ class luminaria_gr extends cform_group {
         //SetDisplayValues($attributes) 
         $this->getClass("class_tic_ticket")->GetField("mapa_lum")->SetDisplayValues(Array("Name"=>"mapa_lum", "Label"=>"Ubicación", "Type"=>"int", "Order"=>51, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("alternativa_lum")->SetDisplayValues(Array("Name"=>"alternativa_lum", "Label"=>"Alternativa", "Size"=>20, "Order"=>60, "Presentation"=>"TICKET::ALTERNATIVA_GEOREF", "IsVisible"=>true, "Class"=>"class_tic_ticket", "InitialValue"=>"NRO"));
-        $this->getClass("class_tic_ticket")->GetField("calle_lum")->SetDisplayValues(Array("Name"=>"calle_lum", "Label"=>"Calle", "Type"=>"int", "Order"=>53, "IsMandatory"=>true, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>100, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("calle_lum")->SetDisplayValues(Array("Name"=>"calle_lum", "Label"=>"Calle", "Type"=>"int", "Order"=>53, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>100, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("calle_nombre_lum")->SetDisplayValues(Array("Name"=>"calle_nombre_lum", "Label"=>"Nombre de la calle", "Size"=>100, "Order"=>52, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
-        $this->getClass("class_tic_ticket")->GetField("calle2_lum")->SetDisplayValues(Array("Name"=>"calle2_lum", "Label"=>"Cruza calle", "Type"=>"int", "Order"=>55, "IsMandatory"=>true, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>100, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("calle2_lum")->SetDisplayValues(Array("Name"=>"calle2_lum", "Label"=>"Cruza calle", "Type"=>"int", "Order"=>55, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>100, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("calle_nombre2_lum")->SetDisplayValues(Array("Name"=>"calle_nombre2_lum", "Label"=>"Nombre de la calle", "Size"=>100, "Order"=>54, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
-        $this->getClass("class_tic_ticket")->GetField("callenro_lum")->SetDisplayValues(Array("Name"=>"callenro_lum", "Label"=>"Altura", "Type"=>"int", "Order"=>56, "IsMandatory"=>true, "Presentation"=>"TICKET::ALTURA", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("callenro_lum")->SetDisplayValues(Array("Name"=>"callenro_lum", "Label"=>"Altura", "Type"=>"int", "Order"=>56, "Presentation"=>"TICKET::ALTURA", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("tic_barrio_lum")->SetDisplayValues(Array("Name"=>"tic_barrio_lum", "Label"=>"Barrio", "Size"=>100, "Order"=>57, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("tic_cgpc_lum")->SetDisplayValues(Array("Name"=>"tic_cgpc_lum", "Label"=>"Comuna", "Size"=>100, "Order"=>58, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("id_luminaria")->SetDisplayValues(Array("Name"=>"id_luminaria", "Label"=>"Luminaria", "Size"=>100, "Order"=>59, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));

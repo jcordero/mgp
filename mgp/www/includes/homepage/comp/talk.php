@@ -64,7 +64,7 @@ if(!class_exists('talk'))
             <div id="identificado" class="row">
                 <div id="talk_nominal" class="span4"></div>            
                 <div id="talk_actions">
-                    <button id="talk_btn_anonimo" onclick="boton_anonimo()" class="btn"><i class="icon-off"></i> Anónimo</button>
+                    <button id="talk_btn_anonimo" onclick="boton_anonimo()" class="btn"><i class="icon-off"></i> Terminar</button>
                     <button id="talk_btn_modificar" onclick="boton_modificar()" class="btn"><i class="icon-edit"></i> Modificar</button>
                     <button id="talk_btn_terminar" onclick="boton_terminar()" class="btn">Terminar</button>        
                 </div>        

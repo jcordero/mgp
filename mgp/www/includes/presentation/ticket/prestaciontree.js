@@ -70,14 +70,7 @@ function m_prestacion_onSelect(row)
                 
                 //Activo el mapa interactivo en el centro de MDQ
                 if(typeof mapa_domicilio.setView === 'undefined') {
-                    $('#m_mapa').html('');
-                    mapa_domicilio = L.map('m_mapa').setView([-38.0086358938483,-57.5388003290637], 13);
-
-                    // add an OpenStreetMap tile layer
-                    var osm = new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
-                    var ggl = new L.Google();
-                    mapa_domicilio.addLayer(osm);
-                    mapa_domicilio.addControl(new L.Control.Layers( {'OSM':osm, 'Google':ggl}, {}));
+                    mapa_domicilio = crearMapa('m_mapa');
                 } else {
                     mapa_domicilio.setView([-38.0086358938483,-57.5388003290637], 13);
                 }
@@ -110,15 +103,8 @@ function m_prestacion_onSelect(row)
                 id_luminaria.m_mandatory = true;
                 
                 //Activo el mapa interactivo en el centro de MDQ
-                if(typeof mapa_luminaria.setView === 'undefined') {
-                    $('#m_mapa_lum').html('');
-                    mapa_luminaria = L.map('m_mapa_lum').setView([-38.0086358938483,-57.5388003290637], 13);
-
-                    // add an OpenStreetMap tile layer
-                    var osm = new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
-                    var ggl = new L.Google();
-                    mapa_luminaria.addLayer(osm);
-                    mapa_luminaria.addControl(new L.Control.Layers( {'OSM':osm, 'Google':ggl}, {}));
+                if(typeof mapa_luminaria.setView === 'undefined') { 
+                    mapa_luminaria = crearMapa('m_mapa_lum');
                 } else {
                     mapa_luminaria.setView([-38.0086358938483,-57.5388003290637], 13);
                 }
