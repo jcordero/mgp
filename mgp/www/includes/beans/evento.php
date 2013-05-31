@@ -29,7 +29,7 @@ class evento {
     static function factoryByCiudadano($ciudadano) {
         global $primary_db;
         $eventos = array();
-        $rs = $primary_db->do_execute("select * from ciu_historial_contactos where where ciu_code='{$ciudadano->ciu_code}' order by chi_fecha desc");
+        $rs = $primary_db->do_execute("select * from ciu_historial_contactos where ciu_code='{$ciudadano->ciu_code}' order by chi_fecha desc");
         while( $row=$primary_db->_fetch_row($rs) ) {
             $ev = new evento();
             $ev->chi_canal  = $row['chi_canal'];

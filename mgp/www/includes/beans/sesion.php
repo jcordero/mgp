@@ -18,7 +18,7 @@ class sesion {
         global $primary_db;
         $sesiones = array();
         
-        $rs = $primary_db->do_execute("select * from ciu_sesiones where where ciu_code='{$ciudadano->ciu_code}' order by cse_tstamp desc");
+        $rs = $primary_db->do_execute("select * from ciu_sesiones where ciu_code='{$ciudadano->ciu_code}' order by cse_tstamp desc");
         while( $row=$primary_db->_fetch_row($rs) ) {
             $se = new sesion();
             $this->cse_code         = $row['cse_code'];

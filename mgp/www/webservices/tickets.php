@@ -1,7 +1,7 @@
 <?php
 include_once 'common/sites.php';
 include_once 'beans/ticket.php';
-ini_set("error_log", LOG_PATH.'api_miciudad.log');
+ini_set("error_log", LOG_PATH.'api_tickets.log');
 error_log("\n------------------ INICIO PROCESO API -----------------------\n");
 
 /**
@@ -33,7 +33,9 @@ if($metodo==='GET' && $ret['error']==='') {
     $p = explode('/', $_SERVER['REQUEST_URI']);
     $tipo = strtoupper($p[4]);      //RECLAMO SOLICITUD DENUNCIA QUEJA           
     $anio = intval($p[5]);          //Año         
-    
+
+    error_log("Metodo GET recibido: ".print_r($p,true));
+
     //Viene una parte de callback JSONP?
     if(isset($_GET['callback'])) {
         $callback = $_GET['callback'];
@@ -70,6 +72,8 @@ if($metodo=='PUT' && $ret['error']==='') {
     $json = $post_vars['payload']; //Payload del post
     $sign = $post_vars['signature']; //Firma
 
+    error_log("Metodo PUT recibido: ".print_r($post_vars,true));
+    
     //Valido json y sign
     $obj = json_decode($json); 
     if(!$obj) {
