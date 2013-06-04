@@ -36,7 +36,7 @@ class class_tic_georef_sl extends csearchandlist {
         //SetDisplayValues($attributes) 
 
     /* Campos de busqueda */
-        $this->m_obj->GetField("tge_tipo")->SetDisplayValues(Array("Name"=>"tge_tipo", "Label"=>"Tipo", "Size"=>30, "IsForDB"=>true, "Order"=>101, "Presentation"=>"UBICACION", "IsVisible"=>true));
+        $this->m_obj->GetField("tge_tipo")->SetDisplayValues(Array("Name"=>"tge_tipo", "Label"=>"Tipo", "Size"=>30, "IsForDB"=>true, "Order"=>101, "Presentation"=>"TICKET::UBICACION", "IsVisible"=>true));
         $this->m_obj->GetField("tge_nombre")->SetDisplayValues(Array("Name"=>"tge_nombre", "Label"=>"Nombre", "Size"=>100, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 
@@ -56,7 +56,7 @@ class col101 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tge_tipo", "Label"=>"Tipo", "Size"=>30, "IsForDB"=>true, "Order"=>101, "Presentation"=>"UBICACION", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tge_tipo", "Label"=>"Tipo", "Size"=>30, "IsForDB"=>true, "Order"=>101, "Presentation"=>"TICKET::UBICACION", "IsVisible"=>true));
     }
 }
 

@@ -312,6 +312,9 @@ class prestacion {
     }
     
     static function plazoComponents($tpr_plazo) {
+        if($tpr_plazo=="")
+            return array("10", "DAY");
+        
         $p = explode(' ',$tpr_plazo);
         $plazo = (double) $p[0];
         if(isset($p[1])) {
@@ -436,7 +439,7 @@ class prestacion {
     {
         global $primary_db;
         
-        $sql = "select tpg.tpg_usa_gis, tpg.tpg_gis_campo, tpg.tpg_gis_valor, tpg.tor_code, tpg.tto_figura, tor_nombre FROM 
+        $sql = "select tpg.tpg_usa_gis, tpg.tpg_gis_campo, tpg.tpg_gis_valor, tpg.tor_code, tpg.tto_figura, tpg.tpr_plazo, tor_nombre FROM 
                     tic_prestaciones_gis tpg JOIN tic_organismos tor ON tpg.tor_code=tor.tor_code
                     WHERE tpg.tpr_code='{$prest->tpr_code}'";
         $re = $primary_db->do_execute($sql);
@@ -466,7 +469,12 @@ class prestacion {
                     $o->tor_code = $row['tor_code'];
                     $o->tor_description = $row['tor_nombre'];
                     $o->tto_figura = $row['tto_figura'];
-                    $prest->organismos[] = $o;                
+                    $prest->organismos[] = $o;
+                    
+                    //Hay un plazo indicado?
+                    if( $row['ttp_plazo']!="" ) {
+                        list($prest->plazo, $prest->plazo_unit) = self::plazoComponents($row['tpr_plazo']);
+                    }
                 }
             }
         }
@@ -481,26 +489,22 @@ class prestacion {
      * @param type $coordy
      * @return string
      */
-    static function consultarGIS($grilla,$coordx,$coordy)
+    static function consultarGIS($grilla,$lat,$lng)
     {
-        /*
-        //Llamar al web service de GIS MGP
-        
-        //Obtengo el nombre del server usado
-    	$host = $_SERVER["HTTP_HOST"];
-    	$ch = curl_init("http://$host/direcciones/proxyjson.php?method=consultarDelimitaciones&p1=$coordx&p2=$coordy&p3=".rawurlencode($grilla));
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-		curl_setopt($ch, CURLOPT_TIMEOUT,20);
-    	$output = curl_exec($ch);
-		if($output=="")
-		{
-			return "";
-		}    	
-        $ans = json_decode($output);
-         
-         */
-        return '';
+        $client = new SoapClient("http://gis.mardelplata.gob.ar/webservice/zonificacion.php?wsdl");
+        $resultado = "";
+        try
+        {
+            $b = $client->zonificacion_latlong($lat,$lng,$grilla);
+            if(isset($b->descripcion))
+                $resultado = $b->descripcion;
+            error_log("prestacion::consultarGIS() zonificacion_latlong() ->".print_r($b,true));
+        }
+        catch (SoapFault $exception)
+        {
+            error_log( "direccion.php zonificacion_latlong() ->".$exception );
+        }		 
+
+        return $resultado;
     }
 }

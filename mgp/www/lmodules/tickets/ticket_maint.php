@@ -34,7 +34,7 @@ class ubicacion_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_lugar")->SetDisplayValues(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>1000, "IsForDB"=>true, "Order"=>109, "Presentation"=>"DIRECCION", "IsVisible"=>true, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_lugar")->SetDisplayValues(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>1000, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TICKET::DIRECCION", "IsVisible"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Size"=>50, "Order"=>24, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_id_cuadra")->SetDisplayValues(Array("Name"=>"tic_id_cuadra", "Label"=>"x", "Type"=>"int", "IsForDB"=>true, "Order"=>114, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"double", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
@@ -305,7 +305,7 @@ class class_tic_ticket_organismos_th5 extends ctable_handler {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
         $obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "Presentation"=>"ORGANISMO", "IsNullable"=>false, "IsVisible"=>true));
-        $obj->GetField("tto_figura")->SetDisplayValues(Array("Name"=>"tto_figura", "Label"=>"Figura", "Size"=>50, "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"GISFIGURA", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("tto_figura")->SetDisplayValues(Array("Name"=>"tto_figura", "Label"=>"Figura", "Size"=>50, "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"TICKET::GISFIGURA", "IsNullable"=>false, "IsVisible"=>true));
     }
 
 }

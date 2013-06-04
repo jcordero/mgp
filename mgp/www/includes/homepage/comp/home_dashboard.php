@@ -8,7 +8,7 @@ if(!class_exists('home_dashboard'))
                 $includes = array();
                 $content = array();
                 $errors = array();    
-                $html = '<div class="container">
+                $html = '
                             <div class="row">
                                 <div class="span12">
                                     <h4 id="mi_titulo">Tablero indicador 147</h4> 
@@ -16,9 +16,9 @@ if(!class_exists('home_dashboard'))
                             </div>
                             
                             <div class="row" id="contadores">
-                                <div class="span1"><button class="btn btn-small"><h4><i class="icon-inbox"></i> <span id="cAbiertos"></span></h4> Abiertos</button></div>
-                                <div class="span1"><button class="btn btn-small"><h4><i class="icon-ok-sign"></i> <span id="cCerrados"></span></h4> Cerrados</button></div>
-                                <div class="span1"><button class="btn btn-small"><h4><i class="icon-exclamation-sign"></i> <span id="cVencidos"></span></h4> Vencidos</button></div>
+                                <div class="span2"><button class="btn btn-large"><h4><i class="icon-inbox"></i> <span id="cAbiertos"></span></h4> Abiertos</button></div>
+                                <div class="span2"><button class="btn btn-large"><h4><i class="icon-ok-sign"></i> <span id="cCerrados"></span></h4> Cerrados</button></div>
+                                <div class="span2"><button class="btn btn-large"><h4><i class="icon-exclamation-sign"></i> <span id="cVencidos"></span></h4> Vencidos</button></div>
                             </div>
                             
                             <div class="row">

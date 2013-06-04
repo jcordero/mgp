@@ -27,18 +27,7 @@ class CDH_DIRECCION extends CDataHandler
                 error_log( "direccion.php coordenada_calle_altura() ->".$exception );
                 return json_encode(array("resultado"	=> 	"error"));
             }
-/*
-            //Recupero el barrio
-            try
-            {
-                $b = $client->barrio_por_calle_altura($calle, $altura);
-            }
-            catch (SoapFault $exception)
-            {
-                error_log( "direccion.php barrio_por_calle_altura() ->".$exception );
-                return json_encode(array("resultado"	=> 	"error"));
-            }		
- */           
+
             //Recupero el barrio
             try
             {
@@ -65,18 +54,6 @@ class CDH_DIRECCION extends CDataHandler
                 return json_encode(array("resultado"	=> 	"error"));
             }
 
-            //Recupero el barrio
-/*            try
-            {
-                $b = $client->barrio_por_calle_calle($calle, $calle2);
-                error_log( "direccion.php barrio_por_calle_calle() ->".print_r($b,true) );
-            }
-            catch (SoapFault $exception)
-            {
-                error_log( "direccion.php barrio_por_calle_calle() ->".$exception );
-                return json_encode(array("resultado"	=> 	"error"));
-            }
- */
             
             //Recupero el barrio
             try

@@ -3,7 +3,7 @@ include_once 'common/sites.php';
 include_once 'beans/ticket.php';
 include_once 'beans/ciudadano.php';
 
-ini_set("error_log", LOG_PATH.'api_web.log');
+ini_set("error_log", LOG_PATH.'api_ciudadanos.log');
 error_log("\n------------------ INICIO PROCESO API -----------------------\n");
 
 /**

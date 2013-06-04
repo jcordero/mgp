@@ -40,7 +40,7 @@ class class_tic_prestaciones_sl extends csearchandlist {
         $this->m_obj->GetField("tpr_tipo")->SetDisplayValues(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACIONTIPO", "IsVisible"=>true));
         $this->m_obj->GetField("tpr_detalle")->SetDisplayValues(Array("Name"=>"tpr_detalle", "Label"=>"Detalle", "Size"=>100, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsVisible"=>true));
         $this->m_obj->GetField("tpr_estado")->SetDisplayValues(Array("Name"=>"tpr_estado", "Label"=>"Estado", "Size"=>20, "IsForDB"=>true, "Order"=>104, "Presentation"=>"ACTIVO", "IsVisible"=>true));
-        $this->m_obj->GetField("tpr_ubicacion")->SetDisplayValues(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"UBICACION", "IsVisible"=>true));
+        $this->m_obj->GetField("tpr_ubicacion")->SetDisplayValues(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TICKET::UBICACION", "IsVisible"=>true));
     }
 
 }
@@ -127,7 +127,24 @@ class col107 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"UBICACION", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TICKET::UBICACION", "IsVisible"=>true));
+    }
+}
+
+class col108 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Plazo';
+        $this->m_order = '108';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tpr_plazo';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tpr_plazo", "Label"=>"Plazo", "Size"=>20, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 }
 
@@ -146,6 +163,7 @@ class class_tic_prestaciones_table extends ctable
         $this->m_cols[103] = new col103($this);
         $this->m_cols[104] = new col104($this);
         $this->m_cols[107] = new col107($this);
+        $this->m_cols[108] = new col108($this);
     }
 
 }

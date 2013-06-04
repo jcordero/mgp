@@ -1,7 +1,7 @@
 <?php
 include_once 'common/sites.php';
 $arch = '';
-ini_set("error_log", LOG_PATH.'api_web.log');
+ini_set("error_log", LOG_PATH.'api_foto.log');
 error_log("\n------------------ INICIO PROCESO API -----------------------\n");
 
 /**

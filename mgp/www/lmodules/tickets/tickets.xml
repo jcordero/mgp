@@ -216,13 +216,14 @@
 		<searchfield name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo"/>
 		<searchfield name="tpr_detalle" presentation="TEXT" label="Detalle"/>
 		<searchfield name="tpr_estado" presentation="ACTIVO" label="Estado"/>
-		<searchfield name="tpr_ubicacion" presentation="UBICACION" label="Ubicación"/>
+		<searchfield name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación"/>
 
 		<listfield name="tpr_code" presentation="TEXT" label="Código"/>
 		<listfield name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo"/>
 		<listfield name="tpr_detalle" presentation="TEXT" label="Detalle"/>
 		<listfield name="tpr_estado" presentation="ACTIVO" label="Estado"/>
-		<listfield name="tpr_ubicacion" presentation="UBICACION" label="Ubicación"/>
+		<listfield name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación"/>
+		<listfield name="tpr_plazo" presentation="TEXT" label="Plazo"/>
 
 		<action label="ver" target="prest_maint.php?OP=V" operation="V">
 			<sendfield classname="class_tic_prestaciones" name="tpr_code"/>
@@ -241,7 +242,7 @@
             <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
             <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
             <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true"/>
-            <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="true"/>
+            <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="true"/>
             <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>
 	</group>
 
@@ -306,7 +307,7 @@
             <column title="Campo" order="1">
                 <field name="tpr_code" isvisible="false"/>
                 <field name="tpg_code" isvisible="false"/>
-                <field name="tpg_gis_campo" presentation="GISGRILLA" label="Campo" />
+                <field name="tpg_gis_campo" presentation="TICKET::GISGRILLA" label="Campo" />
             </column>
             <column title="Valor" order="2">
                 <field name="tpg_gis_valor" presentation="TEXT" label="Valor" />
@@ -318,8 +319,8 @@
                 <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
             </column>
             <column title="Figura" order="5">
-                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
-                <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="false"/>
+                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
+                <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="false"/>
  
                 <field name="tpg_tstamp" presentation="DATETIME" label="Fecha" isvisible="false" />
                 <field name="use_code" presentation="CURRENTUSER" label="Operador" isvisible="false" />
@@ -340,7 +341,7 @@
                 <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
             </column>
             <column title="Figura" order="4">
-                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
+                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
             </column>
         </table>
 
@@ -359,7 +360,7 @@
             <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
             <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true" initialvalue="RECLAMO"/>
             <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true" initialvalue="DOMICILIO"/>
-            <field name="tpr_plazo" presentation="PLAZO" label="Plazo" ismandatory="true" initialvalue="2 Días"/>
+            <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="true" initialvalue="2 Días"/>
             <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>
         </group>
 
@@ -420,7 +421,7 @@
             <column title="Campo" order="1">
                 <field name="tpr_code" isvisible="false"/>
                 <field name="tpg_code" isvisible="false"/>
-                <field name="tpg_gis_campo" presentation="GISGRILLA" label="Campo" />
+                <field name="tpg_gis_campo" presentation="TICKET::GISGRILLA" label="Campo" />
             </column>
             <column title="Valor" order="2">
                 <field name="tpg_gis_valor" presentation="TEXT" label="Valor" />
@@ -432,7 +433,8 @@
                 <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
             </column>
             <column title="Figura" order="5">
-                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true"/>
+                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true"/>
+                <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="false"/>
             </column>
             <column title="Auditoria" order="6">
                 <field name="tpg_tstamp" presentation="DATETIME" label="Fecha" readonly="true" />
@@ -453,7 +455,7 @@
                 <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
             </column>
             <column title="Figura" order="4">
-                <field name="tto_figura" presentation="GISFIGURA" label="Figura" ismandatory="true" initialvalue="RESPONSABLE"/>
+                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true" initialvalue="RESPONSABLE"/>
             </column>			
         </table>
 
@@ -737,7 +739,7 @@
         
         <!-- Ubicacion del problema -->
 	<group title="Ubicación" id="ubicacion" render_html="block">
-            <field name="tic_lugar" presentation="DIRECCION" label="Dirección" />
+            <field name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección" />
             <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
             <field name="tic_id_cuadra" presentation="TEXT" label="x" isvisible="false"/>
             <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
@@ -818,7 +820,7 @@
                 <field name="tor_code" presentation="ORGANISMO" label="Organismo"/>
             </column>
             <column title="Figura" order="2">
-                <field name="tto_figura" presentation="GISFIGURA" label="Figura"/>
+                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura"/>
             </column>
         </table>
 
@@ -894,7 +896,7 @@
         
         <!-- Ubicacion del problema -->
 	<group title="Ubicación" id="ubicacion" render_html="block">
-            <field name="tic_lugar" presentation="DIRECCION" label="Dirección" />
+            <field name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección" />
             <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
             <field name="tic_id_cuadra" presentation="TEXT" label="x" isvisible="false"/>
             <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
@@ -975,7 +977,7 @@
                 <field name="tor_code" presentation="ORGANISMO" label="Organismo"/>
             </column>
             <column title="Figura" order="2">
-                <field name="tto_figura" presentation="GISFIGURA" label="Figura"/>
+                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura"/>
             </column>
         </table>
 
@@ -1061,10 +1063,10 @@
 <make object="search_and_list">
 	<build out_file="georefs.php" classname="class_tic_georef" title="Consulta de GeoReferencias" >
 		
-		<searchfield name="tge_tipo" presentation="UBICACION" label="Tipo"/>
+		<searchfield name="tge_tipo" presentation="TICKET::UBICACION" label="Tipo"/>
 		<searchfield name="tge_nombre" presentation="TEXT" label="Nombre"/>
 		
-		<listfield name="tge_tipo" presentation="UBICACION" label="Tipo"/>
+		<listfield name="tge_tipo" presentation="TICKET::UBICACION" label="Tipo"/>
 		<listfield name="tge_nombre" presentation="TEXT" label="Nombre"/>
 		<listfield name="tge_otra_denominacion" presentation="TEXT" label="Otra Den."/>
 		<listfield name="tge_calle_nombre" presentation="TEXT" label="Calle"/>
@@ -1091,7 +1093,7 @@
 	next="georefs.php?OP=L&amp;last=1">
 		
 		<group title="Referencia" id="asunto">
-			<field name="tge_tipo" presentation="UBICACION" label="Tipo"/>
+			<field name="tge_tipo" presentation="TICKET::UBICACION" label="Tipo"/>
 			<field name="tge_nombre" presentation="TEXT" label="Nombre"/>
 			<field name="tge_otra_denominacion" presentation="TEXTAREA" label="Otras denominaciones" cols="50" rows="4" />
 		</group>

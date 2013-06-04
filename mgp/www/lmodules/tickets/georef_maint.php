@@ -30,7 +30,7 @@ class asunto_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_georef")->GetField("tge_tipo")->SetDisplayValues(Array("Name"=>"tge_tipo", "Label"=>"Tipo", "Size"=>30, "IsForDB"=>true, "Order"=>101, "Presentation"=>"UBICACION", "IsVisible"=>true, "Class"=>"class_tic_georef"));
+        $this->getClass("class_tic_georef")->GetField("tge_tipo")->SetDisplayValues(Array("Name"=>"tge_tipo", "Label"=>"Tipo", "Size"=>30, "IsForDB"=>true, "Order"=>101, "Presentation"=>"TICKET::UBICACION", "IsVisible"=>true, "Class"=>"class_tic_georef"));
         $this->getClass("class_tic_georef")->GetField("tge_nombre")->SetDisplayValues(Array("Name"=>"tge_nombre", "Label"=>"Nombre", "Size"=>100, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_georef"));
         $this->getClass("class_tic_georef")->GetField("tge_otra_denominacion")->SetDisplayValues(Array("Name"=>"tge_otra_denominacion", "Label"=>"Otras denominaciones", "Size"=>500, "IsForDB"=>true, "Order"=>105, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4, "Class"=>"class_tic_georef"));
     }

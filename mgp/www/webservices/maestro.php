@@ -2,7 +2,7 @@
 include_once 'common/sites.php';
 global $primary_db;
 
-ini_set("error_log", LOG_PATH.'api_web.log');
+ini_set("error_log", LOG_PATH.'api_maestro.log');
 error_log("\n------------------ INICIO PROCESO API -----------------------\n");
 
 /**

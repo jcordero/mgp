@@ -1,8 +1,8 @@
 <?php
 
 //$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets/reclamo/2013/31";
-$url = "http://mgp/mgp/webservices/tickets/reclamo/2013/33";
-//$url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets/reclamo/2013/31";
+//$url = "http://mgp/mgp/webservices/tickets/reclamo/2013/33";
+$url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets/reclamo/2013/43";
     
 $secret = 'hasdYR33n1j34j#4jn*(-s';
 $foto = '/Users/jcordero/Desktop/ducreux1.jpg';
@@ -17,13 +17,13 @@ $cambio_estado_ticket = json_encode((object) array(
       'tav_nota'        => "Se cambio la tulipa"
   ),
   'archivos'    =>  array(
-      array(
+/*      array(
           'nombre'  =>  'nueva_tulipa.jpg',
           'tipo'    =>  'image/jpeg',
           'media'   =>  base64_encode(file_get_contents($foto)),
           'publico' =>  'SI',
           'nota'    =>  'Foto de la tulipa nueva'
-      )
+      )*/
   ) 
 ));
 
@@ -31,6 +31,8 @@ $data = http_build_query(array(
     'payload'   => $cambio_estado_ticket, 
     'signature' => md5($secret.$cambio_estado_ticket)
 )); 
+
+echo '<p>Datos enviados: <pre>'.$data.'</pre>';
 
 $c = curl_init();
 curl_setopt($c, CURLOPT_URL, $url);
