@@ -1,5 +1,6 @@
 <?php
 include_once 'beans/person_status.php';
+include_once 'common/cmessaging.php';
 
 class solicitante {
     /** Identificador del ciudadano
@@ -128,8 +129,12 @@ class solicitante {
             $primary_db->do_execute($sql2,$errores,$params2);
             
         }
-        
-        //El ciudadano esta identificado o creado...
+        else
+        {
+            //El ciudadano esta identificado o creado... ciu_code y ciu_documento son conocidos
+            //Esto carga el telefono y el mail.
+            $this->load();
+        }
         
         //Lo asocio al ciudadano que lo reporta (tic_ticket_ciudadano)
         $sql5 = "insert into tic_ticket_ciudadano (tic_nro, ciu_code, ttc_tstamp, ttc_nota) 
@@ -153,7 +158,14 @@ class solicitante {
               'chi_canal'   =>  $ticket->tic_canal
          );
          $primary_db->do_execute($sql6,$errores,$params6);
-        
+
+         
+         //Creo un mensaje de mail para el ciudadano
+         if( $this->ciu_email!=='' ) {
+            $mt = new cmail_type("ADJUNTO", "www/lmodules/tickets/ticket_maint.php", "tic_nro=".$ticket->getNro(),"aviso_nuevo_ticket");
+            $msg = new cmessage();
+            $msg->send(DEFAULT_SMTP,$this->ciu_email,$mt);
+         }
     }
     
     /** Toma los datos del solicitante desde un formulario 
@@ -184,5 +196,27 @@ class solicitante {
         
         return array($s);
     }
+    
+    
+    public function load() {
+        global $primary_db;
+        
+        //Ciudadano identificado ?
+        if($this->ciu_code==='')
+            return false;
+        
+        //Busco algunos datos que no tengo, en la base de datos
+        $row = $primary_db->QueryArray("select ciu_code, ciu_nombres, ciu_apellido, ciu_sexo, ciu_nacimiento, ciu_email, ciu_tel_fijo, ciu_tel_movil, ciu_horario_cont, ciu_no_llamar, ciu_no_email, ciu_dir_calle, ciu_dir_nro, ciu_dir_piso, ciu_dir_dpto, ciu_barrio, ciu_localidad, ciu_provincia, ciu_pais, ciu_cod_postal, ciu_cgpc, ciu_coord_x, ciu_coord_y, ciu_trabaja, ciu_nivel_estudio, ciu_profesion, ciu_ultimo_acceso, ciu_canal_ingreso, use_code, ciu_estado, ciu_tstamp, ciu_tipo_persona, ciu_razon_social, ciu_nacionalidad from ciu_ciudadanos where ciu_code='{$s->ciu_code}'");
+        if($row) {
+            $this->ciu_email            = $row['ciu_email'];
+            $this->ciu_telefono_fijo    = $row['ciu_tel_fijo'];
+            $this->ciu_telefono_movil   = $row['ciu_tel_movil'];
+            $this->ciu_nombres          = $row['ciu_nombres'];
+            $this->ciu_apellido         = $row['ciu_apellido'];
+        }                
+        
+        return true;
+    }
+    
 }
 ?>

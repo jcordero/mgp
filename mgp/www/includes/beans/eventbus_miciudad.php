@@ -28,6 +28,8 @@ class eventbus_miciudad {
             
             //URL del web service destinatario
             $url = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'miciudad.endpoint_url',"") );
+            $api_key = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'miciudad.apikey',"") );
+            $api_secret = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'miciudad.secret',"") );
             
             if($url==='')
                 return 'ERROR no esta declarado el parametro miciudad.endpoint_url';
@@ -50,7 +52,8 @@ class eventbus_miciudad {
                     )); 
 
                     //Envio el mensaje
-                    $ret = $this->put($url, $data);
+                    $msg_url = $url."?apiKey=".$api_key."&hash=".md5($api_secret.$data);
+                    $ret = $this->put($msg_url, $data);
 
                     if($ret!=201)
                         $msg = "Error #{$ret} del endpoint {$url}";

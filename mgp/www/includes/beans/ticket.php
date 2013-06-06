@@ -544,7 +544,7 @@ class ticket {
          foreach($this->prestaciones as $prest) 
              $prest->save($this); 
           
-         //Salvo los solicitantes
+         //Salvo los solicitantes (y les mando un mail)
          foreach($this->solicitantes as $so)
              $so->save($this);
          
