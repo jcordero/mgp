@@ -31,10 +31,10 @@ class eventbus_luminaria {
             //Secret
             $secret = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'luminaria.secret','') );
             
-            $ticket = json_encode($t);
-            $data = http_build_query(array(
-                'ticket'   => $ticket, 
-                'signature' => md5($secret.$ticket)
+            $ticket_json = json_encode($t);
+            $data = json_encode(array(
+                'ticket'   => $t, 
+                'signature' => md5($secret.$ticket_json)
             )); 
 
             //Envio el mensaje

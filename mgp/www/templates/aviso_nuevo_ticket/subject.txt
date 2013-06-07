@@ -1,0 +1,1 @@
+Recibo de ingreso de <com:tic_identificador/>
