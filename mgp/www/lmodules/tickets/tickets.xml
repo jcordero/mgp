@@ -51,7 +51,7 @@
 		</group>
 		
 		<group title="Ubicacion" id="ubicacion">
-                    <field name="tor_padre" presentation="ORGANISMO" label="Organismo padre"/>
+                    <field name="tor_padre" presentation="TICKET::ORGANISMO" label="Organismo padre"/>
                </group>
 		
 		<group title="Estado" id="estado">
@@ -83,7 +83,7 @@
 		</group>
 
 		<group title="Ubicacion" id="ubicacion">
-			<field name="tor_padre" presentation="ORGANISMO" label="Organismo padre"/>
+			<field name="tor_padre" presentation="TICKET::ORGANISMO" label="Organismo padre"/>
 		</group>
 
 		<group title="Estado" id="estado">
@@ -817,7 +817,7 @@
         <table relationclass="" classname="class_tic_ticket_organismos" title="Organismos" add="false" delete="false" update="false">
             <column title="Organismo" order="1">
                 <field name="tic_nro" isvisible="false"/>
-                <field name="tor_code" presentation="ORGANISMO" label="Organismo"/>
+                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo"/>
             </column>
             <column title="Figura" order="2">
                 <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura"/>
@@ -974,7 +974,7 @@
         <table relationclass="" classname="class_tic_ticket_organismos" title="Organismos" add="false" delete="false" update="false">
             <column title="Organismo" order="1">
                 <field name="tic_nro" isvisible="false"/>
-                <field name="tor_code" presentation="ORGANISMO" label="Organismo"/>
+                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo"/>
             </column>
             <column title="Figura" order="2">
                 <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura"/>

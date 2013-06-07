@@ -25,7 +25,9 @@ class archivo {
     static function saveFormFiles($tic_nro) {
          global $primary_db, $sess;
          $err = array();
-         
+         if( !isset($_POST['cfile_op']) )
+            return $err;
+             
          foreach($_POST['cfile_op'] as $ix=>$op) {
             if($op==='A') {
                 $params = array(

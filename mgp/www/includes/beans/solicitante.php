@@ -206,7 +206,7 @@ class solicitante {
             return false;
         
         //Busco algunos datos que no tengo, en la base de datos
-        $row = $primary_db->QueryArray("select ciu_code, ciu_nombres, ciu_apellido, ciu_sexo, ciu_nacimiento, ciu_email, ciu_tel_fijo, ciu_tel_movil, ciu_horario_cont, ciu_no_llamar, ciu_no_email, ciu_dir_calle, ciu_dir_nro, ciu_dir_piso, ciu_dir_dpto, ciu_barrio, ciu_localidad, ciu_provincia, ciu_pais, ciu_cod_postal, ciu_cgpc, ciu_coord_x, ciu_coord_y, ciu_trabaja, ciu_nivel_estudio, ciu_profesion, ciu_ultimo_acceso, ciu_canal_ingreso, use_code, ciu_estado, ciu_tstamp, ciu_tipo_persona, ciu_razon_social, ciu_nacionalidad from ciu_ciudadanos where ciu_code='{$s->ciu_code}'");
+        $row = $primary_db->QueryArray("select ciu_code, ciu_nombres, ciu_apellido, ciu_sexo, ciu_nacimiento, ciu_email, ciu_tel_fijo, ciu_tel_movil, ciu_horario_cont, ciu_no_llamar, ciu_no_email, ciu_dir_calle, ciu_dir_nro, ciu_dir_piso, ciu_dir_dpto, ciu_barrio, ciu_localidad, ciu_provincia, ciu_pais, ciu_cod_postal, ciu_cgpc, ciu_coord_x, ciu_coord_y, ciu_trabaja, ciu_nivel_estudio, ciu_profesion, ciu_ultimo_acceso, ciu_canal_ingreso, use_code, ciu_estado, ciu_tstamp, ciu_tipo_persona, ciu_razon_social, ciu_nacionalidad from ciu_ciudadanos where ciu_code='{$this->ciu_code}'");
         if($row) {
             $this->ciu_email            = $row['ciu_email'];
             $this->ciu_telefono_fijo    = $row['ciu_tel_fijo'];

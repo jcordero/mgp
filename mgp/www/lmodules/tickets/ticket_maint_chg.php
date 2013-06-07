@@ -304,7 +304,7 @@ class class_tic_ticket_organismos_th5 extends ctable_handler {
     public function InitializeInstance($obj) {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
-        $obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "Presentation"=>"ORGANISMO", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TICKET::ORGANISMO", "IsNullable"=>false, "IsVisible"=>true));
         $obj->GetField("tto_figura")->SetDisplayValues(Array("Name"=>"tto_figura", "Label"=>"Figura", "Size"=>50, "IsPK"=>true, "IsForDB"=>true, "Order"=>104, "Presentation"=>"TICKET::GISFIGURA", "IsNullable"=>false, "IsVisible"=>true));
     }
 

@@ -39,6 +39,7 @@ class eventbus_event {
     
     public function setStatus($status, $err, $update_tstamp=false) {
         global $primary_db;
+        error_log("eventbus_event::setStatus(\$status=$status, \$err=$err)");
         $tstamp = ($update_tstamp ? ', eev_tstamp_out=NOW()' : '');
         $primary_db->do_execute("update eve_events set eev_status='{$status}', eev_error_msg='{$err}' {$tstamp} where eev_code='{$this->eev_code}'");
     }

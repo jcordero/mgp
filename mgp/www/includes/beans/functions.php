@@ -6,12 +6,17 @@
         return str_replace(array('-',':',' '),array('','','T'),$tstamp);
    }
    
+   /** Convertir de los formatos de ISO8601 al formato Date de MYSQL
+    *  
+    * @param type $tstamp
+    * @return type
+    */
    function ISO8601toDate($tstamp='') {
         if($tstamp==='')
             return date('Y-m-d H:i:s');
         
         $a = $m = $d = $h = $n = $s = 0;    
-        $p = explode('T',$tstamp);
+        $p = explode('T',  str_replace(array(':','/',' ','Z'), array('','','',''), $tstamp));
         if(count($p)==2) {
             //Fecha
             if(strlen($p[0])==8) {
@@ -25,11 +30,12 @@
                 $n = substr($p[1], 2, 2);
                 $s = substr($p[1], 4, 2);
             } 
+            //Time Zone (no le doy bola)
             return "{$a}-{$m}-{$d} {$h}:{$n}:{$s}";
         }
         elseif(count($p)==1)
         {
-            //Fecha
+            //Solo Fecha
             if(strlen($p[0])==8) {
                 $a = substr($p[0], 0, 4);
                 $m = substr($p[0], 4, 2);

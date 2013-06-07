@@ -187,19 +187,19 @@ class ticket {
                 $this->tic_tstamp_in = DatetoISO8601('');
 
             //Tipo de georeferencia
-            $this->id_luminaria     = _g($ticket,'id_luminaria');
+            $this->id_luminaria     = (int) _g($ticket,'id_luminaria');
             $this->tipo_georef      = _g($ticket,'tipo_georef');
             if($this->tipo_georef==='')
-                $this->tipo_georef = ($this->id_luminaria==='' ? 'DOMICILIO' : 'LUMINARIA');
+                $this->tipo_georef = ($this->id_luminaria===0 ? 'DOMICILIO' : 'LUMINARIA');
             
             //Ubicacion
             $this->tic_barrio       = _g($ticket,'tic_barrio');
             $this->tic_cgpc         = _g($ticket,'tic_cgpc');
-            $this->tic_coordx       = _g($ticket,'tic_coordx');
-            $this->tic_coordy       = _g($ticket,'tic_coordy');
+            $this->tic_coordx       = (double) _g($ticket,'tic_coordx');
+            $this->tic_coordy       = (double) _g($ticket,'tic_coordy');
             $this->tic_nombre_fantasia = _g($ticket,'tic_lugar');
             $this->tic_calle_nombre = _g($ticket,'tic_calle_nombre');
-            $this->tic_nro_puerta   = _g($ticket,'tic_nro_puerta');
+            $this->tic_nro_puerta   = (int) _g($ticket,'tic_nro_puerta');
             $this->tic_piso         = _g($ticket,'tic_piso');
             $this->tic_dpto         = _g($ticket,'tic_dpto');
             $this->tic_lugar        = $this->createLugar();
@@ -223,7 +223,7 @@ class ticket {
     //Defaults que hay que meter si no estan en el JSON
                 
             //Canal de ingreso
-            $this->tic_canal = 'movil';
+            $this->tic_canal = 'movil'; //o web
             
             //Estado del ticket
             $this->tic_estado = 'ABIERTO';
@@ -461,16 +461,16 @@ class ticket {
          if($this->tic_tipo==='')
              $this->addError("Campo obligatorio tic_tipo faltante");
 
-         if($this->tic_coordx==='')
+         if($this->tic_coordx===0)
              $this->addError("Campo obligatorio tic_coordx faltante");
 
-         if($this->tic_coordy==='')
+         if($this->tic_coordy===0)
              $this->addError("Campo obligatorio tic_coordy faltante");
 
          if($this->tic_calle_nombre==='')
              $this->addError("Campo obligatorio tic_calle_nombre faltante");
 
-         if($this->tic_nro_puerta==='' && $this->tic_cruza_calle==='')
+         if($this->tic_nro_puerta===0 && $this->tic_cruza_calle==='')
              $this->addError("Campo obligatorio tic_nro_puerta o tic_cruza_calle faltante");
          
          //Prestacion
@@ -539,28 +539,40 @@ class ticket {
                 'tic_canal'         => $this->tic_canal
          );
          $primary_db->do_execute($sql1,$errores,$params1);
+         if(count($errores)>0)  
+            $this->addError("Error al salvar el ticket en la base de datos");
          
          //Salvo las prestaciones
-         foreach($this->prestaciones as $prest) 
-             $prest->save($this); 
-          
+         if( $this->getStatus() ) {
+            foreach($this->prestaciones as $prest) 
+                $prest->save($this); 
+         }
+         
          //Salvo los solicitantes (y les mando un mail)
-         foreach($this->solicitantes as $so)
-             $so->save($this);
+         if( $this->getStatus() ) {
+            foreach($this->solicitantes as $so)
+                $so->save($this);
+         }
          
          //Salvo los reiterantes
-         foreach($this->reiteraciones as $re)
-             $re->save($this);
-
-         //Salvo los tickets asociados a este
-         foreach($this->asociados as $asoc)
-             $asoc->save($this);
-
-         //Mando una foto? La salvo como un adjunto
-         if($this->media!=='') {
-              self::addPhotoBase64($this->tic_nro, $this->media);
+         if( $this->getStatus() ) {
+            foreach($this->reiteraciones as $re)
+                $re->save($this);
          }
-    
+         
+         //Salvo los tickets asociados a este
+         if( $this->getStatus() ) {
+            foreach($this->asociados as $asoc)
+                $asoc->save($this);
+         }
+         
+         //Mando una foto? La salvo como un adjunto
+         if( $this->getStatus() ) {
+           if($this->media!=='') {
+                 self::addPhotoBase64($this->tic_nro, $this->media);
+            }
+         }
+         
          if($transaction) {
             if( !$this->getStatus() ) {
                $primary_db->rollbackTransaction();
@@ -761,7 +773,8 @@ class ticket {
                 $pres->cambiar_estado($this,$estado,$nota);
                                         
                 //Aviso al WS MiCiudad si el ticket es del canal movil.
-                if($this->tic_canal==='movil') {
+                $canal = strtolower($this->tic_canal);
+                if($canal==='movil' || $canal==='web') {
                     $ev = new eventbus_event();
                     $ev->eev_task = 'miciudad';
                     $ev->eev_data = array(
@@ -907,9 +920,9 @@ class ticket {
                 $this->alternativa          = _F($obj,"alternativa");
                 $this->tic_barrio           = _F($obj,"tic_barrio");
                 $this->tic_cgpc             = _F($obj,"tic_cgpc");
-                $this->tic_coordx           = _F($obj,"tic_coordx");
-                $this->tic_coordy           = _F($obj,"tic_coordy");
-                $this->tic_nro_puerta       = _F($obj,"callenro");
+                $this->tic_coordx           = (double) _F($obj,"tic_coordx");
+                $this->tic_coordy           = (double) _F($obj,"tic_coordy");
+                $this->tic_nro_puerta       = (int) _F($obj,"callenro");
                 $this->tic_calle_nombre     = _F($obj,"calle_nombre");
                 $this->tic_nombre_fantasia  = _F($obj,"nombre_fantasia");
                 $this->tic_calle_nombre2    = _F($obj,"calle_nombre2");
@@ -921,19 +934,19 @@ class ticket {
                 $this->villa          = _F($obj,"villa");
                 $this->vilmanzana     = _F($obj,"vilmanzana");
                 $this->vilcasa        = _F($obj,"vilcasa");
-                $this->tic_coordx     = _F($obj,"tic_coordx");
-                $this->tic_coordy     = _F($obj,"tic_coordy");
+                $this->tic_coordx     = (double) _F($obj,"tic_coordx");
+                $this->tic_coordy     = (double) _F($obj,"tic_coordy");
                 break;
             case 'PLAZA':
                 $this->plaza        = _F($obj,"plaza");
-                $this->tic_coordx   = _F($obj,"tic_coordx");
-                $this->tic_coordy   = _F($obj,"tic_coordy");
+                $this->tic_coordx   = (double) _F($obj,"tic_coordx");
+                $this->tic_coordy   = (double) _F($obj,"tic_coordy");
                 break;
             case 'ORGA.PUBLICO':
                 $this->orgpublico     = _F($obj,"orgpublico");
                 $this->orgsector      = _F($obj,"orgsector");
-                $this->tic_coordx     = _F($obj,"tic_coordx");
-                $this->tic_coordy     = _F($obj,"tic_coordy");
+                $this->tic_coordx     = (double) _F($obj,"tic_coordx");
+                $this->tic_coordy     = (double) _F($obj,"tic_coordy");
                 break;
             case 'CEMENTERIO':
                 $this->cementerio = _F($obj,"cementerio");
@@ -942,22 +955,22 @@ class ticket {
                 $this->sepcalle   = _F($obj,"sepcalle");
                 $this->sepnumero  = _F($obj,"sepnumero");
                 $this->sepfila    = _F($obj,"sepfila");
-                $this->tic_coordx = _F($obj,"tic_coordx");
-                $this->tic_coordy = _F($obj,"tic_coordy");
+                $this->tic_coordx = (double) _F($obj,"tic_coordx");
+                $this->tic_coordy = (double) _F($obj,"tic_coordy");
                 break;
             case 'LUMINARIA':
                 $this->alternativa        = _F($obj,"alternativa_lum");
                 $this->tic_barrio         = _F($obj,"tic_barrio_lum");
                 $this->tic_cgpc           = _F($obj,"tic_cgpc_lum");
-                $this->tic_nro_puerta     = _F($obj,"callenro_lum");
+                $this->tic_nro_puerta     = (int) _F($obj,"callenro_lum");
                 $this->tic_calle_nombre   = _F($obj,"calle_nombre_lum");
                 $this->tic_calle_nombre2  = _F($obj,"calle_nombre2_lum");
-                $this->id_luminaria       = _F($obj,"id_luminaria");
+                $this->id_luminaria       = (int) _F($obj,"id_luminaria");
                 $this->tic_calle          = _F($obj,"calle_lum");
                 $this->tic_calle2         = _F($obj,"calle2_lum");
                 $this->id_cuadra          = _F($obj,"tic_id_cuadra");
-                $this->tic_coordx         = _F($obj,"tic_coordx");
-                $this->tic_coordy         = _F($obj,"tic_coordy");
+                $this->tic_coordx         = (double) _F($obj,"tic_coordx");
+                $this->tic_coordy         = (double) _F($obj,"tic_coordy");
 
                 break;
             default:

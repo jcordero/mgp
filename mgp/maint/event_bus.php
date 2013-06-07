@@ -9,6 +9,7 @@ include_once 'beans/eventbus_miciudad.php';
 ini_set("error_log", LOG_PATH.'event_bus.log');
 
 echo "\n* * INICIO PROCESO DE EVENTOS \n";
+error_log("* * INICIO PROCESO DE EVENTOS");
 
 //Cuantos reintentos se pueden hacer?
 $max_retries = CSession::getParameter($primary_db,'eventbus.retries',20);
@@ -27,6 +28,8 @@ while($row=$primary_db->_fetch_row($rs)) {
         $ev->setStatus('error', "No existe un controlador para el task solicitado", true);
     } else {
         echo "- Proceso: $clase\n";
+        error_log("- Proceso: $clase");
+        
         $th = new $clase();
         $msg = $th->run($ev);
         if($msg==='') {
@@ -44,5 +47,5 @@ while($row=$primary_db->_fetch_row($rs)) {
 }
 
 echo "\n * * FIN DEL PROCESO DE EVENTOS \n";
-
+error_log("* * FIN DEL PROCESO DE EVENTOS");
 ?>

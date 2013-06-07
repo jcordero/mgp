@@ -63,7 +63,7 @@ class ubicacion_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_organismos")->GetField("tor_padre")->SetDisplayValues(Array("Name"=>"tor_padre", "Label"=>"Organismo padre", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"ORGANISMO", "IsVisible"=>true, "Class"=>"class_tic_organismos"));
+        $this->getClass("class_tic_organismos")->GetField("tor_padre")->SetDisplayValues(Array("Name"=>"tor_padre", "Label"=>"Organismo padre", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true, "Class"=>"class_tic_organismos"));
     }
 }
 }

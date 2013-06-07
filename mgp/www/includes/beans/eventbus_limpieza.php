@@ -24,7 +24,7 @@ class eventbus_limpieza extends eventbus_luminaria {
             
             //URL del web service destinatario
             $url = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'limpieza.endpoint_url',"") );
-            $url.= strtolower( '/'.$t->tic_tipo.'/'.$t->getAnioTicket().'/'.$t->getNroTicket() );
+            //$url.= strtolower( '/'.$t->tic_tipo.'/'.$t->getAnioTicket().'/'.$t->getNroTicket() );
             
             //Secret
             $secret = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'limpieza.secret','') );
@@ -52,13 +52,13 @@ class eventbus_limpieza extends eventbus_luminaria {
     
     private function put($url, $data) {
         
-        error_log("put() URL=$url BODY=$data"); 
+        error_log("post() URL=$url BODY=$data"); 
 
         $c = curl_init();
         curl_setopt($c, CURLOPT_URL, $url);
         curl_setopt($c, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Expect:'));
         curl_setopt($c, CURLOPT_VERBOSE, 1);
-        curl_setopt($c, CURLOPT_CUSTOMREQUEST, "PUT"); 
+        curl_setopt($c, CURLOPT_CUSTOMREQUEST, "POST"); 
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1); 
         curl_setopt($c, CURLOPT_POSTFIELDS,$data);
         $verbose = fopen('php://temp', 'rw+');
@@ -68,16 +68,16 @@ class eventbus_limpieza extends eventbus_luminaria {
         $info = curl_getinfo($c); 
         
         if(!curl_errno($c)){ 
-          error_log("put() Took " . $info['total_time'] . ' seconds to send a request to ' . $info['url']); 
-          error_log('put() Respuesta '.$this->last_response);
+          error_log("post() Took " . $info['total_time'] . ' seconds to send a request to ' . $info['url']); 
+          error_log('post() Respuesta '.$this->last_response);
         } else { 
-          error_log('put() Curl error: ' . curl_error($c)); 
+          error_log('post() Curl error: ' . curl_error($c)); 
         } 
         curl_close($c);
 
         !rewind($verbose);
         $verboseLog = stream_get_contents($verbose);
-        error_log("put() ".htmlspecialchars($verboseLog));
+        error_log("post() ".htmlspecialchars($verboseLog));
         
         return $info['http_code'];
     }
