@@ -22,8 +22,8 @@ class ubicacion_gr extends cform_group {
         $this->m_css_prefix = '';// Prefijo CSS
 
         //Campos del grupo
-        $this->m_fields[] = 'class_tic_ticket_upd:tic_lugar';
         $this->m_fields[] = 'class_tic_ticket_upd:mapa';
+        $this->m_fields[] = 'class_tic_ticket_upd:tic_lugar';
         $this->m_fields[] = 'class_tic_ticket_upd:tic_id_cuadra';
         $this->m_fields[] = 'class_tic_ticket_upd:tic_coordx';
         $this->m_fields[] = 'class_tic_ticket_upd:tic_coordy';
@@ -34,8 +34,8 @@ class ubicacion_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_lugar")->SetDisplayValues(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>1000, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TICKET::DIRECCION", "IsVisible"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Size"=>50, "Order"=>24, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_lugar")->SetDisplayValues(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>1000, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TICKET::DIRECCION", "IsVisible"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_id_cuadra")->SetDisplayValues(Array("Name"=>"tic_id_cuadra", "Label"=>"x", "Type"=>"int", "IsForDB"=>true, "Order"=>114, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"double", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_coordy")->SetDisplayValues(Array("Name"=>"tic_coordy", "Label"=>"y", "Type"=>"double", "IsForDB"=>true, "Order"=>113, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));

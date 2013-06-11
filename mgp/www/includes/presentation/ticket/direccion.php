@@ -132,5 +132,51 @@ class CDH_DIRECCION extends CDataHandler
                 
         return json_encode($o);
     }
+    
+            function RenderReadOnly($cn,$showlabel=false)
+	{
+		$fld = $this->m_parent;
+		$html="";
+		$val = html_entity_decode( $fld->getValue() );
+		$name = "m_".$fld->m_Name;
+		$mostrar = "";
+		
+                $id = $name;
+                //$hval = str_replace('"', '&#34;', $val);
+		//$html.="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$hval\"/>"."\n";
+
+		if($fld->m_IsVisible)
+		{    
+                    $obj = json_decode($val);
+                    if($obj) {
+                        $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? 'Calle: '.$obj->calle_nombre.' '.$obj->callenro.'<br/>' : '');
+                        $mostrar .= (isset($obj->piso) && $obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
+                        $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
+                        $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? 'Barrio: '.$obj->barrio : '');
+                    }
+            
+                    if($showlabel)
+                    {
+			$html.="<div class=\"itm\"><div class=\"desc\">$fld->m_Label</div><div class=\"fldro\">$mostrar</div></div>"."\n";
+                    }
+                    else
+                    {
+                        $html.=$mostrar;
+                    }
+		}
+		
+		return $html;
+	}
+	
+	function RenderTableEdit($cn,$frmname,$table="",$row=0,$ro=false,$name="",$suffix="") 
+	{
+		return parent::RenderTableEdit($cn,$frmname,$table="",$row=0,$ro=false,$name="",$suffix="");	
+	}
+
+	function RenderFilterForm($cn,$name="",$id="",$suffix="") 
+	{
+		return $this->RenderReadOnly($cn,true);
+		//return parent::RenderFilterForm($cn,$name="",$id="",$suffix="");
+	}
 }
 ?>

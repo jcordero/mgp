@@ -1,6 +1,8 @@
 <?php
 include_once 'common/sites.php';
 include_once 'beans/ticket.php';
+include_once 'beans/functions.php';
+
 ini_set("error_log", LOG_PATH.'api_tickets.log');
 error_log("\n------------------ INICIO PROCESO API -----------------------\n");
 
@@ -126,11 +128,13 @@ function ingreso_ticket($ingreso_ticket) {
     
     $resultado = $tic->getStatus() ? 'OK' : 'ERROR';
     $identificador = $tic->getStatus() ? $tic->tic_identificador : '';
+    $plazo = DatetoISO8601($tic->tic_tstamp_plazo);
     
     return array(
         'resultado'         => $resultado,
         'error'             => $tic->getErrorString(),
-        'tic_identificador' => $identificador
+        'tic_identificador' => $identificador,
+        'tic_plazo'         => $plazo
     );
 }
 

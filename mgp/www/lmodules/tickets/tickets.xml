@@ -739,8 +739,8 @@
         
         <!-- Ubicacion del problema -->
 	<group title="Ubicación" id="ubicacion" render_html="block">
-            <field name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección" />
             <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
+            <field name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección" />
             <field name="tic_id_cuadra" presentation="TEXT" label="x" isvisible="false"/>
             <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
             <field name="tic_coordy" presentation="TEXT" label="y" isvisible="false"/>
