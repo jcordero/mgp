@@ -16,22 +16,28 @@
 	    <menuitem name="Prestaciones" right="menu.archivo.tickets.admin" order="3" >
 	    	<menuitem name="Listar prestaciones" action="/lmodules/tickets/prestaciones.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
 	        <menuitem name="Nueva prestacion" action="/lmodules/tickets/prest_maint_n.php?OP=N" order="2"/>
-		</menuitem>
-		<menuitem name="Organismos"  right="menu.archivo.tickets.admin" order="4" >
-			<menuitem name="Listar organismos" action="/lmodules/tickets/organismos.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
-	        <menuitem name="Nuevo organismo" action="/lmodules/tickets/organ_maint_n.php?OP=N" order="2"/>
-		</menuitem>
-		<menuitem name="Rubros"  right="menu.archivo.tickets.admin" order="5" >
-			<menuitem name="Listar rubros" action="/lmodules/tickets/rubros.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
+            </menuitem>
+            
+            <menuitem name="Organismos"  right="menu.archivo.tickets.admin" order="4" >
+                <menuitem name="Listar organismos" action="/lmodules/tickets/organismos.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
+                <menuitem name="Nuevo organismo" action="/lmodules/tickets/organ_maint_n.php?OP=N" order="2"/>
+            </menuitem>
+		
+            <menuitem name="Rubros"  right="menu.archivo.tickets.admin" order="5" >
+                <menuitem name="Listar rubros" action="/lmodules/tickets/rubros.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
 	        <menuitem name="Nuevo rubro" action="/lmodules/tickets/rubro_maint_n.php?OP=N" order="2"/>
-		</menuitem>
-		<menuitem name="Georeferencias" right="menu.archivo.tickets.admin" order="6" >
-			<menuitem name="Listar georeferencias" action="/lmodules/tickets/georefs.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
+            </menuitem>
+	
+            <menuitem name="Georeferencias" right="menu.archivo.tickets.admin" order="6" >
+                <menuitem name="Listar georeferencias" action="/lmodules/tickets/georefs.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
 	        <menuitem name="Nueva georeferencia" action="/lmodules/tickets/georef_maint.php?OP=N"  order="2"/>
-		</menuitem>
+            </menuitem>
+
+            <menuitem name="Feriados" right="menu.archivo.tickets.admin" order="7" >
+                <menuitem name="Listar feriados" action="/lmodules/tickets/feriados.php?OP=V" right="menu.archivo.tickets.admin" order="1"/>
+                <menuitem name="Nuevo feriado" action="/lmodules/tickets/feriados_maint.php?OP=N" right="menu.archivo.tickets.admin" order="2"/>
+            </menuitem>
 	
 	</menuitem>
-
-
 </menu>
 </module>

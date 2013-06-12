@@ -220,6 +220,12 @@ class prestacion {
             list($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo) = self::plazoComponents($row['tpr_plazo']);
             $prest->ttp_tstamp_plazo = self::getVencimiento($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo);
         }
+        else
+        {
+            //No existe la prestacion
+            $ticket->addError("La prestación codigo {$prest->tpr_code} no existe.");
+            return array($prest);
+        }
 
         //Rubros
         //Si es una denuncia entonces el rubro esta definido,

@@ -96,6 +96,20 @@
             	$buff.='</ul>';
             	$buff.='</li>';
             }
+            if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 
+            	$buff.="<li>Feriados";
+            	$buff.='<ul>';
+                if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 
+                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/feriados.php?OP=V')."\">Listar feriados</a>";
+                	$buff.='</li>';
+                }
+                if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 
+                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/feriados_maint.php?OP=N')."\">Nuevo feriado</a>";
+                	$buff.='</li>';
+                }
+            	$buff.='</ul>';
+            	$buff.='</li>';
+            }
         	$buff.='</ul>';
         }
         if($this->haveRight($primary_db,'menu.archivo.administracion')) { 

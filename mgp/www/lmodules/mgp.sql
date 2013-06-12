@@ -724,3 +724,9 @@ CREATE TABLE eve_events (
   constraint pk_eve_events primary key clustered (eev_code) 
 )
 
+
+CREATE TABLE tic_feriados (
+  tfe_tstamp_in DATETIME NOT NULL,
+  tfe_desc VARCHAR(100) NULL,
+  constraint pk_tic_feriados primary key clustered (tfe_tstamp_in) 
+)

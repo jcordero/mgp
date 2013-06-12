@@ -1117,5 +1117,49 @@
 </make>
 
 
+<!-- CLASE FERIADOS -->
+<make object="class"> 
+    <build out_file="class_tic_feriados.php" classname="class_tic_feriados" classlabel="Feriados">
+        <parse in_file="../mgp.sql" tablename="tic_feriados"/>
+        <method objfactoryquerysuffix="order by tfe_tstamp_in"/>
+    </build>
+</make>
+
+
+<!--  CONSULTAR FERIADOS -->
+<make object="search_and_list">
+	<build out_file="feriados.php" classname="class_tic_feriados" title="Consulta de Feriados" >
+		
+		<searchfield name="tfe_tstamp_in" presentation="DATERANGE" label="Fecha"/>
+		<searchfield name="tfe_desc" presentation="TEXT" label="Nombre"/>
+		
+		<listfield name="tfe_tstamp_in" presentation="DATERANGE" label="Fecha"/>
+		<listfield name="tfe_desc" presentation="TEXT" label="Nombre"/>
+		
+		<action label="Eliminar" target="feriados_maint.php?OP=B" operation="B">
+                    <sendfield classname="class_tic_feriados" name="tfe_tstamp_in"/>
+		</action>
+	
+		<action label="Modificar" target="feriados_maint.php?OP=M" operation="M">
+                    <sendfield classname="class_tic_feriados" name="tfe_tstamp_in"/>
+		</action>
+	</build>
+</make>
+
+<!-- EDITAR UN FERIADO -->
+<make object="table_maint"> 
+    <build out_file="feriados_maint.php" classname="class_tic_feriados" title="Día feriado" next="feriados.php?OP=L&amp;last=1">
+		
+        <group title="Día" id="dia">
+            <field name="tfe_tstamp_in" presentation="DATE" label="Fecha"/>
+            <field name="tfe_desc" presentation="TEXT" label="Nombre"/>
+        </group>
+			
+        <action label="Nuevo feriado" target="feriados_maint.php?OP=N" operation="N">
+        </action>	
+    </build>
+</make>
+
+
 </ayaxphpclass>
 
