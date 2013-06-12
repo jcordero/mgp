@@ -223,7 +223,9 @@ class ticket {
     //Defaults que hay que meter si no estan en el JSON
                 
             //Canal de ingreso
-            $this->tic_canal = 'movil'; //o web
+            $this->tic_canal = strtoupper( _g($ticket,'tic_canal') );
+            if($this->tic_canal=='')
+                $this->tic_canal = 'MOVIL';
             
             //Estado del ticket
             $this->tic_estado = 'ABIERTO';
@@ -461,16 +463,16 @@ class ticket {
          if($this->tic_tipo==='')
              $this->addError("Campo obligatorio tic_tipo faltante");
 
-         if($this->tic_coordx===0)
+         if((double)$this->tic_coordx===0)
              $this->addError("Campo obligatorio tic_coordx faltante");
 
-         if($this->tic_coordy===0)
+         if((double)$this->tic_coordy===0)
              $this->addError("Campo obligatorio tic_coordy faltante");
 
          if($this->tic_calle_nombre==='')
              $this->addError("Campo obligatorio tic_calle_nombre faltante");
 
-         if($this->tic_nro_puerta===0 && $this->tic_cruza_calle==='')
+         if((int)$this->tic_nro_puerta===0 && $this->tic_cruza_calle==='')
              $this->addError("Campo obligatorio tic_nro_puerta o tic_cruza_calle faltante");
          
          //Prestacion
@@ -511,13 +513,9 @@ class ticket {
          $tic_numero = self::generaCodigoTicket($this->tic_tipo, $tic_anio);
          $this->tic_identificador = $this->tic_tipo.' '.$tic_numero.'/'.$tic_anio;
            
-         //Determino el plazo del ticket
-         $plazo = $this->prestaciones[0]->getPlazo();
-         $plazo_unit = $this->prestaciones[0]->getPlazoUnit();
-
          //Salvo el ticket (tic_ticket)
-         $sql1 = "insert into tic_ticket (tic_nro  ,tic_numero  ,tic_anio  ,tic_tipo    ,tic_tstamp_in    ,use_code    ,tic_nota_in    ,tic_estado,tic_lugar    ,tic_barrio    ,tic_cgpc    ,tic_coordx  ,tic_coordy  ,tic_id_cuadra,tic_forms,tic_canal    , tic_tstamp_plazo                     ,tic_tstamp_cierre,tic_calle_nombre    ,tic_nro_puerta  ,tic_nro_asociado,tic_identificador    ) 
-                                  values (:tic_nro:,:tic_numero:,:tic_anio:,':tic_tipo:',':tic_tstamp_in:',':use_code:',':tic_nota_in:','ABIERTO' ,':tic_lugar:',':tic_barrio:',':tic_cgpc:',:tic_coordx:,:tic_coordy:,0            ,0        ,':tic_canal:', NOW() + INTERVAL :plazo: :plazo_unit:,null             ,':tic_calle_nombre:',:tic_nro_puerta:,null            ,':tic_identificador:')";
+         $sql1 = "insert into tic_ticket (tic_nro  ,tic_numero  ,tic_anio  ,tic_tipo    ,tic_tstamp_in    ,use_code    ,tic_nota_in    ,tic_estado,tic_lugar    ,tic_barrio    ,tic_cgpc    ,tic_coordx  ,tic_coordy  ,tic_id_cuadra,tic_forms,tic_canal    , tic_tstamp_plazo    ,tic_tstamp_cierre,tic_calle_nombre    ,tic_nro_puerta  ,tic_nro_asociado,tic_identificador    ) 
+                                  values (:tic_nro:,:tic_numero:,:tic_anio:,':tic_tipo:',':tic_tstamp_in:',':use_code:',':tic_nota_in:','ABIERTO' ,':tic_lugar:',':tic_barrio:',':tic_cgpc:',:tic_coordx:,:tic_coordy:,0            ,0        ,':tic_canal:', ':tic_tstamp_plazo:',null             ,':tic_calle_nombre:',:tic_nro_puerta:,null            ,':tic_identificador:')";
          $params1 = array(
                 'tic_nro'           => $this->tic_nro,
                 'tic_numero'        => $tic_numero, 
@@ -531,12 +529,11 @@ class ticket {
                 'tic_cgpc'          => $this->tic_cgpc, 
                 'tic_coordx'        => $this->tic_coordx, 
                 'tic_coordy'        => $this->tic_coordy, 
-                'plazo'             => $plazo, 
-                'plazo_unit'        => $plazo_unit, 
                 'tic_calle_nombre'  => $this->tic_calle_nombre, 
                 'tic_nro_puerta'    => $this->tic_nro_puerta, 
                 'tic_identificador' => $this->tic_identificador,
-                'tic_canal'         => $this->tic_canal
+                'tic_canal'         => $this->tic_canal,
+                'tic_tstamp_plazo'  => $this->tic_tstamp_plazo
          );
          $primary_db->do_execute($sql1,$errores,$params1);
          if(count($errores)>0)  
@@ -910,7 +907,7 @@ class ticket {
         $this->tic_tstamp_in = DatetoISO8601(_F($obj,"tic_tstamp_in"));
 
         //Canal de ingreso
-        $this->tic_canal = 'call';
+        $this->tic_canal = 'CALL';
         
         //ESTILO DE GEOREFERENCIA
         $this->tipo_georef = _F($obj,"tipo_georef");
@@ -1000,9 +997,8 @@ class ticket {
         //Usuario que esta creando el ticket
         $this->solicitantes = solicitante::fromForm($obj);
         
-        //Canal de ingreso del ticket
-        $this->tic_canal = $this->determinarCanal();
-                 
+        //Fecha de vencimiento del ticket
+        $this->tic_tstamp_plazo = $this->prestaciones[0]->ttp_tstamp_plazo;
     }
     
     //Determina el canal de ingreso, mirando en los atributos del usuario

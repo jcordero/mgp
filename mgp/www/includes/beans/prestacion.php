@@ -44,7 +44,10 @@ class prestacion {
     
     /** Plazo (unidad) */
     private $plazo_unit;
-    
+
+    /** Plazo (tipo) CORRIDOS / LABORALES */
+    private $plazo_tipo;
+
     /** Tipo de prestacion: RECLAMO, DENUNCIA, SOLICITUD o QUEJA */
     private $tpr_tipo; 
     
@@ -62,6 +65,7 @@ class prestacion {
         $this->ttp_prioridad = '1.1';
         $this->plazo = 10;
         $this->plazo_unit = 'DAY';
+        $this->plazo_tipo = 'LABORALES';
     }
     
     /** getter para el tipo de prestacion
@@ -87,6 +91,13 @@ class prestacion {
     function getPlazoUnit() {
         return $this->plazo_unit;
     }
+    
+    /** getter para el tipo de plazo CORRIDOS, LABORALES
+     * 
+     */
+    function getPlazoTipo() {
+       return $this->plazo_tipo; 
+    }
 
     /** Recupera el ultimo registro de avance
      * 
@@ -108,8 +119,8 @@ class prestacion {
         $errores = array();
           
         //Creo una prestacion (tic_ticket_prestaciones)
-        $sql2 = "insert into tic_ticket_prestaciones (tic_nro  , tpr_code    , tru_code  , ttp_estado    , ttp_prioridad    , ttp_tstamp_plazo                     , ttp_alerta) 
-                                              values (:tic_nro:, ':tpr_code:', :tru_code:, ':ttp_estado:', ':ttp_prioridad:', NOW() + INTERVAL :plazo: :plazo_unit:, ':ttp_alerta:')";
+        $sql2 = "insert into tic_ticket_prestaciones (tic_nro  , tpr_code    , tru_code  , ttp_estado    , ttp_prioridad    , ttp_tstamp_plazo    , ttp_alerta) 
+                                              values (:tic_nro:, ':tpr_code:', :tru_code:, ':ttp_estado:', ':ttp_prioridad:', ':ttp_tstamp_plazo:', ':ttp_alerta:')";
         $params2 = array(
             'tic_nro'             => $ticket->getNro(), 
             'tpr_code'            => $this->tpr_code, 
@@ -118,7 +129,8 @@ class prestacion {
             'plazo'               => $this->plazo,
             'plazo_unit'          => $this->plazo_unit,
             'ttp_alerta'          => $this->ttp_alerta,
-            'ttp_estado'          => $this->ttp_estado
+            'ttp_estado'          => $this->ttp_estado,
+            'ttp_tstamp_plazo'    => $this->ttp_tstamp_plazo
         );
         $primary_db->do_execute($sql2,$errores,$params2);
                 
@@ -205,7 +217,8 @@ class prestacion {
             $prest->tpr_tipo = $row['tpr_tipo'];
             
             //El plazo viene en dos partes, una donde esta la cantidad y otra donde esta la unidad. Ejemplo: 2 dias
-            list($prest->plazo, $prest->plazo_unit) = self::plazoComponents($row['tpr_plazo']);
+            list($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo) = self::plazoComponents($row['tpr_plazo']);
+            $prest->ttp_tstamp_plazo = self::getVencimiento($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo);
         }
 
         //Rubros
@@ -311,6 +324,11 @@ class prestacion {
         $primary_db->do_execute($sql2,$errores,$params2);   
     }
     
+    /** El plazo es un string con tres partes
+     *  <cantidad> <unidad> <tipo>
+     * @param type $tpr_plazo
+     * @return type
+     */
     static function plazoComponents($tpr_plazo) {
         if($tpr_plazo=="")
             return array("10", "DAY");
@@ -335,9 +353,67 @@ class prestacion {
             $plazo_unit = 'DAY';
         }
         
-        return array($plazo, $plazo_unit);
+        if(isset($p[2])) {
+            $plazo_tipo = strtoupper($plazo_unit[2]);
+        } else {
+            $plazo_tipo = 'CORRIDOS';
+        }
+                
+        return array($plazo, $plazo_unit, $plazo_tipo);
     }
     
+    static function getVencimiento($cant, $unit, $tipo) {
+        global $primary_db;
+        
+        $hoy = time();
+        
+        $hoy_dia    = (int) date('j',$hoy);
+        $hoy_mes    = (int) date('n',$hoy);
+        $hoy_anio   = (int) date('Y',$hoy);
+        $hoy_hora   = (int) date('G',$hoy);
+        $hoy_minuto = (int) date('i',$hoy);
+        $hoy_seg    = (int) date('s',$hoy);
+        
+        //Calculo la fecha para días corridos
+        switch ($unit) {
+            case 'DAY':
+                $vencimiento = mktime($hoy_hora, $hoy_minuto, $hoy_seg, $hoy_mes, $hoy_dia + (int) $cant, $hoy_anio);
+                break;
+            case 'HOUR':
+                $vencimiento = mktime($hoy_hora + (int) $cant, $hoy_minuto, $hoy_seg, $hoy_mes, $hoy_dia, $hoy_anio);
+                break;
+            case 'MINUTE':
+                $vencimiento = mktime($hoy_hora, $hoy_minuto + (int) $cant, $hoy_seg, $hoy_mes, $hoy_dia, $hoy_anio);
+                break;
+            default:
+                $vencimiento = mktime($hoy_hora, $hoy_minuto, $hoy_seg, $hoy_mes, $hoy_dia + (int) $cant, $hoy_anio);
+        }
+        
+        //Tipo de lapso
+        if($tipo==='LABORALES') {
+            
+            //Cuantos dias hay en el medio entre hoy y el vencimiento?
+            $agregar = 0;
+            for($j=$hoy;$j<$vencimiento;$j+=86400) {
+                if( date('D',$j)==='Sat' || date('D',$j)==='Sun' )
+                        $agregar++;
+                
+                //Es un dia de semana, pero feriado?
+                //TODO: Hacer un lookup en la base de datos
+            }
+            $vencimiento+=$agregar*86400;
+            
+            //Si el vencimiento cae un Sabado, debo pasarlo 2 dias al Lunes
+            if( date('D',$vencimiento)==='Sat' )
+                $vencimiento += 86400 * 2;
+            
+            //Si el vencimiento cae un Domingo, debo pasarlo 1 dia al Lunes
+            if( date('D',$vencimiento)==='Sun' )
+                    $vencimiento += 86400;
+        }
+        
+        return date('Y-m-d H:i:s',$vencimiento);
+    }
     
     /**
      * Cargar la prestacion desde la UI
@@ -363,7 +439,8 @@ class prestacion {
             $p->tpr_tipo = $row['tpr_tipo'];
             
             //El plazo viene en dos partes, una donde esta la cantidad y otra donde esta la unidad. Ejemplo: 2 dias
-            list($p->plazo, $p->plazo_unit) = self::plazoComponents($row['tpr_plazo']);
+            list($p->plazo, $p->plazo_unit, $p->plazo_tipo) = self::plazoComponents($row['tpr_plazo']);
+            $p->ttp_tstamp_plazo = self::getVencimiento($p->plazo, $p->plazo_unit, $p->plazo_tipo);
         }
         
         
@@ -473,7 +550,7 @@ class prestacion {
                     
                     //Hay un plazo indicado?
                     if( $row['ttp_plazo']!="" ) {
-                        list($prest->plazo, $prest->plazo_unit) = self::plazoComponents($row['tpr_plazo']);
+                        list($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo) = self::plazoComponents($row['tpr_plazo']);
                     }
                 }
             }
