@@ -213,13 +213,13 @@
 	<build out_file="prestaciones.php" classname="class_tic_prestaciones" title="Consulta de prestaciones"  template_html="default.htm">
 
 		<searchfield name="tpr_code" presentation="TEXT" label="Código" cols="10"/>
-		<searchfield name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo"/>
+		<searchfield name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo"/>
 		<searchfield name="tpr_detalle" presentation="TEXT" label="Detalle"/>
 		<searchfield name="tpr_estado" presentation="ACTIVO" label="Estado"/>
 		<searchfield name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación"/>
 
 		<listfield name="tpr_code" presentation="TEXT" label="Código"/>
-		<listfield name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo"/>
+		<listfield name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo"/>
 		<listfield name="tpr_detalle" presentation="TEXT" label="Detalle"/>
 		<listfield name="tpr_estado" presentation="ACTIVO" label="Estado"/>
 		<listfield name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación"/>
@@ -240,7 +240,7 @@
 
 	<group title="Prestación" id="asunto">
             <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
-            <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
+            <field name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
             <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true"/>
             <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="true"/>
             <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>
@@ -358,7 +358,7 @@
 
 	<group title="Prestación" id="asunto">
             <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
-            <field name="tpr_tipo" presentation="PRESTACIONTIPO" label="Tipo" ismandatory="true" initialvalue="RECLAMO"/>
+            <field name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" ismandatory="true" initialvalue="RECLAMO"/>
             <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true" initialvalue="DOMICILIO"/>
             <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="true" initialvalue="2 Días"/>
             <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>

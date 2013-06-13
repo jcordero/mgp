@@ -45,14 +45,19 @@ class CDH_PLAZO extends CDataHandler
 			else
 			{
                 //Cantidad
-                $html.=" <INPUT TYPE=\"TEXT\" NAME=\"a$name\" id=\"a$id\" VALUE=\"$val1\" maxlength=\"15\" SIZE=\"15\" />";
+                            $html.=" <INPUT TYPE=\"TEXT\" NAME=\"a$name\" id=\"a$id\" VALUE=\"$val1\" maxlength=\"15\" SIZE=\"15\" />";
 
                 //Unidades
-				$html.="<SELECT NAME=\"b$name\" id=\"b$id\" />";
-				$html.="<OPTION value=\"Días\" ".($val2=="Días" ? "SELECTED" : "").">Días";
-				$html.="<OPTION value=\"Horas\" ".($val2=="Horas" ? "SELECTED" : "").">Horas";
-				$html.="<OPTION value=\"Minutos\" ".($val2=="Minutos" ? "SELECTED" : "").">Minutos";
-				$html.="</SELECT> ";
+                            $html.="<SELECT NAME=\"b$name\" id=\"b$id\" />";
+                            $html.="<OPTION value=\"Días\" ".($val2=="Días" ? "SELECTED" : "").">Días";
+                            $html.="<OPTION value=\"Horas\" ".($val2=="Horas" ? "SELECTED" : "").">Horas";
+                            $html.="<OPTION value=\"Minutos\" ".($val2=="Minutos" ? "SELECTED" : "").">Minutos";
+                            $html.="</SELECT> ";
+                //Tipo                
+                            $html.="<SELECT NAME=\"c$name\" id=\"c$id\" />";
+                            $html.="<OPTION value=\"CORRIDOS\" ".($val2=="CORRIDOS" ? "SELECTED" : "").">Corridos";
+                            $html.="<OPTION value=\"LABORALES\" ".($val2=="LABORALES" ? "SELECTED" : "").">Laborales";
+                            $html.="</SELECT> ";
 			
             }
 			$html.="</div></div>"."\n";
@@ -62,33 +67,35 @@ class CDH_PLAZO extends CDataHandler
 	
 	function loadForm() 
 	{
-		$fld = $this->m_parent;
-		$val1 = "";
-		$val2 = "";
-		if($fld->m_no_form==false) 
-		{
-			$val = (isset($_REQUEST["m_".$fld->m_Name]) ? $_REQUEST["m_".$fld->m_Name] : "");
-			$val1 = (isset($_REQUEST["am_".$fld->m_Name]) ? $_REQUEST["am_".$fld->m_Name] : "");
-			$val2 = (isset($_REQUEST["bm_".$fld->m_Name]) ? $_REQUEST["bm_".$fld->m_Name] : "");
-			
-			//Combino los dos campos, el tipo y el nro de documento
-			if($val1!="" && $val2!="")
-			{
-				$fld->setValue($val1." ".$val2);
-			}
-			elseif($val1!="")
-			{
-				$fld->setValue($val1);
-			}
-			elseif($val!="")
-			{
-				$fld->setValue($val);
-			}
-			else
-			{
-				$fld->setValue("");
-			}
-		}
+            $fld = $this->m_parent;
+            $val1 = "";
+            $val2 = "";
+            $val3 = "";
+            if($fld->m_no_form==false) 
+            {
+                $val = (isset($_REQUEST["m_".$fld->m_Name]) ? $_REQUEST["m_".$fld->m_Name] : "");
+                $val1 = (isset($_REQUEST["am_".$fld->m_Name]) ? $_REQUEST["am_".$fld->m_Name] : "");
+                $val2 = (isset($_REQUEST["bm_".$fld->m_Name]) ? $_REQUEST["bm_".$fld->m_Name] : "");
+                $val3 = (isset($_REQUEST["cm_".$fld->m_Name]) ? $_REQUEST["cm_".$fld->m_Name] : "");
+
+                //Combino los campos
+                if($val1!="" && $val2!="" && $val3!="")
+                {
+                    $fld->setValue($val1." ".$val2." ".$val3);
+                }
+                elseif($val1!="")
+                {
+                    $fld->setValue($val1);
+                }
+                elseif($val!="")
+                {
+                    $fld->setValue($val);
+                }
+                else
+                {
+                    $fld->setValue("");
+                }
+            }
 	}
 	
 }

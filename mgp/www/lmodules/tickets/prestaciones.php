@@ -37,7 +37,7 @@ class class_tic_prestaciones_sl extends csearchandlist {
 
     /* Campos de busqueda */
         $this->m_obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Código", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true, "Cols"=>10));
-        $this->m_obj->GetField("tpr_tipo")->SetDisplayValues(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACIONTIPO", "IsVisible"=>true));
+        $this->m_obj->GetField("tpr_tipo")->SetDisplayValues(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TICKET::PRESTACIONTIPO", "IsVisible"=>true));
         $this->m_obj->GetField("tpr_detalle")->SetDisplayValues(Array("Name"=>"tpr_detalle", "Label"=>"Detalle", "Size"=>100, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsVisible"=>true));
         $this->m_obj->GetField("tpr_estado")->SetDisplayValues(Array("Name"=>"tpr_estado", "Label"=>"Estado", "Size"=>20, "IsForDB"=>true, "Order"=>104, "Presentation"=>"ACTIVO", "IsVisible"=>true));
         $this->m_obj->GetField("tpr_ubicacion")->SetDisplayValues(Array("Name"=>"tpr_ubicacion", "Label"=>"Ubicación", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TICKET::UBICACION", "IsVisible"=>true));
@@ -76,7 +76,7 @@ class col102 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>102, "Presentation"=>"PRESTACIONTIPO", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tpr_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TICKET::PRESTACIONTIPO", "IsVisible"=>true));
     }
 }
 
