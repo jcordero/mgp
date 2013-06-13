@@ -578,7 +578,7 @@ class prestacion {
         $resultado = "";
         try
         {
-            $b = $client->zonificacion_latlong($lat,$lng,$grilla);
+            $b = $client->zonificacion_latlong($lng,$lat,$grilla);
             if(isset($b->descripcion))
                 $resultado = $b->descripcion;
             error_log("prestacion::consultarGIS() zonificacion_latlong() ->".print_r($b,true));

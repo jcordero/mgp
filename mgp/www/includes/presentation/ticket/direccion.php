@@ -31,7 +31,7 @@ class CDH_DIRECCION extends CDataHandler
             //Recupero el barrio
             try
             {
-                $b = $client_barrio->zonificacion_latlong($r->lat,$r->lng,1);
+                $b = $client_barrio->zonificacion_latlong($r->lng,$r->lat,1);
                 error_log("direccion.php zonificacion_latlong() ->".print_r($b,true));
             }
             catch (SoapFault $exception)
@@ -58,7 +58,7 @@ class CDH_DIRECCION extends CDataHandler
             //Recupero el barrio
             try
             {
-                $b = $client_barrio->zonificacion_latlong($r->lat,$r->lng,1);
+                $b = $client_barrio->zonificacion_latlong($r->lng,$r->lat,1);
                 error_log("direccion.php zonificacion_latlong() ->".print_r($b,true));
             }
             catch (SoapFault $exception)
