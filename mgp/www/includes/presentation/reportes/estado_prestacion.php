@@ -7,14 +7,15 @@ class CDH_ESTADO_PRESTACION extends CDH_SELECTARRAY
 	{
             parent::__construct($parent);
             $this->m_array = array(
-                'pendiente'     =>  'pendiente',
-                'inspección'    =>  'inspección',
-                'en curso'      =>  'en curso',
-                'en espera'     =>  'en espera',
-                'resuelto'      =>  'resuelto',
-                'rechazado'     =>  'rechazado',
-                'cerrado'       =>  'cerrado',
-                'certificación' =>  'certificación'
+                'pendiente'             =>  'pendiente',
+                'inspección'            =>  'inspección',
+                'en curso'              =>  'en curso',
+                'en espera'             =>  'en espera',
+                'resuelto'              =>  'resuelto',
+                'rechazado'             =>  'rechazado',
+                'rechazado indebido'    =>  'rechazado indebido',
+                'cerrado'               =>  'cerrado',
+                'certificación'         =>  'certificación'
             );
         }
 }

@@ -36,6 +36,7 @@ class CDH_TICKET_MAINT extends CDataHandler
                                 <option>en espera
                                 <option>resuelto
                                 <option>rechazado
+                                <option>rechazado indebido
                                 <option>cerrado
                                 <option>certificación';
                 case 'inspección':
@@ -43,6 +44,7 @@ class CDH_TICKET_MAINT extends CDataHandler
                                 <option>en espera
                                 <option>resuelto
                                 <option>rechazado
+                                <option>rechazado indebido
                                 <option>cerrado
                                 <option>certificación';
                     break;
@@ -50,22 +52,26 @@ class CDH_TICKET_MAINT extends CDataHandler
                     $estados = '<option>en espera
                                 <option>resuelto
                                 <option>rechazado
+                                <option>rechazado indebido
                                 <option>cerrado
                                 <option>certificación';
                     break;
                 case 'en espera':
                     $estados = '<option>resuelto
                                 <option>rechazado
+                                <option>rechazado indebido
                                 <option>cerrado
                                 <option>certificación';
                     break;
                 case 'resuelto':
                     $estados = '<option>resuelto
                                 <option>rechazado
+                                <option>rechazado indebido
                                 <option>cerrado
                                 <option>certificación';
                     break;
                 case 'rechazado':
+                case 'rechazado indebido':
                     $estados = '';
                     break;
                 case 'transferido':
