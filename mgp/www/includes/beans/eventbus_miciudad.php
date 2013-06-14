@@ -52,7 +52,8 @@ class eventbus_miciudad {
                         'numeroSolicitud'   => $t->getNroTicket().'/'.$t->getAnioTicket(), 
                         'estado'            => $cod_estado,
                         'estadoNombre'      => $avance->tic_estado_in,
-                        'fecha'             => $avance->tav_tstamp_in 
+                        'fecha'             => $avance->tav_tstamp_in,
+                        'visibleCiudadano'  => ($avance->tic_estado_in==='pendiente' || $avance->tic_estado_in==='rechazado_indebido' ? false : true)
                     )); 
 
                     //Envio el mensaje

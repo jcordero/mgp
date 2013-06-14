@@ -401,11 +401,15 @@ class prestacion {
             //Cuantos dias hay en el medio entre hoy y el vencimiento?
             $agregar = 0;
             for($j=$hoy;$j<$vencimiento;$j+=86400) {
-                if( date('D',$j)==='Sat' || date('D',$j)==='Sun' )
+                if( date('D',$j)==='Sat' || date('D',$j)==='Sun' ) {
                         $agregar++;
-                
-                //Es un dia de semana, pero feriado?
-                //TODO: Hacer un lookup en la base de datos
+                } else {
+                    //Es un dia de semana, pero feriado?
+                    $fecha = date('Y-m-d',$j);
+                    $f = $primary_db->QueryString("select count(*) as cant from tic_feriados where tfe_tstamp_in='{$fecha}'");
+                    if((int)$f===1)
+                        $agregar++;
+                }
             }
             $vencimiento+=$agregar*86400;
             
