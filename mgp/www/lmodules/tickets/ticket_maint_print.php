@@ -1,6 +1,6 @@
 <?php 
-include APP_PATH."common/phpqrcode/qrlib.php";
-include 'beans/functions.php';
+include_once APP_PATH."common/phpqrcode/qrlib.php";
+include_once 'beans/functions.php';
 
 // Extension para implementar un metodo de impresion
 class class_tic_ticket_upd_print extends cclass_maint_print 
@@ -59,7 +59,7 @@ class class_tic_ticket_upd_print extends cclass_maint_print
             $arch = '';
             if($ext_coordx!=0 && $ext_coordy!=0)
             {
-                $url = "http://".$_SERVER["HTTP_HOST"].WEB_PATH."/common/mapa.php?x=$ext_coordx&y=$ext_coordy&w=350&h=250&r=250";
+                $url = 'http://'.$_SERVER["HTTP_HOST"].WEB_PATH."/common/mapa.php?x={$ext_coordx}&y={$ext_coordy}&w=350&h=250&r=250";
                 $img = file_get_contents($url);
                 $arch = HOME_PATH."temp/".md5(time())."_mapa.jpg";
                 error_log("impresion ticket: Mapa url: $url");
@@ -221,7 +221,8 @@ class class_tic_ticket_upd_print extends cclass_maint_print
         private function createPrestacionesPDML() {
             global $primary_db;
             $p = $this->m_data;
-
+            $tic_nro = _F($p,"tic_nro");
+            
             $pa = '<table><tr><td><b>Prestaciones</b></td></tr></table>';
             $pa.= '<table border="1mm">';
             $pa.= '<tr>';
@@ -431,4 +432,5 @@ class class_tic_ticket_upd_print extends cclass_maint_print
             return $o;
         }
 }
-?>
+
+error_log('fin del hook print');

@@ -4,9 +4,12 @@
  * @author jcordero
  *
  */
+error_log('Antes de incluir bean person_status ');
 include_once 'beans/person_status.php';
+error_log('Antes de incluir bean ticket ');
 include_once 'beans/ticket.php';
 
+error_log('Antes de declarar clase  class_tic_ticket_upd_hooks');
 class class_tic_ticket_upd_hooks extends cclass_maint_hooks
 {
 	
@@ -47,10 +50,10 @@ class class_tic_ticket_upd_hooks extends cclass_maint_hooks
         $lugar = "";
         $obj_lugar = json_decode( $obj->getField("tic_lugar")->getValue() );
         if($obj_lugar) {
-            if($obj_lugar->alternativa=='NRO') {
-                $lugar.=$obj_lugar->calle_nombre.' '.$obj_lugar->callenro;
-            } else {
+            if($obj_lugar->alternativa=='CALLE') {
                 $lugar.=$obj_lugar->calle_nombre.' cruce con '.$obj_lugar->calle_nombre2;
+            } else {
+                $lugar.=$obj_lugar->calle_nombre.' '.$obj_lugar->callenro;
             }
             
             if(isset($obj_lugar->piso) && $obj_lugar->piso!='')
@@ -69,14 +72,24 @@ class class_tic_ticket_upd_hooks extends cclass_maint_hooks
             $ciudadano = "{$row['ciu_nombres']} {$row['ciu_apellido']}";
         }
         
+        //Determino la prestacion
+        $desc_prest = "";
+        $prest = ( isset($obj->m_childs['class_tic_ticket_prestaciones'][0]) ? $obj->m_childs['class_tic_ticket_prestaciones'][0] : null);
+        if($prest) {
+            $tpr_code = $prest->getField("tpr_code")->getValue();
+            $desc_prest = $primary_db->QueryString("select tpr_detalle from tic_prestaciones where tpr_code='{$tpr_code}'");
+        }
+        
         //Genero contenido para el mensaje de respuesta.
         $content['ciudadano'] = $ciudadano;
         $content['plazo'] = $obj->getField("tic_tstamp_plazo")->getValue();
         $content['lugar'] = $lugar;
+        $content['prestacion'] = $desc_prest;
        
         $this->m_parent->addContent($content);
         return $res;
     }
     
 }
-?>
+
+error_log('Fin de la inclusion del hook');
