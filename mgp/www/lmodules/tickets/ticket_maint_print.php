@@ -59,7 +59,9 @@ class class_tic_ticket_upd_print extends cclass_maint_print
             $arch = '';
             if($ext_coordx!=0 && $ext_coordy!=0)
             {
-                $url = 'http://'.$_SERVER["HTTP_HOST"].WEB_PATH."/common/mapa.php?x={$ext_coordx}&y={$ext_coordy}&w=350&h=250&r=250";
+                if(!defined('HOSTNAME'))
+                    define('HOSTNAME', $_SERVER["HTTP_HOST"]);
+                $url = 'http://'.HOSTNAME.WEB_PATH."/common/mapa.php?x={$ext_coordx}&y={$ext_coordy}&w=350&h=250&r=250";
                 $img = file_get_contents($url);
                 $arch = HOME_PATH."temp/".md5(time())."_mapa.jpg";
                 error_log("impresion ticket: Mapa url: $url");
@@ -107,7 +109,7 @@ class class_tic_ticket_upd_print extends cclass_maint_print
             $pa.= '<cell next="bottom" border="0.1mm" width="19cm"><b>Notas</b></cell>';
             $pa.= '<cell next="bottom">El plazo indicado puede ser modificado durante el proceso de este ticket.</cell>';
             $pa.= '<cell next="bottom">Para consultar el avance del ticket, puede llamar al Call Center al 147 o en </cell>';
-            $pa.= '<cell next="bottom">http://www.mardelplata.gob.ar</cell>';
+            $pa.= '<cell next="bottom">http://www.mardelplata.gob.ar/147</cell>';
             $pa.= '</div>';
             $o.= $pa;
 		
@@ -115,7 +117,8 @@ class class_tic_ticket_upd_print extends cclass_maint_print
             $o.= '<div left="10cm" top="28cm">Impreso: '.date("d-m-Y h:i:s").'</div>';
 		
  //CODIGO QR
-            $url = "http://147.mardelplata.gob.ar/mgp/public/estado/{$tic_nro}";
+            $preclamo = explode(' ',$codigo);
+            $url = "http://appsb.mardelplata.gob.ar/Consultas/nConsultaSolicitudes147/Solicitud.aspx?param={$preclamo[1]}";
             $arch_barras = HOME_PATH."temp/qr_{$tic_nro}.png";
             $errorCorrectionLevel = 'L';
             $matrixPointSize = 4;
