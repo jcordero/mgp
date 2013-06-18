@@ -43,7 +43,7 @@ class eventbus_miciudad {
                 if( $prest->tpr_code == $tpr_code ) {
                     $avance = $prest->getLastAvance();
                     
-                    //pendiente 1, inspección 2, en curso 3, en espera 4, resuelto 5, rechazado 6, cerrado 7, certificación 8
+                    //pendiente 1, inspección 2, en curso 3, en espera 4, resuelto 5, rechazado 6, cerrado 7, certificación 8, rechazado indebido 9
                     $cod_estado = CSession::getParameter($primary_db,'miciudad.estado.'.$avance->tic_estado_in,0);
                             
                     //Mensaje a enviar
@@ -60,8 +60,15 @@ class eventbus_miciudad {
                     $msg_url = $url."?apiKey=".$api_key."&hash=".md5($api_secret.$data);
                     $ret = $this->put($msg_url, $data);
 
-                    if($ret!=201)
-                        $msg = "Error #{$ret} del endpoint {$url}";
+                    //Si responde con {"detalle":"estado \/ visibleCiudadano son datos requeridos"} o algo asi es que esta mal
+                    if($ret==='') {
+                        $msg = "Error (sin respuesta) del endpoint {$url}";
+                    }else {
+                        $ret_obj = json_decode($ret);
+                        if(isset($ret_obj) && isset($ret_obj->detalle)) {
+                            $msg = "Error ($ret_obj->detalle) del endpoint {$url}";
+                        }
+                    }
                 }
             }
                     
