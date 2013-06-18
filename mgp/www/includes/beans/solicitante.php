@@ -162,7 +162,7 @@ class solicitante {
          
          //Creo un mensaje de mail para el ciudadano
          if( $this->ciu_email!=='' ) {
-            $mt = new cmail_type("ADJUNTO", "www/lmodules/tickets/ticket_maint.php", "tic_nro=".$ticket->getNro(),"aviso_nuevo_ticket");
+            $mt = new cmail_type("IMPRESION", "www/lmodules/tickets/ticket_maint.php", "tic_nro=".$ticket->getNro(),"aviso_nuevo_ticket");
             $msg = new cmessage();
             $msg->send(DEFAULT_SMTP,$this->ciu_email,$mt);
          }
