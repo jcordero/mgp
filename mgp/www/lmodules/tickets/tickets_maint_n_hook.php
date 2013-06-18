@@ -66,7 +66,8 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         //Genero contenido para el mensaje de respuesta.
         $content['nroticket'] = $identificador;
         $content['prestacion'] = "$prestacion - $descripcion";
-       
+        $content['plazo'] = $obj->getField("tic_tstamp_plazo")->getValue();
+        
         return array($content,$res);
     }
     

@@ -56,17 +56,23 @@ class eventbus_miciudad {
                         'visibleCiudadano'  => ($avance->tic_estado_in==='pendiente' || $avance->tic_estado_in==='rechazado indebido' ? false : true)
                     )); 
 
-                    //Envio el mensaje
+                    //Envio el mensaje URL
                     $msg_url = $url."?apiKey=".$api_key."&hash=".md5($api_secret.$data);
+                    
+                    //Retorna el codigo HTTP de respuesta
                     $ret = $this->put($msg_url, $data);
 
                     //Si responde con {"detalle":"estado \/ visibleCiudadano son datos requeridos"} o algo asi es que esta mal
-                    if($ret==='') {
+                    if($ret==='' || $this->last_response==='') {
                         $msg = "Error (sin respuesta) del endpoint {$url}";
                     }else {
-                        $ret_obj = json_decode($ret);
-                        if(isset($ret_obj) && isset($ret_obj->detalle)) {
-                            $msg = "Error ($ret_obj->detalle) del endpoint {$url}";
+                        $ret_obj = json_decode($this->last_response);
+                        if(isset($ret_obj)) {
+                            if (isset($ret_obj->detalle)) {
+                                $msg = "Error ($ret_obj->detalle) del endpoint {$url}";
+                            }
+                        } else {
+                            $msg = "Error (falta respuesta en JSON) del endpoint {$url}";
                         }
                     }
                 }
@@ -102,7 +108,8 @@ class eventbus_miciudad {
 
         !rewind($verbose);
         $verboseLog = stream_get_contents($verbose);
-        error_log("put() ".htmlspecialchars($verboseLog));
+        error_log("put() Log: ".$verboseLog);
+        error_log("put() HTTP Response code: ".$info['http_code']);
         
         return $info['http_code'];
     }
