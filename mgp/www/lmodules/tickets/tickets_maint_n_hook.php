@@ -11,6 +11,7 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
 {
     private $m_prestacion_detalle;
     private $m_identificador;
+    private $m_plazo;
     private $m_ps;
 	
     public function afterLoadForm() {
@@ -38,6 +39,7 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         $ticket->save();
 
         //Completo los valores que se van a usar mas adelante
+        $this->m_plazo = $ticket->tic_tstamp_plazo;
         $this->m_prestacion_detalle = $ticket->prestaciones[0]->tpr_description;
         $this->m_identificador = $ticket->tic_identificador;
         
@@ -66,8 +68,8 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         //Genero contenido para el mensaje de respuesta.
         $content['nroticket'] = $identificador;
         $content['prestacion'] = "$prestacion - $descripcion";
-        $content['plazo'] = $obj->getField("tic_tstamp_plazo")->getValue();
-        
+        $content['plazo'] = $this->m_plazo;
+        error_log("Se define plazo={$content['plazo']} nroticket={$content['nroticket']} prestacion={$content['prestacion']}");
         return array($content,$res);
     }
     
