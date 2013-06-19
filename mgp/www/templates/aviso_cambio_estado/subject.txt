@@ -1,0 +1,1 @@
+Aviso de cambio de estado del <com:tic_identificador/>

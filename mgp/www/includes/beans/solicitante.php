@@ -160,7 +160,7 @@ class solicitante {
          $primary_db->do_execute($sql6,$errores,$params6);
 
          
-         //Creo un mensaje de mail para el ciudadano
+         //Creo un mensaje de mail para el ciudadano, con un recibo por ticket
          if( $this->ciu_email!=='' ) {
             $mt = new cmail_type("IMPRESION", "www/lmodules/tickets/ticket_maint.php", "tic_nro=".$ticket->getNro(),"aviso_nuevo_ticket");
             $msg = new cmessage();

@@ -8,7 +8,7 @@ class CDH_CANAL extends CDH_SELECTARRAY
             parent::__construct($parent);
             $this->m_array = array(
                 "call"          =>  "call",
-                "web"           =>  "web",
+                "internet"      =>  "internet",
                 "movil"         =>  "movil",
                 "presencial"    =>  "presencial"
             );

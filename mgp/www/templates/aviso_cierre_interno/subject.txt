@@ -1,0 +1,1 @@
+Alerta de cierre de <com:tic_identificador/>

@@ -771,7 +771,7 @@ class ticket {
                                         
                 //Aviso al WS MiCiudad si el ticket es del canal movil.
                 $canal = strtolower($this->tic_canal);
-                if($canal==='movil' || $canal==='web') {
+                if($canal==='movil' || $canal==='internet') {
                     $ev = new eventbus_event();
                     $ev->eev_task = 'miciudad';
                     $ev->eev_data = array(
@@ -811,6 +811,9 @@ class ticket {
 
                         //Aviso x mail a los ciudadanos interesados (y registro esto en su historia)
                         $this->notificarSolicitantes('aviso_cierre', $pres, $nota);
+                    } else {
+                        //Cambio de estado intermedio
+                        $this->notificarSolicitantes('aviso_cambio_estado', $pres, $nota);
                     }
                 }
                 
@@ -860,12 +863,12 @@ class ticket {
     
     //Envia un mensaje a cada solicitante y crea un registro en su historia
     function notificarEmail($template, $prestacion, $nota, $email, $nombres='', $apellido='') {
-        
-        $subject = 'Cambio de estado de ticket';        
+        error_log("notificarEmail(\$template={$template}, \$prestacion, \$nota={$nota}, \$email={$email}, \$nombres={$nombres}, \$apellido={$apellido}");
+        $subject = '';        
         if($email!='') {
 
             //Armo la dirección
-            $direccion = $this->tic_calle_nombre.' '.$this->tic_nro.' '.($this->tic_cruza_calle!='' ? 'y '.$this->tic_cruza_calle : '');
+            $direccion = $this->tic_calle_nombre.' '.($this->tic_calle_nombre2!='' ? 'y '.$this->tic_calle_nombre2 : $this->tic_nro);
             if($this->tic_nro!='') {
                 $direccion.= ($this->tic_piso!='' ? ' piso '.$this->tic_piso : '');
                 $direccion.= ($this->tic_dpto!='' ? ' dpto '.$this->tic_dpto : '');
@@ -874,10 +877,10 @@ class ticket {
             $last_avance = $prestacion->getLastAvance();
 
             //Campos del template
-            $tem_fld = json_encode(array(
-                'ticket'        => $this->tic_identificador,
+            $tem_fld = json_encode( array(
+                'tic_identificador' => $this->tic_identificador,
                 'prestacion'    => $prestacion->tpr_description,
-                'direccion'     => $direccion,
+                'lugar'         => $direccion,
                 'lat'           => $this->tic_coordx,
                 'lng'           => $this->tic_coordy,
                 'nombre'        => $nombres,
@@ -885,13 +888,16 @@ class ticket {
                 'estado_ticket' => $this->tic_estado,
                 'fecha'         => ISO8601toDate($last_avance->tav_tstamp_in),
                 'estado_prest'  => $prestacion->ttp_estado,
-                'nota'          => $nota
+                'nota'          => $nota,
+                'plazo'         => $this->tic_tstamp_plazo,
+                'tic_tipo'      => $this->tic_tipo
             ));
 
             $msg = new cmessage();
             $mt = new cmail_type("HTML",'','',$template);
             $headers = array();
             $r = $msg->Send(DEFAULT_SMTP,$email,$mt,$headers,$subject,$tem_fld);
+            error_log("notificarEmail() Resultado: {$r}");
         }    
     }
 
@@ -999,6 +1005,8 @@ class ticket {
         
         //Fecha de vencimiento del ticket
         $this->tic_tstamp_plazo = $this->prestaciones[0]->ttp_tstamp_plazo;
+        
+        $this->tic_estado = 'ABIERTO';
     }
     
     //Determina el canal de ingreso, mirando en los atributos del usuario

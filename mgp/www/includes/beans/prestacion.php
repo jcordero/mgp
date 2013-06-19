@@ -158,6 +158,13 @@ class prestacion {
             );
             $ev->save();        
         }
+        
+        //Aviso interno al ingresar la prestacion
+        $al_inicio = $primary_db->QueryString("select tpr_al_inicio from tic_prestaciones where tpr_code='{$this->tpr_code}'");
+
+        if( $al_inicio!='' ) {
+            $ticket->notificarEmail('aviso_ingreso_interno', $this, $ticket->tic_nota_in, $al_inicio);                
+        }
     }
     
     /**

@@ -74,9 +74,11 @@ class class_tic_ticket_upd_hooks extends cclass_maint_hooks
         
         //Determino la prestacion
         $desc_prest = "";
+        $estado = "";
         $prest = ( isset($obj->m_childs['class_tic_ticket_prestaciones'][0]) ? $obj->m_childs['class_tic_ticket_prestaciones'][0] : null);
         if($prest) {
             $tpr_code = $prest->getField("tpr_code")->getValue();
+            $estado = $prest->getField("ttp_estado")->getValue();
             $desc_prest = $primary_db->QueryString("select tpr_detalle from tic_prestaciones where tpr_code='{$tpr_code}'");
         }
         
@@ -85,7 +87,8 @@ class class_tic_ticket_upd_hooks extends cclass_maint_hooks
         $content['plazo'] = $obj->getField("tic_tstamp_plazo")->getValue();
         $content['lugar'] = $lugar;
         $content['prestacion'] = $desc_prest;
-       
+        $content['estado'] = $estado;
+        
         $this->m_parent->addContent($content);
         return $res;
     }
