@@ -1,6 +1,6 @@
 
-//var site = 'http://mgp';
-var site = 'http://147.mardelplata.gob.ar';
+var site = 'http://mgp';
+//var site = 'http://147.mardelplata.gob.ar';
 //var site = 'http://mgp.commsys.com.ar';
 
 $(document).ready(function(){

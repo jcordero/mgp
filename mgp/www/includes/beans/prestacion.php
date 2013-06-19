@@ -11,7 +11,10 @@ class prestacion {
     
     /** nombre de la prestacion */
     public $tpr_description;
-    
+   
+    /** nombre de la prestacion completo */
+    public $tpr_description_full;
+   
     /** codigo de rubro */
     public $tru_code; 
     
@@ -196,7 +199,7 @@ class prestacion {
             $prest->avance            = avance::factory($tic_nro, $row['tpr_code']);
             $prest->organismos        = organismo::factory($tic_nro, $row['tpr_code']);
             $prest->cuestionario      = cuestionario::factory($tic_nro, $row['tpr_code']); 
-            
+            $prest->tpr_description_full = self::getFullDescription($prest->tpr_code);
             $ret[] = $prest;
         }
         return $ret;
@@ -221,6 +224,7 @@ class prestacion {
         if( $row )
         {
             $prest->tpr_description = $row['tpr_detalle'];
+            $prest->tpr_description_full = self::getFullDescription($p->tpr_code);
             $prest->tpr_tipo = $row['tpr_tipo'];
             
             //El plazo viene en dos partes, una donde esta la cantidad y otra donde esta la unidad. Ejemplo: 2 dias
@@ -432,6 +436,19 @@ class prestacion {
         return date('Y-m-d H:i:s',$vencimiento);
     }
     
+    static function getFullDescription($tpr_code) {
+        global $primary_db;
+        $desc = "";
+        for($j=2; $j<=strlen($tpr_code); $j+=2) {
+            $cod = substr($tpr_code, 0, $j);
+            $parte = $primary_db->QueryString("select tpr_detalle from tic_prestaciones where tpr_code='{$cod}'");
+            $desc.=($desc=='' ? $parte : ' / '.$parte);
+        }
+        
+        return $desc;
+    }
+
+
     /**
      * Cargar la prestacion desde la UI
      * 
@@ -453,6 +470,7 @@ class prestacion {
         if( $row )
         {
             $p->tpr_description = $row['tpr_detalle'];
+            $p->tpr_description_full = self::getFullDescription($p->tpr_code);
             $p->tpr_tipo = $row['tpr_tipo'];
             
             //El plazo viene en dos partes, una donde esta la cantidad y otra donde esta la unidad. Ejemplo: 2 dias
