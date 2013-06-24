@@ -348,7 +348,7 @@ class prestacion {
      */
     static function plazoComponents($tpr_plazo) {
         if($tpr_plazo=="")
-            return array("10", "DAY");
+            return array("10", "DAY", "CORRIDOS");
         
         $p = explode(' ',$tpr_plazo);
         $plazo = (double) $p[0];
@@ -371,11 +371,12 @@ class prestacion {
         }
         
         if(isset($p[2])) {
-            $plazo_tipo = strtoupper($plazo_unit[2]);
+            $plazo_tipo = strtoupper($p[2]);
         } else {
             $plazo_tipo = 'CORRIDOS';
         }
                 
+        error_log("plazoComponents($tpr_plazo) plazo=$plazo, unit=$plazo_unit, tipo=$plazo_tipo ");
         return array($plazo, $plazo_unit, $plazo_tipo);
     }
     
@@ -432,8 +433,9 @@ class prestacion {
             if( date('D',$vencimiento)==='Sun' )
                     $vencimiento += 86400;
         }
-        
-        return date('Y-m-d H:i:s',$vencimiento);
+        $resultado = date('Y-m-d H:i:s',$vencimiento);
+        error_log("getVencimiento(\$cant=$cant, \$unit=$unit, \$tipo=$tipo) resultado  ".$resultado);
+        return $resultado;
     }
     
     static function getFullDescription($tpr_code) {
