@@ -1,3 +1,7 @@
+/* @version {24-Jun-2013 13:25} 
+ * 
+ * @type marker
+ */
 var last_marker_clicked = null;
 var luminariaOnIcon = null;
 var luminariaIcon = null;
