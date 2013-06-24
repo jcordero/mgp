@@ -80,15 +80,15 @@ $(document).ready(function() {
     
     luminariaOnIcon = L.icon({
         iconUrl:    sess_web_path+'/images/mapicons/luminaria_on.png',
-        iconSize:     [32, 37], // size of the icon
-        iconAnchor:   [16, 38], // point of the icon which will correspond to marker's location
-        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        iconSize:     [32, 37], 
+        iconAnchor:   [16, 38],
+        popupAnchor:  [-3, -76]
     });
     luminariaIcon = L.icon({
         iconUrl:    sess_web_path+'/images/mapicons/luminaria.png',
-        iconSize:     [32, 37], // size of the icon
-        iconAnchor:   [16, 38], // point of the icon which will correspond to marker's location
-        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        iconSize:     [32, 37],
+        iconAnchor:   [16, 38],
+        popupAnchor:  [-3, -76]
     });
 
 });
@@ -96,6 +96,10 @@ $(document).ready(function() {
 
 /* ---------- SECCION DOMICILIO -------------------------*/
 
+/** Validar la dirección ingresada
+ * 
+ * @returns {void}
+ */
 function valida_direccion() {
     var calle = $('#m_calle').val();
     var calle2 = $('#m_calle2').val();
@@ -161,7 +165,10 @@ function valida_direccion() {
     },"TICKET::DIRECCION","validarDireccion", calle+'|'+calle2+'|'+altura+'|NO|'+alternativa);
 }
 
-
+/** Muestro los campos editables nuevamente
+ * 
+ * @returns {void}
+ */
 function cambia_direccion() {
     //Oculto los campos read only
     $('#calle .fldl').hide();
@@ -188,7 +195,10 @@ function cambia_direccion() {
     mapa_domicilio = crearMapa('m_mapa');
 }
 
-
+/** Oculto los campos editables de la dirección
+ * 
+ * @returns {void}
+ */
 function direccion_validada() {
     //Oculto la calle y altura
     $('#alternativa').hide();
@@ -247,21 +257,30 @@ function valida_direccion_lum(){
         var o = JSON.parse(json);
         $('#progress').remove();
         if(o.resultado==='ok') {
-            //Actualizo los valores
+    
+            //Coordenadas
             $('#m_tic_coordx').val(o.latitud);
             $('#m_tic_coordy').val(o.longitud);
+            
+            //Barrio
             $('#m_tic_barrio_lum').val(o.barrio);
             $('#lm_tic_barrio_lum').html(o.barrio);
+            
+            //Codigo de calle
             $('#m_calle_lum').val(o.cod_calle);
-
             $('#hm_calle_lum').val(o.calle);
+            
+            //Nombre de la calle
             $('#m_calle_nombre_lum').val(o.calle);
 
+            //Codigo de la calle que cruza
             $('#m_calle2_lum').val(o.cod_calle2);
-
             $('#hm_calle2_lum').val(o.calle2);
+            
+            //Nombre de la calle que cruza
             $('#m_calle_nombre2_lum').val(o.calle2);
 
+            //Conjunto de luminarias proximas
             lista_luminarias = o.luminarias;
 
             //Cargo el mapa con un marker azul en la dirección elegida
@@ -273,7 +292,6 @@ function valida_direccion_lum(){
             for(var j=0;j<cant;j++) {
                 var pt = o.luminarias[j];
                 L.marker([pt.lat,pt.lng], {icon: luminariaIcon}).addTo(mapa_luminaria).on('click',marker_click);
-                //.bindPopup(pt.dir + '<br>id: '+ pt.id + '<br>Situación: '+pt.sit);
             }
             
             direccion_validada_lum();
@@ -286,7 +304,10 @@ function valida_direccion_lum(){
     },"TICKET::DIRECCION","validarDireccion", calle+'|'+calle2+'|'+altura+'|SI|'+alternativa);
 }
 
-
+/** Muestra los campos de edicion para volver a valiar la dirección
+ * 
+ * @returns {void}
+ */
 function cambia_direccion_lum(){
     
     //Oculto los campos read only
@@ -315,6 +336,12 @@ function cambia_direccion_lum(){
     setAlertLuminaria();
 }
 
+
+/** Crea un mapa dinamico
+ * 
+ * @param {string} id del div donde va el mapa
+ * @returns {map}
+ */
 function crearMapa(id) {
     var p = $('#'+id).parent();
     $('#'+id).remove();
@@ -329,7 +356,10 @@ function crearMapa(id) {
     return mapa;
 }
 
-
+/** Muestra el mensaje de aviso que debe elegir una luminaria 
+ * 
+ * @returns {void}
+ */
 function setAlertLuminaria() {
     if( $('#alert_luminaria').length===0 )
     $('#contenido_luminaria').append('<div id="alert_luminaria" class="alert alert-block" style="width: 700px;"> \n\
@@ -339,7 +369,10 @@ function setAlertLuminaria() {
                 </div>');
 }
 
-
+/** Oculta los campos editables una vez validada la dirección
+ * 
+ * @returns {void}
+ */
 function direccion_validada_lum() {
     //Oculto la calle y altura
     $('#alternativa_lum').hide();
@@ -366,7 +399,11 @@ function direccion_validada_lum() {
     callenro_lum.m_status = 'pass';
 }
 
-
+/** Procesa el click sobre la luminaria
+ * 
+ * @param {event} e
+ * @returns {void}
+ */
 function marker_click(e) {
     var marker = e.target;
     var pt = marker.getLatLng();
@@ -389,23 +426,25 @@ function marker_click(e) {
             calle2_lum.m_mandatory = false;
             
             //Completo la direccion de la luminaria
+            //(solo si los datos estan completos)
             $('#m_id_luminaria').val(lum.id);
-            $('#lm_id_luminaria').html(lum.id + ' (' + lum.sit + ')');
+            $('#lm_id_luminaria').html('#'+lum.id);
             
             //Cambio la direccion del reclamo
-            $('#m_tic_coordx').val(lum.lat);
-            $('#m_tic_coordy').val(lum.lng);
-            
-          
-            $('#hm_calle_lum').val(lum.calle);
-            $('#hm_calle_lum').val(lum.calle);
-            $('#calle_lum .fldl').html(lum.calle);
-            
-            $('#m_calle_nombre_lum').val(lum.calle);
-            
-            $('#m_callenro_lum').val(lum.altura);
-            $('#callenro_lum .fldl').html(lum.altura);
+            if(lum.calle!=='' && lum.altura!=='') {
+                $('#m_tic_coordx').val(lum.lat);
+                $('#m_tic_coordy').val(lum.lng);
 
+
+                $('#hm_calle_lum').val(lum.calle);
+                $('#hm_calle_lum').val(lum.calle);
+                $('#calle_lum .fldl').html(lum.calle);
+
+                $('#m_calle_nombre_lum').val(lum.calle);
+
+                $('#m_callenro_lum').val(lum.altura);
+                $('#callenro_lum .fldl').html(lum.altura);
+            }
             //Validacion del campo
             calle_lum.m_status = 'pass';
             break;

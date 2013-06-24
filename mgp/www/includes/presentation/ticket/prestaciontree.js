@@ -62,6 +62,14 @@ function m_prestacion_onSelect(row)
             var divobj = null;
             setValuePair("m_tipo_georef",georef,georef);
 
+            calle_lum.m_mandatory = false;
+            callenro_lum.m_mandatory = false;
+            id_luminaria.m_mandatory = false;
+            villa.m_mandatory = false;
+            plaza.m_mandatory = false;
+            cementerio.m_mandatory = false;
+            orgpublico.m_mandatory = false;
+
             if(georef==='' || georef==="DOMICILIO")
             {
                 divobj = $("#bloque_domicilio").show();
@@ -100,7 +108,7 @@ function m_prestacion_onSelect(row)
                 divobj = $("#bloque_luminaria").show();
                 calle_lum.m_mandatory = true;
                 callenro_lum.m_mandatory = true;
-                id_luminaria.m_mandatory = true;
+                id_luminaria.m_mandatory = false;
                 
                 //Activo el mapa interactivo en el centro de MDQ
                 if(typeof mapa_luminaria.setView === 'undefined') { 
