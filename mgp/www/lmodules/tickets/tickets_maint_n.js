@@ -21,26 +21,26 @@ $(document).ready(function() {
     }
     
     //campos extra en las direcciones
-    $('#alternativa .fldm').append('<div class="fldl"></div>');
-    $('#calle .fldm').append('<div class="fldl"></div>');
-    $('#calle2 .fldm').append('<div class="fldl"></div>');
-    $('#callenro .fldm').append('<div class="fldl"></div>');
+    $('#alternativa .fld').append('<div class="fldl"></div>');
+    $('#calle .fld').append('<div class="fldl"></div>');
+    $('#calle2 .fld').append('<div class="fldl"></div>');
+    $('#callenro .fld').append('<div class="fldl"></div>');
     $('#piso .fld').append('<div class="fldl"></div>');
     $('#dpto .fld').append('<div class="fldl"></div>');
 
     //campos extra en las luminarias 
-    $('#alternativa_lum .fldm').append('<div class="fldl"></div>');
-    $('#calle_lum .fldm').append('<div class="fldl"></div>');
-    $('#callenro_lum .fldm').append('<div class="fldl"></div>');
-    $('#calle2_lum .fldm').append('<div class="fldl"></div>');
+    $('#alternativa_lum .fld').append('<div class="fldl"></div>');
+    $('#calle_lum .fld').append('<div class="fldl"></div>');
+    $('#callenro_lum .fld').append('<div class="fldl"></div>');
+    $('#calle2_lum .fld').append('<div class="fldl"></div>');
     
     /* Boton de validar la direccion */
     $('#contenido_domicilio').after(
-            '<div><button class="btn" id="valida_direccion">Validar Dirección</button> <button class="btn hide" id="cambia_direccion">Cambiar Dirección</button></div>');
+        '<div><button class="btn" id="valida_direccion">Validar Dirección</button> <button class="btn hide" id="cambia_direccion">Cambiar Dirección</button></div>');
     
     /* Boton de validar la direccion en luminarias */
     $('#contenido_luminaria').after(
-            '<div><button class="btn" id="valida_direccion_lum">Validar Dirección</button> <button class="btn hide" id="cambia_direccion_lum">Cambiar Dirección</button></div>');
+        '<div><button class="btn" id="valida_direccion_lum">Validar Dirección</button> <button class="btn hide" id="cambia_direccion_lum">Cambiar Dirección</button></div>');
     
     /* Opcion de escribir la direccion */
     $('#m_alternativa').change(function(){
@@ -106,13 +106,15 @@ $(document).ready(function() {
  */
 function valida_direccion() {
     var calle = $('#m_calle').val();
+    var calle_nombre = $('#hm_calle').val();
     var calle2 = $('#m_calle2').val();
+    var calle2_nombre = $('#hm_calle2').val();
     var altura = $('#m_callenro').val();
     var alternativa = $('#m_alternativa').val();
     	
     if(calle.length!==5) {
         alert_box('Debe completar la calle antes de validar la dirección');
-    return;
+        return;
     }
 
     if(altura==='' && alternativa==='NRO') {
@@ -126,47 +128,56 @@ function valida_direccion() {
     }
 
     $('#m_mapa').parent().append('<div id="progress1" class="progress progress-striped active"><div class="bar" style="width:100%;"></div></div>');
-
+    var params = { 
+        'cod_calle':calle,
+        'nom_calle':calle_nombre,        
+        'cod_calle2':calle2,
+        'nom_calle2':calle2_nombre,
+        'altura':altura,
+        'luminarias':'NO',
+        'alternativa':alternativa
+    };
     new rem_request(this,function(obj,json){
             var o = JSON.parse(json);
             $('#progress1').remove();
             if(o.resultado==='ok') {
-                //Actualizo los valores
+                //Coordenadas
                 $('#m_tic_coordx').val(o.latitud);
                 $('#m_tic_coordy').val(o.longitud);
+                
+                //Barrio
                 $('#m_tic_barrio').val(o.barrio);
                 $('#lm_tic_barrio').html(o.barrio);
 
-                $('#m_calle').val(o.cod_calle);
-                $('#hm_calle').val(o.calle);
+                //Codigo calle
+                //$('#m_calle').val(o.cod_calle);
+                //$('#hm_calle').val(o.calle);
+                
+                //Nombre de calle
                 $('#m_calle_nombre').val(o.calle);
 
-                $('#m_calle2').val(o.cod_calle2);
-                $('#hm_calle2').val(o.calle2);
+                //Codigo de calle cruza
+                //$('#m_calle2').val(o.cod_calle2);
+                //$('#hm_calle2').val(o.calle2);
+                
+                //Nombre calle cruza
                 $('#m_calle_nombre2').val(o.calle2);
-
-                //Cargo el mapa estatico 350 x 250px
-                /* GoogleMaps
-                 * $('#m_mapa img').attr('src','http://maps.googleapis.com/maps/api/staticmap?center='+o.longitud+','+o.latitud+'&zoom=17&size=350x250&maptype=roadmap&markers=color:blue%7Clabel:%7C'+o.longitud+','+o.latitud+'&sensor=false');
-                 * 
-                 * OpenStreetMap
-                 * $('#m_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
-                 */
-                //$('#m_mapa img').attr('src','http://maps.googleapis.com/maps/api/staticmap?center='+o.latitud+','+o.longitud+'&zoom=17&size=350x250&maptype=roadmap&markers=color:blue%7Clabel:%7C'+o.latitud+','+o.longitud+'&sensor=false');
                 
+                //Seteo mapa centrado en coordenadas
                 mapa_domicilio.setView([o.latitud,o.longitud],18);
-                if(marker_domicilio===null)
-                    marker_domicilio = L.marker([o.latitud,o.longitud]).addTo(mapa_domicilio).bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''));
-                else
-                    marker_domicilio.setLatLng([o.latitud,o.longitud]).unbindPopup().bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : '')).update();
                 
+                //Marker en el domicilio
+                if(marker_domicilio!==null)
+                    mapa_domicilio.removeLayer(marker_domicilio);
+                    
+                marker_domicilio = L.marker([o.latitud,o.longitud]).addTo(mapa_domicilio).bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''));
                 direccion_validada();
             }
             else
             {
                 alert_box("La dirección indicada no existe", "Validar dirección");
             }
-    },"TICKET::DIRECCION","validarDireccion", calle+'|'+calle2+'|'+altura+'|NO|'+alternativa);
+    },"TICKET::DIRECCION","validarDireccion", JSON.stringify(params));
 }
 
 /** Muestro los campos editables nuevamente
@@ -174,6 +185,9 @@ function valida_direccion() {
  * @returns {void}
  */
 function cambia_direccion() {
+    var calle = $('#m_calle').val();
+    var calle2 = $('#m_calle2').val();
+
     //Oculto los campos read only
     $('#calle .fldl').hide();
     $('#callenro .fldl').hide();
@@ -182,19 +196,30 @@ function cambia_direccion() {
 
     //Muestro los campo editables
     $('#alternativa').show();
-    $('#calle .fldm input').show();
-    $('#calle .fldm img').show();
-    $('#callenro .fldm input').show();
+    $('#calle .fld input').show();
+    $('#calle .fld img').show();
+    $('#callenro .fld input').show();
     $('#piso .fld input').show();
     $('#dpto .fld input').show();
-    $('#calle2 .fldm input').show();
-    $('#calle2 .fldm img').show();
-    $('#callenro2 .fldm input').show();
+    $('#calle2 .fld input').show();
+    $('#calle2 .fld img').show();
+    $('#callenro2 .fld input').show();
 
     //Muestro los botones
     $('#cambia_direccion').hide();
     $('#valida_direccion').show();
     
+    //Limpio el nombre de la calle si no tiene el codigo cargado
+    if(calle==='') {
+        $('#hm_calle').val('');
+        $('#m_calle_nombre').val('');
+        $('#m_callenro').val('');
+    }
+    
+    if(calle2==='') {
+        $('#hm_calle2').val('');
+    }
+
     //Reseteo el mapa
     mapa_domicilio = crearMapa('m_mapa');
 }
@@ -206,13 +231,13 @@ function cambia_direccion() {
 function direccion_validada() {
     //Oculto la calle y altura
     $('#alternativa').hide();
-    $('#calle .fldm input').hide();
-    $('#calle .fldm img').hide();
-    $('#callenro .fldm input').hide();
+    $('#calle .fld input').hide();
+    $('#calle .fld img').hide();
+    $('#callenro .fld input').hide();
     $('#piso .fld input').hide();
     $('#dpto .fld input').hide();
-    $('#calle2 .fldm input').hide();
-    $('#calle2 .fldm img').hide();
+    $('#calle2 .fld input').hide();
+    $('#calle2 .fld img').hide();
    
     //Pongo los campos ReadOnly
     $('#calle .fldl').html( $('#hm_calle').val() ).show();
@@ -224,6 +249,10 @@ function direccion_validada() {
     //Cambio los botones
     $('#valida_direccion').hide();
     $('#cambia_direccion').show();
+    
+    calle2.m_status = 'pass';
+    calle.m_status = 'pass';
+    callenro.m_status = 'pass';
 }
 
 
@@ -236,7 +265,9 @@ function direccion_validada() {
  */
 function valida_direccion_lum(){
     var calle = $('#m_calle_lum').val();
+    var calle_nombre = $('#hm_calle_lum').val();
     var calle2 = $('#m_calle2_lum').val();
+    var calle2_nombre = $('#hm_calle2_lum').val();
     var altura = $('#m_callenro_lum').val();
     var alternativa = $('#m_alternativa_lum').val();
 
@@ -256,7 +287,15 @@ function valida_direccion_lum(){
     }
 
     $('#m_mapa_lum').parent().append('<div id="progress" class="progress progress-striped active"><div class="bar" style="width:100%;"></div></div>');
-
+    var params = { 
+        'cod_calle':calle,
+        'nom_calle':calle_nombre,        
+        'cod_calle2':calle2,
+        'nom_calle2':calle2_nombre,
+        'altura':altura,
+        'luminarias':'SI',
+        'alternativa':alternativa
+    };
     new rem_request(this,function(obj,json){
         var o = JSON.parse(json);
         $('#progress').remove();
@@ -271,15 +310,15 @@ function valida_direccion_lum(){
             $('#lm_tic_barrio_lum').html(o.barrio);
             
             //Codigo de calle
-            $('#m_calle_lum').val(o.cod_calle);
-            $('#hm_calle_lum').val(o.calle);
+            //$('#m_calle_lum').val(o.cod_calle);
+            //$('#hm_calle_lum').val(o.calle);
             
             //Nombre de la calle
             $('#m_calle_nombre_lum').val(o.calle);
 
             //Codigo de la calle que cruza
-            $('#m_calle2_lum').val(o.cod_calle2);
-            $('#hm_calle2_lum').val(o.calle2);
+            //$('#m_calle2_lum').val(o.cod_calle2);
+            //$('#hm_calle2_lum').val(o.calle2);
             
             //Nombre de la calle que cruza
             $('#m_calle_nombre2_lum').val(o.calle2);
@@ -305,7 +344,7 @@ function valida_direccion_lum(){
         {
             alert_box("La dirección indicada no existe", "Validar dirección");
         }
-    },"TICKET::DIRECCION","validarDireccion", calle+'|'+calle2+'|'+altura+'|SI|'+alternativa);
+    },"TICKET::DIRECCION","validarDireccion", JSON.stringify(params));
 }
 
 /** Muestra los campos de edicion para volver a valiar la dirección
@@ -313,6 +352,8 @@ function valida_direccion_lum(){
  * @returns {void}
  */
 function cambia_direccion_lum(){
+    var calle = $('#m_calle_lum').val();
+    var calle2 = $('#m_calle2_lum').val();
     
     //Oculto los campos read only
     $('#calle_lum .fldl').hide();
@@ -321,11 +362,11 @@ function cambia_direccion_lum(){
 
     //Muestro los campo editables
     $('#alternativa_lum').show();
-    $('#calle_lum .fldm input').show();
-    $('#calle_lum .fldm img').show();
-    $('#callenro_lum .fldm input').show();
-    $('#calle2_lum .fldm input').show();
-    $('#calle2_lum .fldm img').show();
+    $('#calle_lum .fld input').show();
+    $('#calle_lum .fld img').show();
+    $('#callenro_lum .fld input').show();
+    $('#calle2_lum .fld input').show();
+    $('#calle2_lum .fld img').show();
 
     //Muestro los botones
     $('#cambia_direccion_lum').hide();
@@ -334,6 +375,17 @@ function cambia_direccion_lum(){
     $('#m_id_luminaria').val('');
     $('#lm_id_luminaria').html('');
 
+    //Limpio el nombre de la calle si no tiene el codigo cargado
+    if(calle==='') {
+        $('#hm_calle_lum').val('');
+        $('#m_calle_nombre_lum').val('');
+        $('#m_callenro_lum').val('');
+    }
+    
+    if(calle2==='') {
+        $('#hm_calle2_lum').val('');
+    }
+    
     //Reseteo el mapa
     mapa_luminaria = crearMapa('m_mapa_lum');
 
@@ -378,16 +430,19 @@ function setAlertLuminaria() {
  * @returns {void}
  */
 function direccion_validada_lum() {
-    //Oculto la calle y altura
+    //Alternativa calle altura / calle cruza calle
     $('#alternativa_lum').hide();
     
-    $('#calle_lum .fldm input').hide();
-    $('#calle_lum .fldm img').hide();
+    //codigo de calle y descripcion
+    $('#calle_lum .fld input').hide();
+    $('#calle_lum .fld img').hide();
     
-    $('#callenro_lum .fldm input').hide();
+    //Altura
+    $('#callenro_lum .fld input').hide();
     
-    $('#calle2_lum .fldm input').hide();
-    $('#calle2_lum .fldm img').hide();
+    //Calle que cruza
+    $('#calle2_lum .fld input').hide();
+    $('#calle2_lum .fld img').hide();
     
     //Pongo los campos ReadOnly
     $('#calle_lum .fldl').html( $('#hm_calle_lum').val() ).show();
@@ -435,22 +490,27 @@ function marker_click(e) {
             $('#lm_id_luminaria').html('#'+lum.id);
             
             //Cambio la direccion del reclamo
-            if(lum.calle!=='' && lum.altura!=='') {
+            if(lum.calle!=='' && lum.altura!=='' && lum.altura!=='0') {
+                //Nuevas coordenadas
                 $('#m_tic_coordx').val(lum.lat);
                 $('#m_tic_coordy').val(lum.lng);
-
-
-                $('#hm_calle_lum').val(lum.calle);
+                
+                //Codigo y nombre de calle
+                $('#m_calle_lum').val('0');
                 $('#hm_calle_lum').val(lum.calle);
                 $('#calle_lum .fldl').html(lum.calle);
 
+                //Nombre de la calle
                 $('#m_calle_nombre_lum').val(lum.calle);
 
+                //Altura
                 $('#m_callenro_lum').val(lum.altura);
                 $('#callenro_lum .fldl').html(lum.altura);
             }
             //Validacion del campo
             calle_lum.m_status = 'pass';
+            calle2_lum.m_status = 'pass';
+            callenro_lum.m_status = 'pass';
             break;
         }
     }

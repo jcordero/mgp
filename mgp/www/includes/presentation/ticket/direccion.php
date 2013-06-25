@@ -9,100 +9,114 @@ class CDH_DIRECCION extends CDataHandler
     }
 	
     function validarDireccion($p) {
-        global $primary_db;
+        
+        /*
+            'cod_calle':calle,
+            'nom_calle':calle_nombre,        
+            'cod_calle2':calle2,
+            'nom_calle2':calle2_nombre,
+            'altura':altura,
+            'luminarias':'SI',
+            'alternativa':alternativa
+        */
+        $o = json_decode($p);
 
-        list($calle,$calle2,$altura,$luminarias,$alternativa) = explode('|',$p);
-
+        //No tengo el codigo de calle?
+        
+       
         //Convierto calle y altura en latitud y longitud
         $client = new SoapClient("http://gis.mardelplata.gob.ar/webservice/2.php?wsdl");
 	$client_barrio = new SoapClient("http://gis.mardelplata.gob.ar/webservice/zonificacion.php?wsdl");
         
-        if($alternativa=='NRO') {
-            try
-            {
-                $r = $client->coordenada_calle_altura($calle, $altura);
-            }
-            catch (SoapFault $exception)
-            {
-                error_log( "direccion.php coordenada_calle_altura() ->".$exception );
-                return json_encode(array("resultado"	=> 	"error"));
-            }
+        if($o->alternativa=='NRO') {
+            if($o->cod_calle!='' && $o->altura!='') {
+                try
+                {
+                    $r = $client->coordenada_calle_altura($o->cod_calle, $o->altura);
+                }
+                catch (SoapFault $exception)
+                {
+                    error_log( "direccion.php coordenada_calle_altura() ->".$exception );
+                    return json_encode(array("resultado"	=> 	"error"));
+                }
 
-            //Recupero el barrio
-            try
-            {
-                $b = $client_barrio->zonificacion_latlong($r->lng,$r->lat,1);
-                error_log("direccion.php zonificacion_latlong() ->".print_r($b,true));
+                //Recupero el barrio
+                try
+                {
+                    $b = $client_barrio->zonificacion_latlong($r->lng,$r->lat,1);
+                    error_log("direccion.php zonificacion_latlong(long={$r->lng},lat={$r->lat},layer=1) ->".print_r($b,true));
+                }
+                catch (SoapFault $exception)
+                {
+                    error_log( "direccion.php zonificacion_latlong() ->".$exception );
+                    return json_encode(array("resultado"	=> 	"error"));
+                }		 
             }
-            catch (SoapFault $exception)
+            else
             {
-                error_log( "direccion.php zonificacion_latlong() ->".$exception );
-                return json_encode(array("resultado"	=> 	"error"));
-            }		 
-  
-
+                error_log("Falta código de calle/altura! calle={$o->cod_calle} altura={$o->altura}");
+                $r->lat=0;
+                $r->lng=0;
+                $b->descripcion = '';
+            }
         }
         else
         {
-            try
-            {
-                $r = $client->coordenada_calle_calle($calle, $calle2);
-            }
-            catch (SoapFault $exception)
-            {
-                error_log( "direccion.php coordenada_calle_calle() ->".$exception );
-                return json_encode(array("resultado"	=> 	"error"));
-            }
+            if($o->cod_calle!='' && $o->cod_calle2!='') {
+                try
+                {
+                    $r = $client->coordenada_calle_calle($o->cod_calle, $o->cod_calle2);
+                }
+                catch (SoapFault $exception)
+                {
+                    error_log( "direccion.php coordenada_calle_calle() ->".$exception );
+                    return json_encode(array("resultado"	=> 	"error"));
+                }
 
-            
-            //Recupero el barrio
-            try
-            {
-                $b = $client_barrio->zonificacion_latlong($r->lng,$r->lat,1);
-                error_log("direccion.php zonificacion_latlong() ->".print_r($b,true));
-            }
-            catch (SoapFault $exception)
-            {
-                error_log( "direccion.php zonificacion_latlong() ->".$exception );
-                return json_encode(array("resultado"	=> 	"error"));
-            }		 
 
+                //Recupero el barrio
+                try
+                {
+                    $b = $client_barrio->zonificacion_latlong($r->lng,$r->lat,1);
+                    error_log("direccion.php zonificacion_latlong(long={$r->lng},lat={$r->lat},layer=1) ->".print_r($b,true));
+                }
+                catch (SoapFault $exception)
+                {
+                    error_log( "direccion.php zonificacion_latlong() ->".$exception );
+                    return json_encode(array("resultado"	=> 	"error"));
+                }		 
+            }
+            else
+            {
+                error_log("Faltan códigos de calles! calle={$o->cod_calle} calle2={$o->cod_calle2}");
+                $r->lat=0;
+                $r->lng=0;
+                $b->descripcion = '';
+            }
         }
                 
- 		
-        //Busco el nombre de la calle posta
-        $row1 = $primary_db->QueryArray("select gca_codigo,gca_descripcion from geo_calles where gca_codigo='{$calle}'");
-
-        if($calle2!=='') {
-            $row2 = $primary_db->QueryArray("select gca_codigo,gca_descripcion from geo_calles where gca_codigo='{$calle2}'");
-            if($row2==null)
-                $row2 = array('gca_descripcion'=>'', 'gca_codigo'=>$calle2);
-        } else
-            $row2 = array('gca_descripcion'=>'', 'gca_codigo'=>0);
-                
         //Es una direccion imposible?
-        if( $r->lat=="0" && $r->lng=="0" )
+        if( $r->lat==0 && $r->lng==0 )
             $resultado = "error";
         else
             $resultado = "ok";
 
-        $o = array(
+        $res = array(
             "resultado"	=> 	$resultado,	
             "latitud" 	=> 	$r->lat,
             "longitud"	=>	$r->lng,
-            /*"barrio"	=>	$b->nombrebarrio,*/
             "barrio"    =>      $b->descripcion,
-            "calle"	=>	$row1['gca_descripcion'],
-            "cod_calle"	=> 	$row1['gca_codigo'],
-            "nro"       =>      $altura,
-            "calle2"    =>      $row2['gca_descripcion'],
-            "cod_calle2"=>      $row2['gca_codigo'],
+            "calle"	=>	$o->nom_calle,
+            "cod_calle"	=> 	$o->cod_calle,
+            "nro"       =>      $o->altura,
+            "calle2"    =>      $o->nom_calle2,
+            "cod_calle2"=>      $o->cod_calle2,
         );
 
-        error_log("direccion::validarDireccion() ".print_r($o,true));
+        error_log("direccion::validarDireccion() ".print_r($res,true));
                 
         //Hay que consultar las luminarias?
-        if($luminarias==='SI') {
+        if($o->luminarias==='SI' && $r->lat!='' && $r->lng!='') {
             try
             {
                 $distanciamaxima = 100;
@@ -110,8 +124,8 @@ class CDH_DIRECCION extends CDataHandler
                 $tipodesolicitud = '01';
                 $e = $client->elementos_fijos($tipodesolicitud,$r->lat,$r->lng,$distanciamaxima,$cantidadmaxima);
 
-                foreach($e as $lum)
-                    $o['luminarias'][] = array(
+                foreach($e as $lum) {
+                    $res['luminarias'][] = array(
                         'id'    => (int) $lum->id,
                         'lat'   => (double) $lum->latitud,
                         'lng'   => (double) $lum->longitud,
@@ -119,9 +133,7 @@ class CDH_DIRECCION extends CDataHandler
                         'altura'=> $lum->numero,
                         'sit'   => $lum->situacion
                     );
-                
-                //error_log("direccion::validarDireccion() ".print_r($e,true));
-
+                }
             }
             catch (SoapFault $exception)
             {
@@ -130,11 +142,14 @@ class CDH_DIRECCION extends CDataHandler
             }   
         }
                 
-        return json_encode($o);
+        return json_encode($res);
     }
+
     
-            function RenderReadOnly($cn,$showlabel=false)
-	{
+    
+    
+    function RenderReadOnly($cn,$showlabel=false)
+    {
 		$fld = $this->m_parent;
 		$html="";
 		$val = html_entity_decode( $fld->getValue() );
@@ -149,10 +164,14 @@ class CDH_DIRECCION extends CDataHandler
 		{    
                     $obj = json_decode($val);
                     if($obj) {
-                        $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? 'Calle: '.$obj->calle_nombre.' '.$obj->callenro.'<br/>' : '');
+                        if($obj->alternativa=="NRO")
+                            $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$obj->callenro.'<br/>' : '');
+                        else
+                            $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2.'<br/>' : '');
+                        
                         $mostrar .= (isset($obj->piso) && $obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
                         $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
-                        $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? 'Barrio: '.$obj->barrio : '');
+                        //$mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? 'Barrio: '.$obj->barrio : '');
                     }
             
                     if($showlabel)
