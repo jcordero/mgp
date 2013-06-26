@@ -20,7 +20,7 @@ class eventbus_limpieza extends eventbus_luminaria {
             //Cargo el ticket
             $t = new ticket();
             $t->setNro($d->ticket);
-            $t->load('archivos');
+            $t->load('todo');
             
             //URL del web service destinatario
             $url = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'limpieza.endpoint_url',"") );
@@ -36,7 +36,7 @@ class eventbus_limpieza extends eventbus_luminaria {
             )); 
 
             //Envio el mensaje
-            $ret = json_decode( $this->put($url, $data) );
+            $ret = $this->put($url, $data);
             
             if($ret!=200)
                 $msg = "Error #{$ret} del endpoint {$url}";
