@@ -224,7 +224,7 @@ class prestacion {
         if( $row )
         {
             $prest->tpr_description = $row['tpr_detalle'];
-            $prest->tpr_description_full = self::getFullDescription($p->tpr_code);
+            $prest->tpr_description_full = self::getFullDescription($prest->tpr_code);
             $prest->tpr_tipo = $row['tpr_tipo'];
             
             //El plazo viene en dos partes, una donde esta la cantidad y otra donde esta la unidad. Ejemplo: 2 dias

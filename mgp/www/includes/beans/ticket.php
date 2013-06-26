@@ -755,16 +755,25 @@ class ticket {
         global $primary_db;
         $estado = strtolower($nuevo_estado);
         
-        error_log("ticket::cambiar_estado($tpr_code,$estado,$nota,$fecha)");
+        error_log("ticket::cambiar_estado(\$tpr_code=$tpr_code,\$estado=$estado,\$nota=$nota,\$fecha=$fecha)");
         
         //Salvo el ticket
         if($transaction)
             $primary_db->beginTransaction();
-         
+        
+        //Hay que corregir el codigo de prestacion? (porque le falta un cero delante)
+        $lp = strlen($tpr_code);
+        if( $lp % 2 !== 0 ) {
+            $tpr_code = "0".$tpr_code;
+            error_log("ticket::cambiar_estado(\$tpr_code=$tpr_code) se corrige codigo de prestacion");        
+        }
+        
         //Busco la prestacion a modificar
+        $encontrada = false;
         foreach($this->prestaciones as $pres) {
             if( $pres->tpr_code===$tpr_code ) {
-        
+                $encontrada = true;
+                
                 //Modificar el estado de la prestacion del ticket
                 //Agregar un evento de avance a la prestacion
                 $pres->cambiar_estado($this,$estado,$nota);
@@ -821,6 +830,9 @@ class ticket {
                 $this->update();
             }
         }
+        
+        if(!$encontrada)
+            $this->addError('La prestación pedida no se encuentra en el ticket');
         
         if($transaction) {
             if(!$this->getStatus()) {
