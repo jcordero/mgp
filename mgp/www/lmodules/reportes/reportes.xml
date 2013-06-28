@@ -114,7 +114,7 @@
             </build>
 	</make>
 
-        <!-- Consulta Indicadores -->
+        <!-- Reporte de tickets y ciudadanos -->
 	<make object="search_and_list">
             <build out_file="reporte1.php" classname="rep1" title="Reporte de tickets">
 			
@@ -123,6 +123,7 @@
                 <searchfield name="ciu_nombres" presentation="TEXT" label="Nombre" />
                 <searchfield name="ciu_apellido" presentation="TEXT" label="Apellido" />
                 
+                <listfield name="tic_nro"           presentation="INT" label="Codigo" isvisible="false"/>
                 <listfield name="tic_tstamp_in"     presentation="DATERANGE" label="Ingreso"/>
                 <listfield name="tic_canal"         presentation="TEXT" label="Canal"/>
                 <listfield name="tic_identificador" presentation="TEXT" label="Ticket" />
@@ -135,6 +136,50 @@
                 <listfield name="ciu_tel_fijo"      presentation="TEXT" label="Teléfono" />
                 <listfield name="ciu_tel_movil"     presentation="TEXT" label="Móvil" />
 
+                <action label="ver" target="/lmodules/tickets/ticket_maint.php?OP=V" operation="V">
+			<sendfield classname="rep1" name="tic_nro"/>
+		</action>
+
+            </build>
+	</make>
+
+
+
+
+
+<!-- Clase reporte tickets vencidos  -->
+	<make object="class">
+            <build out_file="class_rep2.php" classname="rep2" classlabel="Reporte">
+                <parse in_file="../mgp.sql" tablename="v_ticket_vencido" />
+            </build>
+	</make>
+
+        <!-- Reporte de tickets y ciudadanos -->
+	<make object="search_and_list">
+            <build out_file="reporte2.php" classname="rep2" title="Reporte de tickets vencidos">
+			
+                <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingreso"/>
+                <searchfield name="tic_tstamp_plazo"  presentation="DATERANGE" label="Plazo" />
+                <searchfield name="tpr_detalle" presentation="TEXT" label="Prestación" />
+                <searchfield name="ciu_nombres" presentation="TEXT" label="Nombre" />
+                <searchfield name="ciu_apellido" presentation="TEXT" label="Apellido" />
+                
+                <listfield name="tic_nro"           presentation="INT" label="Codigo" isvisible="false"/>
+                <listfield name="tic_tstamp_in"     presentation="DATERANGE" label="Ingreso"/>
+                <listfield name="tic_identificador" presentation="TEXT" label="Ticket" />
+                <listfield name="tpr_code"          presentation="TEXT" label="Prestación" />
+                <listfield name="tpr_detalle"       presentation="TEXT" label="Prestación" />
+                <listfield name="tic_nota_in"       presentation="TEXT" label="Nota" />
+                <listfield name="ciu_nombres"       presentation="TEXT" label="Nombre" />
+                <listfield name="ciu_apellido"      presentation="TEXT" label="Apellido" />
+                <listfield name="ciu_tel_fijo"      presentation="TEXT" label="Teléfono" />
+                <listfield name="ciu_tel_movil"     presentation="TEXT" label="Móvil" />
+                <listfield name="tic_tstamp_plazo"  presentation="DATERANGE" label="Plazo" classparams="datetime" />
+                <listfield name="vencido"           presentation="TEXT" label="Excedido" />
+
+                <action label="ver" target="/lmodules/tickets/ticket_maint.php?OP=V" operation="V">
+			<sendfield classname="rep2" name="tic_nro"/>
+		</action>
             </build>
 	</make>
 

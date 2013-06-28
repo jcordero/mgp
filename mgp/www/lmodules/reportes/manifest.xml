@@ -11,6 +11,7 @@
     <menuitem name="Listar indicadores" action="/lmodules/reportes/indicadores.php?OP=V" order="3"/>
     
     <menuitem name="Reporte tickets-ciudadanos" action="/lmodules/reportes/reporte1.php?OP=V" order="4"/>  
+    <menuitem name="Reporte tickets-vencidos" action="/lmodules/reportes/reporte2.php?OP=V" order="5"/>  
 </menuitem>
 </menu>
 
