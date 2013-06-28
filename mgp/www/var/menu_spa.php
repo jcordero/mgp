@@ -37,6 +37,8 @@
         	$buff.='</li>';
         	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/indicadores.php?OP=V')."\">Listar indicadores</a>";
         	$buff.='</li>';
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte1.php?OP=V')."\">Reporte tickets-ciudadanos</a>";
+        	$buff.='</li>';
         	$buff.='</ul>';
         }
         if($this->haveRight($primary_db,'menu.archivo.tickets')) { 

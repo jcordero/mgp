@@ -8,7 +8,9 @@
 <menuitem name="Reportes" order="4" pda="false" right="menu.archivo.reportes">
     <menuitem name="Mapeo" action="/lmodules/reportes/mapeo.php?OP=N" order="1" />
     <menuitem name="Reporte por indicador" action="/lmodules/reportes/por_indicador.php?OP=N" order="2"/>
-    <menuitem name="Listar indicadores" action="/lmodules/reportes/indicadores.php?OP=V" order="5"/>  
+    <menuitem name="Listar indicadores" action="/lmodules/reportes/indicadores.php?OP=V" order="3"/>
+    
+    <menuitem name="Reporte tickets-ciudadanos" action="/lmodules/reportes/reporte1.php?OP=V" order="4"/>  
 </menuitem>
 </menu>
 

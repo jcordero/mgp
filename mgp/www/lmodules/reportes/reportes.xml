@@ -106,4 +106,37 @@
 
 
 
+
+<!-- Clase reporte tickets  -->
+	<make object="class">
+            <build out_file="class_rep1.php" classname="rep1" classlabel="Reporte">
+                <parse in_file="../mgp.sql" tablename="v_ticket_ciu" />
+            </build>
+	</make>
+
+        <!-- Consulta Indicadores -->
+	<make object="search_and_list">
+            <build out_file="reporte1.php" classname="rep1" title="Reporte de tickets">
+			
+                <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingreso"/>
+                <searchfield name="tpr_detalle" presentation="TEXT" label="Prestación" />
+                <searchfield name="ciu_nombres" presentation="TEXT" label="Nombre" />
+                <searchfield name="ciu_apellido" presentation="TEXT" label="Apellido" />
+                
+                <listfield name="tic_tstamp_in"     presentation="DATERANGE" label="Ingreso"/>
+                <listfield name="tic_canal"         presentation="TEXT" label="Canal"/>
+                <listfield name="tic_identificador" presentation="TEXT" label="Ticket" />
+                <listfield name="tpr_code"          presentation="TEXT" label="Prestación" />
+                <listfield name="tpr_detalle"       presentation="TEXT" label="Prestación" />
+                <listfield name="tic_nota_in"       presentation="TEXT" label="Nota" />
+                <listfield name="ciu_nombres"       presentation="TEXT" label="Nombre" />
+                <listfield name="ciu_apellido"      presentation="TEXT" label="Apellido" />
+                <listfield name="ciu_email"         presentation="TEXT" label="EMail" />
+                <listfield name="ciu_tel_fijo"      presentation="TEXT" label="Teléfono" />
+                <listfield name="ciu_tel_movil"     presentation="TEXT" label="Móvil" />
+
+            </build>
+	</make>
+
+
 </ayaxphpclass>

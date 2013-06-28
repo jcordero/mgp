@@ -12,7 +12,7 @@ class CDH_DOCID extends CDataHandler
         $fld->m_js_initial = "IniciarDocID";
 	}
 	
-	public function RenderFilterForm($cn,$name="",$id="") 
+	public function RenderFilterForm($cn,$name="",$id="",$prefix="") 
 	{
 		if($name=="") 
 		{

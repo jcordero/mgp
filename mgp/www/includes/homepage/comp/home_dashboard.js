@@ -39,6 +39,7 @@ function ejecutar_consulta() {
 
         }
         var markerCluster = new MarkerClusterer(map, markers);
+        markerCluster.setMaxZoom(14);
 
     },"HOME::DASHBOARD","getTickets",'');
 }
