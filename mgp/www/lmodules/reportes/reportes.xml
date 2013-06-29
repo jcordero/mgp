@@ -165,7 +165,7 @@
                 <searchfield name="ciu_apellido" presentation="TEXT" label="Apellido" />
                 
                 <listfield name="tic_nro"           presentation="INT" label="Codigo" isvisible="false"/>
-                <listfield name="tic_tstamp_in"     presentation="DATERANGE" label="Ingreso"/>
+                <listfield name="tic_tstamp_in"     presentation="DATERANGE" label="Ingreso" classparams="datetime"/>
                 <listfield name="tic_identificador" presentation="TEXT" label="Ticket" />
                 <listfield name="tpr_code"          presentation="TEXT" label="Prestación" />
                 <listfield name="tpr_detalle"       presentation="TEXT" label="Prestación" />
