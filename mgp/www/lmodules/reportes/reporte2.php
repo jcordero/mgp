@@ -25,7 +25,7 @@ class rep2_sl extends csearchandlist {
 		$this->m_render_html = 'BLOCK';
 		$this->m_render_pdml = 'BLOCK';
 
-        $this->m_search_fields = array('tic_tstamp_in','tic_tstamp_plazo','tpr_detalle','ciu_nombres','ciu_apellido');
+        $this->m_search_fields = array('tic_tstamp_in','tic_tstamp_plazo','tpr_detalle','tor_code','tic_barrio');
 
         $this->addAction(6,"/lmodules/tickets/ticket_maint.php?OP=V",array(new caction_param('tic_nro')),"","ver","V","","");
     }
@@ -36,10 +36,10 @@ class rep2_sl extends csearchandlist {
 
     /* Campos de busqueda */
         $this->m_obj->GetField("tic_tstamp_in")->SetDisplayValues(Array("Name"=>"tic_tstamp_in", "Label"=>"Ingreso", "Type"=>"datetime", "IsForDB"=>true, "Order"=>105, "Presentation"=>"DATERANGE", "IsVisible"=>true));
-        $this->m_obj->GetField("tic_tstamp_plazo")->SetDisplayValues(Array("Name"=>"tic_tstamp_plazo", "Label"=>"Plazo", "Type"=>"datetime", "IsForDB"=>true, "Order"=>117, "Presentation"=>"DATERANGE", "IsVisible"=>true));
-        $this->m_obj->GetField("tpr_detalle")->SetDisplayValues(Array("Name"=>"tpr_detalle", "Label"=>"Prestación", "Size"=>50, "IsForDB"=>true, "Order"=>164, "Presentation"=>"TEXT", "IsVisible"=>true));
-        $this->m_obj->GetField("ciu_nombres")->SetDisplayValues(Array("Name"=>"ciu_nombres", "Label"=>"Nombre", "Size"=>50, "IsForDB"=>true, "Order"=>125, "Presentation"=>"TEXT", "IsVisible"=>true));
-        $this->m_obj->GetField("ciu_apellido")->SetDisplayValues(Array("Name"=>"ciu_apellido", "Label"=>"Apellido", "Size"=>50, "IsForDB"=>true, "Order"=>126, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $this->m_obj->GetField("tic_tstamp_plazo")->SetDisplayValues(Array("Name"=>"tic_tstamp_plazo", "Label"=>"Plazo", "Type"=>"datetime", "IsForDB"=>true, "Order"=>106, "Presentation"=>"DATERANGE", "IsVisible"=>true));
+        $this->m_obj->GetField("tpr_detalle")->SetDisplayValues(Array("Name"=>"tpr_detalle", "Label"=>"Prestación", "Type"=>"int", "IsForDB"=>true, "Order"=>104, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $this->m_obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true));
+        $this->m_obj->GetField("tic_barrio")->SetDisplayValues(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true));
     }
 
 }
@@ -62,6 +62,57 @@ class col101 extends ccolumn
     }
 }
 
+class col102 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Organismo';
+        $this->m_order = '102';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tor_code';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true));
+    }
+}
+
+class col103 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Prestación';
+        $this->m_order = '103';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tpr_code';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsVisible"=>true));
+    }
+}
+
+class col104 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Prestación';
+        $this->m_order = '104';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tpr_detalle';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tpr_detalle", "Label"=>"Prestación", "Type"=>"int", "IsForDB"=>true, "Order"=>104, "Presentation"=>"TEXT", "IsVisible"=>true));
+    }
+}
+
 class col105 extends ccolumn
 {
     function __construct($parent)
@@ -79,54 +130,37 @@ class col105 extends ccolumn
     }
 }
 
-class col122 extends ccolumn
+class col106 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
-        $this->m_title = 'Ticket';
-        $this->m_order = '122';
+        $this->m_title = 'Plazo';
+        $this->m_order = '106';
         $this->m_isvisible = true;
         $this->m_align = 'left';
-        $this->m_sort_field = 'tic_identificador';
+        $this->m_sort_field = 'tic_tstamp_plazo';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_identificador", "Label"=>"Ticket", "Size"=>50, "IsForDB"=>true, "Order"=>122, "Presentation"=>"TEXT", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_tstamp_plazo", "Label"=>"Plazo", "Type"=>"datetime", "IsForDB"=>true, "Order"=>106, "Presentation"=>"DATERANGE", "IsVisible"=>true, "ClassParams"=>"datetime"));
     }
 }
 
-class col156 extends ccolumn
+class col108 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
-        $this->m_title = 'Prestación';
-        $this->m_order = '156';
+        $this->m_title = 'Excedido';
+        $this->m_order = '108';
         $this->m_isvisible = true;
         $this->m_align = 'left';
-        $this->m_sort_field = 'tpr_code';
+        $this->m_sort_field = 'vencido';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>50, "IsForDB"=>true, "Order"=>156, "Presentation"=>"TEXT", "IsVisible"=>true));
-    }
-}
-
-class col164 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Prestación';
-        $this->m_order = '164';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'tpr_detalle';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tpr_detalle", "Label"=>"Prestación", "Size"=>50, "IsForDB"=>true, "Order"=>164, "Presentation"=>"TEXT", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"vencido", "Label"=>"Excedido", "Type"=>"int", "IsForDB"=>true, "Order"=>108, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 }
 
@@ -135,117 +169,83 @@ class col107 extends ccolumn
     function __construct($parent)
     {
         parent::__construct($parent);
-        $this->m_title = 'Nota';
+        $this->m_title = 'Estado';
         $this->m_order = '107';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'ttp_estado';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"ttp_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXT", "IsVisible"=>true));
+    }
+}
+
+class col109 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Identificador';
+        $this->m_order = '109';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tic_identificador';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tic_identificador", "Label"=>"Identificador", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TEXT", "IsVisible"=>true));
+    }
+}
+
+class col110 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Dirección';
+        $this->m_order = '110';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tic_lugar';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>500, "IsForDB"=>true, "Order"=>110, "Presentation"=>"REPORTES::LUGAR", "IsVisible"=>true));
+    }
+}
+
+class col111 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Barrio';
+        $this->m_order = '111';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tic_barrio';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true));
+    }
+}
+
+class col112 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Nota';
+        $this->m_order = '112';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'tic_nota_in';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_nota_in", "Label"=>"Nota", "Size"=>50, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXT", "IsVisible"=>true));
-    }
-}
-
-class col125 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Nombre';
-        $this->m_order = '125';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'ciu_nombres';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"ciu_nombres", "Label"=>"Nombre", "Size"=>50, "IsForDB"=>true, "Order"=>125, "Presentation"=>"TEXT", "IsVisible"=>true));
-    }
-}
-
-class col126 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Apellido';
-        $this->m_order = '126';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'ciu_apellido';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"ciu_apellido", "Label"=>"Apellido", "Size"=>50, "IsForDB"=>true, "Order"=>126, "Presentation"=>"TEXT", "IsVisible"=>true));
-    }
-}
-
-class col130 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Teléfono';
-        $this->m_order = '130';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'ciu_tel_fijo';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"ciu_tel_fijo", "Label"=>"Teléfono", "Size"=>50, "IsForDB"=>true, "Order"=>130, "Presentation"=>"TEXT", "IsVisible"=>true));
-    }
-}
-
-class col131 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Móvil';
-        $this->m_order = '131';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'ciu_tel_movil';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"ciu_tel_movil", "Label"=>"Móvil", "Size"=>50, "IsForDB"=>true, "Order"=>131, "Presentation"=>"TEXT", "IsVisible"=>true));
-    }
-}
-
-class col117 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Plazo';
-        $this->m_order = '117';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'tic_tstamp_plazo';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_tstamp_plazo", "Label"=>"Plazo", "Type"=>"datetime", "IsForDB"=>true, "Order"=>117, "Presentation"=>"DATERANGE", "IsVisible"=>true, "ClassParams"=>"datetime"));
-    }
-}
-
-class col178 extends ccolumn
-{
-    function __construct($parent)
-    {
-        parent::__construct($parent);
-        $this->m_title = 'Excedido';
-        $this->m_order = '178';
-        $this->m_isvisible = true;
-        $this->m_align = 'left';
-        $this->m_sort_field = 'vencido';
-        $this->m_width = '';
-
-        //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"vencido", "Label"=>"Excedido", "Type"=>"int", "IsForDB"=>true, "Order"=>178, "Presentation"=>"TEXT", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_nota_in", "Label"=>"Nota", "Size"=>50, "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 }
 
@@ -260,17 +260,17 @@ class rep2_table extends ctable
 
         //Agrego las columnas a la tabla
         $this->m_cols[101] = new col101($this);
+        $this->m_cols[102] = new col102($this);
+        $this->m_cols[103] = new col103($this);
+        $this->m_cols[104] = new col104($this);
         $this->m_cols[105] = new col105($this);
-        $this->m_cols[122] = new col122($this);
-        $this->m_cols[156] = new col156($this);
-        $this->m_cols[164] = new col164($this);
+        $this->m_cols[106] = new col106($this);
+        $this->m_cols[108] = new col108($this);
         $this->m_cols[107] = new col107($this);
-        $this->m_cols[125] = new col125($this);
-        $this->m_cols[126] = new col126($this);
-        $this->m_cols[130] = new col130($this);
-        $this->m_cols[131] = new col131($this);
-        $this->m_cols[117] = new col117($this);
-        $this->m_cols[178] = new col178($this);
+        $this->m_cols[109] = new col109($this);
+        $this->m_cols[110] = new col110($this);
+        $this->m_cols[111] = new col111($this);
+        $this->m_cols[112] = new col112($this);
     }
 
 }
