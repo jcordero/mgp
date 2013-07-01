@@ -25,9 +25,9 @@ class rep2_sl extends csearchandlist {
 		$this->m_render_html = 'BLOCK';
 		$this->m_render_pdml = 'BLOCK';
 
-        $this->m_search_fields = array('tic_tstamp_in','tic_tstamp_plazo','tpr_detalle','tor_code','tic_barrio');
+        $this->m_search_fields = array('tic_tstamp_in','tic_tstamp_plazo','tpr_code','tor_code','tic_barrio');
 
-        $this->addAction(6,"/lmodules/tickets/ticket_maint.php?OP=V",array(new caction_param('tic_nro')),"","ver","V","","");
+        $this->addAction(6,"../tickets/ticket_maint.php?OP=V&next=../reportes/reporte2.php&last=1",array(new caction_param('tic_nro')),"","ver","V","","");
     }
 
     //Inicializo la parte de busqueda
@@ -37,7 +37,7 @@ class rep2_sl extends csearchandlist {
     /* Campos de busqueda */
         $this->m_obj->GetField("tic_tstamp_in")->SetDisplayValues(Array("Name"=>"tic_tstamp_in", "Label"=>"Ingreso", "Type"=>"datetime", "IsForDB"=>true, "Order"=>105, "Presentation"=>"DATERANGE", "IsVisible"=>true));
         $this->m_obj->GetField("tic_tstamp_plazo")->SetDisplayValues(Array("Name"=>"tic_tstamp_plazo", "Label"=>"Plazo", "Type"=>"datetime", "IsForDB"=>true, "Order"=>106, "Presentation"=>"DATERANGE", "IsVisible"=>true));
-        $this->m_obj->GetField("tpr_detalle")->SetDisplayValues(Array("Name"=>"tpr_detalle", "Label"=>"Prestación", "Type"=>"int", "IsForDB"=>true, "Order"=>104, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $this->m_obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "Presentation"=>"REPORTES::PRESTACIONES", "IsVisible"=>true));
         $this->m_obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true));
         $this->m_obj->GetField("tic_barrio")->SetDisplayValues(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true));
     }

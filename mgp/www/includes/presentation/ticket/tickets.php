@@ -18,11 +18,11 @@ class CDH_TICKETS extends CDataHandler
             
             $sql = "select tic_nro,tic_identificador,tic_tstamp_in,tpr_detalle,tic_lugar,tic_nota_in,tic_estado,ttp_estado,tic_coordx,tic_coordy,tic_canal,tto_figura from v_tickets where tor_code in ({$organismos}) ";
             if($filtro=="ABIERTOS")
-                $sql.= "AND tic_estado='ABIERTO' ";
+                $sql.= "AND ttp_estado not in ('cerrado','resuelto') ";
             if($filtro=="CERRADOS")
-                $sql.= "AND tic_estado in ('CERRADO','CANCELADO') ";
+                $sql.= "AND ttp_estado in ('cerrado','resuelto') ";
             if($filtro=="VENCIDOS")
-                $sql.= "AND tic_tstamp_plazo>now() ";
+                $sql.= "AND tic_tstamp_plazo<now() ";
             $sql.= "order by tic_tstamp_in desc";
 
             $rs = $primary_db->do_execute($sql);

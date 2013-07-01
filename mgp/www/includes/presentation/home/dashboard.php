@@ -24,9 +24,9 @@ class CDH_DASHBOARD extends CDataHandler {
         }
         
         //Contadores
-        $contadores['abiertos'] = $primary_db->QueryString("select count(*) from tic_ticket where tic_estado='ABIERTO'");
-        $contadores['cerrados'] = $primary_db->QueryString("select count(*) from tic_ticket where tic_estado='CERRADO'");
-        $contadores['vencidos'] = $primary_db->QueryString("select count(*) from tic_ticket where tic_estado='ABIERTO' and tic_tstamp_plazo > NOW()");
+        $contadores['abiertos'] = $primary_db->QueryString("select count(*) from v_ticket_ciu where ttp_estado not in ('cerrado','resuelto')");
+        $contadores['cerrados'] = $primary_db->QueryString("select count(*) from v_ticket_ciu where ttp_estado in ('cerrado','resuelto')");
+        $contadores['vencidos'] = $primary_db->QueryString("select count(*) from v_ticket_vencido");
         
         return json_encode(array('tickets' => $conjunto, 'contadores' => $contadores));
     }

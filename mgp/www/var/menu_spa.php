@@ -21,7 +21,7 @@
         	$buff.="<li>Ciudadanos";
         	$buff.='<ul>';
             if($this->haveRight($primary_db,'menu.archivo.ciudadanos')) { 
-            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/ciudadanos/ciudadanos.php?OP=V')."\">Ciudadanos</a>";
+            	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/ciudadanos/ciudadanos.php?OP=X')."\">Ciudadanos</a>";
             	$buff.='</li>';
             }
         	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/ciudadanos/ciudadanos_maint_n.php?OP=N')."\">Nuevo Ciudadano</a>";
@@ -35,11 +35,11 @@
         	$buff.='</li>';
         	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/por_indicador.php?OP=N')."\">Reporte por indicador</a>";
         	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/indicadores.php?OP=V')."\">Listar indicadores</a>";
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/indicadores.php?OP=X')."\">Listar indicadores</a>";
         	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte1.php?OP=V')."\">Reporte tickets-ciudadanos</a>";
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte1.php?OP=X')."\">Reporte tickets-ciudadanos</a>";
         	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte2.php?OP=V')."\">Reporte tickets-vencidos</a>";
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte2.php?OP=X')."\">Reporte tickets-vencidos</a>";
         	$buff.='</li>';
         	$buff.='</ul>';
         }
@@ -50,13 +50,13 @@
             	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/tickets_maint_n.php?OP=N')."\">Nuevo ticket</a>";
             	$buff.='</li>';
             }
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/tickets.php?OP=V')."\">Búsqueda de tickets</a>";
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/tickets.php?OP=X')."\">Búsqueda de tickets</a>";
         	$buff.='</li>';
             if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 
             	$buff.="<li>Prestaciones";
             	$buff.='<ul>';
                 if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 
-                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/prestaciones.php?OP=V')."\">Listar prestaciones</a>";
+                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/prestaciones.php?OP=X')."\">Listar prestaciones</a>";
                 	$buff.='</li>';
                 }
             	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/prest_maint_n.php?OP=N')."\">Nueva prestacion</a>";
@@ -68,7 +68,7 @@
             	$buff.="<li>Organismos";
             	$buff.='<ul>';
                 if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 
-                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/organismos.php?OP=V')."\">Listar organismos</a>";
+                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/organismos.php?OP=X')."\">Listar organismos</a>";
                 	$buff.='</li>';
                 }
             	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/organ_maint_n.php?OP=N')."\">Nuevo organismo</a>";
@@ -80,7 +80,7 @@
             	$buff.="<li>Rubros";
             	$buff.='<ul>';
                 if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 
-                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/rubros.php?OP=V')."\">Listar rubros</a>";
+                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/rubros.php?OP=X')."\">Listar rubros</a>";
                 	$buff.='</li>';
                 }
             	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/rubro_maint_n.php?OP=N')."\">Nuevo rubro</a>";
@@ -92,7 +92,7 @@
             	$buff.="<li>Georeferencias";
             	$buff.='<ul>';
                 if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 
-                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/georefs.php?OP=V')."\">Listar georeferencias</a>";
+                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/georefs.php?OP=X')."\">Listar georeferencias</a>";
                 	$buff.='</li>';
                 }
             	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/georef_maint.php?OP=N')."\">Nueva georeferencia</a>";
@@ -104,7 +104,7 @@
             	$buff.="<li>Feriados";
             	$buff.='<ul>';
                 if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 
-                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/feriados.php?OP=V')."\">Listar feriados</a>";
+                	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/tickets/feriados.php?OP=X')."\">Listar feriados</a>";
                 	$buff.='</li>';
                 }
                 if($this->haveRight($primary_db,'menu.archivo.tickets.admin')) { 

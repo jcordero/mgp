@@ -25,9 +25,9 @@ class rep1_sl extends csearchandlist {
 		$this->m_render_html = 'BLOCK';
 		$this->m_render_pdml = 'BLOCK';
 
-        $this->m_search_fields = array('tic_tstamp_in','tpr_detalle','ciu_nombres','ciu_apellido');
+        $this->m_search_fields = array('tic_tstamp_in','tpr_code','ciu_nombres','ciu_apellido');
 
-        $this->addAction(5,"/lmodules/tickets/ticket_maint.php?OP=V",array(new caction_param('tic_nro')),"","ver","V","","");
+        $this->addAction(5,"../tickets/ticket_maint.php?OP=V&next=../reportes/reporte2.php&last=1",array(new caction_param('tic_nro')),"","ver","V","","");
     }
 
     //Inicializo la parte de busqueda
@@ -36,7 +36,7 @@ class rep1_sl extends csearchandlist {
 
     /* Campos de busqueda */
         $this->m_obj->GetField("tic_tstamp_in")->SetDisplayValues(Array("Name"=>"tic_tstamp_in", "Label"=>"Ingreso", "Type"=>"datetime", "IsForDB"=>true, "Order"=>105, "Presentation"=>"DATERANGE", "IsVisible"=>true));
-        $this->m_obj->GetField("tpr_detalle")->SetDisplayValues(Array("Name"=>"tpr_detalle", "Label"=>"Prestación", "Size"=>50, "IsForDB"=>true, "Order"=>164, "Presentation"=>"TEXT", "IsVisible"=>true));
+        $this->m_obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>50, "IsForDB"=>true, "Order"=>156, "Presentation"=>"REPORTES::PRESTACIONES", "IsVisible"=>true));
         $this->m_obj->GetField("ciu_nombres")->SetDisplayValues(Array("Name"=>"ciu_nombres", "Label"=>"Nombre", "Size"=>50, "IsForDB"=>true, "Order"=>125, "Presentation"=>"TEXT", "IsVisible"=>true));
         $this->m_obj->GetField("ciu_apellido")->SetDisplayValues(Array("Name"=>"ciu_apellido", "Label"=>"Apellido", "Size"=>50, "IsForDB"=>true, "Order"=>126, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
