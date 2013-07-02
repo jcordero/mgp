@@ -68,11 +68,15 @@ function ejecutar_consulta(tipo) {
     
 function mostrar_ticket(ev) {
     var marker = this;
+    $('#cargando').show();
+
     new rem_request(this,function(obj,html){
         var infowindow = new google.maps.InfoWindow({
             content: html
         });
         infowindow.open(map,marker);    
+        $('#cargando').hide();
+
     },"REPORTES::REPORTES","getTicketInfo",marker.title);
 }
 
