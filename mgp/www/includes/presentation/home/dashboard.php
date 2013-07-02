@@ -12,9 +12,24 @@ class CDH_DASHBOARD extends CDataHandler {
     function getTickets($p) {
         global $primary_db;
       
+        //Opciones = TODOS, ABIERTOS, CERRADOS, VENCIDOS
+        switch($p) {
+            case "ABIERTOS":
+                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_ticket_ciu where ttp_estado not in ('cerrado','resuelto')";
+                break;
+            case "CERRADOS":
+                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_ticket_ciu where ttp_estado in ('cerrado','resuelto')";
+                break;
+            case "VENCIDOS":
+                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_ticket_ciu where ttp_estado not in ('cerrado','resuelto') and tic_tstamp_plazo<now()";
+                break;
+            default:
+                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_ticket_ciu";
+        }
+        
         //Tickets
         $conjunto = array();
-        $rs = $primary_db->do_execute("select * from tic_ticket");
+        $rs = $primary_db->do_execute($sql);
         while( $row=$primary_db->_fetch_row($rs) ) {
             $conjunto[] = array(
                 'lat'=>$row['tic_coordx'],

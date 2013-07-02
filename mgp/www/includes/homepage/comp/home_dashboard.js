@@ -2,7 +2,7 @@ var map = null;
 
 $(document).ready(function(){
     initialize(); 
-    ejecutar_consulta();
+    ejecutar_consulta('ABIERTOS');
 });
 
 function initialize() {
@@ -17,31 +17,52 @@ function initialize() {
 
 }
 
+var gMarkers = [];
+var gMarkerCluster = {};
 
-function ejecutar_consulta() {
+function ejecutar_consulta(tipo) {
+    //Muestro un espera..
+    $('#cargando').show();
+
+    $('#bAbiertos').removeClass('btn-danger');
+    $('#bCerrados').removeClass('btn-danger');
+    $('#bVencidos').removeClass('btn-danger');
+
+    if(tipo=="ABIERTOS")
+        $('#bAbiertos').addClass('btn-danger');
+    if(tipo=="CERRADOS")
+        $('#bCerrados').addClass('btn-danger');
+    if(tipo=="VENCIDOS")
+        $('#bVencidos').addClass('btn-danger');
     
     new rem_request(this,function(obj,json){
         var jdata = JSON.parse(json);
-
+        $('#cargando').hide();
+        
         //Contadores
         $('#cAbiertos').html(jdata.contadores.abiertos);
         $('#cCerrados').html(jdata.contadores.cerrados);
         $('#cVencidos').html(jdata.contadores.vencidos);
         
+        //Reseteo los markers anteriores
+        if(typeof gMarkerCluster.clearMarkers == "function")
+            gMarkerCluster.clearMarkers();
+        gMarkers = [];
+        
+        //Creo los markers nuevos
         var tickets = jdata.tickets;
-        var markers = [];
         for (var i = 0; i < tickets.length; i++) {
           var ticket = tickets[i];
           var latLng = new google.maps.LatLng(ticket.lat,ticket.lng);
           var marker = new google.maps.Marker({ position: latLng, title:ticket.id });
-          markers.push(marker);
+          gMarkers.push(marker);
           google.maps.event.addListener(marker, 'click', mostrar_ticket);
 
         }
-        var markerCluster = new MarkerClusterer(map, markers);
-        markerCluster.setMaxZoom(14);
+        gMarkerCluster = new MarkerClusterer(map, gMarkers);
+        gMarkerCluster.setMaxZoom(14);
 
-    },"HOME::DASHBOARD","getTickets",'');
+    },"HOME::DASHBOARD","getTickets",tipo);
 }
     
     
