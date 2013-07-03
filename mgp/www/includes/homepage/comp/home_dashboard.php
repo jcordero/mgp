@@ -16,9 +16,9 @@ if(!class_exists('home_dashboard'))
                             </div>
                             
                             <div class="row" id="contadores">
-                                <div class="span2"><button id="bAbiertos" class="btn btn-large" onclick="ejecutar_consulta(\'ABIERTOS\')"><h4><i class="icon-inbox"></i> <span id="cAbiertos"></span></h4> Abiertos</button></div>
-                                <div class="span2"><button id="bCerrados" class="btn btn-large" onclick="ejecutar_consulta(\'CERRADOS\')"><h4><i class="icon-ok-sign"></i> <span id="cCerrados"></span></h4> Cerrados</button></div>
-                                <div class="span2"><button id="bVencidos" class="btn btn-large" onclick="ejecutar_consulta(\'VENCIDOS\')"><h4><i class="icon-exclamation-sign"></i> <span id="cVencidos"></span></h4> Vencidos</button></div>
+                                <div class="span2"><button id="bAbiertos" class="btn btn-large" onclick="ejecutar_consulta(\'ABIERTOS\')"><h4><i class="icon-inbox"></i> <span id="cAbiertos"></span></h4> Pendientes<br>En Curso</button></div>
+                                <div class="span2"><button id="bCerrados" class="btn btn-large" onclick="ejecutar_consulta(\'CERRADOS\')"><h4><i class="icon-ok-sign"></i> <span id="cCerrados"></span></h4> Resueltos Rechazados</button></div>
+                                <div class="span2"><button id="bVencidos" class="btn btn-large" onclick="ejecutar_consulta(\'VENCIDOS\')"><h4><i class="icon-exclamation-sign"></i> <span id="cVencidos"></span></h4> Tickets<br>Vencidos</button></div>
                                 <div class="span4 progress progress-striped active" id="cargando">
                                     <div class="bar"></div>
                                 </div>

@@ -27,4 +27,16 @@ class CDH_PRESTACIONES extends CDH_SELECTARRAY
             if(function_exists('apc_store')) 
                 apc_store('lista_prestaciones',$this->m_array);
 	}
+        
+        function objectFactoryQuery($relax) 
+	{
+            $fld = $this->m_parent;
+            //$type = strtoupper($fld->m_Type);
+            $val = $fld->getValue();
+            $name = strtolower($fld->m_Name);
+
+            $sql = $name." like '".$val."%'";
+            return $sql;
+	}	
+        
 }
