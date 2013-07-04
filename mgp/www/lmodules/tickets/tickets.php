@@ -290,6 +290,23 @@ class col130 extends ccolumn
     }
 }
 
+class col108 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Rol';
+        $this->m_order = '108';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tic_lugar';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tic_lugar", "Label"=>"Rol", "Size"=>1000, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TICKET::DIRECCION", "IsVisible"=>true));
+    }
+}
+
 class class_v_tickets1_table extends ctable
 {
     function __construct($parent)
@@ -314,6 +331,7 @@ class class_v_tickets1_table extends ctable
         $this->m_cols[106] = new col106($this);
         $this->m_cols[129] = new col129($this);
         $this->m_cols[130] = new col130($this);
+        $this->m_cols[108] = new col108($this);
     }
 
 }

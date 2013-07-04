@@ -1,5 +1,6 @@
 <?php 
 include_once "common/cdatatypes.php";
+include_once "beans/functions.php";
 
 class CDH_DIRECCION extends CDataHandler 
 {
@@ -150,52 +151,43 @@ class CDH_DIRECCION extends CDataHandler
     
     function RenderReadOnly($cn,$showlabel=false)
     {
-		$fld = $this->m_parent;
-		$html="";
-		$val = html_entity_decode( $fld->getValue() );
-		$name = "m_".$fld->m_Name;
-		$mostrar = "";
-		
-                $id = $name;
-                //$hval = str_replace('"', '&#34;', $val);
-		//$html.="<input type=\"hidden\" name=\"$name\" id=\"$id\" value=\"$hval\"/>"."\n";
+        $fld = $this->m_parent;
+        $html="";
+        $val = html_entity_decode( $fld->getValue() );
+        $name = "m_".$fld->m_Name;
+        $mostrar = "";
+        $id = $name;
 
-		if($fld->m_IsVisible)
-		{    
-                    $obj = json_decode($val);
-                    if($obj) {
-                        if($obj->alternativa=="NRO")
-                            $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$obj->callenro.'<br/>' : '');
-                        else
-                            $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2.'<br/>' : '');
-                        
-                        $mostrar .= (isset($obj->piso) && $obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
-                        $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
-                        //$mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? 'Barrio: '.$obj->barrio : '');
-                    }
-            
-                    if($showlabel)
-                    {
-			$html.="<div class=\"itm\"><div class=\"desc\">$fld->m_Label</div><div class=\"fldro\">$mostrar</div></div>"."\n";
-                    }
-                    else
-                    {
-                        $html.=$mostrar;
-                    }
-		}
+        if($fld->m_IsVisible)
+        {   
+            $mostrar = generarTextoDireccion($val);
+
+            if($showlabel)
+            {
+                $html.="<div class=\"itm\"><div class=\"desc\">$fld->m_Label</div><div class=\"fldro\">$mostrar</div></div>"."\n";
+            }
+            else
+            {
+                $html.=$mostrar;
+            }
+        }
 		
-		return $html;
-	}
+        return $html;
+    }
 	
-	function RenderTableEdit($cn,$frmname,$table="",$row=0,$ro=false,$name="",$suffix="") 
-	{
-		return parent::RenderTableEdit($cn,$frmname,$table="",$row=0,$ro=false,$name="",$suffix="");	
-	}
+    function RenderTableEdit($cn,$frmname,$table="",$row=0,$ro=false,$name="",$suffix="") 
+    {
+        return parent::RenderTableEdit($cn,$frmname,$table="",$row=0,$ro=false,$name="",$suffix="");	
+    }
 
-	function RenderFilterForm($cn,$name="",$id="",$suffix="") 
-	{
-		return $this->RenderReadOnly($cn,true);
-		//return parent::RenderFilterForm($cn,$name="",$id="",$suffix="");
-	}
+    function RenderFilterForm($cn,$name="",$id="",$suffix="") 
+    {
+        return $this->RenderReadOnly($cn,true);
+    }
+    
+    function getHelperValue($cn, $val) 
+    {
+        return str_replace('<br/>',"\n",generarTextoDireccion($val));
+    }
 }
 ?>

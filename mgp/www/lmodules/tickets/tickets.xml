@@ -663,6 +663,7 @@
         <listfield name="tic_nota_in" presentation="TEXT" label="Nota"/>
         <listfield name="tor_code" presentation="REPORTES::ORGANISMO" label="Organismo"/>
         <listfield name="tto_figura" presentation="TEXT" label="Rol"/>
+        <listfield name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección"/>
 
 		
         <action operation="V" label="ver" target="ticket_maint.php?OP=V" >

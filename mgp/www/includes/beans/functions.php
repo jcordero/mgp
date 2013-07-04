@@ -106,3 +106,22 @@
     	}
     	return 0;
    }
+   
+   function generarTextoDireccion($json) {
+       $mostrar = "";
+       $obj = json_decode($json);
+        
+       if($obj) {
+            if($obj->alternativa=="NRO")
+                $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$obj->callenro.'<br/>' : '(sin calle-nro)<br/>');
+            else
+                $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2.'<br/>' : '(sin calle y cruce)<br/>');
+
+            $mostrar .= (isset($obj->piso) && $obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
+            $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
+            $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? 'Barrio: '.$obj->barrio.'<br/>' : '');
+            $mostrar .= (isset($obj->id_luminaria) && $obj->id_luminaria!='' ? 'Luminaria: '.$obj->id_luminaria : '');
+       }
+        
+       return $mostrar;
+   }

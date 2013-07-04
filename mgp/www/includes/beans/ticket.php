@@ -713,10 +713,11 @@ class ticket {
         $tpr_code = (isset($avance->tpr_code) ? $avance->tpr_code : '');
         $nuevo_estado = (isset($avance->tic_estado_in) ? $avance->tic_estado_in : '');
         $fecha = (isset($avance->tav_tstamp_in) ? $avance->tav_tstamp_in : '');
-        $nota = (isset($avance->nota) ?  $avance->nota : '');
+        $nota = (isset($avance->tav_nota) ?  $avance->tav_nota : '');
+        $motivo = (isset($avance->tic_motivo) ?  $avance->tic_motivo : '');
                 
         if($tpr_code!=='' && $nuevo_estado!=='')
-            $this->cambiar_estado($tpr_code, $nuevo_estado, $nota, $fecha, false);
+            $this->cambiar_estado($tpr_code, $nuevo_estado, $nota, $fecha, false, $motivo);
         else
             $this->addError('Es obligatorio indicar la prestacion y el estado');
         
@@ -751,11 +752,11 @@ class ticket {
         }
     }
     
-    function cambiar_estado($tpr_code,$nuevo_estado,$nota,$fecha='',$transaction=true) {
+    function cambiar_estado($tpr_code,$nuevo_estado,$nota,$fecha='',$transaction=true, $motivo="") {
         global $primary_db;
         $estado = strtolower($nuevo_estado);
         
-        error_log("ticket::cambiar_estado(\$tpr_code=$tpr_code,\$estado=$estado,\$nota=$nota,\$fecha=$fecha)");
+        error_log("ticket::cambiar_estado(\$tpr_code=$tpr_code,\$estado=$estado,\$nota=$nota,\$fecha=$fecha,\$transaction,\$motivo=$motivo)");
         
         //Salvo el ticket
         if($transaction)
@@ -776,7 +777,7 @@ class ticket {
                 
                 //Modificar el estado de la prestacion del ticket
                 //Agregar un evento de avance a la prestacion
-                $pres->cambiar_estado($this,$estado,$nota);
+                $pres->cambiar_estado($this,$estado,$nota,$motivo);
                                         
                 //Aviso al WS MiCiudad si el ticket es del canal movil.
                 $canal = strtolower($this->tic_canal);

@@ -307,9 +307,12 @@ class prestacion {
      * @param type $nuevo_estado
      * @param type $nota
      */
-    function cambiar_estado($parent, $nuevo_estado,$nota) {
+    function cambiar_estado($parent, $nuevo_estado,$nota,$motivo) {
         global $primary_db;
         $errores = array();
+        
+        if($motivo=="")
+            $motivo = 'Cambio de estado'; 
         
         //Ajusto el ultimo avance
         $ult_avance = $this->avance[ count($this->avance)-1 ];
@@ -323,7 +326,7 @@ class prestacion {
         $avance->tav_nota = $nota;
         $avance->tav_tstamp_in = DatetoISO8601();
         $avance->tic_estado_in = $nuevo_estado;
-        $avance->tic_motivo = 'Cambio de estado';
+        $avance->tic_motivo = $motivo;
         $avance->use_code_in = loadOperador('current');
         $this->avance[] = $avance;
         $avance->save($parent, $this->tpr_code);

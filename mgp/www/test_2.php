@@ -1,8 +1,8 @@
 <?php
 
 //$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets/reclamo/2013/31";
-//$url = "http://mgp/mgp/webservices/tickets/reclamo/2013/33";
-$url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets/reclamo/2013/43";
+$url = "http://mgp/mgp/webservices/tickets/reclamo/2013/2000";
+//$url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets/reclamo/2013/43";
     
 $secret = 'hasdYR33n1j34j#4jn*(-s';
 $foto = '/Users/jcordero/Desktop/ducreux1.jpg';
@@ -11,10 +11,11 @@ $foto = '/Users/jcordero/Desktop/ducreux1.jpg';
 $cambio_estado_ticket = json_encode((object) array(
   'object'      =>  'cambio_estado_ticket',
   'avance'      =>  array(
-      'tpr_code'        => "010202",
+      'tpr_code'        => "010101",
       'tav_tstamp_in'   => "20130509T132304",
       'tic_estado_in'   => "resuelto",
-      'tav_nota'        => "Se cambio la tulipa"
+      'tav_nota'        => "Se cambio la tulipa",
+      'tic_motivo'      => "Por mantenimiento"
   ),
   'archivos'    =>  array(
 /*      array(
