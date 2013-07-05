@@ -49,7 +49,7 @@ class CDH_CALLE extends CDataHandler
         
         if(function_exists("apc_fetch")) {
             $resultado = false;
-            $ret = apc_fetch("callejero",&$resultado);
+            $ret = apc_fetch("callejero",$resultado);
             if($resultado)
                 return json_encode($ret);
         }
