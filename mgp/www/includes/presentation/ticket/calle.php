@@ -43,5 +43,28 @@ class CDH_CALLE extends CDataHandler
     {	
         return '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ticket/calle.js"></script>';
     }
+    
+    function getCallejero($p) {
+        global $primary_db;
+        
+        if(function_exists("apc_fetch")) {
+            $resultado = false;
+            $ret = apc_fetch("callejero",&$resultado);
+            if($resultado)
+                return json_encode($ret);
+        }
+        
+        $rs = $primary_db->do_execute("select * from geo_calles order by gca_descripcion");
+        while( $row=$primary_db->_fetch_row($rs) ) {
+            $ret_c[] = $row['gca_codigo'];
+            $ret_v[] = $row['gca_descripcion'];
+        }
+        $ret = array("codigos"=>$ret_c,"calles"=>$ret_v);
+        
+        if(function_exists("apc_store")) {
+            apc_store("callejero", $ret);
+        }        
+        return json_encode($ret);
+    }
 }
-?>
+
