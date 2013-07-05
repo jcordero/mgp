@@ -88,7 +88,7 @@ function calle_init(id, params)
         {
             //Existe la lista de calles?
             if( typeof localStorage.mgp_callejero === "undefined" ) {
-                localStorage.mgp_callejero = "loading...";
+                localStorage.mgp_callejero = '{"loading":true}';
                 new rem_request(this,function(obj,txt){
                     localStorage.mgp_callejero = txt;
                     g_calles = JSON.parse(localStorage.mgp_callejero);
