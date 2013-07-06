@@ -44,14 +44,26 @@ class CDH_CALLE extends CDataHandler
         return '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ticket/calle.js"></script>';
     }
     
+    
+    /** 
+     * Hacer un bloque con el callejero vigente
+     * @global type $primary_db
+     * @param type $p
+     * @return type
+     */ 
     function getCallejero($p) {
         global $primary_db;
         
         if(function_exists("apc_fetch")) {
             $resultado = false;
             $ret = apc_fetch("callejero",$resultado);
-            if($resultado)
-                return json_encode($ret);
+            if($resultado) {
+                //Las claves coinciden? retorno OK, si no coinciden mando el nuevo dataset
+                if( isset($ret["key"]) && $ret["key"]==$p )
+                    return "OK";
+                else
+                    return json_encode($ret);
+            }
         }
         
         $rs = $primary_db->do_execute("select * from geo_calles order by gca_descripcion");
@@ -60,11 +72,17 @@ class CDH_CALLE extends CDataHandler
             $ret_v[] = $row['gca_descripcion'];
         }
         $ret = array("codigos"=>$ret_c,"calles"=>$ret_v);
+        $key = md5(json_encode($ret));
+        $ret["key"] = $key;
         
         if(function_exists("apc_store")) {
             apc_store("callejero", $ret);
         }        
-        return json_encode($ret);
+        
+        if( isset($ret["key"]) && $ret["key"]==$p )
+            return "OK";
+        else
+            return json_encode($ret);
     }
 }
 

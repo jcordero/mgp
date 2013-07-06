@@ -1,5 +1,6 @@
 
 var g_calles = {};
+var loading_calle = false;
 
 function calle_init(id, params)
 {
@@ -86,17 +87,26 @@ function calle_init(id, params)
         //Si soporta HTML5 hago un load local del callejero
         if(typeof Storage !=="undefined")
         {
-            //Existe la lista de calles?
-            if( typeof localStorage.mgp_callejero === "undefined" ) {
-                localStorage.mgp_callejero = '{"loading":true}';
-                new rem_request(this,function(obj,txt){
+            if(loading_calle)
+                return;
+            
+            loading_calle = true;
+            var key = "";
+            
+            //Pido la lista de calles si el key no es valido. Determino la key
+            if(typeof localStorage.mgp_callejero == "string") {
+                g_calles = JSON.parse(localStorage.mgp_callejero);
+                if(typeof g_calles.key == "string")
+                    key = g_calles.key;
+            }
+            
+            new rem_request(this,function(obj,txt) {
+                if(txt!="OK") {
                     localStorage.mgp_callejero = txt;
                     g_calles = JSON.parse(localStorage.mgp_callejero);
-                },"TICKET::CALLE","getCallejero","");    
-            } else {
-                //La lista existe, la pongo disponible
-                g_calles = JSON.parse(localStorage.mgp_callejero);
-            }                
+                }
+            },"TICKET::CALLE","getCallejero",key);    
+                            
         }
 }
 
