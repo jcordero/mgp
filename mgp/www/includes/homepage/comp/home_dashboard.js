@@ -2,7 +2,12 @@ var map = null;
 
 $(document).ready(function(){
     initialize(); 
-    ejecutar_consulta('ABIERTOS');
+    $('#canal').val(dash_config.canal).change(function(){dash_config.canal=$(this).val();refrescarDash();});
+    $('#barrio').val(dash_config.barrio).change(function(){dash_config.barrio=$(this).val();refrescarDash();});
+    $('#organismo').val(dash_config.organismo).change(function(){dash_config.organismo=$(this).val();refrescarDash();});
+    $('#prestacion').val(dash_config.prestacion).change(function(){dash_config.prestacion=$(this).val();refrescarDash();});
+
+    ejecutar_consulta(dash_config.boton);
 });
 
 function initialize() {
@@ -28,24 +33,29 @@ function ejecutar_consulta(tipo) {
     $('#bCerrados').removeClass('btn-danger');
     $('#bVencidos').removeClass('btn-danger');
 
-    if(tipo=="ABIERTOS")
+    if(tipo==="ABIERTOS")
         $('#bAbiertos').addClass('btn-danger');
-    if(tipo=="CERRADOS")
+    if(tipo==="CERRADOS")
         $('#bCerrados').addClass('btn-danger');
-    if(tipo=="VENCIDOS")
+    if(tipo==="VENCIDOS")
         $('#bVencidos').addClass('btn-danger');
     
+    dash_config.boton = tipo;
+    refrescarDash();
+}
+
+function refrescarDash() {
     new rem_request(this,function(obj,json){
         var jdata = JSON.parse(json);
         $('#cargando').hide();
         
-        //Contadores
+        //Refresco el valor de los Contadores
         $('#cAbiertos').html(jdata.contadores.abiertos);
         $('#cCerrados').html(jdata.contadores.cerrados);
         $('#cVencidos').html(jdata.contadores.vencidos);
         
         //Reseteo los markers anteriores
-        if(typeof gMarkerCluster.clearMarkers == "function")
+        if(typeof gMarkerCluster.clearMarkers === "function")
             gMarkerCluster.clearMarkers();
         gMarkers = [];
         
@@ -62,7 +72,7 @@ function ejecutar_consulta(tipo) {
         gMarkerCluster = new MarkerClusterer(map, gMarkers);
         gMarkerCluster.setMaxZoom(14);
 
-    },"HOME::DASHBOARD","getTickets",tipo);
+    },"HOME::DASHBOARD","getTickets",JSON.stringify(dash_config));
 }
     
     
@@ -77,7 +87,7 @@ function mostrar_ticket(ev) {
         infowindow.open(map,marker);    
         $('#cargando').hide();
 
-    },"REPORTES::REPORTES","getTicketInfo",marker.title);
+    },"HOME::DASHBOARD","getTicketInfo",marker.title);
 }
 
 
