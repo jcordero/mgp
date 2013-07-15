@@ -53,7 +53,7 @@ class eventbus_miciudad {
                         'estadoNombre'      => $avance->tic_estado_in,
                         'fecha'             => $avance->tav_tstamp_in,
                         'visibleCiudadano'  => ($avance->tic_estado_in==='pendiente' || $avance->tic_estado_in==='rechazado indebido' ? false : true),
-                        'detalle'           => $avance->tav_nota
+                        'descripcion'       => $avance->tav_nota
                     )); 
 
                     //Envio el mensaje URL
