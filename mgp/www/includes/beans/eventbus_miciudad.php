@@ -47,13 +47,13 @@ class eventbus_miciudad {
                     $cod_estado = CSession::getParameter($primary_db,'miciudad.estado.'.$avance->tic_estado_in,0);
                             
                     //Mensaje a enviar
-//                    $data = http_build_query(array(
                     $data = json_encode(array(
                         'numeroSolicitud'   => $t->getNroTicket().'/'.$t->getAnioTicket(), 
                         'estado'            => $cod_estado,
                         'estadoNombre'      => $avance->tic_estado_in,
                         'fecha'             => $avance->tav_tstamp_in,
-                        'visibleCiudadano'  => ($avance->tic_estado_in==='pendiente' || $avance->tic_estado_in==='rechazado indebido' ? false : true)
+                        'visibleCiudadano'  => ($avance->tic_estado_in==='pendiente' || $avance->tic_estado_in==='rechazado indebido' ? false : true),
+                        'detalle'           => $avance->tav_nota
                     )); 
 
                     //Envio el mensaje URL
