@@ -862,7 +862,12 @@ class ticket {
              $this->errors = array_merge($this->errors, $errores);
     }
     
-    //Envia un mensaje a cada solicitante y crea un registro en su historia
+    /**
+     * Envia un mensaje a cada solicitante y crea un registro en su historia 
+     * @param string $template
+     * @param prestacion $prestacion
+     * @param string $nota
+     */
     function notificarSolicitantes($template, $prestacion, $nota) {
         
         foreach($this->solicitantes as $sol) {
@@ -874,18 +879,29 @@ class ticket {
     }
     
     
-    //Envia un mensaje a cada solicitante y crea un registro en su historia
+    /**
+     *  Envia un mensaje a cada solicitante y crea un registro en su historia 
+     * @param string $template
+     * @param prestacion $prestacion
+     * @param string $nota
+     * @param string $email
+     * @param string $nombres
+     * @param string $apellido
+     */
     function notificarEmail($template, $prestacion, $nota, $email, $nombres='', $apellido='') {
         error_log("notificarEmail(\$template={$template}, \$prestacion, \$nota={$nota}, \$email={$email}, \$nombres={$nombres}, \$apellido={$apellido}");
         $subject = '';        
         if($email!='') {
 
             //Armo la dirección
+            $direccion = generarTextoDireccion($this->tic_lugar); 
+            /*
             $direccion = $this->tic_calle_nombre.' '.($this->tic_calle_nombre2!='' ? 'y '.$this->tic_calle_nombre2 : $this->tic_nro);
             if($this->tic_nro!='') {
                 $direccion.= ($this->tic_piso!='' ? ' piso '.$this->tic_piso : '');
                 $direccion.= ($this->tic_dpto!='' ? ' dpto '.$this->tic_dpto : '');
             }
+             */
 
             $last_avance = $prestacion->getLastAvance();
 

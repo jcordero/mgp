@@ -110,17 +110,19 @@
    function generarTextoDireccion($json) {
        $mostrar = "";
        $obj = json_decode($json);
-        
+       $cnro = intval($obj->callenro,10);
+       $calle_nro = ($cnro>0 ? $cnro : "");
+       
        if($obj) {
-            if($obj->alternativa=="NRO")
-                $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$obj->callenro.'<br/>' : '(sin calle-nro)<br/>');
-            else
+            if($obj->alternativa=="CALLE")
                 $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2.'<br/>' : '(sin calle y cruce)<br/>');
-
-            $mostrar .= (isset($obj->piso) && $obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
-            $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? 'Departamento:'.$obj->dpto.'<br/>' : '');
-            $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? 'Barrio: '.$obj->barrio.'<br/>' : '');
-            $mostrar .= (isset($obj->id_luminaria) && $obj->id_luminaria!='' ? 'Luminaria: '.$obj->id_luminaria : '');
+            else
+                $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$calle_nro.'<br/>' : '(sin calle-nro)<br/>');
+            
+            $mostrar .= (isset($obj->piso) && $obj->piso!='' ? '<b>Piso:</b> '.$obj->piso : ''); 
+            $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? '<b>Departamento:</b> '.$obj->dpto.'<br/>' : '');
+            $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? '<b>Barrio:</b> '.$obj->barrio.'<br/>' : '');
+            $mostrar .= (isset($obj->id_luminaria) && $obj->id_luminaria!='' ? '<b>Luminaria:</b> '.$obj->id_luminaria : '');
        }
         
        return $mostrar;

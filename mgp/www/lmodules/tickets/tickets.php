@@ -93,13 +93,13 @@ class col102 extends ccolumn
         parent::__construct($parent);
         $this->m_title = 'Año';
         $this->m_order = '102';
-        $this->m_isvisible = true;
+        $this->m_isvisible = false;
         $this->m_align = 'left';
         $this->m_sort_field = 'tic_anio';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_anio", "Label"=>"Año", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true, "Cols"=>10));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_anio", "Label"=>"Año", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"TEXT", "IsNullable"=>false, "Cols"=>10));
     }
 }
 
@@ -110,13 +110,13 @@ class col103 extends ccolumn
         parent::__construct($parent);
         $this->m_title = 'Tipo';
         $this->m_order = '103';
-        $this->m_isvisible = true;
+        $this->m_isvisible = false;
         $this->m_align = 'left';
         $this->m_sort_field = 'tic_tipo';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsNullable"=>false, "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsNullable"=>false));
     }
 }
 
@@ -195,13 +195,13 @@ class col118 extends ccolumn
         parent::__construct($parent);
         $this->m_title = 'Calle';
         $this->m_order = '118';
-        $this->m_isvisible = true;
+        $this->m_isvisible = false;
         $this->m_align = 'left';
         $this->m_sort_field = 'tic_calle_nombre';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_calle_nombre", "Label"=>"Calle", "Size"=>100, "IsForDB"=>true, "Order"=>118, "Presentation"=>"TEXT", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_calle_nombre", "Label"=>"Calle", "Size"=>100, "IsForDB"=>true, "Order"=>118, "Presentation"=>"TEXT"));
     }
 }
 
@@ -212,13 +212,13 @@ class col119 extends ccolumn
         parent::__construct($parent);
         $this->m_title = 'Nro';
         $this->m_order = '119';
-        $this->m_isvisible = true;
+        $this->m_isvisible = false;
         $this->m_align = 'left';
         $this->m_sort_field = 'tic_nro_puerta';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_nro_puerta", "Label"=>"Nro", "Type"=>"int", "IsForDB"=>true, "Order"=>119, "Presentation"=>"INTRANGE", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_nro_puerta", "Label"=>"Nro", "Type"=>"int", "IsForDB"=>true, "Order"=>119, "Presentation"=>"INTRANGE"));
     }
 }
 
@@ -229,13 +229,13 @@ class col109 extends ccolumn
         parent::__construct($parent);
         $this->m_title = 'Barrio';
         $this->m_order = '109';
-        $this->m_isvisible = true;
+        $this->m_isvisible = false;
         $this->m_align = 'left';
         $this->m_sort_field = 'tic_barrio';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::BARRIO"));
     }
 }
 
@@ -295,7 +295,7 @@ class col108 extends ccolumn
     function __construct($parent)
     {
         parent::__construct($parent);
-        $this->m_title = 'Rol';
+        $this->m_title = 'Dirección';
         $this->m_order = '108';
         $this->m_isvisible = true;
         $this->m_align = 'left';
@@ -303,7 +303,7 @@ class col108 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_lugar", "Label"=>"Rol", "Size"=>1000, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TICKET::DIRECCION", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>1000, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TICKET::DIRECCION", "IsVisible"=>true));
     }
 }
 

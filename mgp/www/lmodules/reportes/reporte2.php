@@ -211,7 +211,7 @@ class col110 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>500, "IsForDB"=>true, "Order"=>110, "Presentation"=>"REPORTES::LUGAR", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>500, "IsForDB"=>true, "Order"=>110, "Presentation"=>"TICKET::DIRECCION", "IsVisible"=>true));
     }
 }
 
@@ -222,13 +222,13 @@ class col111 extends ccolumn
         parent::__construct($parent);
         $this->m_title = 'Barrio';
         $this->m_order = '111';
-        $this->m_isvisible = true;
+        $this->m_isvisible = false;
         $this->m_align = 'left';
         $this->m_sort_field = 'tic_barrio';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"REPORTES::BARRIO"));
     }
 }
 

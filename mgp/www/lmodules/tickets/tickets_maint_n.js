@@ -5,6 +5,8 @@
 var last_marker_clicked = null;
 var luminariaOnIcon = null;
 var luminariaIcon = null;
+var luminariaIlegalOnIcon = null;
+var luminariaIlegalIcon = null;
 var mapa_luminaria = {};
 var mapa_domicilio = {};
 var lista_luminarias = [];
@@ -94,7 +96,18 @@ $(document).ready(function() {
         iconAnchor:   [16, 38],
         popupAnchor:  [-3, -76]
     });
-
+    luminariaIlegalIcon = L.icon({
+        iconUrl:    sess_web_path+'/images/mapicons/luminaria_ilegal.png',
+        iconSize:     [32, 37],
+        iconAnchor:   [16, 38],
+        popupAnchor:  [-3, -76]
+    });
+    luminariaIlegalOnIcon = L.icon({
+        iconUrl:    sess_web_path+'/images/mapicons/luminaria_ilegal_on.png',
+        iconSize:     [32, 37],
+        iconAnchor:   [16, 38],
+        popupAnchor:  [-3, -76]
+    });
 });
 
 
@@ -334,7 +347,15 @@ function valida_direccion_lum(){
             var cant = o.luminarias.length;
             for(var j=0;j<cant;j++) {
                 var pt = o.luminarias[j];
-                L.marker([pt.lat,pt.lng], {icon: luminariaIcon}).addTo(mapa_luminaria).on('click',marker_click);
+                var m = null;
+                
+                if(pt.com==="ILEGAL")
+                    m = L.marker([pt.lat,pt.lng], {icon: luminariaIlegalIcon}).addTo(mapa_luminaria).on('click',marker_click);
+                else
+                    m = L.marker([pt.lat,pt.lng], {icon: luminariaIcon}).addTo(mapa_luminaria).on('click',marker_click);
+                
+                m.com = pt.com; 
+                console.log(pt.id + " => " + pt.com);
             }
             
             direccion_validada_lum();
@@ -472,9 +493,18 @@ function marker_click(e) {
         if( lum.lng===pt.lng && lum.lat===pt.lat ) {
             
             //Cambio el icono del marker
-            if(last_marker_clicked!==null)
-                last_marker_clicked.setIcon(luminariaIcon);
-            marker.setIcon(luminariaOnIcon);
+            if(last_marker_clicked!==null) {
+                if( last_marker_clicked.com === "ILEGAL" )
+                    last_marker_clicked.setIcon(luminariaIlegalIcon);
+                else    
+                    last_marker_clicked.setIcon(luminariaIcon);
+            }
+            
+            if( marker.com === "ILEGAL" )
+                marker.setIcon(luminariaIlegalOnIcon);
+            else
+                marker.setIcon(luminariaOnIcon);
+ 
             last_marker_clicked = marker;
 
             //Me aseguro que la modalidad sea calle y altura

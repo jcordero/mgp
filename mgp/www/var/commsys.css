@@ -497,7 +497,7 @@ TD.log{ font: 10px 'Courier New', Courier, arial}
 }
 
 .itm:nth-child(odd){
-    background:#fdfdfd0;
+    background:#fdfdfd;
 }
 .itm:after {
     content: ".";
@@ -514,7 +514,8 @@ table td .itm, table td .itm:nth-child(odd) {background:none; border: none;}
 
 /* Etiqueta del campo */
 .itm .desc {
-    float:left;
+    vertical-align: top;
+    display:table-cell;
     font:bold 9pt arial,sans-serif;
     width:145px;
     padding-left: 10px;
@@ -525,8 +526,6 @@ table td .itm, table td .itm:nth-child(odd) {background:none; border: none;}
     min-height: 20px;
     height: auto !important;
     height: 20px;
-    margin-left:14px;
-    padding-top:3px;
     line-height: 21px;
     /*position:relative; comentado para corregir bug IE en tabla mis tramites UTC*/ 
 }
@@ -537,11 +536,10 @@ td .itm .desc{
     height: auto;
 }
 
-/* campos: obligatorios,normales y solo lectura 
+/* campos: obligatorios,normales y solo lectura */
 .itm .fldm,
 .itm .fld,
 .itm .fldro {
-    font: 9pt arial,sans-serif;
     left:0px;
     top:0px;    
     width:auto;
@@ -550,18 +548,18 @@ td .itm .desc{
     height: 20px;
     padding-top:3px;
     line-height: 20px;
+    display:table-cell;
 } 
-*/
 
 .itm .fldro {
     line-height: 21px;
     position: relative;
+    display:table-cell;
 }
 
 .itm .fldm input,
 .itm .fld input,
 .itm .fldro input{
-    float: left; 
     width: auto!important;
 }
 

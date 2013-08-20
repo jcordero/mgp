@@ -124,7 +124,9 @@ class CDH_DIRECCION extends CDataHandler
                 $cantidadmaxima = 100;
                 $tipodesolicitud = '01';
                 $e = $client->elementos_fijos($tipodesolicitud,$r->lat,$r->lng,$distanciamaxima,$cantidadmaxima);
-
+                
+                error_log("Listado de luminarias: ".print_r($e,true));
+                
                 foreach($e as $lum) {
                     $res['luminarias'][] = array(
                         'id'    => (int) $lum->id,
@@ -132,7 +134,8 @@ class CDH_DIRECCION extends CDataHandler
                         'lng'   => (double) $lum->longitud,
                         'calle' => $lum->calle,
                         'altura'=> $lum->numero,
-                        'sit'   => $lum->situacion
+                        'sit'   => $lum->situacion,
+                        'com'   => $lum->comentario
                     );
                 }
             }

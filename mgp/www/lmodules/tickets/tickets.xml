@@ -651,15 +651,15 @@
 		
         <listfield name="tic_nro" presentation="TEXT" isvisible="false"/>
         <listfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
-        <listfield name="tic_anio" presentation="TEXT" label="Año" cols="10"/>
-	<listfield name="tic_tipo" presentation="TEXT" label="Tipo"/>
+        <listfield name="tic_anio" presentation="TEXT" label="Año" cols="10" isvisible="false"/>
+	<listfield name="tic_tipo" presentation="TEXT" label="Tipo" isvisible="false"/>
         <listfield name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
         <listfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
         <listfield name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestacion"/>
         <listfield name="tru_code" presentation="RUBRO" label="Rubro"/>
-        <listfield name="tic_calle_nombre" presentation="TEXT" label="Calle"/>
-        <listfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
-        <listfield name="tic_barrio" presentation="REPORTES::BARRIO" label="Barrio"/>
+        <listfield name="tic_calle_nombre" presentation="TEXT" label="Calle" isvisible="false"/>
+        <listfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro" isvisible="false"/>
+        <listfield name="tic_barrio" presentation="REPORTES::BARRIO" label="Barrio" isvisible="false"/>
         <listfield name="tic_nota_in" presentation="TEXT" label="Nota"/>
         <listfield name="tor_code" presentation="REPORTES::ORGANISMO" label="Organismo"/>
         <listfield name="tto_figura" presentation="TEXT" label="Rol"/>

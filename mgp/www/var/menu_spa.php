@@ -41,6 +41,10 @@
         	$buff.='</li>';
         	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte2.php?OP=X')."\">Reporte tickets-vencidos</a>";
         	$buff.='</li>';
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte3.php?OP=X')."\">Reporte por luminaria</a>";
+        	$buff.='</li>';
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte4.php?OP=X')."\">Reporte tiempos resolución</a>";
+        	$buff.='</li>';
         	$buff.='</ul>';
         }
         if($this->haveRight($primary_db,'menu.archivo.tickets')) { 
