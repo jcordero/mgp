@@ -31,11 +31,11 @@ class rep4_hooks extends cclass_maint_hooks
             $plazo = DateToTimestamp( $row['tic_tstamp_plazo'] );
             
             $lapso = ($final-$inicio);
-            $row['tmp_duracion'] = $this->timeToHuman($lapso) . "($estado)";
+            $row['tmp_duracion'] = timeToHuman($lapso) . "($estado)";
             $row['tmp_tstamp_out'] = date("Y-m-d H:i:s",$final);
             
             if($final>$plazo) {
-                $row['tmp_excedido'] = $this->timeToHuman($final-$plazo);
+                $row['tmp_excedido'] = timeToHuman($final-$plazo);
             }
             else
             {
@@ -50,17 +50,4 @@ class rep4_hooks extends cclass_maint_hooks
     	return $row;
     }
     
-    function timeToHuman($sec) {
-        $meses = intval( $sec / (86400*30), 10);
-        $semanas = intval( ($sec - ($meses * 86400*30)) / (86400*7), 10);
-        $dias = intval( ($sec - ($meses * 86400*30) - ($semanas * 86400 * 7)) / 86400, 10);
-        $horas = intval( ($sec - ($meses * 86400*30) - ($semanas * 86400 * 7) - ($dias*86400)) / 3600, 10);
-        $minutos = intval( ($sec - ($meses * 86400*30) - ($semanas * 86400 * 7) - ($dias*86400) - ($horas*3600)) / 60, 10);
-        
-        return ($meses==1 ? "1 mes " : "").($meses>1 ? "{$meses} meses " : "").
-               ($semanas==1 ? "1 sem. " : "").($semanas>1 ? "{$semanas} sem. " : "").
-               ($dias==1 ? "1 día " : "").($dias>1 ? "{$dias} días " : "").
-               ($horas==1 ? "1 hora " : "").($horas>1 ? "{$horas} horas " : "").
-               ($minutos==1 ? "1 min. " : "").($minutos>1 ? "{$minutos} min. " : "");
-    }
 }
