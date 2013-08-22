@@ -229,7 +229,9 @@
 	<make object="class">
             <build out_file="class_rep4.php" classname="rep4" classlabel="Reporte">
                 <parse in_file="../mgp.sql" tablename="v_tickets" />
-                <field name="tmp_duracion" type="int" />
+                <field name="tmp_duracion" type="text" size="50" />
+                <field name="tmp_excedido" type="text" size="50" />
+                <field name="tmp_tstamp_out" type="datetime" />
                 <method objfactoryquerysuffix="order by tic_tstamp_in desc"/>	
             </build>
 	</make>
@@ -245,12 +247,14 @@
                 <listfield name="tor_code"          presentation="TICKET::ORGANISMO" label="Organismo" />
                 <listfield name="tpr_code"          presentation="REPORTES::PRESTACIONES" label="Prestación" />
                 <listfield name="tic_tstamp_in"     presentation="DATERANGE" label="Ingreso" classparams="datetime"/>
+                <listfield name="tmp_tstamp_out"    presentation="DATERANGE" label="Fin" classparams="datetime"/>
                 <listfield name="tic_tstamp_plazo"  presentation="DATERANGE" label="Plazo" classparams="datetime" />
                 <listfield name="ttp_estado"        presentation="REPORTES::ESTADO_PRESTACION" label="Estado" />
                 <listfield name="tic_identificador" presentation="TEXT" label="Identificador" />
                 <listfield name="tic_lugar"         presentation="TICKET::DIRECCION" label="Dirección" />
                 <listfield name="tic_nota_in"       presentation="TEXT" label="Nota" />
-                <listfield name="tmp_duracion"      presentation="INT" label="Duracion" />
+                <listfield name="tmp_duracion"      presentation="TEXT" label="Duracion" />
+                <listfield name="tmp_excedido"      presentation="TEXT" label="Excedido" />
                 
                 <action label="ver" target="../tickets/ticket_maint.php?OP=V&amp;next=../reportes/reporte4.php&amp;last=1" operation="V">
 			<sendfield classname="rep4" name="tic_nro"/>

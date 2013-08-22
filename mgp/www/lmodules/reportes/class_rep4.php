@@ -48,7 +48,9 @@ class rep4 extends cobjbase {
         $this->m_fields['ttp_alerta'] = new CField(Array("Name"=>"ttp_alerta", "Type"=>"int", "IsForDB"=>true, "Order"=>128));
         $this->m_fields['tor_code'] = new CField(Array("Name"=>"tor_code", "Type"=>"int", "IsForDB"=>true, "Order"=>129));
         $this->m_fields['tto_figura'] = new CField(Array("Name"=>"tto_figura", "Size"=>50, "IsForDB"=>true, "Order"=>130));
-        $this->m_fields['tmp_duracion'] = new CField(Array("Name"=>"tmp_duracion", "Type"=>"int", "Order"=>31));
+        $this->m_fields['tmp_duracion'] = new CField(Array("Name"=>"tmp_duracion", "Size"=>50, "Type"=>"text", "Order"=>31));
+        $this->m_fields['tmp_excedido'] = new CField(Array("Name"=>"tmp_excedido", "Size"=>50, "Type"=>"text", "Order"=>32));
+        $this->m_fields['tmp_tstamp_out'] = new CField(Array("Name"=>"tmp_tstamp_out", "Type"=>"datetime", "Order"=>33));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes

@@ -110,6 +110,23 @@ class col104 extends ccolumn
     }
 }
 
+class col33 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Fin';
+        $this->m_order = '33';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tmp_tstamp_out';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tmp_tstamp_out", "Label"=>"Fin", "Type"=>"datetime", "Order"=>33, "Presentation"=>"DATERANGE", "IsVisible"=>true, "ClassParams"=>"datetime"));
+    }
+}
+
 class col116 extends ccolumn
 {
     function __construct($parent)
@@ -208,7 +225,24 @@ class col31 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tmp_duracion", "Label"=>"Duracion", "Type"=>"int", "Order"=>31, "Presentation"=>"INT", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tmp_duracion", "Label"=>"Duracion", "Size"=>50, "Type"=>"text", "Order"=>31, "Presentation"=>"TEXT", "IsVisible"=>true));
+    }
+}
+
+class col32 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Excedido';
+        $this->m_order = '32';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tmp_excedido';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tmp_excedido", "Label"=>"Excedido", "Size"=>50, "Type"=>"text", "Order"=>32, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 }
 
@@ -226,12 +260,14 @@ class rep4_table extends ctable
         $this->m_cols[129] = new col129($this);
         $this->m_cols[122] = new col122($this);
         $this->m_cols[104] = new col104($this);
+        $this->m_cols[33] = new col33($this);
         $this->m_cols[116] = new col116($this);
         $this->m_cols[125] = new col125($this);
         $this->m_cols[121] = new col121($this);
         $this->m_cols[108] = new col108($this);
         $this->m_cols[106] = new col106($this);
         $this->m_cols[31] = new col31($this);
+        $this->m_cols[32] = new col32($this);
     }
 
 }
