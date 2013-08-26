@@ -149,30 +149,24 @@ class class_tic_ticket_upd_print extends cclass_maint_print
         private function createLugarPDML() {
             $p = $this->m_data;
             $obj_lugar = json_decode( _F($p,"tic_lugar") );
-    
+            $lugar = generarTextoDireccion(_F($p,"tic_lugar"));
+            
             $pdml = '<table><tr><td><b>Ubicación</b></td></tr></table>
                 <table border="1mm">';
 
             switch($obj_lugar->tipo) {
                 case "LUMINARIA":
-                    if( $obj_lugar->alternativa=="NRO" )
-                        $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Calle</td><td width="10cm"> <b>'.$obj_lugar->calle_nombre.' '.$obj_lugar->callenro.'</b></td></tr>';
-                    else
-                        $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Calle</td><td width="10cm"> <b>'.$obj_lugar->calle_nombre.' y '.$obj_lugar->calle_nombre2.'</b></td></tr>';
+                    $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Calle</td><td width="10cm"> '.$this->splitLine($lugar,70).'</td></tr>';
 
                     if($obj_lugar->barrio!='')
                        $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Barrio</td><td width="10cm"> <b>'.$obj_lugar->barrio.'</b></td></tr>';
                     
                     if($obj_lugar->comuna!='')
                         $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Comuna</td><td width="10cm"> <b>'.$obj_lugar->comuna.'</b></td></tr>';
-                    $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Luminaria</td><td width="10cm"> <b>'.$obj_lugar->id_luminaria.'</b></td></tr>';
                     
                     break;
                 case "DOMICILIO":
-                    if( $obj_lugar->alternativa=="NRO" )
-                        $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Calle</td><td width="10cm"> <b>'.$obj_lugar->calle_nombre.' '.$obj_lugar->callenro.'</b></td></tr>';
-                    else
-                        $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Calle</td><td width="10cm"> <b>'.$obj_lugar->calle_nombre.' y '.$obj_lugar->calle_nombre2.'</b></td></tr>';
+                    $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Calle</td><td width="10cm"> '.$this->splitLine($lugar,70).'</td></tr>';
 
                     $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Piso</td><td width="10cm"> <b>'.$obj_lugar->piso.'</b></td></tr>';
                     $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Depto</td><td width="10cm"> <b>'.$obj_lugar->dpto.'</b></td></tr>';
