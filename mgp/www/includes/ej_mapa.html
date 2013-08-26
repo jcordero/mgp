@@ -1,0 +1,166 @@
+<html>
+  <head>
+    <title>Municipalidad de General Pueyrredon</title>
+  </head>
+<body>
+
+<script src="wms236.js" type="text/javascript"></script>	        
+<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyD-wZ32cogLHNtCqUmMqB4M_xdvrqivYcE" type="text/javascript"></script>	        
+    
+    <div id="map" style="width: 800px; height: 600px;"></div>
+
+    <script type="text/javascript">
+    //<![CDATA[
+
+
+  
+    var map = new GMap(document.getElementById("map"));
+	map.addControl(new GSmallZoomControl());
+	map.addControl(new GMapTypeControl());
+				
+						      	
+	/* punto de Gral. Paunero 2805 */
+    var point = new GLatLng(-38.01696,-57.53720);
+	map.setCenter(point,20);
+	map.setMapType(G_SATELLITE_MAP);
+	var geocoder = null;
+	var marker = null;    
+    var gdir = null;
+
+
+	var baseIcon = new GIcon();
+	baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+	baseIcon.image = "http://www.google.com/mapfiles/marker_green.png"; /*"http://www.google.com/mapfiles/marker.png";*/
+	baseIcon.iconSize = new GSize(20, 34);
+	baseIcon.shadowSize = new GSize(37, 34);
+	baseIcon.iconAnchor = new GPoint(9, 34);
+	baseIcon.infoWindowAnchor = new GPoint(9, 2);
+	baseIcon.infoShadowAnchor = new GPoint(18, 25);
+
+	markerOptions = { icon:baseIcon, draggable: false };
+	marker = new GMarker(point, markerOptions); 
+					
+	GEvent.addListener(marker, "click", function(point){
+		if  (document.getElementById('check50').checked == false)  {
+			document.getElementById('check50').checked = true;
+			markers.setImage("http://www.google.com/mapfiles/marker.png");
+		} else {
+			document.getElementById('check50').checked = false;
+			markers.setImage("http://www.google.com/mapfiles/marker_green.png");
+		}					
+
+	});
+			map.addOverlay(marker);
+			
+	/* punto de Gral. Paunero 2850 */
+    var point = new GLatLng(-38.01730,-57.53730);
+	map.setCenter(point,20);
+	var geocoder = null;
+	var marker = null;    
+    var gdir = null;
+	//var markers = null;
+
+	var baseIcon = new GIcon();
+	baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+	baseIcon.image = "http://www.google.com/mapfiles/marker_green.png"; /*"http://www.google.com/mapfiles/marker.png";*/
+	baseIcon.iconSize = new GSize(20, 34);
+	baseIcon.shadowSize = new GSize(37, 34);
+	baseIcon.iconAnchor = new GPoint(9, 34);
+	baseIcon.infoWindowAnchor = new GPoint(9, 2);
+	baseIcon.infoShadowAnchor = new GPoint(18, 25);
+
+	markerOptions = { icon:baseIcon, draggable: false };
+	marker = new GMarker(point, markerOptions);
+					
+	GEvent.addListener(marker, "click", function(point){
+		if  (document.getElementById('check51').checked == false)  {
+			document.getElementById('check51').checked = true;
+			markers.setImage("http://www.google.com/mapfiles/marker.png");
+		} else {
+			document.getElementById('check51').checked = false;
+			markers.setImage("http://www.google.com/mapfiles/marker_green.png");
+		}					
+
+	});
+			map.addOverlay(marker);
+
+	/* punto de Gral. Paunero 2891 */
+        var point = new GLatLng(-38.01751,-57.53764);
+	map.setCenter(point, 20);
+	
+	
+	var point = new GLatLng(-38.01696,-57.53720);
+	map.setCenter(point,20);
+	
+	var geocoder = null;
+	var marker = null;    
+        var gdir = null;
+
+	var baseIcon = new GIcon();
+	baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+	baseIcon.image = "http://www.google.com/mapfiles/marker_green.png"; /*"http://www.google.com/mapfiles/marker.png";*/
+	baseIcon.iconSize = new GSize(20, 34);
+	baseIcon.shadowSize = new GSize(37, 34);
+	baseIcon.iconAnchor = new GPoint(9, 34);
+	baseIcon.infoWindowAnchor = new GPoint(9, 2);
+	baseIcon.infoShadowAnchor = new GPoint(18, 25);
+
+	markerOptions = { icon:baseIcon, draggable: false };
+	marker = new GMarker(point, markerOptions);
+					
+	GEvent.addListener(marker, "click", function(point){
+		if  (document.getElementById('check52').checked == false)  {
+			document.getElementById('check52').checked = true;
+			markers.setImage("http://www.google.com/mapfiles/marker.png");
+		} else {
+			document.getElementById('check52').checked = false;
+			markers.setImage("http://www.google.com/mapfiles/marker_green.png");
+		}					
+
+	});
+	map.addOverlay(marker);
+			
+//	set up your wms layer
+	var tile_roadless;
+	tile_roadless= new GTileLayer(new GCopyrightCollection(""),1,17);
+	
+//	these are the layers from your mapserver map file	
+	tile_roadless.myLayers =  'callesi_4326';
+	tile_roadless.myMercZoomLevel=5;
+	tile_roadless.myFormat='image/png';
+	
+//	this is the address of your mapserver map	
+	tile_roadless.myBaseURL= 'http://gis.mardelplata.gob.ar/cgi-bin/mapserv?map=/var/www/webservice/wms/servicios.map';
+	
+//	this is the function performed by John Deck's script	
+	tile_roadless.getTileUrl=CustomGetTileUrl;		
+	
+//	this specifies the opacity of your layer	
+	tile_roadless.getOpacity = function() {return 1.0;}
+
+	map.addControl(new GLargeMapControl());
+	map.addControl(new GMapTypeControl());
+
+//	set the location of the map	 
+//	map.setCenter(new GLatLng(35.846760876811366, -106.03317260742188), 10);	
+
+//	add wms layer with GTileLayerOverlay
+	var MapserverLayer = new GTileLayerOverlay(tile_roadless);
+	map.addOverlay(MapserverLayer);
+			
+						
+		
+
+    //]]>
+
+    </script>                  
+            <form action="ejemplo-gis.html" method="get">
+    	        <label><input name="check50" id="check50"  type="checkbox" value="check50">Luminaria en Gral. Paunero 2805</label> <br />
+    	        <label><input name="check51" id="check51" type="checkbox" value="check51">Luminaria en Gral. Paunero 2850</label>  <br />
+    	        <label><input name="check52" id="check52" type="checkbox" value="check52">Luminaria en Gral. Paunero 2891</label>  <br />
+           </form>
+           
+
+        
+</body>
+</html>

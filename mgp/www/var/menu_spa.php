@@ -43,7 +43,9 @@
         	$buff.='</li>';
         	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte3.php?OP=X')."\">Reporte por luminaria</a>";
         	$buff.='</li>';
-        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte4.php?OP=X')."\">Reporte tiempos resolución</a>";
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte4.php?OP=X')."\">Reporte tiempos de resolución</a>";
+        	$buff.='</li>';
+        	$buff.="<li><a href=\"".$this->encodeURL('/mgp/lmodules/reportes/reporte5.php?OP=N')."\">Reporte tiempo medio de resolución</a>";
         	$buff.='</li>';
         	$buff.='</ul>';
         }

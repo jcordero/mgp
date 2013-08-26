@@ -264,4 +264,45 @@
 
 
 
+
+
+
+
+<!-- Clase reporte tiempo de resolucion  -->
+	<make object="class">
+            <build out_file="class_rep5.php" classname="rep5" classlabel="Reporte">
+                <parse tablename="tic_avance" />
+                
+                <field name="tpr_code" type="text" size="50"/>
+                <field name="tpr_plazo" type="text" size="50" />
+                <field name="tmp_rechazados" type="text" size="50" />
+                <field name="tmp_fecha" type="datetime" />
+                <field name="tmp_media" type="text" size="50" />
+                <field name="tmp_plazo" type="text" size="50" />
+
+                <field name="tmp_min" type="text" size="50" />
+                <field name="tmp_max" type="text" size="50" />
+                <field name="tmp_stddev" type="text" size="50" />
+                <field name="tmp_cant" type="text" size="50" />
+                
+                <method objfactoryquery="select tpr_code,count(*) as cant from tic_avance where tic_estado_in='pendiente' and tpr_code like '%tpr_code%%' and tav_tstamp_in>'%tmp_fecha%' group by tpr_code order by tpr_code" />
+                <method objfactoryquerysuffix="order by tpr_code desc"/>	
+            </build>
+	</make>
+
+        <!-- Reporte de tickets y ciudadanos -->
+	<make object="table_maint">
+            <build out_file="reporte5.php" classname="rep5" title="Reporte de tiempo medio de resolución">
+                <include file="reporte5.js"/>
+            
+                <group title="Filtro" id="filtro" render_html="block">
+                    <field name="tmp_fecha"       presentation="DATERANGE" label="Fecha"/>
+                    <field name="tpr_code"        presentation="REPORTES::PRESTACIONES" label="Prestación" />
+                    <field name="tmp_rechazados"  presentation="CHECKBOX" label="Incluir rechazados?" />
+                </group>
+                
+            </build>
+	</make>
+
+
 </ayaxphpclass>

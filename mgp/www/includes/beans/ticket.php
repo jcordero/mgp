@@ -193,6 +193,7 @@ class ticket {
                 $this->tipo_georef = ($this->id_luminaria===0 ? 'DOMICILIO' : 'LUMINARIA');
             
             //Ubicacion
+            $this->alternativa      = "NRO";
             $this->tic_barrio       = _g($ticket,'tic_barrio');
             $this->tic_cgpc         = _g($ticket,'tic_cgpc');
             $this->tic_coordx       = (double) _g($ticket,'tic_coordx');

@@ -13,7 +13,8 @@
     <menuitem name="Reporte tickets-ciudadanos" action="/lmodules/reportes/reporte1.php?OP=X" order="4"/>  
     <menuitem name="Reporte tickets-vencidos" action="/lmodules/reportes/reporte2.php?OP=X" order="5"/>  
     <menuitem name="Reporte por luminaria" action="/lmodules/reportes/reporte3.php?OP=X" order="6"/>
-    <menuitem name="Reporte tiempos resolución" action="/lmodules/reportes/reporte4.php?OP=X" order="7"/>  
+    <menuitem name="Reporte tiempos de resolución" action="/lmodules/reportes/reporte4.php?OP=X" order="7"/>  
+    <menuitem name="Reporte tiempo medio de resolución" action="/lmodules/reportes/reporte5.php?OP=N" order="8"/>  
 </menuitem>
 </menu>
 

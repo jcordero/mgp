@@ -185,4 +185,67 @@ class CDH_REPORTES extends CDataHandler {
         return json_encode($r);
     } 
     
+    
+    function getTiemposMedios($opt) {
+        global $primary_db;
+        
+        $pars = json_decode($opt);
+        $sql_fecha = "";        
+        
+        if(isset($pars->desde) && $pars->desde!="")
+            $sql_fecha.= " AND tav_tstamp_in>=STR_TO_DATE('{$pars->desde}','%d/%m/%Y')";
+        
+        if(isset($pars->hasta) && $pars->hasta!="")
+            $sql_fecha.= " AND tav_tstamp_in<(STR_TO_DATE('{$pars->hasta}','%d/%m/%Y') + interval 1 day)";
+        
+        $h = '<table class="table table-bordered table-striped"><thead><tr><th>Prestación</th><th>Plazo</th><th>Cantidad</th><th>Min</th><th>Max</th><th>Media</th><th>Desv.std.</th></tr></thead><tbody>';
+        //Recorro todas las prestaciones
+        $sql = "SELECT tpr_code, tpr_detalle, tpr_plazo FROM tic_prestaciones WHERE tpr_code like '{$pars->prestacion}%' order by tpr_code desc";
+        $rs = $primary_db->do_execute($sql);
+        while($row=$primary_db->_fetch_row($rs)) {
+            $cantidad = 0;
+            $min = "N/A";
+            $max = "N/A";
+            $media = "N/A";
+            $desvstd = "N/A";
+            $tpr_code = $row['tpr_code'];
+            $valores = array();
+            $acc_lapso = 0;
+            
+            //Por cada prestacion analizo los tickets
+            $sql2 = "select tic_nro,tav_tstamp_in from tic_avance where tpr_code='{$tpr_code}' and tic_estado_in='pendiente' {$sql_fecha}";
+            $rs2 = $primary_db->do_execute($sql2);
+            while( $row2=$primary_db->_fetch_row($rs2) ) {
+                //Existe el evento de cierre de este ticket?
+                $tic_nro = $row2['tic_nro'];
+
+                //Pido la fecha y hora de cierre (si el ticket no esta cerrado da null)
+                if(isset($pars->rechazados) && $pars->rechazados=="on") {
+                   $row1 = $primary_db->QueryArray("select tav_tstamp_in from tic_avance where tic_nro={$tic_nro} and tic_estado_in in ('resuelto','cerrado','rechazado','rechazado indebido') order by tav_code;");
+                } else {
+                    $row1 = $primary_db->QueryArray("select tav_tstamp_in from tic_avance where tic_nro={$tic_nro} and tic_estado_in in ('resuelto','cerrado') order by tav_code;");
+                }
+                
+                if($row1) {
+                    $inicio = DateToTimestamp( $row2['tav_tstamp_in'] );
+                    $final = DateToTimestamp( $row1['tav_tstamp_in'] );
+                    $lapso = ($final-$inicio);
+                    $valores[] = $lapso;
+                    $acc_lapso+=$lapso;
+                    $cantidad++;
+                }
+            }
+            
+            if($cantidad>0) {            
+                $media = timeToHuman($acc_lapso/$cantidad);
+                $min = timeToHuman(min($valores));
+                $max = timeToHuman(max($valores));
+                $desvstd = timeToHuman(standard_deviation($valores));
+            }
+            
+            $h .= "<tr><td>{$row['tpr_code']} {$row['tpr_detalle']}</td><td>{$row['tpr_plazo']}</td><td>{$cantidad}</td><td>{$min}</td><td>{$max}</td><td>{$media}</td><td>{$desvstd}</td></tr>";
+        }
+        
+        return $h.'</tbody></table>';
+    }
 }

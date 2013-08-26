@@ -3,10 +3,6 @@
  * @type marker
  */
 var last_marker_clicked = null;
-var luminariaOnIcon = null;
-var luminariaIcon = null;
-var luminariaIlegalOnIcon = null;
-var luminariaIlegalIcon = null;
 var mapa_luminaria = {};
 var mapa_domicilio = {};
 var lista_luminarias = [];
@@ -84,30 +80,6 @@ $(document).ready(function() {
     $('#valida_direccion_lum').click(valida_direccion_lum);
     $('#cambia_direccion_lum').hide().click(cambia_direccion_lum);
     
-    luminariaOnIcon = L.icon({
-        iconUrl:    sess_web_path+'/images/mapicons/luminaria_on.png',
-        iconSize:     [32, 37], 
-        iconAnchor:   [16, 38],
-        popupAnchor:  [-3, -76]
-    });
-    luminariaIcon = L.icon({
-        iconUrl:    sess_web_path+'/images/mapicons/luminaria.png',
-        iconSize:     [32, 37],
-        iconAnchor:   [16, 38],
-        popupAnchor:  [-3, -76]
-    });
-    luminariaIlegalIcon = L.icon({
-        iconUrl:    sess_web_path+'/images/mapicons/luminaria_ilegal.png',
-        iconSize:     [32, 37],
-        iconAnchor:   [16, 38],
-        popupAnchor:  [-3, -76]
-    });
-    luminariaIlegalOnIcon = L.icon({
-        iconUrl:    sess_web_path+'/images/mapicons/luminaria_ilegal_on.png',
-        iconSize:     [32, 37],
-        iconAnchor:   [16, 38],
-        popupAnchor:  [-3, -76]
-    });
 });
 
 
@@ -181,9 +153,9 @@ function valida_direccion() {
                 
                 //Marker en el domicilio
                 if(marker_domicilio!==null)
-                    mapa_domicilio.removeLayer(marker_domicilio);
+                    mapa_domicilio.removeOverlay(marker_domicilio);
                     
-                marker_domicilio = L.marker([o.latitud,o.longitud]).addTo(mapa_domicilio).bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''));
+                marker_domicilio = createMarker([o.latitud,o.longitud], o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''), mapa_domicilio);
                 direccion_validada();
             }
             else
@@ -341,21 +313,19 @@ function valida_direccion_lum(){
 
             //Cargo el mapa con un marker azul en la dirección elegida
             mapa_luminaria.setView([o.latitud,o.longitud],18);
-            marker_luminarias = L.marker([o.latitud,o.longitud]).addTo(mapa_luminaria).bindPopup(o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''));
+            marker_luminarias = createMarker([o.latitud,o.longitud], (o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : '')), mapa_luminaria);
             
             //Creo los markers de las luminarias
-            var cant = o.luminarias.length;
+            var cant = lista_luminarias.length;
             for(var j=0;j<cant;j++) {
-                var pt = o.luminarias[j];
-                var m = null;
+                var pt = lista_luminarias[j];
                 
                 if(pt.com==="ILEGAL")
-                    m = L.marker([pt.lat,pt.lng], {icon: luminariaIlegalIcon}).addTo(mapa_luminaria).on('click',marker_click);
+                    lista_luminarias[j].marker = createMarker([pt.lat,pt.lng],"Ilegal",mapa_luminaria,{icon: luminariaIlegalIcon}, marker_click);
                 else
-                    m = L.marker([pt.lat,pt.lng], {icon: luminariaIcon}).addTo(mapa_luminaria).on('click',marker_click);
+                    lista_luminarias[j].marker = createMarker([pt.lat,pt.lng],"Luminaria",mapa_luminaria,{icon: luminariaIcon},marker_click);
                 
-                m.com = pt.com; 
-                console.log(pt.id + " => " + pt.com);
+                lista_luminarias[j].com = pt.com; 
             }
             
             direccion_validada_lum();
@@ -414,25 +384,6 @@ function cambia_direccion_lum(){
 }
 
 
-/** Crea un mapa dinamico
- * 
- * @param {string} id del div donde va el mapa
- * @returns {map}
- */
-function crearMapa(id) {
-    var p = $('#'+id).parent();
-    $('#'+id).remove();
-    p.append('<div id="' + id + '"></div>');
-    var mapa = new L.map(id).setView([-38.0086358938483,-57.5388003290637], 13);
-
-    // add an OpenStreetMap tile layer
-    var osm = new L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
-    var ggl = new L.Google();
-    mapa.addLayer(osm);
-    mapa.addControl(new L.Control.Layers( {'Vista calles':osm, 'Vista satélite':ggl}, {}));
-    return mapa;
-}
-
 /** Muestra el mensaje de aviso que debe elegir una luminaria 
  * 
  * @returns {void}
@@ -485,27 +436,30 @@ function direccion_validada_lum() {
  * @returns {void}
  */
 function marker_click(e) {
-    var marker = e.target;
-    var pt = marker.getLatLng();
+    var lat = e.lat();
+    var lng = e.lng();
     var cant = lista_luminarias.length;
     for(var j=0;j<cant;j++) {
         var lum = lista_luminarias[j];
-        if( lum.lng===pt.lng && lum.lat===pt.lat ) {
+        if( lum.lng===lng && lum.lat===lat ) {
             
             //Cambio el icono del marker
             if(last_marker_clicked!==null) {
-                if( last_marker_clicked.com === "ILEGAL" )
-                    last_marker_clicked.setIcon(luminariaIlegalIcon);
-                else    
-                    last_marker_clicked.setIcon(luminariaIcon);
+                mapa_luminaria.removeOverlay(last_marker_clicked.marker);
+                if( last_marker_clicked.com === "ILEGAL" ) {
+                    last_marker_clicked.marker = createMarker([lat,lng],"Ilegal",mapa_luminaria,{icon: luminariaIlegalIcon}, marker_click);
+                } else {    
+                    last_marker_clicked.marker = createMarker([lat,lng],"Luminaria",mapa_luminaria,{icon: luminariaIcon}, marker_click);
+                }
             }
             
-            if( marker.com === "ILEGAL" )
-                marker.setIcon(luminariaIlegalOnIcon);
+            mapa_luminaria.removeOverlay(lum.marker);
+            if( lum.com === "ILEGAL" ) 
+                lum.marker = createMarker([lat,lng],"Ilegal",mapa_luminaria,{icon: luminariaIlegalOnIcon}, marker_click);
             else
-                marker.setIcon(luminariaOnIcon);
+                lum.marker = createMarker([lat,lng],"Luminaria",mapa_luminaria,{icon: luminariaOnIcon}, marker_click);
  
-            last_marker_clicked = marker;
+            last_marker_clicked = lum;
 
             //Me aseguro que la modalidad sea calle y altura
             $('#m_alternativa_lum').val('NRO');

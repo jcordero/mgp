@@ -125,7 +125,7 @@ class CDH_DIRECCION extends CDataHandler
                 $tipodesolicitud = '01';
                 $e = $client->elementos_fijos($tipodesolicitud,$r->lat,$r->lng,$distanciamaxima,$cantidadmaxima);
                 
-                error_log("Listado de luminarias: ".print_r($e,true));
+                //error_log("Listado de luminarias: ".print_r($e,true));
                 
                 foreach($e as $lum) {
                     $res['luminarias'][] = array(

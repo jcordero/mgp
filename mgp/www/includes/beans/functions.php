@@ -150,3 +150,22 @@
                ($horas==1 ? "1 hora " : "").($horas>1 ? "{$horas} horas " : "").
                ($minutos==1 ? "1 min. " : "").($minutos>1 ? "{$minutos} min. " : "");
     }
+    
+     /**
+     * Calcular la desviacion standard
+     * 
+     * @param float[] $aValues
+     * @param boolean $bSample
+     * @return float
+     */
+    function standard_deviation($aValues, $bSample = false)
+    {
+        $fMean = array_sum($aValues) / count($aValues);
+        $fVariance = 0.0;
+        foreach ($aValues as $i)
+        {
+            $fVariance += pow($i - $fMean, 2);
+        }
+        $fVariance /= ( $bSample ? count($aValues) - 1 : count($aValues) );
+        return (float) sqrt($fVariance);
+    }
