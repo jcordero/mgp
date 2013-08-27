@@ -50,6 +50,7 @@
     // 2013-08-17 12:29:38
     function DateToTimestamp($tstamp) {
         $p = explode(":",str_replace(array("-"," "), array(":",":"), $tstamp));
+        //error_log("DateToTimestamp($tstamp) ".print_r($tstamp));
         if(count($p)==6)
             return mktime(intval($p[3],10), intval($p[4],10), intval($p[5],10), intval($p[1],10), intval($p[2],10), intval($p[0],10));
         else

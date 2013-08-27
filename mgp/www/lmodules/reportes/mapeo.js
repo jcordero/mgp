@@ -40,7 +40,8 @@ function ejecutar_consulta() {
     var estado_prestacion = $('#m_tmp_estado_prestacion').val();
     var canal = $('#m_tmp_canal').val();
     var organismo = $('#m_tmp_organismo').val();
-    var params = {'barrio':barrio, 'fecha_desde':fecha_desde, 'fecha_hasta':fecha_hasta, 'prestacion':prestacion, 'estado_ticket':estado_ticket, 'estado_prestacion':estado_prestacion, 'canal':canal, 'organismo':organismo };
+    var vencidos = $('#m_tmp_vencido:checked').val();
+    var params = {'barrio':barrio, 'fecha_desde':fecha_desde, 'fecha_hasta':fecha_hasta, 'prestacion':prestacion, 'estado_ticket':estado_ticket, 'estado_prestacion':estado_prestacion, 'canal':canal, 'organismo':organismo, 'vencidos':vencidos };
     
     $('#bloque_filtro .contenido').collapse('hide');
     

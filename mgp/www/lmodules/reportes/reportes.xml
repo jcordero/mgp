@@ -11,6 +11,7 @@
                     <field name="tmp_fecha" type="varchar" size="50" isfordb="false" />
                     <field name="tmp_canal" type="varchar" size="50" isfordb="false" />
                     <field name="tmp_organismo" type="varchar" size="50" isfordb="false" />
+                    <field name="tmp_vencido" type="varchar" size="50" isfordb="false" />
    		</build>
 	</make>
 
@@ -31,6 +32,7 @@
                     <field name="tmp_canal" presentation="REPORTES::CANAL" label="Canal" />
                     <field name="tmp_organismo" presentation="REPORTES::ORGANISMO" label="Organismo" />
                     <field name="tmp_fecha" presentation="DATERANGE" label="Fecha ingreso" />
+                    <field name="tmp_vencido" presentation="CHECKBOX" label="Vencidos" />
                 </group>
                 
 		</build>

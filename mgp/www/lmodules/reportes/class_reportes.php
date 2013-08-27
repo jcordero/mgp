@@ -25,6 +25,7 @@ class reportes extends cobjbase {
         $this->m_fields['tmp_fecha'] = new CField(Array("Name"=>"tmp_fecha", "Size"=>50, "Order"=>5));
         $this->m_fields['tmp_canal'] = new CField(Array("Name"=>"tmp_canal", "Size"=>50, "Order"=>6));
         $this->m_fields['tmp_organismo'] = new CField(Array("Name"=>"tmp_organismo", "Size"=>50, "Order"=>7));
+        $this->m_fields['tmp_vencido'] = new CField(Array("Name"=>"tmp_vencido", "Size"=>50, "Order"=>8));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes

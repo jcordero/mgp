@@ -14,8 +14,11 @@ class CDH_REPORTES extends CDataHandler {
         $conjunto = array();
         
         $opc = json_decode($p);
-      
+
         $sql = "select tic_coordx,tic_coordy,tic_identificador from tic_ticket tic join tic_ticket_prestaciones tpr on tic.tic_nro=tpr.tic_nro left outer join tic_ticket_organismos tor on tpr.tic_nro=tor.tic_nro and tpr.tpr_code=tor.tpr_code WHERE 1=1 ";
+
+        if(isset($opc->vencidos) && $opc->vencidos=="on")
+            $sql .= " and tpr.ttp_estado in ('pendiente','en curso','en espera') and tic_tstamp_plazo<NOW()";
         
         //Prestaciones
         if($opc->prestacion!='')
@@ -68,9 +71,20 @@ class CDH_REPORTES extends CDataHandler {
         $tic->setIdent($p);
         if( $tic->load('archivos') ) {
             $pres = $tic->prestaciones[0];
+            $plazo = ISO8601toDate($tic->tic_tstamp_plazo);
             $h = '<h4>'.$tic->tic_identificador.'</h4>';
-            $h.= $pres->tpr_code.' '.$pres->tpr_description.'<br>Estado: '.$tic->tic_estado.' Ingreso: '.ISO8601toDate($tic->tic_tstamp_in).'<br>';
-            $h.= 'Nota: '.$tic->tic_nota_in.'<br>';
+            $h.= '<span style="color:#006;font-weight:bold;">'.$pres->tpr_code.' '.$pres->tpr_description_full.'</span><br><b>Estado:</b> '.$pres->ttp_estado.' <b>Ingreso:</b> '.ISO8601toDate($tic->tic_tstamp_in).'<br>';
+            $h.= '<b>Plazo:</b> '.$plazo.'<br>';
+ 
+            //Esta vencido?
+            if( $pres->ttp_estado=="pendiente" || $pres->ttp_estado=="en curso" || $pres->ttp_estado=="en espera") {
+                $p = DateToTimestamp($plazo);
+                if( $p<time() ) {
+                    $h.= '<b>Vencido hace:</b> <span class="badge badge-danger">'.intval((time()-$p)/86400, 10).' días</span><br>';
+                }    
+            }
+            if($tic->tic_nota_in!="")
+                $h.= '<b>Nota:</b> '.$tic->tic_nota_in.'<br>';
             
             //Fotos
             foreach($tic->archivos as $f) {

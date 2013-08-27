@@ -29,6 +29,7 @@ class filtro_gr extends cform_group {
         $this->m_fields[] = 'reportes:tmp_canal';
         $this->m_fields[] = 'reportes:tmp_organismo';
         $this->m_fields[] = 'reportes:tmp_fecha';
+        $this->m_fields[] = 'reportes:tmp_vencido';
 
     }
 
@@ -41,6 +42,7 @@ class filtro_gr extends cform_group {
         $this->getClass("reportes")->GetField("tmp_canal")->SetDisplayValues(Array("Name"=>"tmp_canal", "Label"=>"Canal", "Size"=>50, "Order"=>6, "Presentation"=>"REPORTES::CANAL", "IsVisible"=>true, "Class"=>"reportes"));
         $this->getClass("reportes")->GetField("tmp_organismo")->SetDisplayValues(Array("Name"=>"tmp_organismo", "Label"=>"Organismo", "Size"=>50, "Order"=>7, "Presentation"=>"REPORTES::ORGANISMO", "IsVisible"=>true, "Class"=>"reportes"));
         $this->getClass("reportes")->GetField("tmp_fecha")->SetDisplayValues(Array("Name"=>"tmp_fecha", "Label"=>"Fecha ingreso", "Size"=>50, "Order"=>5, "Presentation"=>"DATERANGE", "IsVisible"=>true, "Class"=>"reportes"));
+        $this->getClass("reportes")->GetField("tmp_vencido")->SetDisplayValues(Array("Name"=>"tmp_vencido", "Label"=>"Vencidos", "Size"=>50, "Order"=>8, "Presentation"=>"CHECKBOX", "IsVisible"=>true, "Class"=>"reportes"));
     }
 }
 }
