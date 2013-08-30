@@ -118,7 +118,13 @@
    
    function generarTextoDireccion($json) {
        $mostrar = "";
-       $obj = json_decode($json);
+       $obj = null;
+       if(is_object($json)) { 
+            $obj = $json;
+       } else {
+            $obj = json_decode($json);
+       }
+       
        $cnro = intval($obj->callenro,10);
        $calle_nro = ($cnro>0 ? $cnro : "");
        

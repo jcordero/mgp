@@ -675,12 +675,16 @@ class ticket {
     	return $geo;
     }
     
+    /**
+     * Verifica que todas las prestaciones del ticket esten en un estado final
+     * @return boolean
+     */
     function prestacionesTerminadas() {
         $cerradas = 0;
         $total = count($this->prestaciones);
         foreach($this->prestaciones as $pres) {
             $estado = strtolower($pres->ttp_estado);
-            if( $estado==='cerrado' || $estado==='rechazado' )
+            if( $estado==='cerrado' || $estado==='rechazado' || $estado==='rechazado indebido' || $estado==='resuelto') 
                 $cerradas++;
         }
         error_log("ticket::prestacionesTerminadas() Total:{$total} Cerradas:{$cerradas}");
@@ -689,6 +693,8 @@ class ticket {
     
     /**
      * Cambio de estado y agregado de archivos desde JSON (api)
+     * Esta función llama a cambiar_estado(...) internamente.
+     * Agrega el salvado de documentos adjuntos que la otra no requiere.
      * 
      * @global type $primary_db
      * @param type $identificador
@@ -753,6 +759,16 @@ class ticket {
         }
     }
     
+    /** Proceso del cambio de estado de un ticket. Crea un registro de avance, dispara eventos y mails de alerta.
+     * 
+     * @global cdbdata $primary_db
+     * @param string $tpr_code
+     * @param string $nuevo_estado
+     * @param string $nota
+     * @param string $fecha
+     * @param boolean $transaction
+     * @param string $motivo
+     */
     function cambiar_estado($tpr_code,$nuevo_estado,$nota,$fecha='',$transaction=true, $motivo="") {
         global $primary_db;
         $estado = strtolower($nuevo_estado);
@@ -804,33 +820,42 @@ class ticket {
                         'prestacion'=>  $pres->tpr_code
                     );
                     $ev->save();        
-                }                
+                }               
+                
+                //Agrego una notificacion al sistema del MGP
+                $ev = new eventbus_event();
+                $ev->eev_task = 'mgp';
+                $ev->eev_data = array(
+                    'op'        =>  'cambio_estado',
+                    'ticket'    =>  $this->tic_nro,
+                    'prestacion'=>  $pres->tpr_code
+                );
+                $ev->save();        
                 
                 //Si se cerró el ticket, envio las notificaciones
-                if( $this->tic_estado=='ABIERTO' ) {
-                    if( $this->prestacionesTerminadas() ) {
-                        $this->tic_estado = 'CERRADO';
-                        error_log("ticket::cambiar_estado() CIERRO TICKET");
+                if( $this->prestacionesTerminadas() ) {
+                    $this->tic_estado = 'CERRADO';
+                    $this->tic_tstamp_cierre = DatetoISO8601();
+                    error_log("ticket::cambiar_estado() CIERRO TICKET");
 
-                        //Definicion de la prestacion
-                        $al_final = $primary_db->QueryString("select tpr_al_final from tic_prestaciones where tpr_code='{$pres->tpr_code}'");
+                    //Definicion de la prestacion
+                    $al_final = $primary_db->QueryString("select tpr_al_final from tic_prestaciones where tpr_code='{$pres->tpr_code}'");
 
-                        //Aviso x mail si es el fin de la prestacion a los responsables
-                        if( $al_final!='' ) {
-                            $this->notificarEmail('aviso_cierre_interno', $pres, $nota, $al_final);                
-                        }
-
-                        //Aviso x mail a los ciudadanos interesados (y registro esto en su historia)
-                        $this->notificarSolicitantes('aviso_cierre', $pres, $nota);
-                    } else {
-                        //Cambio de estado intermedio
-                        $this->notificarSolicitantes('aviso_cambio_estado', $pres, $nota);
+                    //Aviso x mail si es el fin de la prestacion a los responsables
+                    if( $al_final!='' ) {
+                        $this->notificarEmail('aviso_cierre_interno', $pres, $nota, $al_final);                
                     }
+
+                    //Aviso x mail a los ciudadanos interesados (y registro esto en su historia)
+                    $this->notificarSolicitantes('aviso_cierre', $pres, $nota);
+                } else {
+                    //Cambio de estado intermedio
+                    $this->notificarSolicitantes('aviso_cambio_estado', $pres, $nota);
                 }
-                
-                //Grabo los cambios (solo la parte del ticket
-                $this->update();
             }
+                
+            //Grabo los cambios (solo la parte del ticket
+            $this->update();
         }
         
         if(!$encontrada)
@@ -854,7 +879,7 @@ class ticket {
          $sql1 = "update tic_ticket set tic_estado=':tic_estado:', tic_tstamp_cierre=':tic_tstamp_cierre:' where tic_nro=:tic_nro:";
          $params1 = array(
             'tic_nro'           => $this->tic_nro,
-            'tic_tstamp_cierre' => $this->tic_tstamp_cierre, 
+            'tic_tstamp_cierre' => ISO8601toDate($this->tic_tstamp_cierre), 
             'tic_estado'        => $this->tic_estado
          );
          $primary_db->do_execute($sql1,$errores,$params1);
@@ -870,11 +895,10 @@ class ticket {
      * @param string $nota
      */
     function notificarSolicitantes($template, $prestacion, $nota) {
-        
+        error_log("notificarSolicitantes($template,$prestacion->tpr_code,$nota)");
         foreach($this->solicitantes as $sol) {
-            $email = $sol->ciu_email;
-            if($email!='') {
-                $this->notificarEmail($template, $prestacion, $nota, $email,$sol->ciu_nombres,$sol->ciu_apellido);
+            if($sol->ciu_email!='') {
+                $this->notificarEmail($template, $prestacion, $nota, $sol->ciu_email, $sol->ciu_nombres, $sol->ciu_apellido);
            }
         }
     }
@@ -890,20 +914,13 @@ class ticket {
      * @param string $apellido
      */
     function notificarEmail($template, $prestacion, $nota, $email, $nombres='', $apellido='') {
-        error_log("notificarEmail(\$template={$template}, \$prestacion, \$nota={$nota}, \$email={$email}, \$nombres={$nombres}, \$apellido={$apellido}");
+        error_log("notificarEmail(\$template={$template}, \$prestacion={$prestacion->tpr_code}, \$nota={$nota}, \$email={$email}, \$nombres={$nombres}, \$apellido={$apellido}");
         $subject = '';        
         if($email!='') {
 
             //Armo la dirección
             $direccion = generarTextoDireccion($this->tic_lugar); 
-            /*
-            $direccion = $this->tic_calle_nombre.' '.($this->tic_calle_nombre2!='' ? 'y '.$this->tic_calle_nombre2 : $this->tic_nro);
-            if($this->tic_nro!='') {
-                $direccion.= ($this->tic_piso!='' ? ' piso '.$this->tic_piso : '');
-                $direccion.= ($this->tic_dpto!='' ? ' dpto '.$this->tic_dpto : '');
-            }
-             */
-
+ 
             $last_avance = $prestacion->getLastAvance();
 
             //Campos del template
@@ -927,7 +944,7 @@ class ticket {
             $mt = new cmail_type("HTML",'','',$template);
             $headers = array();
             $r = $msg->Send(DEFAULT_SMTP,$email,$mt,$headers,$subject,$tem_fld);
-            error_log("notificarEmail() Resultado: {$r}");
+            error_log("notificarEmail($email) Resultado: {$r}");
         }    
     }
 
