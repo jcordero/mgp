@@ -21,10 +21,10 @@
         .box {background:#efefef;padding:15px;border:solid 1px #eee; border-radius:5px;}
         div#head {height: 156px;width: 100%;position: relative;z-index: 3; /*para arreglar bug de IE*/}
         #head_center {position: relative;margin:auto;text-align:left;height:115px;background: url("/mgp/images/rayitas.png") repeat-y transparent;background-position:right;}
-        #head_nav {position: relative;text-align:center;height:41px;}
+        #head_nav {position: relative;height:41px;}
         img.logo {position:relative;top:10px;}
         .homepage {min-height:100%;}
-        #appmenu {position:relative;top:6px;max-width:1200px;min-width: 750px;width: 99.4%;position: relative;margin:auto;text-align:left;}
+        #appmenu {position:relative;top:6px;max-width:1200px;min-width: 750px;margin:0px;text-align:left;overflow-x: hidden;}
         .back1, .back2 {position:absolute;top:0px;left:0px;width:100%;height:156px;background:#e0ded8;}
         .back2 {height:41px;background:#000;top:115px;}
         
@@ -50,6 +50,7 @@
             </div>
             <div id="head_nav">
                 <div id="appmenu" class="container"></div>
+                <com:homepage.comp.home_selector/>
             </div>
         </div>
 	
