@@ -9,15 +9,21 @@ class home_selector {
         $html = '<a id="home_selector" href="#"><img src="'.WEB_PATH.'/images/default/profile_large.gif"></a>';
         $html.= '<div class="hide" id="home_selector_panel">Home: <select onchange="cambio_home(this)">';
         
+        $dh = (object) array("home"=>"", "groups"=>array());
         if( isset($_SESSION['dynhome']) ) {
             $dh = json_decode($_SESSION['dynhome']);
-            foreach($dh->groups as $gr) {
-                if($gr == $dh->home)
-                    $html.= '<option value="'.$gr.'" selected>'.substr($gr,5);
-                else
-                    $html.= '<option value="'.$gr.'">'.substr($gr,5);
-            }
+            $homes = $dh->groups;
+        } else {
+            $homes = $this->crearListaHomes();
         }
+        
+        foreach($homes as $gr) {
+            if($gr == $dh->home)
+                $html.= '<option value="'.$gr.'" selected>'.substr($gr,5);
+            else
+                $html.= '<option value="'.$gr.'">'.substr($gr,5);
+        }
+
         
         $html.= '</select></div>';
         $style = "
@@ -30,4 +36,21 @@ class home_selector {
         $includes[] = '<script type="text/javascript" src="./includes/homepage/comp/home_selector.js"></script>';
         return array( $content, $includes );
     }
+    
+    function crearListaHomes() {
+        global $sess;
+
+        $groups = $sess->getGroups();
+        $home_groups = array();
+
+        foreach($groups as $gr)
+        {
+            $usr_gr = strtolower(trim($gr));
+            if(substr($usr_gr,0,5)=="home_")
+                $home_groups[] = $usr_gr;
+        }
+
+        return $home_groups;
+    }
+
 }
