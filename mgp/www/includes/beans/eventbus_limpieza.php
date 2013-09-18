@@ -2,7 +2,7 @@
 include_once 'beans/ticket.php';
 include_once 'common/csession.php';
 
-class eventbus_limpieza extends eventbus_luminaria {
+class eventbus_limpieza {
     private $last_response;
     
     function run($event) {

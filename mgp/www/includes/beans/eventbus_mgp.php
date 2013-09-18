@@ -2,7 +2,7 @@
 include_once 'beans/ticket.php';
 include_once 'common/csession.php';
 
-class eventbus_mgp extends eventbus_luminaria {
+class eventbus_mgp {
     private $last_response;
     
     function run($event) {
@@ -10,41 +10,33 @@ class eventbus_mgp extends eventbus_luminaria {
         $msg = '';
         $d = $event->eev_data;
         
-        //'op'        =>  'cambio_estado',
+        //'op'        =>  'cambio_estado','ingreso ticket'
         //'ticket'    =>  $this->tic_nro,
         //'prestacion'=>  $pres->tpr_code
 
-        //Cuando se hace un alta, se inserta el ticket en el sistema remoto
-        if( $d->op==='ingreso ticket' ) {
             
-            //Cargo el ticket
-            $t = new ticket();
-            $t->setNro($d->ticket);
-            $t->load('todo');
+        //Cargo el ticket
+        $t = new ticket();
+        $t->setNro($d->ticket);
+        $t->load('todo');
             
-            //URL del web service destinatario
-            $url = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'mgp.endpoint_url',"") );
-            
-            //Secret
-            $secret = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'mgp.secret','') );
-            
-            $ticket_json = json_encode($t);
-            $data = json_encode(array(
-                'ticket'   => $t, 
-                'signature' => md5($secret.$ticket_json)
-            )); 
+        //URL del web service destinatario
+        $url = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'mgp.endpoint_url',"") );
 
-            //Envio el mensaje
-            $ret = $this->put($url, $data);
+        //Secret
+        $secret = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'mgp.secret','') );
             
-            if($ret!=200)
-                $msg = "Error #{$ret} del endpoint {$url}";
-        }
-        
-        //Cuando se hace un cambio de estado, no se debe hacer nada
-        if( $d->op==='cambio_estado' ) {
-            //Si respondo con un string vacio, se considera que la operacion se completó con exito.
-        }
+        $ticket_json = json_encode($t);
+        $data = json_encode(array(
+            'ticket'   => $t, 
+            'signature' => md5($secret.$ticket_json)
+        )); 
+
+        //Envio el mensaje
+        $ret = $this->put($url, $data);
+
+        if($ret!=200)
+            $msg = "Error #{$ret} del endpoint {$url}";
         
         return $msg;
     }

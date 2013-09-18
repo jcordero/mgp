@@ -247,10 +247,10 @@ class class_tic_avance_th4 extends ctable_handler {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
         $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado inicial", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"REPORTES::ESTADO_TICKET", "IsVisible"=>true));
+        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado inicial", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
         $obj->GetField("tav_tstamp_in")->SetDisplayValues(Array("Name"=>"tav_tstamp_in", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATETIME", "IsVisible"=>true));
         $obj->GetField("use_code_in")->SetDisplayValues(Array("Name"=>"use_code_in", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"USER", "IsVisible"=>true));
-        $obj->GetField("tic_estado_out")->SetDisplayValues(Array("Name"=>"tic_estado_out", "Label"=>"Estado final", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::ESTADO_TICKET", "IsVisible"=>true));
+        $obj->GetField("tic_estado_out")->SetDisplayValues(Array("Name"=>"tic_estado_out", "Label"=>"Estado final", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
         $obj->GetField("tav_tstamp_out")->SetDisplayValues(Array("Name"=>"tav_tstamp_out", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>110, "Presentation"=>"DATETIME", "IsVisible"=>true));
         $obj->GetField("use_code_out")->SetDisplayValues(Array("Name"=>"use_code_out", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"USER", "IsVisible"=>true));
         $obj->GetField("tav_nota")->SetDisplayValues(Array("Name"=>"tav_nota", "Label"=>"Nota", "Size"=>1000, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4, "Cols"=>60));

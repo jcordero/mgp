@@ -36,39 +36,44 @@ class CDH_TICKET_MAINT extends CDataHandler
                                 <option>en espera
                                 <option>resuelto
                                 <option>rechazado
-                                <option>rechazado indebido
-                                <option>cerrado
-                                <option>certificación';
+                                <option>rechazado indebido'.
+                                //'<option>cerrado'.
+                                '<option>finalizado'.
+                                '<option>certificación';
                 case 'inspección':
                     $estados = '<option>en curso
                                 <option>en espera
                                 <option>resuelto
                                 <option>rechazado
-                                <option>rechazado indebido
-                                <option>cerrado
-                                <option>certificación';
+                                <option>rechazado indebido'.
+                                //'<option>cerrado'.
+                                '<option>finalizado'.
+                                '<option>certificación';
                     break;
                 case 'en curso':
                     $estados = '<option>en espera
                                 <option>resuelto
                                 <option>rechazado
-                                <option>rechazado indebido
-                                <option>cerrado
-                                <option>certificación';
+                                <option>rechazado indebido'.
+                                //'<option>cerrado'.
+                                '<option>finalizado'.
+                                '<option>certificación';
                     break;
                 case 'en espera':
                     $estados = '<option>resuelto
                                 <option>rechazado
-                                <option>rechazado indebido
-                                <option>cerrado
-                                <option>certificación';
+                                <option>rechazado indebido'.
+                                //'<option>cerrado'.
+                                '<option>finalizado'.
+                                '<option>certificación';
                     break;
                 case 'resuelto':
                     $estados = '<option>resuelto
                                 <option>rechazado
-                                <option>rechazado indebido
-                                <option>cerrado
-                                <option>certificación';
+                                <option>rechazado indebido'.
+                                //'<option>cerrado'.
+                                '<option>finalizado'.
+                                '<option>certificación';
                     break;
                 case 'rechazado':
                 case 'rechazado indebido':
@@ -80,8 +85,12 @@ class CDH_TICKET_MAINT extends CDataHandler
                 case 'cerrado':
                     $estados = '';
                     break;
+                case 'finalizado':
+                    $estados = '';
+                    break;
                 case 'certificación':
-                    $estados = '<option>cerrado';
+                    $estados =  //'<option>cerrado'.
+                                '<option>finalizado';
                     break;
                 default:
                     $estados = '';

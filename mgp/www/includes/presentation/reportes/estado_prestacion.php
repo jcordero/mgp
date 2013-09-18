@@ -15,6 +15,7 @@ class CDH_ESTADO_PRESTACION extends CDH_SELECTARRAY
                 'rechazado'             =>  "<span class='label label-inverse'>rechazado</span>",
                 'rechazado indebido'    =>  "<span class='label label-inverse'>rechazado indebido</span>",
                 'cerrado'               =>  "<span class='label label-success'>cerrado</span>",
+                'finalizado'            =>  "<span class='label label-success'>finalizado</span>",
                 'certificación'         =>  "<span class='label label-info'>certificación</span>"
             );
         }

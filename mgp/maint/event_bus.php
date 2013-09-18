@@ -6,6 +6,8 @@ include_once 'beans/eventbus_event.php';
 include_once 'beans/eventbus_luminaria.php';
 include_once 'beans/eventbus_limpieza.php';
 include_once 'beans/eventbus_miciudad.php';
+include_once 'beans/eventbus_mgp.php';
+
 ini_set("error_log", LOG_PATH.'event_bus.log');
 
 echo "\n* * INICIO PROCESO DE EVENTOS \n";

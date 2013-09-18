@@ -414,6 +414,9 @@
             <column title="Opciones" order="4">
                 <field name="tpr_opciones" presentation="TEXTAREA" ROWS="4" COLS="50" label="Opciones" />
             </column>
+            <column title="MiCiudad" order="5">
+                <field name="tpr_miciudad" presentation="TEXT" label="Código MiCiudad" cols="10"/>
+            </column>
         </table>
 
         <!-- GIS -->
@@ -797,12 +800,12 @@
                 <field name="tpr_code" isvisible="false"/>
             </column>
             <column title="Est.Inicial" order="2">
-                <field name="tic_estado_in" presentation="REPORTES::ESTADO_TICKET" label="Estado inicial"/>
+                <field name="tic_estado_in" presentation="REPORTES::ESTADO_PRESTACION" label="Estado inicial"/>
                 <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
                 <field name="use_code_in" presentation="USER" label="Operador"/>
             </column>
             <column title="Est.Final" order="3">
-                <field name="tic_estado_out" presentation="REPORTES::ESTADO_TICKET" label="Estado final"/>
+                <field name="tic_estado_out" presentation="REPORTES::ESTADO_PRESTACION" label="Estado final"/>
                 <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha"/>
                 <field name="use_code_out" presentation="USER" label="Operador"/>
             </column>
@@ -954,12 +957,12 @@
                 <field name="tpr_code" isvisible="false"/>
             </column>
             <column title="Est.Inicial" order="2">
-                <field name="tic_estado_in" presentation="REPORTES::ESTADO_TICKET" label="Estado inicial"/>
+                <field name="tic_estado_in" presentation="REPORTES::ESTADO_PRESTACION" label="Estado inicial"/>
                 <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
                 <field name="use_code_in" presentation="USER" label="Operador"/>
             </column>
             <column title="Est.Final" order="3">
-                <field name="tic_estado_out" presentation="REPORTES::ESTADO_TICKET" label="Estado final"/>
+                <field name="tic_estado_out" presentation="REPORTES::ESTADO_PRESTACION" label="Estado final"/>
                 <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha"/>
                 <field name="use_code_out" presentation="USER" label="Operador"/>
             </column>

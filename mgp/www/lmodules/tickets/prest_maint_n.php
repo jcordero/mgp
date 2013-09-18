@@ -274,11 +274,13 @@ class class_tic_prestaciones_cuest_th8 extends ctable_handler {
         $this->m_datafields['tpr_preg']=4;
         $this->m_datafields['tpr_tipo_preg']=5;
         $this->m_datafields['tpr_opciones']=6;
+        $this->m_datafields['tpr_miciudad']=7;
 
         $this->m_columns[1] = new ctable_column(1,'Orden',array('tpr_code','tcu_code','tpr_orden'));
         $this->m_columns[2] = new ctable_column(2,'Pregunta',array('tpr_preg'));
         $this->m_columns[3] = new ctable_column(3,'Tipo',array('tpr_tipo_preg'));
         $this->m_columns[4] = new ctable_column(4,'Opciones',array('tpr_opciones'));
+        $this->m_columns[5] = new ctable_column(5,'MiCiudad',array('tpr_miciudad'));
     }
 
     public function getJsIncludes($obj) {
@@ -289,6 +291,7 @@ class class_tic_prestaciones_cuest_th8 extends ctable_handler {
         $r[]=$obj->GetField("tpr_preg")->getJsIncludes();
         $r[]=$obj->GetField("tpr_tipo_preg")->getJsIncludes();
         $r[]=$obj->GetField("tpr_opciones")->getJsIncludes();
+        $r[]=$obj->GetField("tpr_miciudad")->getJsIncludes();
         return $r;
     }
 
@@ -300,6 +303,7 @@ class class_tic_prestaciones_cuest_th8 extends ctable_handler {
         $obj->GetField("tpr_preg")->SetDisplayValues(Array("Name"=>"tpr_preg", "Label"=>"Pregunta", "Size"=>100, "IsForDB"=>true, "Order"=>104, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true));
         $obj->GetField("tpr_tipo_preg")->SetDisplayValues(Array("Name"=>"tpr_tipo_preg", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>105, "IsMandatory"=>true, "Presentation"=>"CUESTOPCIONES", "IsVisible"=>true));
         $obj->GetField("tpr_opciones")->SetDisplayValues(Array("Name"=>"tpr_opciones", "Label"=>"Opciones", "Size"=>200, "IsForDB"=>true, "Order"=>106, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4));
+        $obj->GetField("tpr_miciudad")->SetDisplayValues(Array("Name"=>"tpr_miciudad", "Label"=>"Código MiCiudad", "Size"=>45, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXT", "IsVisible"=>true, "Cols"=>10));
     }
 
 }
