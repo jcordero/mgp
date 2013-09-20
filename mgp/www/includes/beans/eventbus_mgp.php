@@ -1,6 +1,7 @@
 <?php
 include_once 'beans/ticket.php';
 include_once 'common/csession.php';
+include_once 'beans/cambio_estado_mgp.php';
 
 class eventbus_mgp {
     private $last_response;
@@ -18,8 +19,14 @@ class eventbus_mgp {
         //Cargo el ticket
         $t = new ticket();
         $t->setNro($d->ticket);
-        $t->load('todo');
-            
+        $t->load('basico');
+        
+        //Creo el mensaje
+        $c = new cambio_estado_mgp();
+        $c->loadFromTicket($t);
+
+        
+        
         //URL del web service destinatario
         $url = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'mgp.endpoint_url',"") );
 

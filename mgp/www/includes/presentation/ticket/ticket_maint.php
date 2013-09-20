@@ -41,7 +41,8 @@ class CDH_TICKET_MAINT extends CDataHandler
                                 '<option>finalizado'.
                                 '<option>certificación';
                 case 'inspección':
-                    $estados = '<option>en curso
+                    $estados = '<option>inspección
+                                <option>en curso
                                 <option>en espera
                                 <option>resuelto
                                 <option>rechazado
@@ -51,7 +52,8 @@ class CDH_TICKET_MAINT extends CDataHandler
                                 '<option>certificación';
                     break;
                 case 'en curso':
-                    $estados = '<option>en espera
+                    $estados = '<option>en curso
+                                <option>en espera
                                 <option>resuelto
                                 <option>rechazado
                                 <option>rechazado indebido'.
@@ -60,7 +62,8 @@ class CDH_TICKET_MAINT extends CDataHandler
                                 '<option>certificación';
                     break;
                 case 'en espera':
-                    $estados = '<option>resuelto
+                    $estados = '<option>en espera
+                                <option>resuelto
                                 <option>rechazado
                                 <option>rechazado indebido'.
                                 //'<option>cerrado'.
@@ -76,20 +79,23 @@ class CDH_TICKET_MAINT extends CDataHandler
                                 '<option>certificación';
                     break;
                 case 'rechazado':
+                    $estados = '<option>rechazado';
+                    break;
                 case 'rechazado indebido':
-                    $estados = '';
+                    $estados = '<option>rechazado indebido';
                     break;
                 case 'transferido':
-                    $estados = '';
+                    $estados = '<option>transferido';
                     break;
                 case 'cerrado':
-                    $estados = '';
+                    $estados = '<option>cerrado';
                     break;
                 case 'finalizado':
-                    $estados = '';
+                    $estados = '<option>finalizado';
                     break;
                 case 'certificación':
                     $estados =  //'<option>cerrado'.
+                                '<option>certificación'.
                                 '<option>finalizado';
                     break;
                 default:
