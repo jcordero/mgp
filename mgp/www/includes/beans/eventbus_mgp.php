@@ -25,19 +25,16 @@ class eventbus_mgp {
         $c = new cambio_estado_mgp();
         $c->loadFromTicket($t);
 
-        
-        
         //URL del web service destinatario
         $url = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'mgp.endpoint_url',"") );
 
         //Secret
         $secret = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'mgp.secret','') );
             
-        $ticket_json = json_encode($t);
-        $data = json_encode(array(
-            'ticket'   => $t, 
-            'signature' => md5($secret.$ticket_json)
-        )); 
+        $ticket_json = json_encode($c);
+        $c->signature = md5($ticket_json.$secret);
+        
+        $data = json_encode($c); 
 
         //Envio el mensaje
         $ret = $this->put($url, $data);

@@ -926,18 +926,20 @@ class ticket {
             //Campos del template
             $tem_fld = json_encode( array(
                 'tic_identificador' => $this->tic_identificador,
-                'prestacion'    => $prestacion->tpr_description,
-                'lugar'         => $direccion,
-                'lat'           => $this->tic_coordx,
-                'lng'           => $this->tic_coordy,
-                'nombre'        => $nombres,
-                'apellido'      => $apellido,
-                'estado_ticket' => $this->tic_estado,
-                'fecha'         => ISO8601toDate($last_avance->tav_tstamp_in),
-                'estado_prest'  => $prestacion->ttp_estado,
-                'nota'          => $nota,
-                'plazo'         => $this->tic_tstamp_plazo,
-                'tic_tipo'      => $this->tic_tipo
+                'prestacion'            => $prestacion->tpr_description,
+                'prestacion_completa'   => $prestacion->tpr_description_full,
+                'lugar'                 => $direccion,
+                'lat'                   => $this->tic_coordx,
+                'lng'                   => $this->tic_coordy,
+                'nombre'                => $nombres,
+                'apellido'              => $apellido,
+                'estado_ticket'         => $this->tic_estado,
+                'fecha'                 => ISO8601toDate($last_avance->tav_tstamp_in),
+                'estado_prest'          => $prestacion->ttp_estado,
+                'nota'                  => $nota,
+                'plazo'                 => $this->tic_tstamp_plazo,
+                'plazo_sin_hora'        => substr($this->tic_tstamp_plazo,0,10),
+                'tic_tipo'              => $this->tic_tipo
             ));
 
             $msg = new cmessage();
