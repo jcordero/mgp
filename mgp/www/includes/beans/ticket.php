@@ -926,8 +926,8 @@ class ticket {
             //Campos del template
             $tem_fld = json_encode( array(
                 'tic_identificador' => $this->tic_identificador,
-                'prestacion'            => $prestacion->tpr_description,
-                'prestacion_completa'   => $prestacion->tpr_description_full,
+                'prestacion'            => htmlentities($prestacion->tpr_description, ENT_QUOTES, "UTF-8", false),
+                'prestacion_completa'   => htmlentities($prestacion->tpr_description_full, ENT_QUOTES, "UTF-8", false),
                 'lugar'                 => $direccion,
                 'lat'                   => $this->tic_coordx,
                 'lng'                   => $this->tic_coordy,
@@ -937,8 +937,8 @@ class ticket {
                 'fecha'                 => ISO8601toDate($last_avance->tav_tstamp_in),
                 'estado_prest'          => $prestacion->ttp_estado,
                 'nota'                  => $nota,
-                'plazo'                 => $this->tic_tstamp_plazo,
-                'plazo_sin_hora'        => substr($this->tic_tstamp_plazo,0,10),
+                'plazo'                 => ISO8601toDate($this->tic_tstamp_plazo),
+                'plazo_sin_hora'        => ISO8601toDate(substr($this->tic_tstamp_plazo,0,8)),
                 'tic_tipo'              => $this->tic_tipo
             ));
 
