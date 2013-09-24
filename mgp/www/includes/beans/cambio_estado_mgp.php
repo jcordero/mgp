@@ -34,7 +34,7 @@ class cambio_estado_mgp {
             $avance = $t->prestaciones[0]->getLastAvance();
             if($avance) {
                 $this->estado_actual    = $avance->tic_estado_in ;  //  ttp_estado (de la prestación del ticket)
-                $this->fecha_hora       = $avance->use_code_in;  //  tav_tstamp_in del ultimo cambio de estado
+                $this->fecha_hora       = $avance->tav_tstamp_in;  //  tav_tstamp_in del ultimo cambio de estado
                 $this->notas            = $avance->tav_nota;   //  tav_nota o similar con respecto al cambio de estado
             } else {
                 $this->estado_actual    = "";  //  ttp_estado (de la prestación del ticket)
