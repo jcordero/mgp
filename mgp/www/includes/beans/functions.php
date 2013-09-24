@@ -176,3 +176,44 @@
         $fVariance /= ( $bSample ? count($aValues) - 1 : count($aValues) );
         return (float) sqrt($fVariance);
     }
+    
+       /** Convertir de los formatos de ISO8601 al formato Date de MYSQL
+    *  
+    * @param type $tstamp
+    * @return type
+    */
+   function ISO8601toLocale($tstamp='') {
+        if($tstamp==='')
+            return date('d/m/Y H:i:s');
+        
+        $a = $m = $d = $h = $n = $s = 0;    
+        $p = explode('T',  str_replace(array(':','/',' ','Z'), array('','','',''), $tstamp));
+        if(count($p)==2) {
+            //Fecha
+            if(strlen($p[0])==8) {
+                $a = substr($p[0], 0, 4);
+                $m = substr($p[0], 4, 2);
+                $d = substr($p[0], 6, 2);
+            }
+            //Hora
+            if(strlen($p[1])==6) {
+                $h = substr($p[1], 0, 2);
+                $n = substr($p[1], 2, 2);
+                $s = substr($p[1], 4, 2);
+            } 
+            //Time Zone (no le doy bola)
+            return "{$d}/{$m}/{$a} {$h}:{$n}:{$s}";
+        }
+        elseif(count($p)==1)
+        {
+            //Solo Fecha
+            if(strlen($p[0])==8) {
+                $a = substr($p[0], 0, 4);
+                $m = substr($p[0], 4, 2);
+                $d = substr($p[0], 6, 2);
+            }
+            return "{$d}/{$m}/{$a}";            
+        }
+
+        return date('d/m/Y H:i:s');
+    }
