@@ -936,7 +936,7 @@ class ticket {
                 'estado_ticket'         => $this->tic_estado,
                 'fecha'                 => ISO8601toLocale($last_avance->tav_tstamp_in),
                 'estado_prest'          => $prestacion->ttp_estado,
-                'nota'                  => $nota,
+                'nota'                  => htmlentities($nota,ENT_QUOTES,"UTF-8",false),
                 'plazo'                 => ISO8601toLocale($this->tic_tstamp_plazo),
                 'plazo_sin_hora'        => ISO8601toLocale(substr($this->tic_tstamp_plazo,0,8)),
                 'tic_tipo'              => $this->tic_tipo
