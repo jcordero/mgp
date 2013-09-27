@@ -625,7 +625,7 @@
         </group>
 
         <group title="Ubicación COLECTIVO" id="colectivo" render_html="block">
-            <field name="col_linea" presentation="TEXT" label="Linea" ismandatory="true"/>
+            <field name="col_linea" presentation="TEXT" label="Linea" ismandatory="false"/>
             <field name="col_interno" presentation="TEXT" label="Interno" ismandatory="false"/>
             <field name="col_fecha_hora" presentation="DATETIME" label="Fecha y hora" ismandatory="false"/>
         </group>

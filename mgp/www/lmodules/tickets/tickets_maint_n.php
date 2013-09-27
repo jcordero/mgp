@@ -293,7 +293,7 @@ class colectivo_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket")->GetField("col_linea")->SetDisplayValues(Array("Name"=>"col_linea", "Label"=>"Linea", "Size"=>100, "Order"=>61, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("col_linea")->SetDisplayValues(Array("Name"=>"col_linea", "Label"=>"Linea", "Size"=>100, "Order"=>61, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("col_interno")->SetDisplayValues(Array("Name"=>"col_interno", "Label"=>"Interno", "Size"=>100, "Order"=>62, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("col_fecha_hora")->SetDisplayValues(Array("Name"=>"col_fecha_hora", "Label"=>"Fecha y hora", "Type"=>"datetime", "Order"=>63, "Presentation"=>"DATETIME", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
     }
