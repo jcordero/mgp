@@ -69,7 +69,8 @@ function m_prestacion_onSelect(row)
             plaza.m_mandatory = false;
             cementerio.m_mandatory = false;
             orgpublico.m_mandatory = false;
-
+            col_linea.m_mandatory = false;
+            
             if(georef==='' || georef==="DOMICILIO")
             {
                 divobj = $("#bloque_domicilio").show();
@@ -92,6 +93,11 @@ function m_prestacion_onSelect(row)
             {
                 divobj = $("#bloque_plaza").show();
                 plaza.m_mandatory = true;
+            }
+            else if(georef==="COLECTIVO")
+            {
+                divobj = $("#bloque_colectivo").show();
+                col_linea.m_mandatory = true;
             }
             else if(georef==="CEMENTERIO")
             {

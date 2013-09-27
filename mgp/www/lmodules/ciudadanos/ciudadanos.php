@@ -101,7 +101,7 @@ class col104 extends ccolumn
     function __construct($parent)
     {
         parent::__construct($parent);
-        $this->m_title = 'Sexo';
+        $this->m_title = 'Género';
         $this->m_order = '104';
         $this->m_isvisible = true;
         $this->m_align = 'left';
@@ -109,7 +109,7 @@ class col104 extends ccolumn
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"ciu_sexo", "Label"=>"Sexo", "Size"=>15, "IsForDB"=>true, "Order"=>104, "Presentation"=>"SEXO", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"ciu_sexo", "Label"=>"Género", "Size"=>15, "IsForDB"=>true, "Order"=>104, "Presentation"=>"CIUDADANO::SEXO", "IsVisible"=>true));
     }
 }
 

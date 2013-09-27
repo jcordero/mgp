@@ -135,6 +135,13 @@ class ticket {
 
     /** Identificador de cuadra */
     private $id_cuadra;
+
+    /** Colectivo */
+    private $col_linea;
+    private $col_interno;
+    private $col_fecha_hora;
+
+    
     
     function __construct() {
         $this->prestaciones = array();
@@ -438,12 +445,16 @@ class ticket {
         if($opcion=='archivos' || $opcion=='todo') {
             $this->archivos = archivo::factory($this->tic_nro);
         }
+
+        if($opcion=='basico' || $opcion=='todo') {
+            $this->solicitantes = solicitante::factory($this->tic_nro);
+        }
         
         if($opcion=='todo') {
-            $this->solicitantes = solicitante::factory($this->tic_nro);
             $this->reiteraciones = reiteracion::factory($this->tic_nro);
             $this->asociados = asociado::factory($this->tic_nro);
         }
+        
         
         return true;
     }
@@ -663,6 +674,16 @@ class ticket {
    			'tipo'          => 'ORGAN.PUBLICO',
 	    		'organismo'	=> $this->orgpublico,
 	    		'sector' 	=> $this->orgsector,
+    			'lat'		=> $this->tic_coordx,
+    			'lng'		=> $this->tic_coordy,
+    		);	
+                break;
+            case "COLECTIVO":
+                $geo = array(
+   			'tipo'          => 'COLECTIVO',
+	    		'linea'         => $this->col_linea,
+	    		'interno' 	=> $this->col_interno,
+                        'fecha_hora'    => $this->col_fecha_hora,
     			'lat'		=> $this->tic_coordx,
     			'lng'		=> $this->tic_coordy,
     		);	
@@ -988,6 +1009,13 @@ class ticket {
                 $this->vilcasa        = _F($obj,"vilcasa");
                 $this->tic_coordx     = (double) _F($obj,"tic_coordx");
                 $this->tic_coordy     = (double) _F($obj,"tic_coordy");
+                break;
+            case 'COLECTIVO':
+                $this->col_linea        = _F($obj,"col_linea");
+                $this->col_interno      = _F($obj,"col_interno");
+                $this->col_fecha_hora   = localeToISO8601( _F($obj,"col_fecha_hora") );
+                $this->tic_coordx       = (double) _F($obj,"tic_coordx");
+                $this->tic_coordy       = (double) _F($obj,"tic_coordy");
                 break;
             case 'PLAZA':
                 $this->plaza        = _F($obj,"plaza");

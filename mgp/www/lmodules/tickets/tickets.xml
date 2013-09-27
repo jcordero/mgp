@@ -472,6 +472,11 @@
 
 
 
+
+
+
+
+
 <!-- CLASE TICKETS class_tic_ticket.php -->
 <make object="class">
 	<build out_file="class_tic_ticket.php" classname="class_tic_ticket" classlabel="Ticket">
@@ -528,6 +533,11 @@
             <field name="tic_cgpc_lum" type="varchar" size="100"/>
             <field name="id_luminaria" type="varchar" size="100"/>
             <field name="alternativa_lum" type="varchar" size="20"/>
+
+            <!-- COLECTIVOS --> 
+            <field name="col_linea" type="varchar" size="100"/>
+            <field name="col_interno" type="varchar" size="100"/>
+            <field name="col_fecha_hora" type="datetime" />
             
     </build>
 </make>
@@ -612,6 +622,12 @@
             <field name="tic_barrio_lum" label="Barrio" presentation="TEXT" readonly="true"/>
             <field name="tic_cgpc_lum" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
             <field name="id_luminaria" label="Luminaria" presentation="TEXT" readonly="true" isvisible="true"/>
+        </group>
+
+        <group title="Ubicación COLECTIVO" id="colectivo" render_html="block">
+            <field name="col_linea" presentation="TEXT" label="Linea" ismandatory="true"/>
+            <field name="col_interno" presentation="TEXT" label="Interno" ismandatory="false"/>
+            <field name="col_fecha_hora" presentation="DATETIME" label="Fecha y hora" ismandatory="false"/>
         </group>
 		
 

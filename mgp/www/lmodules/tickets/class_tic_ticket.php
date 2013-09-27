@@ -78,6 +78,9 @@ class class_tic_ticket extends cobjbase {
         $this->m_fields['tic_cgpc_lum'] = new CField(Array("Name"=>"tic_cgpc_lum", "Size"=>100, "Order"=>58));
         $this->m_fields['id_luminaria'] = new CField(Array("Name"=>"id_luminaria", "Size"=>100, "Order"=>59));
         $this->m_fields['alternativa_lum'] = new CField(Array("Name"=>"alternativa_lum", "Size"=>20, "Order"=>60));
+        $this->m_fields['col_linea'] = new CField(Array("Name"=>"col_linea", "Size"=>100, "Order"=>61));
+        $this->m_fields['col_interno'] = new CField(Array("Name"=>"col_interno", "Size"=>100, "Order"=>62));
+        $this->m_fields['col_fecha_hora'] = new CField(Array("Name"=>"col_fecha_hora", "Type"=>"datetime", "Order"=>63));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes

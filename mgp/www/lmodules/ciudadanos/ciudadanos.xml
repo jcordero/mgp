@@ -40,7 +40,7 @@
                 <listfield name="CIU_CODE" presentation="INT" label="Codigo" isvisible="false"/>
                 <listfield name="CIU_NOMBRES" presentation="TEXT" label="Nombre" />
                 <listfield name="CIU_APELLIDO" presentation="TEXT" label="Apellido" />
-                <listfield name="CIU_SEXO" presentation="SEXO" label="Sexo" />
+                <listfield name="CIU_SEXO" presentation="CIUDADANO::SEXO" label="Género" />
                 <listfield name="CIU_TEL_FIJO" presentation="PHONE" label="Tel.Fijo" />
                 <listfield name="CIU_TEL_MOVIL" presentation="PHONE" label="Tel.Movil" />
                 <listfield name="CIU_EMAIL" presentation="EMAIL" label="Email" />
@@ -70,13 +70,13 @@
                 <!-- Datos personales -->
                 <group title="Datos personales" id="datos_personales" render_html="block">
                     <field name="ciu_code" presentation="INT" label="Cod.ciudadano" readonly="true" />
-                    <field name="ciu_tipo_persona" presentation="TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
+                    <field name="ciu_tipo_persona" presentation="CIUDADANO::TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
                     <field name="ciu_nombres" presentation="TEXT" label="Nombre" ismandatory="true" />
                     <field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
-                    <field name="ciu_sexo" presentation="SEXO" label="Género"  ismandatory="true" />
+                    <field name="ciu_sexo" presentation="CIUDADANO::SEXO" label="Género"  ismandatory="true" />
                     <field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
                                 
-                    <field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" initialvalue="Argentina"/>
+                    <field name="ciu_nacionalidad" presentation="CIUDADANO::NACIONALIDAD" label="Nacionalidad" ismandatory="true" initialvalue="Argentina"/>
                     <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
                 </group>
 
@@ -112,7 +112,7 @@
                 <!-- Informacion adicional laboral/estudios -->
                 <group title="Informacion Laboral/Estudios" id="laboral" render_html="block">
                     <field name="ciu_trabaja" presentation="SINO" label="Trabaja" />
-                    <field name="ciu_nivel_estudio" presentation="NIVEL_ESTUDIO" label="Nivel de Estudios" />
+                    <field name="ciu_nivel_estudio" presentation="CIUDADANO::NIVEL_ESTUDIO" label="Nivel de Estudios" />
                     <field name="ciu_profesion" presentation="TEXT" label="Profesion" />
                 </group>
 
@@ -121,7 +121,7 @@
                     <field name="ciu_tstamp" presentation="DATETIME" label="Fecha de ingreso" isvisible="true" readonly="true" />
                     <field name="ciu_canal_ingreso" presentation="CANALDEINGRESO" label="Canal de Ingreso" ismandatory="false" isvisible="true" readonly="true"/>
                     <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" ismandatory="false" isvisible="true" />
-                    <field name="ciu_estado" presentation="ESTADO_CIUDADANO" label="Estado" ismandatory="false" isvisible="false" />
+                    <field name="ciu_estado" presentation="CIUDADANO::ESTADO_CIUDADANO" label="Estado" ismandatory="false" isvisible="false" />
                 </group>
 
                 <!-- Documentos -->
@@ -148,13 +148,13 @@
                 <!-- Datos personales -->
                 <group title="Datos identificatorios" id="datos_personales" render_html="block">
                     <field name="ciu_code" presentation="SEQUENCE" label="Cod.ciudadano" cols="20" classparams="ciu_ciudadanos" readonly="true" />
-                    <field name="ciu_tipo_persona" presentation="TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
+                    <field name="ciu_tipo_persona" presentation="CIUDADANO::TIPOPERSONA" label="Tipo persona" initialvalue="FISICA" classparams="ciu_nombres|ciu_apellido|ciu_razon_social|ciu_sexo|ciu_nacimiento|ciu_doc_nro|ciu_nacionalidad"/>
                     <field name="ciu_nombres" presentation="TEXT" label="Nombre" ismandatory="true" />
                     <field name="ciu_apellido" presentation="TEXT" label="Apellido"  ismandatory="true" />
-                    <field name="ciu_sexo" presentation="SEXO" label="Género"  ismandatory="true" />
+                    <field name="ciu_sexo" presentation="CIUDADANO::SEXO" label="Género"  ismandatory="true" />
                     <field name="ciu_nacimiento" presentation="DATE" label="Fecha de Nacimiento" ismandatory="false" initialvalue="no" />
                     <field name="tmp_doc" presentation="CIUDADANO::DNI" label="Documento" classparams="{'nombre':'ciu_nombres','apellido':'ciu_apellido','direccion':'ciu_dir_calle','ocupacion':'ciu_profesion','genero':'ciu_sexo','localidad':'ciu_localidad','provincia':'ciu_provincia','barrio':'ciu_barrio'}"/>
-                    <field name="ciu_nacionalidad" presentation="NACIONALIDAD" label="Nacionalidad" ismandatory="true" />
+                    <field name="ciu_nacionalidad" presentation="CIUDADANO::NACIONALIDAD" label="Nacionalidad" ismandatory="true" />
                     <field name="ciu_razon_social" presentation="TEXT" label="Razon Social" ismandatory="true"/>
                 </group>
                         
@@ -190,7 +190,7 @@
                 <!-- Informacion adicional laboral/estudios -->
                 <group title="Información Laboral/Estudios" id="laboral" render_html="block">
                     <field name="ciu_trabaja" presentation="SINO" label="Trabaja" />
-                    <field name="ciu_nivel_estudio" presentation="NIVEL_ESTUDIO" label="Nivel de Estudios" />
+                    <field name="ciu_nivel_estudio" presentation="CIUDADANO::NIVEL_ESTUDIO" label="Nivel de Estudios" />
                     <field name="ciu_profesion" presentation="TEXT" label="Profesion" />
                 </group>
 
@@ -199,7 +199,7 @@
                     <field name="ciu_tstamp" presentation="DATETIME" label="Fecha de ingreso" cols="20" isvisible="true" readonly="true" classparams="force" />
                     <field name="ciu_canal_ingreso" presentation="CANALDEINGRESO" label="Canal de Ingreso" ismandatory="false" cols="20" isvisible="true" initialvalue="CALL" readonly="true"/>
                     <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" ismandatory="false" cols="20" isvisible="true" />
-                    <field name="ciu_estado" presentation="ESTADO_CIUDADANO" label="Estado" ismandatory="false" cols="20" initialvalue="ACTIVO" isvisible="false" />
+                    <field name="ciu_estado" presentation="CIUDADANO::ESTADO_CIUDADANO" label="Estado" ismandatory="false" cols="20" initialvalue="ACTIVO" isvisible="false" />
                 </group>
 
                 <!-- Documentos -->

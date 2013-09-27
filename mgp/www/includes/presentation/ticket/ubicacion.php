@@ -11,6 +11,7 @@ class CDH_UBICACION extends CDH_SELECTARRAY
                 $this->m_array = array(
                     "DOMICILIO"     =>  "DOMICILIO",
                     "LUMINARIA"     =>  "LUMINARIA",
+                    "COLECTIVO"     =>  "COLECTIVO",
                     "CEMENTERIO"    =>  "CEMENTERIO",
                     "ORGAN.PUBLICO" =>  "ORGAN.PUBLICO",
                     "PLAZA"         =>  "PLAZA",

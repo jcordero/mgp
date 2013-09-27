@@ -129,15 +129,22 @@
        $calle_nro = ($cnro>0 ? $cnro : "");
        
        if($obj) {
-            if($obj->alternativa=="CALLE")
-                $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2.'<br/>' : '(sin calle y cruce)<br/>');
-            else
-                $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$calle_nro.'<br/>' : '(sin calle-nro)<br/>');
-            
-            $mostrar .= (isset($obj->piso) && $obj->piso!='' ? '<b>Piso:</b> '.$obj->piso : ''); 
-            $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? '<b>Departamento:</b> '.$obj->dpto.'<br/>' : '');
-            $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? '<b>Barrio:</b> '.$obj->barrio.'<br/>' : '');
-            $mostrar .= (isset($obj->id_luminaria) && $obj->id_luminaria!='' ? '<b>Luminaria:</b> '.$obj->id_luminaria : '');
+            if( $obj->tipo=="DOMICILIO" || $obj->tipo=="" || $obj->tipo=="LUMINARIA") {
+                if($obj->alternativa=="CALLE")
+                    $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2.'<br/>' : '(sin calle y cruce)<br/>');
+                else
+                    $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$calle_nro.'<br/>' : '(sin calle-nro)<br/>');
+
+                $mostrar .= (isset($obj->piso) && $obj->piso!='' ? '<b>Piso:</b> '.$obj->piso : ''); 
+                $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? '<b>Departamento:</b> '.$obj->dpto.'<br/>' : '');
+                $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? '<b>Barrio:</b> '.$obj->barrio.'<br/>' : '');
+                $mostrar .= (isset($obj->id_luminaria) && $obj->id_luminaria!='' ? '<b>Luminaria:</b> '.$obj->id_luminaria : '');
+            }
+            elseif( $obj->tipo=="COLECTIVO" ) {
+                $mostrar .= '<b>Linea:</b> '.$obj->linea.'<br/>';
+                $mostrar .= (isset($obj->interno) && $obj->interno!="" ? '<b>Interno:</b> '.$obj->interno.'<br/>' : "" );
+                $mostrar .= (isset($obj->fecha_hora) && $obj->fecha_hora!="" ? '<b>Fecha:</b> '.ISO8601toLocale($obj->fecha_hora).'<br/>' : "" );
+            }
        }
         
        return $mostrar;
@@ -213,6 +220,38 @@
                 $d = substr($p[0], 6, 2);
             }
             return "{$d}/{$m}/{$a}";            
+        }
+
+        return date('d/m/Y H:i:s');
+    }
+
+    function localeToISO8601($tstamp='') {
+        if($tstamp==='')
+            return date('YmdTHis');
+        
+        $a = $m = $d = $h = $n = $s = 0;    
+        $p = explode(':',  str_replace(array(':','/','-',' '), array(':',':',':',':'), $tstamp));
+        if(count($p)==6) {
+            //Fecha
+            $a = sprintf("%04d",intval($p[2],10));
+            $m = sprintf("%02d",intval($p[1],10));
+            $d = sprintf("%02d",intval($p[0],10));
+            
+            //Hora
+            $h = sprintf("%02d",intval($p[3],10));
+            $n = sprintf("%02d",intval($p[4],10));
+            $s = sprintf("%02d",intval($p[5],10));
+             
+            //Time Zone (no le doy bola)
+            return "{$a}{$m}{$d}T{$h}{$n}{$s}";
+        }
+        elseif(count($p)==3)
+        {
+            //Solo Fecha
+            $a = sprintf("%04d",intval($p[2],10));
+            $m = sprintf("%02d",intval($p[1],10));
+            $d = sprintf("%02d",intval($p[0],10));
+            return "{$a}{$m}{$d}";            
         }
 
         return date('d/m/Y H:i:s');

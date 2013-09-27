@@ -269,6 +269,37 @@ class luminaria_gr extends cform_group {
 }
 }
 
+
+if( !class_exists('colectivo_gr') ) {
+class colectivo_gr extends cform_group {
+    function __construct($parent) {
+        parent::__construct($parent);
+        $this->m_title = 'Ubicación COLECTIVO'; //Titulo del grupo
+        $this->m_order = 7; //Orden de presentacion de este grupo
+        $this->m_id = 'colectivo'; //Id para los wizards
+        $this->m_note = ''; //Nota
+        $this->m_image = ''; //Imagen
+        $this->m_render_html = 'BLOCK'; //Forma de generar el contenido HTML
+        $this->m_render_pdml = 'PARENT'; //Forma de generar el contenido PDF
+        $this->m_comment = '';// Comentario del formulario
+        $this->m_css_prefix = '';// Prefijo CSS
+
+        //Campos del grupo
+        $this->m_fields[] = 'class_tic_ticket:col_linea';
+        $this->m_fields[] = 'class_tic_ticket:col_interno';
+        $this->m_fields[] = 'class_tic_ticket:col_fecha_hora';
+
+    }
+
+    public function InitializeInstance() {
+        //SetDisplayValues($attributes) 
+        $this->getClass("class_tic_ticket")->GetField("col_linea")->SetDisplayValues(Array("Name"=>"col_linea", "Label"=>"Linea", "Size"=>100, "Order"=>61, "IsMandatory"=>true, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("col_interno")->SetDisplayValues(Array("Name"=>"col_interno", "Label"=>"Interno", "Size"=>100, "Order"=>62, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("col_fecha_hora")->SetDisplayValues(Array("Name"=>"col_fecha_hora", "Label"=>"Fecha y hora", "Type"=>"datetime", "Order"=>63, "Presentation"=>"DATETIME", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
+    }
+}
+}
+
 if( !class_exists('class_tic_ticket_m') ) {
 class class_tic_ticket_m extends cclass_maint {
     function __construct() {
@@ -309,6 +340,7 @@ class class_tic_ticket_m extends cclass_maint {
 		$this->m_handler[4] = new plaza_gr($this);
 		$this->m_handler[5] = new cementerio_gr($this);
 		$this->m_handler[6] = new luminaria_gr($this);
+		$this->m_handler[7] = new colectivo_gr($this);
 
     }
 
