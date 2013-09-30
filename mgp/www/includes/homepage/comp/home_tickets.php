@@ -34,9 +34,26 @@ if(!class_exists('home_tickets'))
                             </div>
                             
                             <div class="row">
-                                <div class="span1"><button class="btn btn-small" onclick="mostrarPagina(pagnro,\'ABIERTOS\')"><i class="icon-inbox"></i> Abiertos</button></div>
-                                <div class="span1"><button class="btn btn-small" onclick="mostrarPagina(pagnro,\'CERRADOS\')"><i class="icon-ok-sign"></i> Cerrados</button></div>
-                                <div class="span1"><button class="btn btn-small" onclick="mostrarPagina(pagnro,\'VENCIDOS\')"><i class="icon-exclamation-sign"></i> Vencidos</button></div>
+                                <div class="span1"><button id="abiertos" class="btn btn-small" onclick="mostrarPagina(pagnro,\'ABIERTOS\')"><i class="icon-inbox"></i> Abiertos</button></div>
+                                <div class="span1"><button id="cerrados" class="btn btn-small" onclick="mostrarPagina(pagnro,\'CERRADOS\')"><i class="icon-ok-sign"></i> Cerrados</button></div>
+                                <div class="span1"><button id="vencidos" class="btn btn-small" onclick="mostrarPagina(pagnro,\'VENCIDOS\')"><i class="icon-exclamation-sign"></i> Vencidos</button></div>
+                                
+                                <div class="span9">
+                                    <form class="form-search" id="buscador" onsubmit="return false">
+                                        <input type="text" class="input-medium search-query">
+                                        <button type="submit" class="btn">Buscar</button>
+                                    </form>
+                                </div>    
+                            </div>
+                            
+                            <div class="row nav" >
+                                <div class="span6">
+                                    <h5>Página <span id="nro_pagina">1</span> de <span id="total_paginas"></span></h5>
+                                </div>
+                                <div class="span6">
+                                    <form class="form-inline" id="navegador" onsubmit="return false">
+                                    </form>
+                                </div>
                             </div>
                             
                             <div class="row">
@@ -47,7 +64,6 @@ if(!class_exists('home_tickets'))
                                                 <th>Fecha/Id</th>
                                                 <th>Prestación/Nota</th>
                                                 <th>Dirección</th>
-                                                <th>Rol</th>
                                                 <th>Estados</th>
                                                 <th>Acciones</th>
                                             </tr>
@@ -67,78 +83,7 @@ if(!class_exists('home_tickets'))
 
                 ';
 
-                $includes[] = '
-                <script type="text/javascript">
-                    $(document).ready(function(){
-                        //Recupero los tickets para los organismos del usuario
-                        mostrarPagina(1,"ABIERTOS");
-                    });
-                    
-                    var mostrarPaginaBusy = false;
-                    var pagnro = 1;
-                    
-                    function mostrarPagina(nro,filtro) {
-                        if(mostrarPaginaBusy)
-                            return;
-                        mostrarPaginaBusy = true;
-                        var b = $("#mis_tickets tbody").html("");
-                        $("#carga_tickets").show();
-                        $("#mi_titulo").html("Cargando tickets...");
-                        $("#sin_tickets").hide();
-                        
-                        new rem_request(this,function(obj,json){
-                            var obj = JSON.parse(json);
-                            var o = obj.tickets;
-                            var l = o.length;
-                            for(var j=0;j<l;j++) {
-                                var est_prest = (o[j].estado_prest=="resuelto" ? " badge-success" : " badge-warning");
-                                var h = "<tr><td>" + o[j].fecha + "<br>" + o[j].identificador + "</td>" +
-                                        "<td>" + o[j].prestacion + "<br><span class=\"it\">" + o[j].nota + "</span></td>" +
-                                        "<td>" + renderDireccion(o[j].direccion) + "</td>" +
-                                        "<td>" + o[j].rol + "</td>" +
-                                        "<td><span class=\"badge badge-info\">" + o[j].estado + "</span><br><span class=\"badge"+est_prest+"\">" + o[j].estado_prest + "</span></td>" +
-                                        "<td><button class=\"btn btn-small\" onclick=\"trabajar(\'" + o[j].ticket + "\')\">Trabajar</button></td></tr>";
-                                b.append(h);
-                            }
-                            
-                            if(l==0)
-                                $("#sin_tickets").html("Sin tickets "+filtro).show();
-                        
-                            $("#mis_tickets a").popover();
-                            $("#carga_tickets").hide();
-                            $("#mi_titulo").html(obj.titulo);
-                            mostrarPaginaBusy = false;
-                        },"TICKET::TICKETS","crearPagina",nro+"|"+filtro);    
-                    }
-                    
-                    function renderDireccion(o) {
-                        if(o && o.lat && o.lng) {
-                            var mapa = "<img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + o.lat + "&y=" + o.lng + "&w=250&h=250&r=250\'>";
-                            var d = o.calle_nombre + " " + o.callenro + " <a href=\"#\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i></a><br>";
-                            if(o.piso)
-                                d+=" Piso:" + o.piso;
-                            if(o.dpto)
-                                d+=" Dpto:" + o.dpto;
-                            if(o.barrio)    
-                                d+=" Barrio:" + o.barrio;
-                            return d;
-                        } 
-                        return "Sin dirección";
-                    }
-                    
-                    var trabajarBusy = false;
-                    function trabajar(ticket) {
-                        if(trabajarBusy)
-                            return;
-                        trabajarBusy = true;
-                        
-                        new rem_request(this,function(obj,json){
-                            document.location.href = json;
-                        },"TICKET::TICKETS","updateTicket",ticket);
-                    }
-                                        
-                </script>    
-                ';
+                $includes[] = '<script type="text/javascript" src="/mgp/includes/homepage/comp/home_tickets.js"></script>';
                 
 		$content["home_tickets"] = $html;
 		return array( $content, $errors, $includes );
