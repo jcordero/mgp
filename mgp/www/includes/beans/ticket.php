@@ -717,12 +717,33 @@ class ticket {
      * Esta función llama a cambiar_estado(...) internamente.
      * Agrega el salvado de documentos adjuntos que la otra no requiere.
      * 
+     * [10-Oct-2013 11:19:26 America/Buenos_Aires] Metodo PUT recibido: Array
+(
+    [payload] => {
+     * "object":"cambio_estado_ticket",
+     * "avance":{
+     *      "tpr_code":"10101",
+     *      "tav_tstamp_in":"20131010T000000",
+     *      "use_code_in":{"use_code":"0","use_name":"user"},
+     *      "tic_estado_in":"en curso",
+     *      "tav_nota":"Reclamo asignado a una cuadrilla para su reparación",
+     *      "tic_motivo":"Reclamo asignado a una cuadrilla para su reparación",
+     *      "tic_estado_out":"pendiente",
+     *      "tav_tstamp_out":null,
+     *      "use_code_out":null
+     * },
+     * "archivos":[],
+     * "id_luminaria":"4741"}
+    [signature] => 3D07209D03AB8CED7FCC570237B24710
+)
+     * 
      * @global type $primary_db
      * @param type $identificador
      * @param type $avance_json
      */
     function cambiar_estado_fromJSON($identificador, $avance_json) {
         global $primary_db;
+        $err = array();
         
         error_log("ticket::cambiar_estado_fromJSON(\$identificador=$identificador, \$avance_json)");
         /*
@@ -736,14 +757,43 @@ class ticket {
         $this->setIdent($identificador);
         $this->load('archivos');
         
-        //Cambio de estado de la prestacion
-        $avance = _g($avance_json, 'avance');
-        $tpr_code = (isset($avance->tpr_code) ? $avance->tpr_code : '');
-        $nuevo_estado = (isset($avance->tic_estado_in) ? $avance->tic_estado_in : '');
-        $fecha = (isset($avance->tav_tstamp_in) ? $avance->tav_tstamp_in : '');
-        $nota = (isset($avance->tav_nota) ?  $avance->tav_nota : '');
-        $motivo = (isset($avance->tic_motivo) ?  $avance->tic_motivo : '');
+        //Usa la georef de LUMINARIA?
+        if( isset($this->tic_lugar->tipo) && $this->tic_lugar->tipo=='LUMINARIA' ) {
+            $id_luminaria = _g($avance_json, 'id_luminaria');
+
+            //Cambio la luminaria?
+            if( !isset($this->tic_lugar->id_luminaria) || (isset($this->tic_lugar->id_luminaria) && $this->tic_lugar->id_luminaria!=$id_luminaria) ) {
                 
+                //Bajo los datos de georeferencia que estan en la base para este ticket
+                $this->tipo_georef          = "LUMINARIA";
+                $this->alternativa          = (isset($this->tic_lugar->alternativa) ? $this->tic_lugar->alternativa : '');
+                $this->tic_calle_nombre     = (isset($this->tic_lugar->calle_nombre) ? $this->tic_lugar->calle_nombre : '');
+                $this->tic_calle            = (isset($this->tic_lugar->calle) ? $this->tic_lugar->calle : '');
+                $this->tic_nro_puerta       = (isset($this->tic_lugar->callenro) ? $this->tic_lugar->callenro : '');
+                $this->tic_barrio           = (isset($this->tic_lugar->barrio) ? $this->tic_lugar->barrio : '');
+                $this->tic_cgpc             = (isset($this->tic_lugar->comuna) ? $this->tic_lugar->comuna : '');
+                $this->tic_coordx           = (isset($this->tic_lugar->lat) ? $this->tic_lugar->lat : 0);
+                $this->tic_coordy           = (isset($this->tic_lugar->lng) ? $this->tic_lugar->lng : 0);
+                $this->id_luminaria         = $id_luminaria;
+                $this->tic_calle_nombre2    = (isset($this->tic_lugar->calle_nombre2) ? $this->tic_lugar->calle_nombre2 : '');
+                $this->tic_calle2           = (isset($this->tic_lugar->calle2) ? $this->tic_lugar->calle2 : '');
+
+                //Actualizo los datos de georeferencia en la base, con el nuevo ID de luminaria
+                $lugar = json_encode($this->createLugar());
+                $params = array("lugar" => $lugar, "tic_nro" => $this->tic_nro);
+                $primary_db->do_execute("update tic_ticket set tic_lugar=':lugar:' where tic_nro=':tic_nro:'",$err,$params);
+            }
+        }
+                
+        //Cambio de estado de la prestacion
+        $avance         = _g($avance_json, 'avance');
+        $tpr_code       = (isset($avance->tpr_code)         ? $avance->tpr_code         : '');
+        $nuevo_estado   = (isset($avance->tic_estado_in)    ? $avance->tic_estado_in    : '');
+        $fecha          = (isset($avance->tav_tstamp_in)    ? $avance->tav_tstamp_in    : '');
+        $nota           = (isset($avance->tav_nota)         ?  $avance->tav_nota        : '');
+        $motivo         = (isset($avance->tic_motivo)       ?  $avance->tic_motivo      : '');
+       
+        
         if($tpr_code!=='' && $nuevo_estado!=='')
             $this->cambiar_estado($tpr_code, $nuevo_estado, $nota, $fecha, false, $motivo);
         else
@@ -756,11 +806,11 @@ class ticket {
             if(is_array($archivos)) {
                 foreach($archivos as $arch) {
                     //$tic_nro, $media, $f_name='', $nota='', $mime='image/jpeg', $publico='SI'
-                    $media      = (isset($arch->media) ? $arch->media : ''); 
-                    $nombre     = (isset($arch->nombre) ? $arch->nombre : 'foto.jpg'); 
-                    $nota       = (isset($arch->nota) ? $arch->nota : ''); 
-                    $tipo       = (isset($arch->tipo) ? $arch->tipo : 'image/jpeg'); 
-                    $publico    = (isset($arch->publico) ? $arch->publico : 'SI');
+                    $media      = (isset($arch->media)      ? $arch->media      : ''); 
+                    $nombre     = (isset($arch->nombre)     ? $arch->nombre     : 'foto.jpg'); 
+                    $nota       = (isset($arch->nota)       ? $arch->nota       : ''); 
+                    $tipo       = (isset($arch->tipo)       ? $arch->tipo       : 'image/jpeg'); 
+                    $publico    = (isset($arch->publico)    ? $arch->publico    : 'SI');
                     
                     if($media!='')
                         self::addPhotoBase64($this->tic_nro, $media, $nombre, $nota, $tipo, $publico);
