@@ -128,8 +128,8 @@ class CDH_MAPA extends CDataHandler
     {	
         return array(
             '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ticket/mapa.js"></script>',
-            '<script src="'.WEB_PATH.'/includes/wms236.js" type="text/javascript"></script>',	        
-            '<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyD-wZ32cogLHNtCqUmMqB4M_xdvrqivYcE" type="text/javascript"></script>'	        
+        //    '<script src="'.WEB_PATH.'/includes/wms236.js" type="text/javascript"></script>',	        
+        //    '<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyD-wZ32cogLHNtCqUmMqB4M_xdvrqivYcE" type="text/javascript"></script>'	        
             );
     }
 }
