@@ -4,30 +4,11 @@
 $url = "http://mgp/mgp/webservices/tickets";
 //$url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets";
     
-$secret = 'hasdYR33n1j34j#4jn*(-s';
-
-//Foto 
-$foto = base64_encode(file_get_contents('/Users/jcordero/Desktop/59346361.jpg'));
-
 //llamada por CURL
 $ingreso_ticket = json_encode((object) array(
-  'object'              =>  'ingreso_ticket',
-  'tic_tipo'            =>  'RECLAMO',
-  'tic_coordx'          =>  -38.0086896250302,
-  'tic_coordy'          =>  -57.5345889139824,
-  'tic_calle_nombre'    =>  'ALVEAR, CARLOS MARIA',
-  'tic_nro_puerta'      =>  '345',
-  'tpr_code'            =>  '01020209', //Falta la tulipa
-  'ciu_documento'       =>  'ARG DNI 20300300',
-  'ciu_nombre'          =>  'JUAN CARLOS',
-  'ciu_apellido'        =>  'PETRUZA',
-  'media'               =>  $foto,
-  
-  'tic_nota_in'         =>  "La tulipa esta arrancada",
-  'id_luminaria'        =>  "123",  
-//  'ttp_cuestionario'        =>  array(
-//                                array('tpr_miciudad'=>94, 'tpr_respuesta'=>1),
-//                            )
+  'afiliado'    =>  12345,
+  'id_agenda'   =>  10,
+  'id_turno'    =>  1000
 ));
 
 $data = http_build_query(array(

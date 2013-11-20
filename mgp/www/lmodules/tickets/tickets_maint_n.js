@@ -149,13 +149,16 @@ function valida_direccion() {
                 $('#m_calle_nombre2').val(o.calle2);
                 
                 //Seteo mapa centrado en coordenadas
-                mapa_domicilio.setView([o.latitud,o.longitud],18);
+                var center = new google.maps.LatLng(o.latitud,o.longitud);
+                mapa_domicilio.setCenter(center);
+                mapa_domicilio.setZoom(18);
                 
                 //Marker en el domicilio
                 if(marker_domicilio!==null)
-                    mapa_domicilio.removeOverlay(marker_domicilio);
+                    marker_domicilio.setMap(null);
                     
                 marker_domicilio = createMarker([o.latitud,o.longitud], o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''), mapa_domicilio);
+                
                 direccion_validada();
             }
             else
@@ -312,8 +315,15 @@ function valida_direccion_lum(){
             lista_luminarias = o.luminarias;
 
             //Cargo el mapa con un marker azul en la dirección elegida
-            mapa_luminaria.setView([o.latitud,o.longitud],18);
-            marker_luminarias = createMarker([o.latitud,o.longitud], (o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : '')), mapa_luminaria);
+            var center = new google.maps.LatLng(o.latitud,o.longitud);
+            mapa_luminaria.setCenter(center);
+            mapa_luminaria.setZoom(18);
+                
+            //Marker en el domicilio
+            if(marker_luminarias!==null)
+                marker_luminarias.setMap(null);
+
+            marker_luminarias = createMarker([o.latitud,o.longitud], o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''), mapa_luminaria);
             
             //Creo los markers de las luminarias
             var cant = lista_luminarias.length;
@@ -321,9 +331,9 @@ function valida_direccion_lum(){
                 var pt = lista_luminarias[j];
                 
                 if(pt.com==="ILEGAL")
-                    lista_luminarias[j].marker = createMarker([pt.lat,pt.lng],"Ilegal",mapa_luminaria,{icon: luminariaIlegalIcon}, marker_click);
+                    lista_luminarias[j].marker = createMarker([pt.lat,pt.lng],"Ilegal "+pt.calle+' '+pt.altura,mapa_luminaria,luminariaIlegalIcon,marker_click,j);
                 else
-                    lista_luminarias[j].marker = createMarker([pt.lat,pt.lng],"Luminaria",mapa_luminaria,{icon: luminariaIcon},marker_click);
+                    lista_luminarias[j].marker = createMarker([pt.lat,pt.lng],"Luminaria "+pt.calle+' '+pt.altura,mapa_luminaria,luminariaIcon,marker_click,j);
                 
                 lista_luminarias[j].com = pt.com; 
             }
@@ -432,72 +442,69 @@ function direccion_validada_lum() {
 
 /** Procesa el click sobre la luminaria
  * 
- * @param {event} e
+ * @param {event} event
  * @returns {void}
  */
-function marker_click(e) {
-    var lat = e.lat();
-    var lng = e.lng();
+function marker_click(event) {
+    var index = this.lum_index;
+    var lat = event.latLng.lat();
+    var lng = event.latLng.lng();
     var cant = lista_luminarias.length;
-    for(var j=0;j<cant;j++) {
-        var lum = lista_luminarias[j];
-        if( lum.lng===lng && lum.lat===lat ) {
+    var lum = lista_luminarias[index];
             
-            //Cambio el icono del marker
-            if(last_marker_clicked!==null) {
-                mapa_luminaria.removeOverlay(last_marker_clicked.marker);
-                if( last_marker_clicked.com === "ILEGAL" ) {
-                    last_marker_clicked.marker = createMarker([lat,lng],"Ilegal",mapa_luminaria,{icon: luminariaIlegalIcon}, marker_click);
-                } else {    
-                    last_marker_clicked.marker = createMarker([lat,lng],"Luminaria",mapa_luminaria,{icon: luminariaIcon}, marker_click);
-                }
-            }
-            
-            mapa_luminaria.removeOverlay(lum.marker);
-            if( lum.com === "ILEGAL" ) 
-                lum.marker = createMarker([lat,lng],"Ilegal",mapa_luminaria,{icon: luminariaIlegalOnIcon}, marker_click);
-            else
-                lum.marker = createMarker([lat,lng],"Luminaria",mapa_luminaria,{icon: luminariaOnIcon}, marker_click);
- 
-            last_marker_clicked = lum;
-
-            //Me aseguro que la modalidad sea calle y altura
-            $('#m_alternativa_lum').val('NRO');
-            $('#calle2_lum').hide();
-            $('#callenro_lum').show();
-            callenro_lum.m_mandatory = true;
-            calle2_lum.m_mandatory = false;
-            
-            //Completo la direccion de la luminaria
-            //(solo si los datos estan completos)
-            $('#m_id_luminaria').val(lum.id);
-            $('#lm_id_luminaria').html('#'+lum.id);
-            
-            //Cambio la direccion del reclamo
-            if(lum.calle!=='' && lum.altura!=='' && lum.altura!=='0') {
-                //Nuevas coordenadas
-                $('#m_tic_coordx').val(lum.lat);
-                $('#m_tic_coordy').val(lum.lng);
-                
-                //Codigo y nombre de calle
-                $('#m_calle_lum').val('0');
-                $('#hm_calle_lum').val(lum.calle);
-                $('#calle_lum .fldl').html(lum.calle);
-
-                //Nombre de la calle
-                $('#m_calle_nombre_lum').val(lum.calle);
-
-                //Altura
-                $('#m_callenro_lum').val(lum.altura);
-                $('#callenro_lum .fldl').html(lum.altura);
-            }
-            //Validacion del campo
-            calle_lum.m_status = 'pass';
-            calle2_lum.m_status = 'pass';
-            callenro_lum.m_status = 'pass';
-            break;
+    //Cambio el icono del marker de seleccionado a normal
+    if(last_marker_clicked!==null) {
+        if( last_marker_clicked.com === "ILEGAL" ) {
+            last_marker_clicked.marker.setIcon(luminariaIlegalIcon);
+        } else {    
+            last_marker_clicked.marker.setIcon(luminariaIcon);
         }
     }
+            
+    //Paso el marker seleccionado a estado activo
+    if( lum.com === "ILEGAL" ) 
+        lum.marker.setIcon(luminariaIlegalOnIcon);
+    else
+        lum.marker.setIcon(luminariaOnIcon);
+ 
+    last_marker_clicked = lum;
+
+    //Me aseguro que la modalidad sea calle y altura
+    $('#m_alternativa_lum').val('NRO');
+    $('#calle2_lum').hide();
+    $('#callenro_lum').show();
+    callenro_lum.m_mandatory = true;
+    calle2_lum.m_mandatory = false;
+            
+    //Completo la direccion de la luminaria
+    //(solo si los datos estan completos)
+    $('#m_id_luminaria').val(lum.id);
+    $('#lm_id_luminaria').html('#'+lum.id);
+            
+    //Cambio la direccion del reclamo
+    if(lum.calle!=='' && lum.altura!=='' && lum.altura!=='0') {
+        //Nuevas coordenadas
+        $('#m_tic_coordx').val(lum.lat);
+        $('#m_tic_coordy').val(lum.lng);
+
+        //Codigo y nombre de calle
+        $('#m_calle_lum').val('0');
+        $('#hm_calle_lum').val(lum.calle);
+        $('#calle_lum .fldl').html(lum.calle);
+
+        //Nombre de la calle
+        $('#m_calle_nombre_lum').val(lum.calle);
+
+        //Altura
+        $('#m_callenro_lum').val(lum.altura);
+        $('#callenro_lum .fldl').html(lum.altura);
+    }
+
+    //Validacion del campo
+    calle_lum.m_status = 'pass';
+    calle2_lum.m_status = 'pass';
+    callenro_lum.m_status = 'pass';
+    
     $('#alert_luminaria').remove();
 }
 
@@ -615,10 +622,12 @@ function cambio_prestacion(codigo)
             callenro.m_mandatory = true;
 
             //Activo el mapa interactivo en el centro de MDQ
-            if(typeof mapa_domicilio.setView === 'undefined') {
+            if(typeof mapa_domicilio.setCenter === 'undefined') {
                 mapa_domicilio = crearMapa('m_mapa');
             } else {
-                mapa_domicilio.setView([-38.0086358938483,-57.5388003290637], 13);
+                var center = new google.maps.LatLng(-38.0086358938483,-57.5388003290637);
+                mapa_domicilio.setCenter(center);
+                mapa_domicilio.setZoom(13);
             }
         }
         else if(georef==="VILLA")
@@ -654,10 +663,12 @@ function cambio_prestacion(codigo)
             id_luminaria.m_mandatory = false;
 
             //Activo el mapa interactivo en el centro de MDQ (ver mapa.js)
-            if(typeof mapa_luminaria.setView === 'undefined') { 
+            if(typeof mapa_luminaria.setCenter === 'undefined') { 
                 mapa_luminaria = crearMapa('m_mapa_lum');
             } else {
-                mapa_luminaria.setView([-38.0086358938483,-57.5388003290637], 13);
+                var center = new google.maps.LatLng(-38.0086358938483,-57.5388003290637);
+                mapa_luminaria.setCenter(center);
+                mapa_luminaria.setZoom(13);
             }
         }
        

@@ -1,6 +1,7 @@
 $(document).ready(function(){
     //Recupero los tickets para los organismos del usuario
     mostrarPagina(1,"ABIERTOS");
+    $('#buscador button').on("click",buscar);
 });
                     
 var mostrarPaginaBusy = false;
@@ -161,4 +162,11 @@ function renderEstado(estado) {
             break;
     }
     return "<span class=\"badge "+c+"\">" + estado + "</span>";
+}
+
+function buscar() {
+    var t = $('#buscador input').val();
+    if(t!='') {
+        alert('Buscar: '+t);
+    }
 }

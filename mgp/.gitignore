@@ -2,3 +2,8 @@
 /documents
 /log
 /temp
+.DS_Store
+.buildpath
+.project
+.settings
+.gitignore

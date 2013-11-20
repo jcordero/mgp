@@ -24,14 +24,11 @@ if(!class_exists('home_tickets'))
                 $content = array();
                 $errors = array();    
                 $html = '<div class="container">
-                            <div class="row">
+                             <div class="row">
                                 <div class="span12">
                                     <h4 id="mi_titulo">Cargando sus tickets...</h4> 
-                                    <div id="carga_tickets" class="progress progress-striped active">
-                                        <div class="bar" style="width: 100%;"></div>
-                                    </div>
                                 </div>
-                            </div>
+                         </div>
                             
                             <div class="row">
                                 <div class="span1"><button id="abiertos" class="btn btn-small" onclick="mostrarPagina(pagnro,\'ABIERTOS\')"><i class="icon-inbox"></i> Abiertos</button></div>
@@ -80,7 +77,13 @@ if(!class_exists('home_tickets'))
                                 No hay tickets 
                             </div>
                          </div>
-
+                         <div class="row">
+                                <div class="span12">
+                                    <div id="carga_tickets" class="progress progress-striped active">
+                                        <div class="bar" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                         </div>
                 ';
 
                 $includes[] = '<script type="text/javascript" src="/mgp/includes/homepage/comp/home_tickets.js"></script>';

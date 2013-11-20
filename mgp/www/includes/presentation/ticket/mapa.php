@@ -127,6 +127,7 @@ class CDH_MAPA extends CDataHandler
     function getJsIncludes()
     {	
         return array(
+            '<script src="http://maps.googleapis.com/maps/api/js?v=3.14&sensor=false" type="text/javascript"></script>',
             '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ticket/mapa.js"></script>',
         //    '<script src="'.WEB_PATH.'/includes/wms236.js" type="text/javascript"></script>',	        
         //    '<script src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyD-wZ32cogLHNtCqUmMqB4M_xdvrqivYcE" type="text/javascript"></script>'	        

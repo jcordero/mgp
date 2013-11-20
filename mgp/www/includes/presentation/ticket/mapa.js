@@ -123,8 +123,6 @@ function crearMapa3(id) {
   
     mapa.overlayMapTypes.push(SLPLayer);
     
-    //Inicializar iconos
-    
     return mapa;
 }
 
@@ -135,75 +133,36 @@ function crearMapa3(id) {
  * @returns {map}
  */
 function crearMapa(id) {
-    var p = $('#'+id).parent();
-    $('#'+id).remove();
-    p.append('<div id="' + id + '"></div>');
-
-    var mapa = new GMap(document.getElementById(id));
-    mapa.addControl(new GSmallZoomControl());
-    mapa.addControl(new GMapTypeControl());
-
-
-    mapa.setView = function(latlng,zoom) {
-        var point = new GLatLng(latlng[0],latlng[1]);
-	mapa.setCenter(point,zoom);
-	mapa.setMapType(G_SATELLITE_MAP);
-    }
-    
-    mapa.setView([-38.0086358938483,-57.5388003290637], 16);
-    
-    var tile_roadless= new GTileLayer(new GCopyrightCollection(""),1,17);
-    tile_roadless.myLayers =  'callesi_4326';
-    tile_roadless.myMercZoomLevel=5;
-    tile_roadless.myFormat='image/png';
-    tile_roadless.myBaseURL= 'http://gis.mardelplata.gob.ar/cgi-bin/mapserv?map=/var/www/webservice/wms/servicios.map';
-    tile_roadless.getTileUrl=CustomGetTileUrl;		
-    tile_roadless.getOpacity = function() {return 1.0;}
-
-    mapa.addControl(new GLargeMapControl());
-    //mapa.addControl(new GMapTypeControl());
-    var MapserverLayer = new GTileLayerOverlay(tile_roadless);
-    mapa.addOverlay(MapserverLayer);
+   
 	
-    luminariaIcon = new GIcon();
-    luminariaIcon.image = sess_web_path+'/images/mapicons/luminaria.png';
-    luminariaIcon.iconSize = new GSize(32, 37);
-    luminariaIcon.iconAnchor = new GPoint(16, 38);
-    luminariaIcon.infoWindowAnchor = new GPoint(-3, 76);
-
-    luminariaOnIcon = new GIcon();
-    luminariaOnIcon.image = sess_web_path+'/images/mapicons/luminaria_on.png';
-    luminariaOnIcon.iconSize = new GSize(32, 37);
-    luminariaOnIcon.iconAnchor = new GPoint(16, 38);
-    luminariaOnIcon.infoWindowAnchor = new GPoint(-3, 76);
-
-    luminariaIlegalIcon = new GIcon();
-    luminariaIlegalIcon.image = sess_web_path+'/images/mapicons/luminaria_ilegal.png';
-    luminariaIlegalIcon.iconSize = new GSize(32, 37);
-    luminariaIlegalIcon.iconAnchor = new GPoint(16, 38);
-    luminariaIlegalIcon.infoWindowAnchor = new GPoint(-3, 76);
+    luminariaIcon = sess_web_path+'/images/mapicons/luminaria.png';
+  
+    luminariaOnIcon = sess_web_path+'/images/mapicons/luminaria_on.png';
     
-    luminariaIlegalOnIcon = new GIcon();
-    luminariaIlegalOnIcon.image = sess_web_path+'/images/mapicons/luminaria_ilegal_on.png';
-    luminariaIlegalOnIcon.iconSize = new GSize(32, 37);
-    luminariaIlegalOnIcon.iconAnchor = new GPoint(16, 38);
-    luminariaIlegalOnIcon.infoWindowAnchor = new GPoint(-3, 76);
+    luminariaIlegalIcon = sess_web_path+'/images/mapicons/luminaria_ilegal.png';
+  
+    luminariaIlegalOnIcon = sess_web_path+'/images/mapicons/luminaria_ilegal_on.png';
     
-    return mapa;
+    
+     return crearMapa3(id);
 }
 
-function createMarker( latlng, label, mapa, opts, click_event) {
+function createMarker( latlng, label, mapa, icon, click_event, index) {
 
     if(typeof opts === "undefined")
         opts = { draggable: false };
     
-    var point = new GLatLng(latlng[0],latlng[1]);
-    var m = new GMarker(point, opts); 
+    var point = new google.maps.LatLng(latlng[0],latlng[1]);
+    var m = new google.maps.Marker({map:mapa, position:point, title:label}); 
 					
     if(typeof click_event === "function")
-        GEvent.addListener(m, "click",click_event);
+        google.maps.event.addListener(m, 'click', click_event);
     
-    mapa.addOverlay(m);
-
+    if(typeof icon === "string")
+        m.setIcon(icon);
+    
+    if(typeof index !== "undefined")
+        m.lum_index = index;
+         
     return m;
 }
