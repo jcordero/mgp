@@ -307,6 +307,23 @@ class col108 extends ccolumn
     }
 }
 
+class col131 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Ciudadano';
+        $this->m_order = '131';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tic_nro';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tic_nro", "Label"=>"Ciudadano", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"TICKET::RECLAMANTE", "IsNullable"=>false, "IsVisible"=>true));
+    }
+}
+
 class class_v_tickets1_table extends ctable
 {
     function __construct($parent)
@@ -332,6 +349,7 @@ class class_v_tickets1_table extends ctable
         $this->m_cols[129] = new col129($this);
         $this->m_cols[130] = new col130($this);
         $this->m_cols[108] = new col108($this);
+        $this->m_cols[131] = new col131($this);
     }
 
 }

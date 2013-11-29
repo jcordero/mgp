@@ -560,7 +560,11 @@ function ocultar_bloques_geo()
     }   
 }
 
-
+/**
+ * Es invocada por el tree de prestaciones
+ * @param {type} codigo
+ * @returns {undefined}
+ */
 function cambio_prestacion(codigo)
 {	    
     //Ocultar la georeferencia

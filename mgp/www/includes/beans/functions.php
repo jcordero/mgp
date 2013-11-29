@@ -116,7 +116,7 @@
     	return 0;
    }
    
-   function generarTextoDireccion($json) {
+   function generarTextoDireccion($json,$use_html=true) {
        $mostrar = "";
        $obj = null;
        if(is_object($json)) { 
@@ -128,7 +128,7 @@
        $cnro = intval($obj->callenro,10);
        $calle_nro = ($cnro>0 ? $cnro : "");
        
-       if($obj) {
+       if($obj && $use_html) {
             if( $obj->tipo=="DOMICILIO" || $obj->tipo=="" || $obj->tipo=="LUMINARIA") {
                 if($obj->alternativa=="CALLE")
                     $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2.'<br/>' : '(sin calle y cruce)<br/>');
@@ -147,6 +147,24 @@
             }
        }
         
+       if($obj && $use_html==false) {
+            if( $obj->tipo=="DOMICILIO" || $obj->tipo=="" || $obj->tipo=="LUMINARIA") {
+                if($obj->alternativa=="CALLE")
+                    $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2."\n" : "(sin calle y cruce)\n");
+                else
+                    $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$calle_nro."\n" : "(sin calle-nro)\n");
+
+                $mostrar .= (isset($obj->piso) && $obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
+                $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? 'Departamento: '.$obj->dpto."\n" : '');
+                $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? 'Barrio: '.$obj->barrio."\n" : '');
+                $mostrar .= (isset($obj->id_luminaria) && $obj->id_luminaria!='' ? 'Luminaria: '.$obj->id_luminaria : '');
+            }
+            elseif( $obj->tipo=="COLECTIVO" ) {
+                $mostrar .= 'Linea: '.$obj->linea."\n";
+                $mostrar .= (isset($obj->interno) && $obj->interno!="" ? 'Interno: '.$obj->interno."\n" : "" );
+                $mostrar .= (isset($obj->fecha_hora) && $obj->fecha_hora!="" ? 'Fecha: '.ISO8601toLocale($obj->fecha_hora)."\n" : "" );
+            }
+       }
        return $mostrar;
    }
    

@@ -15,7 +15,7 @@ class rep2_sl extends csearchandlist {
         $this->m_obj = new rep2();
         $this->m_page_name = "reporte2.php";
         $this->m_result = new ctable($this->m_title);
-        $this->m_print_orientation = 'P';
+        $this->m_print_orientation = 'L';
         $this->m_print_size = 'A4';
         $this->m_iso_codigo = '';
         $this->m_iso_revision = '';
@@ -249,6 +249,23 @@ class col112 extends ccolumn
     }
 }
 
+class col113 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'Ciudadano';
+        $this->m_order = '113';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tic_nro';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tic_nro", "Label"=>"Ciudadano", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "Presentation"=>"TICKET::RECLAMANTE", "IsVisible"=>true));
+    }
+}
+
 class rep2_table extends ctable
 {
     function __construct($parent)
@@ -271,6 +288,7 @@ class rep2_table extends ctable
         $this->m_cols[110] = new col110($this);
         $this->m_cols[111] = new col111($this);
         $this->m_cols[112] = new col112($this);
+        $this->m_cols[113] = new col113($this);
     }
 
 }

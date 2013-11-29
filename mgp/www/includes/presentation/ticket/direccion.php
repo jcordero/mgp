@@ -190,7 +190,7 @@ class CDH_DIRECCION extends CDataHandler
     
     function getHelperValue($cn, $val) 
     {
-        return str_replace('<br/>',"\n",generarTextoDireccion($val));
+        return generarTextoDireccion($val,false);
     }
 }
 ?>

@@ -159,7 +159,7 @@
 
         <!-- Reporte de tickets y ciudadanos -->
 	<make object="search_and_list">
-            <build out_file="reporte2.php" classname="rep2" title="Reporte de tickets vencidos">
+            <build out_file="reporte2.php" classname="rep2" title="Reporte de tickets vencidos" print_orientation="L">
 			
                 <searchfield name="tic_tstamp_in"       presentation="DATERANGE" label="Ingreso"/>
                 <searchfield name="tic_tstamp_plazo"    presentation="DATERANGE" label="Plazo" />
@@ -179,6 +179,7 @@
                 <listfield name="tic_lugar"         presentation="TICKET::DIRECCION" label="Dirección" />
                 <listfield name="tic_barrio"        presentation="REPORTES::BARRIO" label="Barrio" isvisible="false"/>
                 <listfield name="tic_nota_in"       presentation="TEXT" label="Nota" />
+                <listfield name="tic_nro"           presentation="TICKET::RECLAMANTE" label="Ciudadano"/>
                 
                 <action label="ver" target="../tickets/ticket_maint.php?OP=V&amp;next=../reportes/reporte2.php&amp;last=1" operation="V">
 			<sendfield classname="rep2" name="tic_nro"/>

@@ -653,8 +653,7 @@
 
 <!--  BUSCAR TICKETS tickets.php -->
 <make object="search_and_list">
-    <build out_file="tickets.php" classname="class_v_tickets1" title="Consulta de tickets"
-        template_html="default.htm" >
+    <build out_file="tickets.php" classname="class_v_tickets1" title="Consulta de tickets" >
 
 	<searchfield name="tic_identificador" presentation="TEXT" label="Identificador" cols="45"/>
         <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10" initialvalue="2013" />
@@ -683,7 +682,7 @@
         <listfield name="tor_code" presentation="REPORTES::ORGANISMO" label="Organismo"/>
         <listfield name="tto_figura" presentation="TEXT" label="Rol"/>
         <listfield name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección"/>
-
+        <listfield name="tic_nro" presentation="TICKET::RECLAMANTE" label="Ciudadano"/>
 		
         <action operation="V" label="ver" target="ticket_maint.php?OP=V" >
             <sendfield classname="class_v_tickets1" name="tic_nro"/>

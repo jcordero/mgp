@@ -17,7 +17,17 @@ function m_prestacion_onSelect(row)
     $("#rubro").hide();
     rubro.m_mandatory = false;
     
+    //Minimizo el tree
+    $("#m_prestacion_div").hide();
+    if( $("#prestacion_cambiar").length==0 ) {
+        $("#tm_prestacion").after("  <button id=\"prestacion_cambiar\" class=\"maint cancel btn\" onclick=\"cambiar_prest()\">Cambiar</button>");
+    } else {
+        $("#prestacion_cambiar").show();
+    }
     cambio_prestacion(codigo);    
 }
 
-
+function cambiar_prest() {
+    $("#m_prestacion_div").show();
+    $("#prestacion_cambiar").hide();
+}
