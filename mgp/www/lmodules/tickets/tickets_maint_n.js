@@ -34,11 +34,11 @@ $(document).ready(function() {
     
     /* Boton de validar la direccion */
     $('#contenido_domicilio').after(
-        '<div><button class="btn" id="valida_direccion">Validar Dirección</button> <button class="btn hide" id="cambia_direccion">Cambiar Dirección</button></div>');
+        '<div><button class="btn" id="valida_direccion"><i class="icon-globe"></i> Validar Dirección</button> <button class="btn hide" id="cambia_direccion"><i class="icon-globe"></i> Cambiar Dirección</button></div>');
     
     /* Boton de validar la direccion en luminarias */
     $('#contenido_luminaria').after(
-        '<div><button class="btn" id="valida_direccion_lum">Validar Dirección</button> <button class="btn hide" id="cambia_direccion_lum">Cambiar Dirección</button></div>');
+        '<div><button class="btn" id="valida_direccion_lum"><i class="icon-globe"></i> Validar Dirección</button> <button class="btn hide" id="cambia_direccion_lum"><i class="icon-globe"></i> Cambiar Dirección</button></div>');
     
     /* Opcion de escribir la direccion */
     $('#m_alternativa').change(function(){

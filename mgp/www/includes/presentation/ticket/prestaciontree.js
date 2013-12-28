@@ -20,7 +20,7 @@ function m_prestacion_onSelect(row)
     //Minimizo el tree
     $("#m_prestacion_div").hide();
     if( $("#prestacion_cambiar").length==0 ) {
-        $("#tm_prestacion").after("  <button id=\"prestacion_cambiar\" class=\"maint cancel btn\" onclick=\"cambiar_prest()\">Cambiar</button>");
+        $("#tm_prestacion").after("  <button id=\"prestacion_cambiar\" class=\"maint cancel btn\" onclick=\"cambiar_prest()\"><i class=\"icon-pencil\"></i> Cambiar</button>");
     } else {
         $("#prestacion_cambiar").show();
     }
