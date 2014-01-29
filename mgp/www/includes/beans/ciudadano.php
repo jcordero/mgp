@@ -1,6 +1,7 @@
 <?php
-include_once 'beans/evento.php';
+
 include_once 'beans/sesion.php';
+include_once 'beans/evento_historia.php';
 
 class ciudadano {
     
@@ -125,7 +126,7 @@ class ciudadano {
             
             if($detalle!=='BASICO') {
                 //Cargo los eventos
-                $this->eventos = evento::factoryByCiudadano($this);
+                $this->eventos = evento_historia::factoryByCiudadano($this);
 
                 //Cargo las sesiones del call
                 $this->sesiones = sesion::factoryByCiudadano($this);
@@ -152,7 +153,7 @@ class ciudadano {
              foreach($row as $key => $value)
              {
                 if(!is_numeric($key))
-                 $a[$key] = $row[$key];   
+                    $a[$key] = $row[$key];   
              }
             return  (object)$a;
         }
@@ -160,27 +161,6 @@ class ciudadano {
               
     }
         
-    static function addEvento($evento) {
-         global $primary_db;
-         $contenido=array();
-         $errores=array();
-         $evento =(object)$evento;
-        
-         $existe=$primary_db->QueryString("SELECT count(*) FROM ciu_ciudadanos where ciu_code= $evento->ciu_code");
-         if($existe<1)return array("El ciudadano no existe");
-         $sql = "insert into ciu_historial_contactos(chi_code,ciu_code,chi_fecha,chi_motivo,use_code, chi_canal) values(:chi_code:,:ciu_code:,':chi_fecha:',':chi_motivo:',:use_code:,':chi_canal:')";
-         $params = array(
-            'chi_code'   => $evento->chi_code,
-            'ciu_code'   => $evento->ciu_code,
-            'chi_fecha'  => $evento->chi_fecha,
-            'chi_motivo' => $evento->chi_motivo,
-            'use_code'   => $evento->use_code,
-            'chi_canal'  => $evento->chi_canal,
-        );
-        $primary_db->do_execute($sql,$errores,$params);
-        
-        return array($contenido,$errores);    
-    }
     
     function toJSON() {
         return json_encode($this);

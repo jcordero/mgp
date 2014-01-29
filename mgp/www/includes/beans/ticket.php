@@ -9,10 +9,12 @@ include_once 'beans/asociado.php';
 include_once 'common/cmessaging.php';
 include_once 'beans/archivo.php';
 include_once 'beans/eventbus_event.php';
+include_once 'beans/georeferencias.php';
+include_once 'beans/evento_historia.php';
 
 class ticket {
     /** Nro interno del ticket */
-    private $tic_nro;
+    protected $tic_nro;
     
     /** Identificador publico del ticket "TIPO NRO/AÑO" */
     public $tic_identificador;
@@ -23,7 +25,7 @@ class ticket {
     /** Codigo del ticket al que este esta asociado este */
     public $tic_nro_asociado;
     
-    /** Fecha de ingreso del ticket */
+    /** Fecha de ingreso del ticket ISO8601 */
     public $tic_tstamp_in;
     
     /** Operador que ingreso el ticket */
@@ -35,62 +37,20 @@ class ticket {
     /** Estado global del ticket ABIERTO / CERRADO / CANCELADO */
     public $tic_estado;
     
-    /** Objeto que contiene la información del lugar */
+    /** Objeto que contiene la información del lugar en formato JSON */
     public $tic_lugar;
     
-    /** Campo de busqueda barrio */
-    private $tic_barrio;
-    
-    /** Campo de busqueda comuna */
-    private $tic_cgpc;
-    
-    /** Campo de busqueda Latitud */
-    private $tic_coordx;
-    
-    /** Campo de busqueda Longitud */
-    private $tic_coordy;
+    /** Objeto de georeferencia */
+    protected $tic_georef;
     
     /** Canal de ingreso: web, movil, call, presencial */
     public $tic_canal;
     
-    /** Fecha de vencimiento del ticket */
+    /** Fecha de vencimiento del ticket ISO8601*/
     public $tic_tstamp_plazo;
     
     /** Fecha en la que se cierra o cancela el ticket */
     public $tic_tstamp_cierre;
-    
-    /** Tipo de geo referencia DOMICILIO, CEMENTERIO, VILLA, LUMINARIA, PLAZA, ORGAN.PUBLICO */
-    private $tipo_georef;
- 
-    /** Nombre del lugar, como Hospital Pirulo */
-    private $tic_nombre_fantasia;
-    
-    /** Nombre de la calle */
-    private $tic_calle_nombre;
-
-    /** Código de la calle */
-    private $tic_calle;
-
-    /** Nombre de la calle que cruza */
-    private $tic_calle_nombre2;
-
-    /** Código de la calle que cruza*/
-    private $tic_calle2;
-    
-    /** Usa calle nro (NRO) o calle y calle (CALLE) */
-    private $alternativa;
-
-    /** Numero de la puerta */
-    private $tic_nro_puerta;
-
-    /** Piso */
-    private $tic_piso;
-
-    /** Departamento */
-    private $tic_dpto;
-
-    /** Identificador de la luminaria */
-    private $id_luminaria;
     
     /** Array con las prestaciones */
     public $prestaciones;
@@ -108,40 +68,10 @@ class ticket {
     public $archivos;
     
     /** Foto */
-    private $media;
+    protected $media;
     
     /** Array de errores de proceso */
-    private $errors;
-    
-    /** Villa */
-    private $villa;
-    private $vilmanzana;
-    private $vilcasa;
-         
-    /** Plaza */
-    private $plaza;
-    
-    /** Organismo publico */
-    private $orgpublico;
-    private $orgsector;
-    
-    /** Cementerio */
-    private $cementerio;
-    private $sepultura;
-    private $sepsector;
-    private $sepcalle;
-    private $sepnumero;
-    private $sepfila;
-
-    /** Identificador de cuadra */
-    private $id_cuadra;
-
-    /** Colectivo */
-    private $col_linea;
-    private $col_interno;
-    private $col_fecha_hora;
-
-    
+    protected $errors;
     
     function __construct() {
         $this->prestaciones = array();
@@ -152,10 +82,18 @@ class ticket {
         $this->archivos = array();
     }
     
+    /** Retorna un array con los errores
+     * 
+     * @return string[]
+     */
     function getErrors() {
         return $this->errors;
     }
 
+    /** Retorna un string con todos los errores
+     * 
+     * @return string
+     */
     function getErrorString() {
         $ret = '';
         foreach($this->errors as $err)
@@ -164,14 +102,36 @@ class ticket {
         return $ret;
     }
     
+    /** Reporta un error en el proceso de este objeto
+     * 
+     * @param string $msg
+     */
     function addError($msg) {
         $this->errors[] = $msg;
     }
 
+    /** Retorna true si no hay ningun error
+     * 
+     * @return boolean
+     */
     function getStatus() {
         return (count($this->errors)===0 ? true : false);
     }
 
+    /** Cadena completa del nombre de la prestacion
+     * 
+     * @return string
+     */
+    function getPrestacionFull() {
+        if(count($this->prestaciones)>0) {
+            $prest = $this->prestaciones[0];
+            return $prest->tpr_description_full;
+        }
+        else {
+            return "Sin prestacion asignada";
+        }
+    }
+    
     /**
      * Agrega un ticket al sistema
      * 
@@ -194,23 +154,9 @@ class ticket {
                 $this->tic_tstamp_in = DatetoISO8601('');
 
             //Tipo de georeferencia
-            $this->id_luminaria     = (int) _g($ticket,'id_luminaria');
-            $this->tipo_georef      = _g($ticket,'tipo_georef');
-            if($this->tipo_georef==='')
-                $this->tipo_georef = ($this->id_luminaria===0 ? 'DOMICILIO' : 'LUMINARIA');
-            
-            //Ubicacion
-            $this->alternativa      = "NRO";
-            $this->tic_barrio       = _g($ticket,'tic_barrio');
-            $this->tic_cgpc         = _g($ticket,'tic_cgpc');
-            $this->tic_coordx       = (double) _g($ticket,'tic_coordx');
-            $this->tic_coordy       = (double) _g($ticket,'tic_coordy');
-            $this->tic_nombre_fantasia = _g($ticket,'tic_lugar');
-            $this->tic_calle_nombre = _g($ticket,'tic_calle_nombre');
-            $this->tic_nro_puerta   = (int) _g($ticket,'tic_nro_puerta');
-            $this->tic_piso         = _g($ticket,'tic_piso');
-            $this->tic_dpto         = _g($ticket,'tic_dpto');
-            $this->tic_lugar        = $this->createLugar();
+            $this->tic_georef = new georeferencias();
+            $this->tic_georef->fromJSON($ticket);
+            $this->tic_lugar = $this->tic_georef->createLugar();
             
             //Agrego Prestacion
             $this->prestaciones = prestacion::fromJSON($ticket,$this);
@@ -239,7 +185,7 @@ class ticket {
             $this->tic_estado = 'ABIERTO';
             
             //Plazo de ejecución
-            $this->tic_tstamp_plazo  = $this->prestaciones[0]->ttp_tstamp_plazo;
+            $this->tic_tstamp_plazo  = DatetoISO8601($this->prestaciones[0]->ttp_tstamp_plazo);
             
             //Operador
             $this->use_code = loadOperador();
@@ -247,13 +193,32 @@ class ticket {
         
     }
         
-    static private function generaCodigoTicket($tipo,$anio)
+    /** Crea un codigo de ticket que se reinicia cada año
+     * 
+     * @global cdbdata $primary_db
+     * @param string $tipo
+     * @param int $anio
+     * @return string
+     */
+    static protected function generaCodigoTicket($tipo,$anio)
     {
         global $primary_db;
         return $primary_db->Sequence("$tipo-$anio");
     }
     
-    static private function addPhotoBase64($tic_nro, $media, $f_name='', $nota='', $mime='image/jpeg', $publico='SI') {
+    /** Agrega al ticket una foto, que viene codificada en formato base64
+     * 
+     * @global cdbdata $primary_db
+     * @global csession $sess
+     * @param int $tic_nro
+     * @param string $media
+     * @param string $f_name
+     * @param string $nota
+     * @param string $mime
+     * @param string $publico
+     * @return string
+     */
+    static protected function addPhotoBase64($tic_nro, $media, $f_name='', $nota='', $mime='image/jpeg', $publico='SI') {
         global $primary_db,$sess;
         $errores = array();
         
@@ -306,7 +271,7 @@ class ticket {
        
     /**
      * Cargo el identificador compuesto del ticket
-     * @param type $identificador
+     * @param string $identificador
      */
     function setIdent($identificador) {
         $p = explode(' ',$identificador);
@@ -323,10 +288,10 @@ class ticket {
     
     /** Cargo los datos para identificar al ticket 
      * 
-     * @param type $tipo
-     * @param type $nro
-     * @param type $anio
-     * @return type
+     * @param string $tipo
+     * @param int $nro
+     * @param int $anio
+     * @return void
      */
     function setTipoNroAnio($tipo,$nro,$anio) {
         $t = strtoupper($tipo);
@@ -341,7 +306,7 @@ class ticket {
 
     /** Numero interno del ticket
      * 
-     * @param type $tic_nro
+     * @param int $tic_nro
      */
     function setNro($tic_nro) {
         $this->tic_nro = $tic_nro;
@@ -350,11 +315,11 @@ class ticket {
     /**
      * Crea un ticket dado su tipo numero y año.
      * 
-     * @global type $primary_db
-     * @param type $tipo
-     * @param type $nro
-     * @param type $anio
-     * @return type
+     * @global cdbdata $primary_db
+     * @param string $tipo
+     * @param int $nro
+     * @param int $anio
+     * @return ticket
      */
     static function  factoryByIdent($tipo,$nro,$anio) {
         $t = new ticket();
@@ -367,16 +332,16 @@ class ticket {
     
     /** Numero interno del ticket
      * 
-     * @return type
+     * @return int
      */
     function getNro() {
         return $this->tic_nro;
     }
     
     /**
-     * Numero del ticket (del identificador)
+     * Numero del ticket (del identificador) sin el año
      * 
-     * @return type
+     * @return int
      */
     function getNroTicket() {
         // RECLAMO 4/2013
@@ -385,9 +350,9 @@ class ticket {
     }
 
     /**
-     * Año del ticket (del identificador)
+     * Año del ticket (del identificador) sin el numero
      * 
-     * @return type
+     * @return int
      */
     function getAnioTicket() {
         // RECLAMO 4/2013
@@ -398,8 +363,8 @@ class ticket {
     /**
      * Carga el ticket desde la base de datos.
      * 
-     * @global type $primary_db
-     * @param type $opcion (todo, basico)
+     * @global cdbdata $primary_db
+     * @param string $opcion (todo, basico, archivos)
      * @return boolean
      */
     function load($opcion='todo') {
@@ -426,19 +391,13 @@ class ticket {
         $this->use_code = loadOperador($row['use_code']);
         $this->tic_nota_in = $row['tic_nota_in'];
         $this->tic_estado = $row['tic_estado'];
-        $this->tic_lugar = json_decode($row['tic_lugar']);
-        $this->tic_barrio = $row['tic_barrio'];
-        $this->tic_cgpc = $row['tic_cgpc'];
-        $this->tic_coordx = $row['tic_coordx'];
-        $this->tic_coordy = $row['tic_coordy'];
         $this->tic_canal = $row['tic_canal'];
         $this->tic_tstamp_plazo = DatetoISO8601($row['tic_tstamp_plazo']);
         $this->tic_tstamp_cierre = DatetoISO8601($row['tic_tstamp_cierre']);
-        $this->tic_calle_nombre = $row['tic_calle_nombre'];
-        //$this->tic_calle = ...
-        $this->tic_nro_puerta = $row['tic_nro_puerta'];
-        $this->tic_calle_nombre2 = $row['tic_cruza_calle'];
-        //$this->tic_calle2 = ...
+        
+        $this->tic_lugar = json_decode($row['tic_lugar']);
+        $this->tic_georef = new georeferencias();
+        $this->tic_georef->load($row['tic_lugar']);
         
         $this->prestaciones = prestacion::factory($this->tic_nro);
         
@@ -463,8 +422,8 @@ class ticket {
      * Crea un nuevo ticket en el sistema
      *  Si el ticket va a un sistema externo, entonces se debe crear una entrada en el event bus
      * 
-     * * @global type $primary_db
-     * @global type $sess
+     * @global cdbdata $primary_db
+     * @global csession $sess
      * @return boolean
      */
     function save($transaction=true) {
@@ -475,17 +434,17 @@ class ticket {
          if($this->tic_tipo==='')
              $this->addError("Campo obligatorio tic_tipo faltante");
 
-         if((double)$this->tic_coordx===0)
+         if((double)$this->tic_georef->tic_coordx===0)
              $this->addError("Campo obligatorio tic_coordx faltante");
 
-         if((double)$this->tic_coordy===0)
+         if((double)$this->tic_georef->tic_coordy===0)
              $this->addError("Campo obligatorio tic_coordy faltante");
 
-         if($this->tic_calle_nombre==='')
+         if($this->tic_georef->tic_calle_nombre==='')
              $this->addError("Campo obligatorio tic_calle_nombre faltante");
 
-         if((int)$this->tic_nro_puerta===0 && $this->tic_cruza_calle==='')
-             $this->addError("Campo obligatorio tic_nro_puerta o tic_cruza_calle faltante");
+         if((int)$this->tic_georef->tic_nro_puerta===0 && $this->tic_georef->$tic_calle_nombre2==='')
+             $this->addError("Campo obligatorio tic_nro_puerta o tic_calle_nombre2 faltante");
          
          //Prestacion
          if(!isset($this->prestaciones[0]))
@@ -526,8 +485,8 @@ class ticket {
          $this->tic_identificador = $this->tic_tipo.' '.$tic_numero.'/'.$tic_anio;
            
          //Salvo el ticket (tic_ticket)
-         $sql1 = "insert into tic_ticket (tic_nro  ,tic_numero  ,tic_anio  ,tic_tipo    ,tic_tstamp_in    ,use_code    ,tic_nota_in    ,tic_estado,tic_lugar    ,tic_barrio    ,tic_cgpc    ,tic_coordx  ,tic_coordy  ,tic_id_cuadra,tic_forms,tic_canal    , tic_tstamp_plazo    ,tic_tstamp_cierre,tic_calle_nombre    ,tic_nro_puerta  ,tic_nro_asociado,tic_identificador    ) 
-                                  values (:tic_nro:,:tic_numero:,:tic_anio:,':tic_tipo:',':tic_tstamp_in:',':use_code:',':tic_nota_in:','ABIERTO' ,':tic_lugar:',':tic_barrio:',':tic_cgpc:',:tic_coordx:,:tic_coordy:,0            ,0        ,':tic_canal:', ':tic_tstamp_plazo:',null             ,':tic_calle_nombre:',:tic_nro_puerta:,null            ,':tic_identificador:')";
+         $sql1 = "insert into tic_ticket (tic_nro  ,tic_numero  ,tic_anio  ,tic_tipo    ,tic_tstamp_in    ,use_code    ,tic_nota_in    ,tic_estado,tic_lugar    ,tic_barrio    ,tic_cgpc    ,tic_coordx  ,tic_coordy  ,tic_id_cuadra,tic_forms,tic_canal    , tic_tstamp_plazo    ,tic_tstamp_cierre,tic_calle_nombre    ,tic_nro_puerta  ,tic_nro_asociado,tic_identificador    ,tic_id_elemento  ) 
+                                  values (:tic_nro:,:tic_numero:,:tic_anio:,':tic_tipo:',':tic_tstamp_in:',':use_code:',':tic_nota_in:','ABIERTO' ,':tic_lugar:',':tic_barrio:',':tic_cgpc:',:tic_coordx:,:tic_coordy:,0            ,0        ,':tic_canal:', ':tic_tstamp_plazo:',null             ,':tic_calle_nombre:',:tic_nro_puerta:,null            ,':tic_identificador:',:tic_id_elemento:)";
          $params1 = array(
                 'tic_nro'           => $this->tic_nro,
                 'tic_numero'        => $tic_numero, 
@@ -537,19 +496,21 @@ class ticket {
                 'use_code'          => $sess->getUserId(), 
                 'tic_nota_in'       => $this->tic_nota_in, 
                 'tic_lugar'         => json_encode($this->tic_lugar), 
-                'tic_barrio'        => $this->tic_barrio, 
-                'tic_cgpc'          => $this->tic_cgpc, 
-                'tic_coordx'        => $this->tic_coordx, 
-                'tic_coordy'        => $this->tic_coordy, 
-                'tic_calle_nombre'  => $this->tic_calle_nombre, 
-                'tic_nro_puerta'    => $this->tic_nro_puerta, 
+                'tic_barrio'        => $this->tic_georef->tic_barrio, 
+                'tic_cgpc'          => $this->tic_georef->tic_cgpc, 
+                'tic_coordx'        => $this->tic_georef->tic_coordx, 
+                'tic_coordy'        => $this->tic_georef->tic_coordy, 
+                'tic_calle_nombre'  => $this->tic_georef->tic_calle_nombre, 
+                'tic_nro_puerta'    => $this->tic_georef->tic_nro_puerta, 
                 'tic_identificador' => $this->tic_identificador,
                 'tic_canal'         => $this->tic_canal,
-                'tic_tstamp_plazo'  => $this->tic_tstamp_plazo
+                'tic_tstamp_plazo'  => ISO8601toDate($this->tic_tstamp_plazo),
+                'tic_id_elemento'   => intval($this->tic_georef->id_elemento,10)
          );
          $primary_db->do_execute($sql1,$errores,$params1);
          if(count($errores)>0)  
             $this->addError("Error al salvar el ticket en la base de datos");
+         
          
          //Salvo las prestaciones
          if( $this->getStatus() ) {
@@ -559,8 +520,24 @@ class ticket {
          
          //Salvo los solicitantes (y les mando un mail)
          if( $this->getStatus() ) {
-            foreach($this->solicitantes as $so)
+            foreach($this->solicitantes as $so) {
                 $so->save($this);
+                
+                //Creo un mensaje de mail para el ciudadano, con un recibo por ticket
+                if( $so->ciu_email!=='' ) {
+                    $traza1 = $this->getNro()."-".$so->getCiuCode()."-MAIL INGRESO";
+                    $ev1 = new evento_historia();
+                    $ev1->crearEvento($so->getCiuCode(), 'Envio de notificación por ingreso '.$this->tic_identificador, "", $this->tic_canal, $traza1);
+                    $ev1->save();
+                    
+                    $this->notificarEmail("aviso_nuevo_ticket", $this->prestaciones[0], $this->tic_nota_in, $so->ciu_email, $so->ciu_nombres, $so->ciu_apellido, "IMPRESION","www/lmodules/tickets/ticket_maint.php", "tic_nro=".$this->getNro());
+                }
+                
+                $traza2 = $this->getNro()."-".$so->getCiuCode()."-INGRESO TICKET";
+                $ev2 = new evento_historia();
+                $ev2->crearEvento($so->getCiuCode(), 'Ingreso de ticket '.$this->tic_identificador, $this->tic_nota_in, $this->tic_canal, $traza2);
+                $ev2->save();
+            }
          }
          
          //Salvo los reiterantes
@@ -595,109 +572,20 @@ class ticket {
          return true;
     }
     
+    /** Crea una version en JSON de este objeto
+     * 
+     * @return string
+     */
     function toJSON() {
         return json_encode($this);
     }
     
     
-    private function createLugar() {
-	
-        /** Tipo de geo referencia DOMICILIO, CEMENTERIO, VILLA, LUMINARIA, PLAZA, ORGAN.PUBLICO */
-        switch($this->tipo_georef) {
-            case "LUMINARIA":
-                $geo = array(
-                    'tipo'		=> 'LUMINARIA',
-                    'alternativa'       => $this->alternativa,
-                    'calle_nombre' 	=> $this->tic_calle_nombre,
-                    'calle'             => $this->tic_calle,
-                    'callenro'          => $this->tic_nro_puerta,
-                    'barrio'            => $this->tic_barrio,
-                    'comuna'            => $this->tic_cgpc,
-                    'lat'		=> $this->tic_coordx,
-                    'lng'		=> $this->tic_coordy,
-                    'id_luminaria'      => $this->id_luminaria,
-                    'calle_nombre2' 	=> $this->tic_calle_nombre2,
-                    'calle2'            => $this->tic_calle2,
-                );
-                break;
-            case "DOMICILIO":
-                $geo = array(
-                    'tipo'              => 'DOMICILIO',
-                    'alternativa'       => $this->alternativa,
-                    'calle_nombre'      => $this->tic_calle_nombre,
-                    'calle'             => $this->tic_calle,
-                    'callenro'          => $this->tic_nro_puerta,
-                    'piso'              => $this->tic_piso,
-                    'dpto'              => $this->tic_dpto,
-                    'nombre_fantasia'   => $this->tic_nombre_fantasia,
-                    'barrio'            => $this->tic_barrio,
-                    'comuna'            => $this->tic_cgpc,
-                    'lat'               => $this->tic_coordx,
-                    'lng'               => $this->tic_coordy,
-                    'calle_nombre2' 	=> $this->tic_calle_nombre2,
-                    'calle2'            => $this->tic_calle2,
-                );
-                break;
-            case "VILLA":
-                $geo = array(
-    			'tipo'		=> 'VILLA',
-	    		'villa' 	=> $this->villa,
-	    		'manzana' 	=> $this->vilmanzana,
-	    		'casa' 		=> $this->vilcasa,
-    			'lat'		=> $this->tic_coordx,
-    			'lng'		=> $this->tic_coordy,
-    		);
-                break;
-            case "PLAZA":
-                $geo = array(
-    			'tipo'          => 'PLAZA',
-    			'plaza'         => $this->plaza,
-                        'lat'           => $this->tic_coordx,
-    			'lng'           => $this->tic_coordy,
-    		);
-                break;
-            case "CEMENTERIO":
-                $geo = array(
-    			'tipo'		=> 'CEMENTERIO',
-	    		'cementerio' 	=> $this->cementerio,
-	    		'sepultura' 	=> $this->sepultura,
-	    		'sector' 	=> $this->sepsector,
-	    		'calle' 	=> $this->sepcalle,
-	    		'numero' 	=> $this->sepnumero,
-	    		'fila' 		=> $this->sepfila,
-    			'lat'		=> $this->tic_coordx,
-    			'lng'		=> $this->tic_coordy,
-    		);
-                break;
-            case "ORGAN.PUBLICO":
-                $geo = array(
-   			'tipo'          => 'ORGAN.PUBLICO',
-	    		'organismo'	=> $this->orgpublico,
-	    		'sector' 	=> $this->orgsector,
-    			'lat'		=> $this->tic_coordx,
-    			'lng'		=> $this->tic_coordy,
-    		);	
-                break;
-            case "COLECTIVO":
-                $geo = array(
-   			'tipo'          => 'COLECTIVO',
-	    		'linea'         => $this->col_linea,
-	    		'interno' 	=> $this->col_interno,
-                        'fecha_hora'    => $this->col_fecha_hora,
-    			'lat'		=> $this->tic_coordx,
-    			'lng'		=> $this->tic_coordy,
-    		);	
-                break;
-            default:
-                $geo = array();
-                break;
-        }
-    	 
-    	return $geo;
-    }
     
     /**
-     * Verifica que todas las prestaciones del ticket esten en un estado final
+     * Verifica que todas las prestaciones del ticket esten en un estado final. Si es asi, retorna true
+     * Estados posibles:
+     * 'pendiente','inspección','en curso','en espera','resuelto','rechazado','rechazado indebido','cerrado','finalizado','certificación'   
      * @return boolean
      */
     function prestacionesTerminadas() {
@@ -705,7 +593,7 @@ class ticket {
         $total = count($this->prestaciones);
         foreach($this->prestaciones as $pres) {
             $estado = strtolower($pres->ttp_estado);
-            if( $estado==='cerrado' || $estado==='rechazado' || $estado==='rechazado indebido' || $estado==='resuelto') 
+            if( $estado==='cerrado' || $estado==='rechazado' || $estado==='rechazado indebido' || $estado==='resuelto' || $estado==='finalizado') 
                 $cerradas++;
         }
         error_log("ticket::prestacionesTerminadas() Total:{$total} Cerradas:{$cerradas}");
@@ -733,13 +621,13 @@ class ticket {
      *      "use_code_out":null
      * },
      * "archivos":[],
-     * "id_luminaria":"4741"}
+     * "id_elemento":"4741"}
     [signature] => 3D07209D03AB8CED7FCC570237B24710
 )
      * 
-     * @global type $primary_db
-     * @param type $identificador
-     * @param type $avance_json
+     * @global cdbdata $primary_db
+     * @param string $identificador
+     * @param string $avance_json
      */
     function cambiar_estado_fromJSON($identificador, $avance_json) {
         global $primary_db;
@@ -757,31 +645,24 @@ class ticket {
         $this->setIdent($identificador);
         $this->load('archivos');
         
-        //Usa la georef de LUMINARIA?
+        //Usa la georef de LUMINARIA?, entonces valido que no cambio el ID de la luminaria
         if( isset($this->tic_lugar->tipo) && $this->tic_lugar->tipo=='LUMINARIA' ) {
-            $id_luminaria = _g($avance_json, 'id_luminaria');
+            $id_elemento = intval(_g($avance_json, 'id_luminaria'),10);
 
             //Cambio la luminaria?
-            if( !isset($this->tic_lugar->id_luminaria) || (isset($this->tic_lugar->id_luminaria) && $this->tic_lugar->id_luminaria!=$id_luminaria) ) {
+            if( !isset($this->tic_lugar->id_elemento) || (isset($this->tic_lugar->id_elemento) && $this->tic_lugar->id_elemento!=$id_elemento) ) {
                 
-                //Bajo los datos de georeferencia que estan en la base para este ticket
-                $this->tipo_georef          = "LUMINARIA";
-                $this->alternativa          = (isset($this->tic_lugar->alternativa) ? $this->tic_lugar->alternativa : '');
-                $this->tic_calle_nombre     = (isset($this->tic_lugar->calle_nombre) ? $this->tic_lugar->calle_nombre : '');
-                $this->tic_calle            = (isset($this->tic_lugar->calle) ? $this->tic_lugar->calle : '');
-                $this->tic_nro_puerta       = (isset($this->tic_lugar->callenro) ? $this->tic_lugar->callenro : '');
-                $this->tic_barrio           = (isset($this->tic_lugar->barrio) ? $this->tic_lugar->barrio : '');
-                $this->tic_cgpc             = (isset($this->tic_lugar->comuna) ? $this->tic_lugar->comuna : '');
-                $this->tic_coordx           = (isset($this->tic_lugar->lat) ? $this->tic_lugar->lat : 0);
-                $this->tic_coordy           = (isset($this->tic_lugar->lng) ? $this->tic_lugar->lng : 0);
-                $this->id_luminaria         = $id_luminaria;
-                $this->tic_calle_nombre2    = (isset($this->tic_lugar->calle_nombre2) ? $this->tic_lugar->calle_nombre2 : '');
-                $this->tic_calle2           = (isset($this->tic_lugar->calle2) ? $this->tic_lugar->calle2 : '');
-
+                $this->tic_georef->id_elemento = $id_elemento;
+                $this->tic_lugar->id_elemento = $id_elemento;
+                
                 //Actualizo los datos de georeferencia en la base, con el nuevo ID de luminaria
-                $lugar = json_encode($this->createLugar());
-                $params = array("lugar" => $lugar, "tic_nro" => $this->tic_nro);
-                $primary_db->do_execute("update tic_ticket set tic_lugar=':lugar:' where tic_nro=':tic_nro:'",$err,$params);
+                $lugar = json_encode($this->tic_georef->createLugar());
+                $params = array(
+                    "lugar"             =>  $lugar, 
+                    "tic_nro"           =>  $this->tic_nro,
+                    "tic_id_elemento"   =>  $id_elemento
+                );
+                $primary_db->do_execute("update tic_ticket set tic_lugar=':lugar:', tic_id_elemento=':tic_id_elemento:' where tic_nro=':tic_nro:'",$err,$params);
             }
         }
                 
@@ -793,7 +674,6 @@ class ticket {
         $nota           = (isset($avance->tav_nota)         ?  $avance->tav_nota        : '');
         $motivo         = (isset($avance->tic_motivo)       ?  $avance->tic_motivo      : '');
        
-        
         if($tpr_code!=='' && $nuevo_estado!=='')
             $this->cambiar_estado($tpr_code, $nuevo_estado, $nota, $fecha, false, $motivo);
         else
@@ -942,6 +822,10 @@ class ticket {
         }
     }
     
+    /** Cambiar el estado del ticket y fecha de cierre solamente
+     * 
+     * @global type $primary_db
+     */
     function update() {
          global $primary_db;
          $errores=array();
@@ -955,6 +839,14 @@ class ticket {
          );
          $primary_db->do_execute($sql1,$errores,$params1);
         
+         //Guardo un registro de la operacion
+         foreach($this->solicitantes as $so) {
+            $traza = $this->getNro()."-".$so->getCiuCode()."-ACTUALIZO TICKET";
+            $ev = new evento_historia();
+            $ev->crearEvento($so->getCiuCode(), 'Actualizo ticket '.$this->tic_identificador, $this->tic_nota_in, $this->tic_canal, $traza);
+            $ev->save();
+         }
+         
          if(count($errores)>0)
              $this->errors = array_merge($this->errors, $errores);
     }
@@ -965,10 +857,15 @@ class ticket {
      * @param prestacion $prestacion
      * @param string $nota
      */
-    function notificarSolicitantes($template, $prestacion, $nota) {
+    function notificarSolicitantes($template, prestacion $prestacion, $nota) {
         error_log("notificarSolicitantes($template,$prestacion->tpr_code,$nota)");
         foreach($this->solicitantes as $sol) {
             if($sol->ciu_email!='') {
+                $traza = $this->getNro()."-".$sol->getCiuCode()."-".strtoupper($template);
+                $ev = new evento_historia();
+                $ev->crearEvento($sol->getCiuCode(), 'Mensaje de actualizacion de '.$this->tic_identificador, $this->tic_nota_in, $this->tic_canal, $traza);
+                $ev->save();
+                
                 $this->notificarEmail($template, $prestacion, $nota, $sol->ciu_email, $sol->ciu_nombres, $sol->ciu_apellido);
            }
         }
@@ -984,24 +881,24 @@ class ticket {
      * @param string $nombres
      * @param string $apellido
      */
-    function notificarEmail($template, $prestacion, $nota, $email, $nombres='', $apellido='') {
-        error_log("notificarEmail(\$template={$template}, \$prestacion={$prestacion->tpr_code}, \$nota={$nota}, \$email={$email}, \$nombres={$nombres}, \$apellido={$apellido}");
+    function notificarEmail($template, prestacion $prestacion, $nota, $email, $nombres='', $apellido='',$modo="HTML",$impresion_path="",$impresion_code="") {
+        error_log("notificarEmail(\$template={$template}, \$prestacion={$prestacion->tpr_code}, \$nota={$nota}, \$email={$email}, \$nombres={$nombres}, \$apellido={$apellido}, \$modo=$modo, \$impresion_path=$impresion_path, \$impresion_code=$impresion_code");
         $subject = '';        
         if($email!='') {
 
-            //Armo la dirección
-            $direccion = generarTextoDireccion($this->tic_lugar); 
+            //Armo la dirección (retorna HTML)
+            $direccion = $this->tic_georef->generarTextoDireccion(true); 
  
             $last_avance = $prestacion->getLastAvance();
 
-            //Campos del template
+            //Campos del template que van al body del mail
             $tem_fld = json_encode( array(
-                'tic_identificador' => $this->tic_identificador,
+                'tic_identificador'     => $this->tic_identificador,
                 'prestacion'            => htmlentities($prestacion->tpr_description, ENT_QUOTES, "UTF-8", false),
                 'prestacion_completa'   => htmlentities($prestacion->tpr_description_full, ENT_QUOTES, "UTF-8", false),
-                'lugar'                 => $direccion,
-                'lat'                   => $this->tic_coordx,
-                'lng'                   => $this->tic_coordy,
+                'lugar'                 => $direccion, 
+                'lat'                   => $this->tic_georef->tic_coordx,
+                'lng'                   => $this->tic_georef->tic_coordy,
                 'nombre'                => htmlentities($nombres,ENT_QUOTES,"UTF-8",false),
                 'apellido'              => htmlentities($apellido,ENT_QUOTES,"UTF-8",false),
                 'estado_ticket'         => $this->tic_estado,
@@ -1009,12 +906,12 @@ class ticket {
                 'estado_prest'          => $prestacion->ttp_estado,
                 'nota'                  => htmlentities($nota,ENT_QUOTES,"UTF-8",false),
                 'plazo'                 => ISO8601toLocale($this->tic_tstamp_plazo),
-                'plazo_sin_hora'        => ISO8601toLocale(substr($this->tic_tstamp_plazo,0,8)),
+                'plazo_sin_hora'        => substr(ISO8601toLocale($this->tic_tstamp_plazo),0,10),
                 'tic_tipo'              => $this->tic_tipo
-            ));
+            ),JSON_UNESCAPED_UNICODE);
 
             $msg = new cmessage();
-            $mt = new cmail_type("HTML",'','',$template);
+            $mt = new cmail_type($modo,$impresion_path,$impresion_code,$template);
             $headers = array();
             $r = $msg->Send(DEFAULT_SMTP,$email,$mt,$headers,$subject,$tem_fld);
             error_log("notificarEmail($email) Resultado: {$r}");
@@ -1036,76 +933,8 @@ class ticket {
         $this->tic_canal = 'CALL';
         
         //ESTILO DE GEOREFERENCIA
-        $this->tipo_georef = _F($obj,"tipo_georef");
-        
-        switch($this->tipo_georef) {
-            case 'DOMICILIO':        
-                $this->alternativa          = _F($obj,"alternativa");
-                $this->tic_barrio           = _F($obj,"tic_barrio");
-                $this->tic_cgpc             = _F($obj,"tic_cgpc");
-                $this->tic_coordx           = (double) _F($obj,"tic_coordx");
-                $this->tic_coordy           = (double) _F($obj,"tic_coordy");
-                $this->tic_nro_puerta       = (int) _F($obj,"callenro");
-                $this->tic_calle_nombre     = _F($obj,"calle_nombre");
-                $this->tic_nombre_fantasia  = _F($obj,"nombre_fantasia");
-                $this->tic_calle_nombre2    = _F($obj,"calle_nombre2");
-                $this->tic_calle            = _F($obj,"calle");
-                $this->tic_calle2           = _F($obj,"calle2");
-                $this->id_cuadra            = _F($obj,"tic_id_cuadra");
-                break;
-            case 'VILLA':
-                $this->villa          = _F($obj,"villa");
-                $this->vilmanzana     = _F($obj,"vilmanzana");
-                $this->vilcasa        = _F($obj,"vilcasa");
-                $this->tic_coordx     = (double) _F($obj,"tic_coordx");
-                $this->tic_coordy     = (double) _F($obj,"tic_coordy");
-                break;
-            case 'COLECTIVO':
-                $this->col_linea        = _F($obj,"col_linea");
-                $this->col_interno      = _F($obj,"col_interno");
-                $this->col_fecha_hora   = localeToISO8601( _F($obj,"col_fecha_hora") );
-                $this->tic_coordx       = (double) _F($obj,"tic_coordx");
-                $this->tic_coordy       = (double) _F($obj,"tic_coordy");
-                break;
-            case 'PLAZA':
-                $this->plaza        = _F($obj,"plaza");
-                $this->tic_coordx   = (double) _F($obj,"tic_coordx");
-                $this->tic_coordy   = (double) _F($obj,"tic_coordy");
-                break;
-            case 'ORGA.PUBLICO':
-                $this->orgpublico     = _F($obj,"orgpublico");
-                $this->orgsector      = _F($obj,"orgsector");
-                $this->tic_coordx     = (double) _F($obj,"tic_coordx");
-                $this->tic_coordy     = (double) _F($obj,"tic_coordy");
-                break;
-            case 'CEMENTERIO':
-                $this->cementerio = _F($obj,"cementerio");
-                $this->sepultura  = _F($obj,"sepultura");
-                $this->sepsector  = _F($obj,"sepsector");
-                $this->sepcalle   = _F($obj,"sepcalle");
-                $this->sepnumero  = _F($obj,"sepnumero");
-                $this->sepfila    = _F($obj,"sepfila");
-                $this->tic_coordx = (double) _F($obj,"tic_coordx");
-                $this->tic_coordy = (double) _F($obj,"tic_coordy");
-                break;
-            case 'LUMINARIA':
-                $this->alternativa        = _F($obj,"alternativa_lum");
-                $this->tic_barrio         = _F($obj,"tic_barrio_lum");
-                $this->tic_cgpc           = _F($obj,"tic_cgpc_lum");
-                $this->tic_nro_puerta     = (int) _F($obj,"callenro_lum");
-                $this->tic_calle_nombre   = _F($obj,"calle_nombre_lum");
-                $this->tic_calle_nombre2  = _F($obj,"calle_nombre2_lum");
-                $this->id_luminaria       = (int) _F($obj,"id_luminaria");
-                $this->tic_calle          = _F($obj,"calle_lum");
-                $this->tic_calle2         = _F($obj,"calle2_lum");
-                $this->id_cuadra          = _F($obj,"tic_id_cuadra");
-                $this->tic_coordx         = (double) _F($obj,"tic_coordx");
-                $this->tic_coordy         = (double) _F($obj,"tic_coordy");
-
-                break;
-            default:
-                $this->addError('Opción de GEOREFERENCIA desconocida: >'.$this->tipo_georef.'<');
-        }
+        $this->tic_georef = new georeferencias();
+        $this->tic_georef->fromForm($obj);
         
         //Tipo de prestacion y descripción
         $this->prestaciones = prestacion::fromForm($obj);
@@ -1114,30 +943,30 @@ class ticket {
         $this->tic_tipo = $this->prestaciones[0]->getTipoPrestacion();
         
         //Valido la altura de la calle
-        if($this->tic_nro_puerta=="")
-            $this->tic_nro_puerta = 1;
+        if($this->tic_georef->tic_nro_puerta=="")
+            $this->tic_georef->tic_nro_puerta = 1;
         
         //La altura de la calle no puede ser blanco, si no esta definido debe ser 0
-        $this->id_cuadra = ($this->id_cuadra=="" ? 0 : $this->id_cuadra);
+        $this->tic_georef->id_cuadra = ($this->tic_georef->id_cuadra=="" ? 0 : $this->tic_georef->id_cuadra);
         
         //Las coordeanadas no pueden estar en blanco
-        $this->tic_coordx = ($this->tic_coordx=="" ? 0 : $this->tic_coordx);
-        $this->tic_coordy = ($this->tic_coordy=="" ? 0 : $this->tic_coordy);
+        $this->tic_georef->tic_coordx = ($this->tic_georef->tic_coordx=="" ? 0 : $this->tic_georef->tic_coordx);
+        $this->tic_georef->tic_coordy = ($this->tic_georef->tic_coordy=="" ? 0 : $this->tic_georef->tic_coordy);
         
         //Creo la descripcion del lugar
-        $this->tic_lugar = $this->createLugar();
+        $this->tic_lugar = $this->tic_georef->createLugar();
         
         //Usuario que esta creando el ticket
         $this->solicitantes = solicitante::fromForm($obj);
         
         //Fecha de vencimiento del ticket
-        $this->tic_tstamp_plazo = $this->prestaciones[0]->ttp_tstamp_plazo;
+        $this->tic_tstamp_plazo = DatetoISO8601($this->prestaciones[0]->ttp_tstamp_plazo);
         
         $this->tic_estado = 'ABIERTO';
     }
     
     //Determina el canal de ingreso, mirando en los atributos del usuario
-    private function determinarCanal()
+    protected function determinarCanal()
     {
         $canal = "CALL";
 

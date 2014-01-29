@@ -38,18 +38,21 @@ function mostrarPagina(nro,filt) {
             $('#vencidos').addClass('btn-danger');
     }
     
-    var params = pagnro+"|"+filtro;
+    var params = pagnro+"|"+filtro+"|"+buscar;
     new rem_request(this,function(obj,json){
         var obj = JSON.parse(json);
         var o = obj.tickets;
         var l = o.length;
         for(var j=0;j<l;j++) {
             var est_prest = (o[j].estado_prest=="resuelto" ? " badge-success" : " badge-warning");
-            var h = "<tr><td>" + o[j].fecha + "<br>" + o[j].identificador + "</td>" +
-                    "<td><b>" + o[j].prestacion + "</b><br><span class=\"it\">" + o[j].nota + "</span></td>" +
+            var v = parseInt(o[j].vencido);
+            var vencido = v>0 ? '<br><span class="badge badge-important">Vencido '+v+(v===1 ? ' día' : ' días')+'</span>' : '';
+            
+            var h = "<tr><td style=\"width:150px;font-size:0.8em;\">Ingreso:<br>" + o[j].fecha + "<br>Estimado:<br>" + o[j].plazo + "<br><b>" + o[j].identificador +"</b>"+ vencido+"</td>" +
+                    "<td><span style=\"font-size:1.1em;\">" + o[j].prestacion + "</span><br><span class=\"it\">" + o[j].nota + "</span></td>" +
                     "<td>" + o[j].texto_dir + "</td>" +
                     "<td>" + renderEstado( o[j].estado_prest ) + "<br>" + o[j].rol + "</td>" +
-                    "<td><button class=\"btn btn-small\" onclick=\"trabajar(\'" + o[j].ticket + "\')\">Trabajar</button><br><br> " + renderDireccion(o[j].direccion) + 
+                    "<td><button style=\"width:100px;\" class=\"btn btn-small\" onclick=\"trabajar(\'" + o[j].ticket + "\')\"><i class=\"icon-wrench\"></i> Trabajar</button><br><br> " + renderDireccion(o[j].direccion) + 
                     "</td></tr>";
             b.append(h);
         }
@@ -57,7 +60,7 @@ function mostrarPagina(nro,filt) {
         if(l==0)
             $("#sin_tickets").html("Sin tickets "+filtro).show();
 
-        $("#mis_tickets a").popover();
+        $("#mis_tickets .mapa").popover();
         $("#carga_tickets").hide();
         $("#mi_titulo").html(obj.titulo);
         
@@ -73,16 +76,8 @@ function mostrarPagina(nro,filt) {
 function renderDireccion(o) {
     if(o && o.lat && o.lng) {
         var mapa = "<img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + o.lat + "&y=" + o.lng + "&w=250&h=250&r=250\'>";
-        var d = " <a class=\"btn btn-small\" href=\"#\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" >Mapa</a><br>";
-        /*
-        var d = o.calle_nombre + " " + o.callenro + " <a href=\"#\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i></a><br>";
-        if(o.piso)
-            d+=" Piso:" + o.piso;
-        if(o.dpto)
-            d+=" Dpto:" + o.dpto;
-        if(o.barrio)    
-            d+=" Barrio:" + o.barrio;
-        */
+        var d = " <button style=\"width:100px;\" class=\"btn btn-small mapa\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i> Mapa</button>";
+        
         return d;
     } 
     return "Sin dirección";

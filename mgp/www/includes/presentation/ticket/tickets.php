@@ -1,6 +1,8 @@
 <?php 
 include_once "common/cdatatypes.php";
 include_once "beans/functions.php";
+include_once "beans/georeferencias.php";
+include_once "beans/prestacion.php";
 
 class CDH_TICKETS extends CDataHandler 
 {
@@ -19,7 +21,7 @@ class CDH_TICKETS extends CDataHandler
         function crearPagina($par) {
             global $primary_db;
             $ret = array();
-            list($pagina, $filtro) = explode('|', $par);
+            list($pagina, $filtro, $buscar) = explode('|', $par);
                 
             //Paginacion
             if(intval($pagina,10)==0)
@@ -32,7 +34,8 @@ class CDH_TICKETS extends CDataHandler
             list($organismos,$siglas) = $this->getOrganismos();
             
             //Lista de tickets afectados, filtrados por tipo de estado
-            $sql = "select tic_nro,tic_identificador,tic_tstamp_in,tpr_detalle,tic_lugar,tic_nota_in,tic_estado,ttp_estado,tic_coordx,tic_coordy,tic_canal,tto_figura from v_tickets where tor_code in ({$organismos}) ";
+            $sql = "select tic_nro,tic_identificador,tic_tstamp_in,tpr_code,tpr_detalle,tic_lugar,tic_nota_in,tic_estado,ttp_estado,tic_coordx,tic_coordy,tic_canal,tto_figura,datediff(NOW(),tic_tstamp_plazo) as vencido,tic_tstamp_plazo ".
+                    "from v_tickets where tor_code in ({$organismos}) ";
  
             //Filtros
             $sql2 = '';
@@ -49,9 +52,20 @@ class CDH_TICKETS extends CDataHandler
             $rs = $primary_db->do_execute($sql.$sql2.$sql3);
             while( $row = $primary_db->_fetch_row($rs) ) {
                 $direccion = json_decode($row['tic_lugar']);
+                
+                $geo = new georeferencias();
+                $geo->load($row['tic_lugar']);
+                $lugar = $geo->generarTextoDireccion();
+                
+                 //Vencido
+                if($row['tic_estado']==='ABIERTO')
+                    $vencido = $row['vencido'];
+                else
+                    $vencido = 0;
+
                 $ret[] = array(
-                    'fecha'         => $row['tic_tstamp_in'],
-                    'prestacion'    => $row['tpr_detalle'],
+                    'fecha'         => DatetoLocale($row['tic_tstamp_in']),
+                    'prestacion'    => prestacion::getFullDescription( $row['tpr_code'] ),
                     'direccion'     => $direccion,
                     'nota'          => $row['tic_nota_in'],
                     'estado'        => $row['tic_estado'],
@@ -60,7 +74,9 @@ class CDH_TICKETS extends CDataHandler
                     'identificador' => $row['tic_identificador'],
                     'rol'           => $row['tto_figura'],
                     'canal'         => $row['tic_canal'],
-                    'texto_dir'     => generarTextoDireccion($direccion)
+                    'texto_dir'     => $lugar,
+                    'vencido'       => $vencido,
+                    'plazo'         => DatetoLocale($row['tic_tstamp_plazo'])
                 );
             }
 

@@ -68,7 +68,7 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         //Genero contenido para el mensaje de respuesta.
         $content['nroticket'] = $identificador;
         $content['prestacion'] = "$prestacion - $descripcion";
-        $content['plazo'] = $this->m_plazo;
+        $content['plazo'] = ISO8601toLocale($this->m_plazo);
         error_log("Se define plazo={$content['plazo']} nroticket={$content['nroticket']} prestacion={$content['prestacion']}");
         return array($content,$res);
     }

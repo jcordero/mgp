@@ -1,4 +1,5 @@
 <?php
+include_once 'beans/evento_historia.php';
 
 class reiteracion {
     /** Identificador del ciudadano
@@ -93,8 +94,8 @@ class reiteracion {
      * @global type $sess
      * @param ticket $ticket
      */
-    function save($ticket) {
-        global $primary_db, $sess;
+    function save(ticket $ticket) {
+        global $primary_db;
         $errores = array();
         
         //Existe el ciudadano?
@@ -105,8 +106,8 @@ class reiteracion {
             $this->ciu_code = $primary_db->Sequence('ciu_ciudadanos');
             $nac = substr($this->ciu_documento,0,3);
             
-            $sql1 = "insert into ciu_ciudadanos (ciu_code  , ciu_nombres   , ciu_apellido   , ciu_email   , ciu_tel_fijo   , ciu_tel_movil   , ciu_ultimo_acceso, ciu_canal_ingreso   , ciu_estado, ciu_tstamp, ciu_tipo_persona, ciu_nacionalidad) 
-                                         values (:ciu_code:,':ciu_nombres:',':ciu_apellido:',':ciu_email:',':ciu_tel_fijo:',':ciu_tel_movil:',NOW()             ,':ciu_canal_ingreso:','ACTIVO'   , NOW()     , 'FISICA'        , ':ciu_nacionalidad:')";
+            $sql1 = "insert into ciu_ciudadanos (ciu_code  , ciu_nombres   , ciu_apellido   , ciu_email   , ciu_tel_fijo   , ciu_tel_movil   , ciu_ultimo_acceso, ciu_canal_ingreso   , ciu_estado, ciu_tstamp, ciu_tipo_persona, ciu_nacionalidad    ) ".
+                                        "values (:ciu_code:,':ciu_nombres:',':ciu_apellido:',':ciu_email:',':ciu_tel_fijo:',':ciu_tel_movil:',NOW()             ,':ciu_canal_ingreso:','ACTIVO'   , NOW()     , 'FISICA'        , ':ciu_nacionalidad:')";
             $params1 = array(
                   'ciu_code'            => $this->ciu_code, 
                   'ciu_nombres'         => $this->ciu_nombres, 
@@ -119,8 +120,8 @@ class reiteracion {
             );
             $primary_db->do_execute($sql1,$errores,$params1);
             
-            $sql2 = "insert into ciu_identificacion (ciu_code  , ciu_nro_doc   ) 
-                                             values (:ciu_code:,':ciu_nro_doc:')";
+            $sql2 = "insert into ciu_identificacion (ciu_code  , ciu_nro_doc   ) ".
+                                            "values (:ciu_code:,':ciu_nro_doc:')";
             $params2 = array(
                   'ciu_code'            => $this->ciu_code, 
                   'ciu_nro_doc'         => $this->ciu_documento, 
@@ -131,8 +132,8 @@ class reiteracion {
         //El ciudadano esta identificado o creado...
         
         //Lo asocio al ciudadano que lo reporta (tic_ticket_ciudadano_reit)
-        $sql5 = "insert into tic_ticket_ciudadano_reit (tic_nro, ciu_code, ttc_tstamp, ttc_nota) 
-                    values (:tic_nro:, :ciu_code:, NOW(), ':ttc_nota:')";
+        $sql5 = "insert into tic_ticket_ciudadano_reit (tic_nro, ciu_code, ttc_tstamp, ttc_nota) ".
+                   "values (:tic_nro:, :ciu_code:, NOW(), ':ttc_nota:')";
         $params5 = array(
               'tic_nro'     => $ticket->getNro(), 
               'ciu_code'    => $this->ciu_code, 
@@ -140,19 +141,12 @@ class reiteracion {
         );
         $primary_db->do_execute($sql5,$errores,$params5);
          
-        //Creo un evento en el historial del ciudadano (ciu_historial_contactos)
-        $sql6 = "insert into ciu_historial_contactos (chi_code  , ciu_code  , cse_code, chi_fecha, chi_motivo    , use_code    , chi_canal    , chi_nota    ) 
-                                               values (:chi_code:, :ciu_code:, null    , NOW()    , ':chi_motivo:', ':use_code:', ':chi_canal:', ':chi_nota:')";
-        $params6 = array(
-              'chi_code'    =>  $primary_db->Sequence('ciu_historial_contactos'), 
-              'ciu_code'    =>  $this->ciu_code, 
-              'use_code'    =>  $sess->getUserId(), 
-              'chi_nota'    =>  $this->ttc_nota,
-              'chi_motivo'  =>  'Reiteración de '.$ticket->tic_identificador,
-              'chi_canal'   =>  $ticket->tic_canal
-        );
-        $primary_db->do_execute($sql6,$errores,$params6);
-        
+        //Creo un evento en el historial del ciudadano
+        $traza = $ticket->getNro()."-".$this->ciu_code."-REITERO TICKET";
+        $ev = new evento_historia();
+        $ev->crearEvento($this->ciu_code, 'Reitero ticket '.$ticket->tic_identificador, $ticket->tic_nota_in, $ticket->tic_canal, $traza);
+        $ev->save();
+                    
     }
 
 }

@@ -1,6 +1,7 @@
 <?php
 include_once 'beans/person_status.php';
 include_once 'common/cmessaging.php';
+include_once 'beans/evento_historia.php';
 
 class solicitante {
     /** Identificador del ciudadano
@@ -39,7 +40,7 @@ class solicitante {
      */
     public $ciu_telefono_movil;
     
-    /** Fecha de creacion
+    /** Fecha de creacion ISO8601
      *
      * @var date 
      */
@@ -66,9 +67,9 @@ class solicitante {
     static function factory($tic_nro) {
         global $primary_db;
         $ret = array();
-        $sql = "select * from tic_ticket_ciudadano tci 
-                    JOIN ciu_ciudadanos cci ON tci.ciu_code=cci.ciu_code
-                WHERE tci.tic_nro='{$tic_nro}'";
+        $sql = "select * from tic_ticket_ciudadano tci ".
+                    "JOIN ciu_ciudadanos cci ON tci.ciu_code=cci.ciu_code ".
+               "WHERE tci.tic_nro='{$tic_nro}'";
         $rs = $primary_db->do_execute($sql);
         while( $row=$primary_db->_fetch_row($rs) ) {
             $ciudadano = new solicitante();                
@@ -94,8 +95,8 @@ class solicitante {
      * @global CSession $sess
      * @param ticket $ticket
      */
-    function save($ticket) {
-        global $primary_db, $sess;
+    function save(ticket $ticket) {
+        global $primary_db;
         $errores = array();
         
         //Existe el ciudadano?
@@ -106,8 +107,8 @@ class solicitante {
             $this->ciu_code = $primary_db->Sequence('ciu_ciudadanos');
             $nac = substr($this->ciu_documento,0,3);
             
-            $sql1 = "insert into ciu_ciudadanos (ciu_code  , ciu_nombres   , ciu_apellido   , ciu_email   , ciu_tel_fijo   , ciu_tel_movil   , ciu_ultimo_acceso, ciu_canal_ingreso   , ciu_estado, ciu_tstamp, ciu_tipo_persona, ciu_nacionalidad) 
-                                         values (:ciu_code:,':ciu_nombres:',':ciu_apellido:',':ciu_email:',':ciu_tel_fijo:',':ciu_tel_movil:',NOW()             ,':ciu_canal_ingreso:','ACTIVO'   , NOW()     , 'FISICA'        , ':ciu_nacionalidad:')";
+            $sql1 = "insert into ciu_ciudadanos (ciu_code  , ciu_nombres   , ciu_apellido   , ciu_email   , ciu_tel_fijo   , ciu_tel_movil   , ciu_ultimo_acceso, ciu_canal_ingreso   , ciu_estado, ciu_tstamp, ciu_tipo_persona, ciu_nacionalidad) ".
+                                        "values (:ciu_code:,':ciu_nombres:',':ciu_apellido:',':ciu_email:',':ciu_tel_fijo:',':ciu_tel_movil:',NOW()             ,':ciu_canal_ingreso:','ACTIVO'   , NOW()     , 'FISICA'        , ':ciu_nacionalidad:')";
             $params1 = array(
                   'ciu_code'            => $this->ciu_code, 
                   'ciu_nombres'         => $this->ciu_nombres, 
@@ -120,8 +121,8 @@ class solicitante {
             );
             $primary_db->do_execute($sql1,$errores,$params1);
             
-            $sql2 = "insert into ciu_identificacion (ciu_code  , ciu_nro_doc   ) 
-                                             values (:ciu_code:,':ciu_nro_doc:')";
+            $sql2 = "insert into ciu_identificacion (ciu_code  , ciu_nro_doc   ) ".
+                                            "values (:ciu_code:,':ciu_nro_doc:')";
             $params2 = array(
                   'ciu_code'            => $this->ciu_code, 
                   'ciu_nro_doc'         => $this->ciu_documento, 
@@ -137,35 +138,14 @@ class solicitante {
         }
         
         //Lo asocio al ciudadano que lo reporta (tic_ticket_ciudadano)
-        $sql5 = "insert into tic_ticket_ciudadano (tic_nro, ciu_code, ttc_tstamp, ttc_nota) 
-                    values (:tic_nro:, :ciu_code:, NOW(), ':ttc_nota:')";
+        $sql5 = "insert into tic_ticket_ciudadano (tic_nro, ciu_code, ttc_tstamp, ttc_nota) ".
+                    "values (:tic_nro:, :ciu_code:, NOW(), ':ttc_nota:')";
         $params5 = array(
               'tic_nro'     => $ticket->getNro(), 
               'ciu_code'    => $this->ciu_code, 
               'ttc_nota'    => $ticket->tic_nota_in
         );
-        $primary_db->do_execute($sql5,$errores,$params5);
-         
-         //Creo un evento en el historial del ciudadano (ciu_historial_contactos)
-         $sql6 = "insert into ciu_historial_contactos (chi_code  , ciu_code  , cse_code, chi_fecha, chi_motivo    , use_code    , chi_canal  , chi_nota    ) 
-                                               values (:chi_code:, :ciu_code:, null    , NOW()    , ':chi_motivo:', ':use_code:', 'chi_canal', ':chi_nota:')";
-         $params6 = array(
-              'chi_code'    =>  $primary_db->Sequence('ciu_historial_contactos'), 
-              'ciu_code'    =>  $this->ciu_code, 
-              'use_code'    =>  $sess->getUserId(), 
-              'chi_nota'    =>  $ticket->tic_nota_in,
-              'chi_motivo'  =>  'Ingreso '.$ticket->tic_identificador,
-              'chi_canal'   =>  $ticket->tic_canal
-         );
-         $primary_db->do_execute($sql6,$errores,$params6);
-
-         
-         //Creo un mensaje de mail para el ciudadano, con un recibo por ticket
-         if( $this->ciu_email!=='' ) {
-            $mt = new cmail_type("IMPRESION", "www/lmodules/tickets/ticket_maint.php", "tic_nro=".$ticket->getNro(),"aviso_nuevo_ticket");
-            $msg = new cmessage();
-            $msg->send(DEFAULT_SMTP,$this->ciu_email,$mt);
-         }
+        $primary_db->do_execute($sql5,$errores,$params5); 
     }
     
     /** Toma los datos del solicitante desde un formulario 
@@ -197,7 +177,11 @@ class solicitante {
         return array($s);
     }
     
-    
+    /** Carga el contenido del objeto solicitante desde la base de datos. Requiere definir previamente el ciu_code.
+     * 
+     * @global cdbdata $primary_db
+     * @return boolean
+     */
     public function load() {
         global $primary_db;
         
@@ -206,7 +190,8 @@ class solicitante {
             return false;
         
         //Busco algunos datos que no tengo, en la base de datos
-        $row = $primary_db->QueryArray("select ciu_code, ciu_nombres, ciu_apellido, ciu_sexo, ciu_nacimiento, ciu_email, ciu_tel_fijo, ciu_tel_movil, ciu_horario_cont, ciu_no_llamar, ciu_no_email, ciu_dir_calle, ciu_dir_nro, ciu_dir_piso, ciu_dir_dpto, ciu_barrio, ciu_localidad, ciu_provincia, ciu_pais, ciu_cod_postal, ciu_cgpc, ciu_coord_x, ciu_coord_y, ciu_trabaja, ciu_nivel_estudio, ciu_profesion, ciu_ultimo_acceso, ciu_canal_ingreso, use_code, ciu_estado, ciu_tstamp, ciu_tipo_persona, ciu_razon_social, ciu_nacionalidad from ciu_ciudadanos where ciu_code='{$this->ciu_code}'");
+        $row = $primary_db->QueryArray("select ciu_code, ciu_nombres, ciu_apellido, ciu_sexo, ciu_nacimiento, ciu_email, ciu_tel_fijo, ciu_tel_movil, ciu_horario_cont, ciu_no_llamar, ciu_no_email, ciu_dir_calle, ciu_dir_nro, ciu_dir_piso, ciu_dir_dpto, ciu_barrio, ciu_localidad, ciu_provincia, ciu_pais, ciu_cod_postal, ciu_cgpc, ciu_coord_x, ciu_coord_y, ciu_trabaja, ciu_nivel_estudio, ciu_profesion, ciu_ultimo_acceso, ciu_canal_ingreso, use_code, ciu_estado, ciu_tstamp, ciu_tipo_persona, ciu_razon_social, ciu_nacionalidad ".
+                "from ciu_ciudadanos where ciu_code='{$this->ciu_code}'");
         if($row) {
             $this->ciu_email            = $row['ciu_email'];
             $this->ciu_telefono_fijo    = $row['ciu_tel_fijo'];
@@ -218,5 +203,12 @@ class solicitante {
         return true;
     }
     
+    /** Obtener el ciu_code correspondiente a este solicitante
+     * 
+     * @return int
+     */
+    public function getCiuCode() {
+        return $this->ciu_code;
+    }
 }
 ?>

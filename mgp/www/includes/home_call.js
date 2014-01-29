@@ -436,7 +436,7 @@ function completar_tabla_tickets(datos)
                     "    <tr>" +
                     "		<th>Ticket</th>" +
                     "		<th>Estado</th>" +
-                    "		<th>Fechas</th>" +
+                    "		<th style=\"width:168px;\">Fechas</th>" +
                     "		<th>Prestaciones</th>" +
                     "		<th>Ubicación</th>" +
                     "		<th>Acción</th>" +
@@ -449,22 +449,61 @@ function completar_tabla_tickets(datos)
         for(j=0;j<datos.length;j++)
         {
             var estado = datos[j].estado==='ABIERTO' ? '<span class="badge badge-info">Abierto</span>' : '<span class="badge badge-success">Cerrado</span>';
-            var cerrado = datos[j].cerrado!=='' ? "<br> Cerrado: "+datos[j].cerrado : '';
-            var reiterado = datos[j].reiterado!=='' ? "<br>Reiterado: "+datos[j].reiterado : '';
+            var cerrado = datos[j].cerrado!=='' ? "<br><b>Cerrado:</b> <br>"+datos[j].cerrado : '';
+            var reiterado = datos[j].reiterado!=='' ? "<br><b>Reiterado:</b> <br>"+datos[j].reiterado : '';
             var v = parseInt(datos[j].vencido);
             var vencido = v>0 ? '<br><span class="badge badge-important">Vencido '+v+(v===1 ? ' día' : ' días')+'</span>' : '';
+            var c = "";
+            switch(datos[j].estado_prestacion){
+                case "pendiente":
+                    c = "badge-important";
+                    break;
+                case "inspección":
+                    c = "badge-warning";
+                    break;
+                case "en curso":
+                    c = "badge-info";
+                    break;
+                case "en espera":
+                    c = "badge-info";
+                    break;
+                case "resuelto":
+                    c = "badge-success";
+                    break;
+                case "rechazado":
+                    c = "badge-inverse";
+                    break;
+                case "rechazado indebido":
+                    c = "badge-inverse";
+                    break;
+                case "cerrado":
+                    c = "badge-success";
+                    break;
+                case "finalizado":
+                    c = "badge-success";
+                    break;
+                case "certificación":
+                    c = "badge-warning";
+                    break;
+            }
+            var estado_prestacion = "<span class=\"badge "+ c + "\">"+datos[j].estado_prestacion+"</span>";
+            
+            //renderDireccion(datos[j].ubicacion)
             b+="<tr>" +
                "  <td>"+datos[j].identificador+"</td>" + 
-               "  <td>"+estado+vencido+"</td>" +
-               "  <td>Ingreso: "+datos[j].ingreso+"<br>Estimado: "+datos[j].estimado+reiterado+cerrado+"</td>" +
+               "  <td>"+estado+estado_prestacion+vencido+"</td>" +
+               "  <td><b>Ingreso:</b> <br>"+datos[j].ingreso+"<br><b>Estimado:</b> <br>"+datos[j].estimado+reiterado+cerrado+"</td>" +
                "  <td>"+datos[j].prestacion+"<br/><em>"+datos[j].nota+"<em></td>" +
-               "  <td>"+renderDireccion(datos[j].ubicacion)+"</td>" +
+               "  <td>"+datos[j].lugar+"</td>" +
                "  <td>";
+       
             if(datos[j].url_ver!=="")
-                b+="<button onclick=\"irA('"+datos[j].url_ver+"')\" class=\"btn\">Ver</button>  ";
+                b+="<button onclick=\"irA('"+datos[j].url_ver+"')\" class=\"btn btn-small\"><i class=\"icon-folder-open\"></i> Ver</button>  <br>";
 
             if(datos[j].url_reiterar!=="")
-                b+="<button onclick=\"irA('"+datos[j].url_reiterar+"')\" class=\"btn\">Reiterar</button>";
+                b+="<button onclick=\"irA('"+datos[j].url_reiterar+"')\" class=\"btn btn-small\"><i class=\"icon-fire\"></i> Reiterar</button> <br>";
+            
+            b+=renderMapa(datos[j].ubicacion);
             
             b+="  </td>" +
                "</tr>";
@@ -477,7 +516,7 @@ function completar_tabla_tickets(datos)
     b+="</tbody></table>";
 
     $("#tickets_tbl").html(b);		
-    $("#tickets_tbl a").popover();
+    $("#tickets_tbl .mapa").popover();
 }
 
 /** Genera el HTML con la direccion
@@ -485,26 +524,12 @@ function completar_tabla_tickets(datos)
  * @param {object} objDir
  * @returns {string}
  */
-function renderDireccion(objDir) {
+function renderMapa(objDir) {
     if(objDir && objDir.lat && objDir.lng) {
-        var mapa = "<img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + objDir.lat + "&y=" + objDir.lng + "&w=250&h=250&r=250\'>";
-        var d = '';
-        
-        if(objDir.alternativa=='CALLE') 
-            d+= objDir.calle_nombre + ' y '+ objDir.calle_nombre2;
-        else
-            d+= objDir.calle_nombre + " " + objDir.callenro; 
-
-            d+=" <a href=\"#\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i></a><br>";
-        if(objDir.piso)
-            d+=" Piso:" + objDir.piso;
-        if(objDir.dpto)
-            d+=" Dpto:" + objDir.dpto;
-        if(objDir.barrio)    
-            d+=" Barrio:" + objDir.barrio;
-        return d;
+        var mapa = "<img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + objDir.lat + "&y=" + objDir.lng + "&w=250&h=250&r=250\'>";        
+        return " <button class=\"btn btn-small mapa\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i> Mapa</button>";
     } 
-    return "Sin dirección";
+    return "";
 }
 
 /** Hacer la transcicion a la pagina
@@ -550,7 +575,7 @@ function completar_tabla_contactos(datos)
     var b = "<table class=\"table table-striped\">" +
                     "	<thead>" +
                     "		<tr>" +
-                    "			<th>Fecha</th>" +
+                    "			<th style=\"width:160px;\">Fecha</th>" +
                     "			<th>Sesión</th>" +
                     "			<th>Motivo</th>" +
                     "			<th>Nota</th>" +
@@ -566,7 +591,7 @@ function completar_tabla_contactos(datos)
             b+="<tr><td>"+datos[j].fecha+"</td>";
             b+="<td>"+datos[j].cse_code+"</td>";
             b+="<td>"+datos[j].motivo+"</td>";
-            b+="<td>"+datos[j].nota+"</td>";
+            b+="<td>"+(datos[j].nota!=null ? datos[j].nota : "")+"</td>";
             b+="<td>"+datos[j].canal+"</td>";
 
             //Acciones    

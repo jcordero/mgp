@@ -6,55 +6,106 @@ include_once 'beans/cuestionario.php';
 include_once 'beans/eventbus_event.php';
 
 class prestacion {
-    /** codigo de prestacion */
+    /** codigo de prestacion 010203
+     *
+     * @var string
+     */
     public $tpr_code; 
     
-    /** nombre de la prestacion */
+    /** nombre de la prestacion 
+     *
+     * @var string
+     */
     public $tpr_description;
    
-    /** nombre de la prestacion completo */
+    /** nombre de la prestacion completo 
+     *
+     * @var string
+     */
     public $tpr_description_full;
    
-    /** codigo de rubro */
+    /** codigo de rubro 0102
+     *
+     * @var string
+     */
     public $tru_code; 
     
-    /** nombre del rubro */
+    /** nombre del rubro 
+     *
+     * @var string
+     */
     public $tru_description;
     
-    /** estado de la prestacion */
+    /** estado de la prestacion 
+     *
+     * @var string
+     */
     public $ttp_estado; 
     
-    /** prioridad */
+    /** prioridad
+     *
+     * @var string
+     */
     public $ttp_prioridad;
     
-    /** fecha prevista de cierre */
+    /** fecha prevista de cierre (codificada como Date) 
+     *
+     * @var date
+     */
     public $ttp_tstamp_plazo; 
     
-    /** Flag de alerta */
+    /** Flag de alerta (0/1)
+     *
+     * @var int
+     */
     public $ttp_alerta;
 
-    /** Array de pregunstas que forman el cuestionario */
+    /** Array de pregunstas que forman el cuestionario 
+     *
+     * @var string[]
+     */
     public $cuestionario; 
     
-    /** Array de eventos de avance */
+    /** Array de eventos de avance 
+     *
+     * @var evento[] 
+     */
     public $avance;
     
-    /** Array de organismos vinculados a esta prestacion */
+    /** Array de organismos vinculados a esta prestacion 
+     *
+     * @var organismo[] 
+     */
     public $organismos;
     
-    /** Plazo (numerico) */
+    /** Plazo (numerico)
+     *
+     * @var double
+     */
     private $plazo;
     
-    /** Plazo (unidad) */
+    /** Plazo (unidad)
+     *
+     * @var string
+     */
     private $plazo_unit;
 
-    /** Plazo (tipo) CORRIDOS / LABORALES */
+    /** Plazo (tipo) CORRIDOS / LABORALES
+     *
+     * @var string
+     */
     private $plazo_tipo;
 
-    /** Tipo de prestacion: RECLAMO, DENUNCIA, SOLICITUD o QUEJA */
+    /** Tipo de prestacion: RECLAMO, DENUNCIA, SOLICITUD o QUEJA 
+     *
+     * @var string
+     */
     private $tpr_tipo; 
     
-    /** Tarea del event bus */
+    /** Tarea del event bus
+     *
+     * @var string 
+     */
     private $eev_task;
     
     /** Constructor del objeto
@@ -480,7 +531,7 @@ class prestacion {
             
             //El plazo viene en dos partes, una donde esta la cantidad y otra donde esta la unidad. Ejemplo: 2 dias
             list($p->plazo, $p->plazo_unit, $p->plazo_tipo) = self::plazoComponents($row['tpr_plazo']);
-            $p->ttp_tstamp_plazo = self::getVencimiento($p->plazo, $p->plazo_unit, $p->plazo_tipo);
+            $p->ttp_tstamp_plazo = self::getVencimiento($p->plazo, $p->plazo_unit, $p->plazo_tipo); //crea una fecha en formato Y-m-d H:i:s
         }
         
         

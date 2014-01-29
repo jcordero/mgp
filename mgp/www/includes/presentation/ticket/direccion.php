@@ -1,6 +1,7 @@
 <?php 
 include_once "common/cdatatypes.php";
 include_once "beans/functions.php";
+include_once "beans/georeferencias.php";
 
 class CDH_DIRECCION extends CDataHandler 
 {
@@ -17,7 +18,7 @@ class CDH_DIRECCION extends CDataHandler
             'cod_calle2':calle2,
             'nom_calle2':calle2_nombre,
             'altura':altura,
-            'luminarias':'SI',
+            'gis':0,
             'alternativa':alternativa
         */
         $o = json_decode($p);
@@ -116,19 +117,19 @@ class CDH_DIRECCION extends CDataHandler
 
         error_log("direccion::validarDireccion() ".print_r($res,true));
                 
-        //Hay que consultar las luminarias?
-        if($o->luminarias==='SI' && $r->lat!='' && $r->lng!='') {
+        //Hay que consultar las luminarias / semaforos?
+        if($o->gis>0 && $r->lat!='' && $r->lng!='') {
             try
             {
                 $distanciamaxima = 100;
                 $cantidadmaxima = 100;
-                $tipodesolicitud = '01';
+                $tipodesolicitud = $o->gis;
                 $e = $client->elementos_fijos($tipodesolicitud,$r->lat,$r->lng,$distanciamaxima,$cantidadmaxima);
                 
-                //error_log("Listado de luminarias: ".print_r($e,true));
+                //error_log("Listado de elementos layer #{$o->gis}: ".print_r($e,true));
                 
                 foreach($e as $lum) {
-                    $res['luminarias'][] = array(
+                    $res['elementos'][] = array(
                         'id'    => (int) $lum->id,
                         'lat'   => (double) $lum->latitud,
                         'lng'   => (double) $lum->longitud,
@@ -159,11 +160,12 @@ class CDH_DIRECCION extends CDataHandler
         $val = html_entity_decode( $fld->getValue() );
         $name = "m_".$fld->m_Name;
         $mostrar = "";
-        $id = $name;
-
+  
         if($fld->m_IsVisible)
         {   
-            $mostrar = generarTextoDireccion($val);
+            $geo = new georeferencias();
+            $geo->load($val);
+            $mostrar = $geo->generarTextoDireccion();
 
             if($showlabel)
             {
@@ -190,7 +192,19 @@ class CDH_DIRECCION extends CDataHandler
     
     function getHelperValue($cn, $val) 
     {
-        return generarTextoDireccion($val,false);
+        $geo = new georeferencias();
+        $geo->load($val);
+        return $geo->generarTextoDireccion(false);
+    }
+    
+    function listaDePlayas($p) {
+        global $primary_db;
+        $lista = array();
+        $rs = $primary_db->do_execute("select * from geo_lugares where glu_estado='ACTIVO' and glu_geo_tipo='PLAYA' order by glu_nombre");
+        while( $row=$primary_db->_fetch_row($rs) ) {
+            $lista[] = array("playa"=>$row["glu_nombre"], "lat"=>$row["glu_lat"], "lng"=>$row["glu_lng"]);
+        }
+        return json_encode($lista);
     }
 }
 ?>

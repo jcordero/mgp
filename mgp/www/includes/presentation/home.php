@@ -6,6 +6,8 @@ include_once "beans/person_status.php";
 include_once "common/csession.php";
 include_once "beans/ticket.php";
 include_once "beans/functions.php";
+include_once 'beans/georeferencias.php';
+include_once 'beans/prestacion.php';
 
 class CDH_HOME extends CDataHandler
 {
@@ -246,31 +248,40 @@ class CDH_HOME extends CDataHandler
             $sql = "SELECT *,datediff(NOW(),tic_tstamp_plazo) as vencido FROM v_ticket_ciu WHERE tic_identificador='{$identificador}'";
             $re = $primary_db->do_execute($sql);
             while( $row1=$primary_db->_fetch_row($re) )
-            {
-                //Decodifico la direccion 
-                $json = $primary_db->DesFiltrado( $row1["tic_lugar"] );   
-                
+            {                
                 //Ultima reiteracion
-                $ultima_reiteracion = $primary_db->QueryString("select ttc_tstamp from tic_ticket_ciudadano_reit where tic_nro='{$row['tic_nro']} order by ttc_tstamp desc limit 1'");    
+                $ultima_reiteracion = $primary_db->QueryString("select ttc_tstamp from tic_ticket_ciudadano_reit where tic_nro='{$row1['tic_nro']} order by ttc_tstamp desc limit 1'");    
+                
+                //Vencido
+                if($row1['tic_estado']==='ABIERTO')
+                    $vencido = $row1['vencido'];
+                else
+                    $vencido = 0;
+
+                //Lugar
+                $geo = new georeferencias();
+                $geo->load($primary_db->DesFiltrado( $row1["tic_lugar"] ));
+                $lugar = $geo->generarTextoDireccion();
                 
                 $conjunto[] = array(
                             'tipo'		=> $row1['tic_tipo'],
                             'identificador'	=> $identificador,
-                            'prestacion'	=> $row1['tpr_detalle'],
-                            'ubicacion'		=> $row1['tic_lugar'],
+                            'prestacion'	=> prestacion::getFullDescription($row1['tpr_code']),
                             'estado'		=> $row1['tic_estado'],
+                            'estado_prestacion' => $row1['ttp_estado'],
                             'ciudadano'		=> $row1['ciu_nombres'].' '.$row1['ciu_apellido'],
                             'ciu_code'		=> $row1['ciu_code'],
-                            'ubicacion'         => json_decode($json),
+                            'ubicacion'         => json_decode($primary_db->DesFiltrado( $row1["tic_lugar"] )),
                             'tic_nro'           => $row1['tic_nro'],
                             'nota'              => $row1['tic_nota_in'],
-                            'ingreso'           => $row['tic_tstamp_in'],
-                            'reiterado'         => $ultima_reiteracion,
-                            'estimado'          => $row['tic_tstamp_plazo'],
-                            'cerrado'           => $row['tic_tstamp_cierre'],
-                            'vencido'           => $row['vencido'], //Dias vencido. Esta mal si >0
-                            'anio'              => $row['tic_anio'],
-                            'numero'            => $row['tic_numero'],
+                            'ingreso'           => DatetoLocale($row1['tic_tstamp_in']),
+                            'reiterado'         => ($ultima_reiteracion!="" ? DatetoLocale($ultima_reiteracion) : ""),
+                            'estimado'          => DatetoLocale($row1['tic_tstamp_plazo']),
+                            'cerrado'           => ($row1['tic_tstamp_cierre']==null ? '' : DatetoLocale($row1['tic_tstamp_cierre'])),
+                            'vencido'           => $vencido, //Dias vencido. Esta mal si >0
+                            'anio'              => $row1['tic_anio'],
+                            'numero'            => $row1['tic_numero'],
+                            'lugar'             => $lugar
                 );
             }
         }
@@ -282,10 +293,7 @@ class CDH_HOME extends CDataHandler
                 $sql = "SELECT *,datediff(NOW(),tic_tstamp_plazo) as vencido FROM v_ticket_ciu WHERE ciu_code='{$ciu_code}' order by tic_tstamp_in desc";
             	$re = $primary_db->do_execute($sql);
                 while( $row=$primary_db->_fetch_row($re) )
-                {
-                    //Decodifico la direccion 
-                    $json = $primary_db->DesFiltrado( $row["tic_lugar"] );
-                    
+                {                    
                     //Ultima reiteracion
                     $ultima_reiteracion = $primary_db->QueryString("select ttc_tstamp from tic_ticket_ciudadano_reit where tic_nro='{$row['tic_nro']} order by ttc_tstamp desc limit 1'");    
 
@@ -295,24 +303,30 @@ class CDH_HOME extends CDataHandler
                     else
                         $vencido = 0;
                     
+                    //Lugar
+                    $geo = new georeferencias();
+                    $geo->load($primary_db->DesFiltrado( $row["tic_lugar"] ));
+                    $lugar = $geo->generarTextoDireccion();
+                    
                     $conjunto[] = array(
                             'tipo'		=> $row['tic_tipo'],
                             'identificador'	=> $row['tic_identificador'],
-                            'prestacion'	=> $row['tpr_detalle'],
-                            'ubicacion'		=> $row['tic_lugar'],
+                            'prestacion'	=> prestacion::getFullDescription($row['tpr_code']),
                             'estado'		=> $row['tic_estado'],
+                            'estado_prestacion' => $row['ttp_estado'],
                             'ciudadano'		=> $row['ciu_nombres'].' '.$row['ciu_apellido'],
                             'ciu_code'		=> $row['ciu_code'],
-                            'ubicacion'         => json_decode($json),
+                            'ubicacion'         => json_decode($primary_db->DesFiltrado( $row["tic_lugar"] )),
                             'tic_nro'           => $row['tic_nro'],
                             'nota'              => $row['tic_nota_in'],
-                            'ingreso'           => $row['tic_tstamp_in'],
-                            'reiterado'         => $ultima_reiteracion,
-                            'estimado'          => $row['tic_tstamp_plazo'],
-                            'cerrado'           => ($row['tic_tstamp_cierre']==null ? '' : $row['tic_tstamp_cierre']),
+                            'ingreso'           => DatetoLocale($row['tic_tstamp_in']),
+                            'reiterado'         => ($ultima_reiteracion!="" ? DatetoLocale($ultima_reiteracion) : ""),
+                            'estimado'          => DatetoLocale($row['tic_tstamp_plazo']),
+                            'cerrado'           => ($row['tic_tstamp_cierre']==null ? '' : DatetoLocale($row['tic_tstamp_cierre'])),
                             'vencido'           => $vencido, //Dias vencido. Esta mal si >0
                             'anio'              => $row['tic_anio'],
                             'numero'            => $row['tic_numero'],
+                            'lugar'             => $lugar
                     );
                 }
             }
@@ -321,15 +335,17 @@ class CDH_HOME extends CDataHandler
         //Agrego los botones...
         foreach($conjunto as $key=>$elemento)
         {
-            $url1 = $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=V&tic_anio={$elemento['anio']}&tic_nro={$elemento['numero']}&tic_tipo={$elemento['tipo']}&next=/index.php");
+            $url1 = $sess->encodeURL(WEB_PATH."/lmodules/tickets/ticket_maint.php?OP=V&tic_anio={$elemento['anio']}&tic_nro={$elemento['tic_nro']}&tic_tipo={$elemento['tipo']}&next=/index.php");
             $conjunto[$key]['url_ver'] = $url1;
             
             //Solo los reclamos se pueden reiterar    
-            if($elemento['tipo']=="RECLAMO")
+            if($elemento['tipo']=="RECLAMO" && $elemento['estado']=="ABIERTO")
             {
                 $url2 = "javascript:reiterar({$elemento['tic_nro']})";
                 $conjunto[$key]['url_reiterar'] = $url2;
             }
+            else
+                $conjunto[$key]['url_reiterar'] = "";
         }
         return json_encode($conjunto);
     }
@@ -478,7 +494,7 @@ class CDH_HOME extends CDataHandler
         while( $row=$primary_db->_fetch_row($re) )
         {        	
             $conjunto[] = array( 
-                "fecha"         =>  $row['chi_fecha'],
+                "fecha"         => DatetoLocale($row['chi_fecha']),
                 "cse_code"      =>  ($row['cse_code']===null ? '' : $row['cse_code']),
                 "use_code"      =>  $row['use_code'],
                 "canal"         =>  $row['chi_canal'],

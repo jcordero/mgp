@@ -1,6 +1,7 @@
 <?php 
 include_once APP_PATH."common/phpqrcode/qrlib.php";
 include_once 'beans/functions.php';
+include_once 'beans/georeferencias.php';
 
 // Extension para implementar un metodo de impresion
 class class_tic_ticket_upd_print extends cclass_maint_print 
@@ -149,13 +150,20 @@ class class_tic_ticket_upd_print extends cclass_maint_print
         private function createLugarPDML() {
             $p = $this->m_data;
             $obj_lugar = json_decode( _F($p,"tic_lugar") );
-            $lugar = generarTextoDireccion(_F($p,"tic_lugar"));
+            $lugar = "";
+            
+            if($obj_lugar->tipo=="LUMINARIA" || $obj_lugar->tipo=="SEMAFORO" || $obj_lugar->tipo=="DOMICILIO") {
+                $geo = new georeferencias();
+                $geo->load(_F($p,"tic_lugar"));
+                $lugar = $geo->generarTextoDireccion();
+            }
             
             $pdml = '<table><tr><td><b>Ubicación</b></td></tr></table>
                 <table border="1mm">';
 
             switch($obj_lugar->tipo) {
                 case "LUMINARIA":
+                case "SEMAFORO":
                     $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Calle</td><td width="10cm"> '.$this->splitLine($lugar,70).'</td></tr>';
 
                     if($obj_lugar->barrio!='')
@@ -190,6 +198,10 @@ class class_tic_ticket_upd_print extends cclass_maint_print
                     break;
                 case "PLAZA":
                     $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Plaza</td><td width="10cm"> <b>'.$obj_lugar->plaza.'</b></td></tr>';
+                    
+                    break;
+                case "PLAYA":
+                    $pdml.= '<tr><td width="2cm" fillcolor="#B0B0B0">Playa</td><td width="10cm"> <b>'.$obj_lugar->playa.'</b></td></tr>';
                     
                     break;
                 case "CEMENTERIO":

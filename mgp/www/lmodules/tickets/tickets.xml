@@ -531,7 +531,7 @@
             <field name="callenro_lum" type="int"/>
             <field name="tic_barrio_lum" type="varchar" size="100"/>
             <field name="tic_cgpc_lum" type="varchar" size="100"/>
-            <field name="id_luminaria" type="varchar" size="100"/>
+            <field name="id_elemento" type="varchar" size="100"/>
             <field name="alternativa_lum" type="varchar" size="20"/>
 
             <!-- COLECTIVOS --> 
@@ -592,12 +592,12 @@
         </group>
 
         <group title="Ubicación ORGANISMO PUBLICO" id="orgpublico" render_html="block">
-            <field name="orgpublico" presentation="ORGPUBLICO" label="Organismo público" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
+            <field name="orgpublico" presentation="ORGPUBLICO" label="Organismo público" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
             <field name="orgsector" presentation="TEXT" label="Area o sector" />
         </group>
 
         <group title="Ubicación PLAZA" id="plaza" render_html="block">
-            <field name="plaza" presentation="PLAZA" label="Plaza o parque" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
+            <field name="plaza" presentation="PLAZA" label="Plaza o parque" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
         </group>
 		
         <group title="Ubicación CEMENTERIO" id="cementerio" render_html="block">
@@ -609,7 +609,7 @@
             <field name="sepfila" presentation="TEXT" label="Fila" cols="5" />
         </group>
 
-        <group title="Ubicación LUMINARIA" id="luminaria" render_html="block">
+        <group title="Ubicación con elementos" id="luminaria" render_html="block">
             <field name="mapa_lum" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
             <field name="alternativa_lum" presentation="TICKET::ALTERNATIVA_GEOREF" label="Alternativa" initialvalue="NRO"/>
             <field name="calle_lum" presentation="TICKET::CALLE" label="Calle" cols="100" />
@@ -621,7 +621,7 @@
             <field name="callenro_lum" presentation="TICKET::ALTURA" label="Altura" cols="5" />
             <field name="tic_barrio_lum" label="Barrio" presentation="TEXT" readonly="true"/>
             <field name="tic_cgpc_lum" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
-            <field name="id_luminaria" label="Luminaria" presentation="TEXT" readonly="true" isvisible="true"/>
+            <field name="id_elemento" label="Elemento" presentation="TEXT" readonly="true" isvisible="true"/>
         </group>
 
         <group title="Ubicación COLECTIVO" id="colectivo" render_html="block">
@@ -656,7 +656,7 @@
     <build out_file="tickets.php" classname="class_v_tickets1" title="Consulta de tickets" >
 
 	<searchfield name="tic_identificador" presentation="TEXT" label="Identificador" cols="45"/>
-        <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10" initialvalue="2013" />
+        <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10" initialvalue="2014" />
 	<searchfield name="tic_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" search="fix" initialvalue="RECLAMO"/>
         <searchfield name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
         <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>

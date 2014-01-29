@@ -6,6 +6,17 @@
         return str_replace(array('-',':',' '),array('','','T'),$tstamp);
    }
    
+   function DatetoLocale($tstamp='') {
+        if($tstamp==='')
+            $tstamp=date('d/m/Y H:i:s');
+        $p = explode('-',  str_replace(array(':','/',' ','Z'), array('-','-','-','-'), $tstamp));
+        
+        if(count($p)==6)
+            return $p[2]."/".$p[1]."/".$p[0]." ".$p[3].":".$p[4].":".$p[5];
+        else
+            return $p[2]."/".$p[1]."/".$p[0];
+   }
+   
    /** Convertir de los formatos de ISO8601 al formato Date de MYSQL
     *  
     * @param type $tstamp
@@ -116,57 +127,7 @@
     	return 0;
    }
    
-   function generarTextoDireccion($json,$use_html=true) {
-       $mostrar = "";
-       $obj = null;
-       if(is_object($json)) { 
-            $obj = $json;
-       } else {
-            $obj = json_decode($json);
-       }
-       
-       $cnro = intval($obj->callenro,10);
-       $calle_nro = ($cnro>0 ? $cnro : "");
-       
-       if($obj && $use_html) {
-            if( $obj->tipo=="DOMICILIO" || $obj->tipo=="" || $obj->tipo=="LUMINARIA") {
-                if($obj->alternativa=="CALLE")
-                    $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2.'<br/>' : '(sin calle y cruce)<br/>');
-                else
-                    $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$calle_nro.'<br/>' : '(sin calle-nro)<br/>');
-
-                $mostrar .= (isset($obj->piso) && $obj->piso!='' ? '<b>Piso:</b> '.$obj->piso : ''); 
-                $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? '<b>Departamento:</b> '.$obj->dpto.'<br/>' : '');
-                $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? '<b>Barrio:</b> '.$obj->barrio.'<br/>' : '');
-                $mostrar .= (isset($obj->id_luminaria) && $obj->id_luminaria!='' ? '<b>Luminaria:</b> '.$obj->id_luminaria : '');
-            }
-            elseif( $obj->tipo=="COLECTIVO" ) {
-                $mostrar .= '<b>Linea:</b> '.$obj->linea.'<br/>';
-                $mostrar .= (isset($obj->interno) && $obj->interno!="" ? '<b>Interno:</b> '.$obj->interno.'<br/>' : "" );
-                $mostrar .= (isset($obj->fecha_hora) && $obj->fecha_hora!="" ? '<b>Fecha:</b> '.ISO8601toLocale($obj->fecha_hora).'<br/>' : "" );
-            }
-       }
-        
-       if($obj && $use_html==false) {
-            if( $obj->tipo=="DOMICILIO" || $obj->tipo=="" || $obj->tipo=="LUMINARIA") {
-                if($obj->alternativa=="CALLE")
-                    $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' y '.$obj->calle_nombre2."\n" : "(sin calle y cruce)\n");
-                else
-                    $mostrar .= (isset($obj->calle_nombre) && $obj->calle_nombre!='' ? $obj->calle_nombre.' '.$calle_nro."\n" : "(sin calle-nro)\n");
-
-                $mostrar .= (isset($obj->piso) && $obj->piso!='' ? 'Piso: '.$obj->piso : ''); 
-                $mostrar .= (isset($obj->dpto) && $obj->dpto!='' ? 'Departamento: '.$obj->dpto."\n" : '');
-                $mostrar .= (isset($obj->barrio) && $obj->barrio!='' ? 'Barrio: '.$obj->barrio."\n" : '');
-                $mostrar .= (isset($obj->id_luminaria) && $obj->id_luminaria!='' ? 'Luminaria: '.$obj->id_luminaria : '');
-            }
-            elseif( $obj->tipo=="COLECTIVO" ) {
-                $mostrar .= 'Linea: '.$obj->linea."\n";
-                $mostrar .= (isset($obj->interno) && $obj->interno!="" ? 'Interno: '.$obj->interno."\n" : "" );
-                $mostrar .= (isset($obj->fecha_hora) && $obj->fecha_hora!="" ? 'Fecha: '.ISO8601toLocale($obj->fecha_hora)."\n" : "" );
-            }
-       }
-       return $mostrar;
-   }
+   
    
    
    function timeToHuman($sec) {
@@ -208,11 +169,13 @@
     * @return type
     */
    function ISO8601toLocale($tstamp='') {
-        if($tstamp==='')
+        if($tstamp=='')
             return date('d/m/Y H:i:s');
         
         $a = $m = $d = $h = $n = $s = 0;    
         $p = explode('T',  str_replace(array(':','/',' ','Z'), array('','','',''), $tstamp));
+        
+        //Si tiene dos partes, es porque hay fecha y hora
         if(count($p)==2) {
             //Fecha
             if(strlen($p[0])==8) {
@@ -231,7 +194,7 @@
         }
         elseif(count($p)==1)
         {
-            //Solo Fecha
+            //Tiene una sola parte, Solo Fecha
             if(strlen($p[0])==8) {
                 $a = substr($p[0], 0, 4);
                 $m = substr($p[0], 4, 2);

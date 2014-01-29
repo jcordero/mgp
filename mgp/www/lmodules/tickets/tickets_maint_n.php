@@ -154,7 +154,7 @@ class orgpublico_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket")->GetField("orgpublico")->SetDisplayValues(Array("Name"=>"orgpublico", "Label"=>"Organismo público", "Size"=>100, "Order"=>43, "Presentation"=>"ORGPUBLICO", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("orgpublico")->SetDisplayValues(Array("Name"=>"orgpublico", "Label"=>"Organismo público", "Size"=>100, "Order"=>43, "Presentation"=>"ORGPUBLICO", "IsVisible"=>true, "ClassParams"=>"{calle:\"calle\",altura:\"callenro\",lat:\"tic_coordx\",lng:\"tic_coordy\",barrio:\"tic_barrio\",comuna:\"tic_cgpc\"}", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("orgsector")->SetDisplayValues(Array("Name"=>"orgsector", "Label"=>"Area o sector", "Size"=>100, "Order"=>44, "Presentation"=>"TEXT", "IsVisible"=>true, "Class"=>"class_tic_ticket"));
     }
 }
@@ -182,7 +182,7 @@ class plaza_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket")->GetField("plaza")->SetDisplayValues(Array("Name"=>"plaza", "Label"=>"Plaza o parque", "Size"=>100, "Order"=>42, "Presentation"=>"PLAZA", "IsVisible"=>true, "ClassParams"=>"calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc", "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("plaza")->SetDisplayValues(Array("Name"=>"plaza", "Label"=>"Plaza o parque", "Size"=>100, "Order"=>42, "Presentation"=>"PLAZA", "IsVisible"=>true, "ClassParams"=>"{calle:\"calle\",altura:\"callenro\",lat:\"tic_coordx\",lng:\"tic_coordy\",barrio:\"tic_barrio\",comuna:\"tic_cgpc\"}", "Class"=>"class_tic_ticket"));
     }
 }
 }
@@ -229,7 +229,7 @@ if( !class_exists('luminaria_gr') ) {
 class luminaria_gr extends cform_group {
     function __construct($parent) {
         parent::__construct($parent);
-        $this->m_title = 'Ubicación LUMINARIA'; //Titulo del grupo
+        $this->m_title = 'Ubicación con elementos'; //Titulo del grupo
         $this->m_order = 6; //Orden de presentacion de este grupo
         $this->m_id = 'luminaria'; //Id para los wizards
         $this->m_note = ''; //Nota
@@ -249,7 +249,7 @@ class luminaria_gr extends cform_group {
         $this->m_fields[] = 'class_tic_ticket:callenro_lum';
         $this->m_fields[] = 'class_tic_ticket:tic_barrio_lum';
         $this->m_fields[] = 'class_tic_ticket:tic_cgpc_lum';
-        $this->m_fields[] = 'class_tic_ticket:id_luminaria';
+        $this->m_fields[] = 'class_tic_ticket:id_elemento';
 
     }
 
@@ -264,7 +264,7 @@ class luminaria_gr extends cform_group {
         $this->getClass("class_tic_ticket")->GetField("callenro_lum")->SetDisplayValues(Array("Name"=>"callenro_lum", "Label"=>"Altura", "Type"=>"int", "Order"=>56, "Presentation"=>"TICKET::ALTURA", "IsVisible"=>true, "Cols"=>5, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("tic_barrio_lum")->SetDisplayValues(Array("Name"=>"tic_barrio_lum", "Label"=>"Barrio", "Size"=>100, "Order"=>57, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("tic_cgpc_lum")->SetDisplayValues(Array("Name"=>"tic_cgpc_lum", "Label"=>"Comuna", "Size"=>100, "Order"=>58, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
-        $this->getClass("class_tic_ticket")->GetField("id_luminaria")->SetDisplayValues(Array("Name"=>"id_luminaria", "Label"=>"Luminaria", "Size"=>100, "Order"=>59, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("id_elemento")->SetDisplayValues(Array("Name"=>"id_elemento", "Label"=>"Elemento", "Size"=>100, "Order"=>59, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
     }
 }
 }

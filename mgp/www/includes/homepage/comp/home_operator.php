@@ -35,8 +35,21 @@ if(!class_exists('home_operator'))
 	
          	<div id="tickets" class="container">
          		<div class="row">         	
-    	     		<div id="botones_turnos" class="span2">
-			    		<button onclick="boton_nuevo_ticket()" class="btn btn-primary"><i class="icon-pencil"></i> Nuevo Ticket</button>
+    	     		<div id="botones_turnos" class="span8">
+			    		
+                                        <div class="form-inline">
+                                                <button onclick="boton_nuevo_ticket()" class="btn btn-primary"><i class="icon-pencil"></i> Nuevo Ticket</button>
+                                        - 
+			          		<select class="input-medium" id="m_tickets_tipo">
+			          			<option value="RECLAMO">RECLAMO
+			          			<option value="SOLICITUD">SOLICITUD
+			          			<option value="DENUNCIA">DENUNCIA
+			          			<option value="QUEJA">QUEJA
+			          		</select>			          			
+			          		<input type="text" class="input-small" placeholder="Número" id="m_tickets_nro">
+  							<input type="text" class="input-small" placeholder="Año" id="m_tickets_anio">
+			          		<button onclick="boton_buscar_tickets()" class="btn"><i class="icon-search"></i> Buscar</button>
+                                        </div>
          			</div>
          		</div>
             	
@@ -108,7 +121,7 @@ if(!class_exists('home_operator'))
 		
 			<ul class="nav nav-tabs" data-tabs="tabs">
     			<li class="active"><a href="#tab1" data-toggle="tab">Tickets</a></li>
-    			<li>			   <a href="#tab2" data-toggle="tab">Contactos anteriores</a></li>
+    			<li>			   <a href="#tab2" data-toggle="tab">Contactos</a></li>
     			<li>			   <a href="#tab3" data-toggle="tab">Ciudadanos con este nro.</a></li>
   			</ul>
 		

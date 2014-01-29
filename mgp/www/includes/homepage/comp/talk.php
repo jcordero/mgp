@@ -99,7 +99,7 @@ if(!class_exists('talk'))
     #nm_person_doc {width:100px;}
     #talk_search div {display: inline-block;margin-top:3px;}
     #talk_search button {margin-top: -10px;}
-    
+    .btn-small {width:90px;}
 </style>
             ';
             

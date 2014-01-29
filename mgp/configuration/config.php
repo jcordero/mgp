@@ -23,7 +23,7 @@ define("KENDO_MENU_LIB",true);
 define("CMD_UPDATE_SITE","ls");
 define("CMD_UPDATE_PLATAFORMA","ls");
 
-define("PHP_CMD","/usr/bin/php -c /opt/local/etc/php5/php.ini -d include_path=.:/Users/jcordero/plataforma4/Plataforma4/includes:/Users/jcordero/plataforma4_sites/mgp_git/mgp/www/includes");
+define("PHP_CMD","/usr/bin/php -c /opt/local/etc/php54/php.ini -d include_path=.:/Users/jcordero/plataforma4/Plataforma4/includes:/Users/jcordero/plataforma4_sites/mgp_git/mgp/www/includes");
 
 define("DEBUG",		true);
 define("DEFAULT_SMTP",1);
