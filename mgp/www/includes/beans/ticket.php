@@ -1056,4 +1056,11 @@ class ticket {
         
         return true;
     }
+    
+    public function generarTextoDireccion() {
+        if( is_a($this->tic_georef, "georeferencias") ) {
+            return $this->tic_georef->generarTextoDireccion();
+        } 
+        return "";
+    }
 }

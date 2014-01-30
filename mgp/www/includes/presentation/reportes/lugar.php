@@ -1,6 +1,7 @@
 <?php 
 include_once "common/cdatatypes.php";
 include_once "beans/functions.php";
+include_once "beans/georeferencias.php";
 
 class CDH_LUGAR extends CDataHandler
 {
@@ -15,10 +16,10 @@ class CDH_LUGAR extends CDataHandler
         $fld = $this->m_parent;
         $val = $fld->readValue();
         
-        $html = generarTextoDireccion($val);
-                
+        $geo = new georeferencias();
+        $geo->load($val);
+        $html = $geo->generarTextoDireccion();
+        
         return $html;
     }
-	
-
 }

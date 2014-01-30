@@ -1,6 +1,7 @@
 <?php
 include_once 'beans/ticket.php';
 include_once 'beans/prestacion.php';
+include_once 'beans/georeferencias.php';
 
 class cambio_estado_mgp {
     public $signature;  //  signature (como aparece en el instructivo)
@@ -22,7 +23,7 @@ class cambio_estado_mgp {
      * 
      * @param ticket $t
      */
-    function loadFromTicket($t) {
+    function loadFromTicket(ticket $t) {
         
         $this->signature;  //  signature (como aparece en el instructivo)
         $this->tic_identificador = $t->tic_identificador; //  tic_identificador
@@ -58,7 +59,7 @@ class cambio_estado_mgp {
             $this->email        = "";   //  ciu_email del solicitante
         }
         
-        $this->desc_ubicacion   = generarTextoDireccion($t->tic_lugar);  //  descripcion de la ubicacion del reclamo, usando calle, callenro, barrio, etc. de lugar del reclamo 
+        $this->desc_ubicacion   = $t->generarTextoDireccion();  //  descripcion de la ubicacion del reclamo, usando calle, callenro, barrio, etc. de lugar del reclamo 
     }
     
     private function determinarClaseTicket($tic_nro) {
