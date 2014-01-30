@@ -29,11 +29,11 @@ class eventbus_limpieza {
             //Secret
             $secret = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'limpieza.secret','') );
             
-            $ticket_json = json_encode($t);
+            $ticket_json = json_encode($t,JSON_UNESCAPED_UNICODE);
             $data = json_encode(array(
                 'ticket'   => $t, 
                 'signature' => md5($secret.$ticket_json)
-            )); 
+            ),JSON_UNESCAPED_UNICODE); 
 
             //Envio el mensaje
             $ret = $this->put($url, $data);

@@ -54,7 +54,7 @@ class eventbus_miciudad {
                         'fecha'             => $avance->tav_tstamp_in,
                         'visibleCiudadano'  => ($avance->tic_estado_in==='pendiente' || $avance->tic_estado_in==='rechazado indebido' ? false : true),
                         'descripcion'       => $avance->tav_nota
-                    )); 
+                    ),JSON_UNESCAPED_UNICODE); 
 
                     //Envio el mensaje URL
                     $msg_url = $url."?apiKey=".$api_key."&hash=".md5($api_secret.$data);

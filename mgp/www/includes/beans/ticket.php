@@ -577,7 +577,7 @@ class ticket {
      * @return string
      */
     function toJSON() {
-        return json_encode($this);
+        return json_encode($this,JSON_UNESCAPED_UNICODE);
     }
     
     
@@ -886,28 +886,28 @@ class ticket {
         $subject = '';        
         if($email!='') {
 
-            //Armo la dirección (retorna HTML)
-            $direccion = $this->tic_georef->generarTextoDireccion(true); 
+            //Armo la dirección (retorna HTML, sin elementos)
+            $direccion = $this->tic_georef->generarTextoDireccion(true,false); 
  
             $last_avance = $prestacion->getLastAvance();
 
             //Campos del template que van al body del mail
             $tem_fld = json_encode( array(
-                'tic_identificador'     => $this->tic_identificador,
-                'prestacion'            => htmlentities($prestacion->tpr_description, ENT_QUOTES, "UTF-8", false),
-                'prestacion_completa'   => htmlentities($prestacion->tpr_description_full, ENT_QUOTES, "UTF-8", false),
+                'tic_identificador'     => strtolower($this->tic_identificador),
+                'prestacion'            => $prestacion->tpr_description,
+                'prestacion_completa'   => $prestacion->tpr_description_full,
                 'lugar'                 => $direccion, 
                 'lat'                   => $this->tic_georef->tic_coordx,
                 'lng'                   => $this->tic_georef->tic_coordy,
-                'nombre'                => htmlentities($nombres,ENT_QUOTES,"UTF-8",false),
-                'apellido'              => htmlentities($apellido,ENT_QUOTES,"UTF-8",false),
+                'nombre'                => $nombres,
+                'apellido'              => $apellido,
                 'estado_ticket'         => $this->tic_estado,
                 'fecha'                 => ISO8601toLocale($last_avance->tav_tstamp_in),
                 'estado_prest'          => $prestacion->ttp_estado,
-                'nota'                  => htmlentities($nota,ENT_QUOTES,"UTF-8",false),
+                'nota'                  => $nota,
                 'plazo'                 => ISO8601toLocale($this->tic_tstamp_plazo),
                 'plazo_sin_hora'        => substr(ISO8601toLocale($this->tic_tstamp_plazo),0,10),
-                'tic_tipo'              => $this->tic_tipo
+                'tic_tipo'              => strtolower($this->tic_tipo)
             ),JSON_UNESCAPED_UNICODE);
 
             $msg = new cmessage();

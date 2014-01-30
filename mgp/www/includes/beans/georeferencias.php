@@ -384,7 +384,7 @@ class georeferencias {
     	return $geo;
     }
     
-    function generarTextoDireccion($use_html=true) {
+    function generarTextoDireccion($use_html=true,$mostrar_elemento=true) {
        $mostrar = "";
        
        $cnro = intval($this->tic_nro_puerta,10);
@@ -402,7 +402,8 @@ class georeferencias {
                  $mostrar.= (isset($this->tic_piso) && $this->tic_piso!='' ? '<b>Piso:</b> '.$this->tic_piso : ''); 
                  $mostrar.= (isset($this->tic_dpto) && $this->tic_dpto!='' ? '<b>Departamento:</b> '.$this->tic_dpto.'<br/>' : '');
                  $mostrar.= (isset($this->tic_barrio) && $this->tic_barrio!='' ? '<b>Barrio:</b> '.$this->tic_barrio.'<br/>' : '');
-                 $mostrar.= (isset($this->id_elemento) && $this->id_elemento!='' ? '<b>Luminaria:</b> '.$this->id_elemento : '');
+                 if($mostrar_elemento)
+                    $mostrar.= (isset($this->id_elemento) && $this->id_elemento!='' ? '<b>Luminaria:</b> '.$this->id_elemento : '');
                  break;
             case "SEMAFORO":
                  if($this->alternativa=="CALLE")
@@ -413,7 +414,8 @@ class georeferencias {
                  $mostrar.= (isset($this->tic_piso) && $this->tic_piso!='' ? '<b>Piso:</b> '.$this->tic_piso : ''); 
                  $mostrar.= (isset($this->tic_dpto) && $this->tic_dpto!='' ? '<b>Departamento:</b> '.$this->tic_dpto.'<br/>' : '');
                  $mostrar.= (isset($this->tic_barrio) && $this->tic_barrio!='' ? '<b>Barrio:</b> '.$this->tic_barrio.'<br/>' : '');
-                 $mostrar.= (isset($this->id_elemento) && $this->id_elemento!='' ? '<b>Semáforo:</b> '.$this->id_elemento : '');
+                 if($mostrar_elemento)
+                     $mostrar.= (isset($this->id_elemento) && $this->id_elemento!='' ? '<b>Semáforo:</b> '.$this->id_elemento : '');
                  break;
 
             case "COLECTIVO":

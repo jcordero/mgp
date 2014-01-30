@@ -31,10 +31,12 @@ class eventbus_mgp {
         //Secret
         $secret = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'mgp.secret','') );
             
-        $ticket_json = json_encode($c);
+        //Firma
+        $ticket_json = json_encode($c,JSON_UNESCAPED_UNICODE);
         $c->signature = md5($ticket_json.$secret);
         
-        $data = json_encode($c); 
+        //Creo el payload
+        $data = json_encode($c,JSON_UNESCAPED_UNICODE); 
 
         //Envio el mensaje
         $ret = $this->put($url, $data);

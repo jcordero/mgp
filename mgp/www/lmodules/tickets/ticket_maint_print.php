@@ -155,7 +155,7 @@ class class_tic_ticket_upd_print extends cclass_maint_print
             if($obj_lugar->tipo=="LUMINARIA" || $obj_lugar->tipo=="SEMAFORO" || $obj_lugar->tipo=="DOMICILIO") {
                 $geo = new georeferencias();
                 $geo->load(_F($p,"tic_lugar"));
-                $lugar = $geo->generarTextoDireccion();
+                $lugar = $geo->generarTextoDireccion(true,false);
             }
             
             $pdml = '<table><tr><td><b>Ubicación</b></td></tr></table>
