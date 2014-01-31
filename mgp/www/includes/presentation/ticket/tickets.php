@@ -86,7 +86,10 @@ class CDH_TICKETS extends CDataHandler
             //titulo
             $tit = 'Tickets de '.$siglas;
             
-            return json_encode( array("tickets" => $ret, "titulo" => $tit, "paginas"=>  ceil($cantidad/25) ));
+            return json_encode( array(
+                "tickets" => $ret, 
+                "titulo" => $tit, 
+                "paginas"=>  ceil($cantidad/25) ),JSON_UNESCAPED_UNICODE);
         }
         
         

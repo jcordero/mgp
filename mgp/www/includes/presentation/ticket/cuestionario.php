@@ -117,7 +117,7 @@ class CDH_CUESTIONARIO extends CDataHandler
         }
 
         //Persisto la respuesta como un objeto JSON
-        $fld->setValue(json_encode($result));
+        $fld->setValue(json_encode($result),JSON_UNESCAPED_UNICODE);
     }
 
     

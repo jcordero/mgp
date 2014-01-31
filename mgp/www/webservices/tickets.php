@@ -106,9 +106,9 @@ if($ret['resultado']!=='OK')
     header('HTTP/1.0 400 Bad Request');
             
 if($callback==='')
-    echo json_encode($ret);
+    echo json_encode($ret,JSON_UNESCAPED_UNICODE);
 else
-    echo $callback.'('.json_encode($ret).')';
+    echo $callback.'('.json_encode($ret,JSON_UNESCAPED_UNICODE).')';
 
 exit;
 

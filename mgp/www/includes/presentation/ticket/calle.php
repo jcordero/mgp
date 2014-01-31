@@ -36,7 +36,7 @@ class CDH_CALLE extends CDataHandler
             error_log( "CDH_CALLE callejero_mgp() ->".$exception );
         }
        
-        return json_encode($ret);
+        return json_encode($ret,JSON_UNESCAPED_UNICODE);
     }
     
     function getJsIncludes()
@@ -62,7 +62,7 @@ class CDH_CALLE extends CDataHandler
                 if( isset($ret["key"]) && $ret["key"]==$p )
                     return "OK";
                 else
-                    return json_encode($ret);
+                    return json_encode($ret,JSON_UNESCAPED_UNICODE);
             }
         }
         
@@ -72,7 +72,7 @@ class CDH_CALLE extends CDataHandler
             $ret_v[] = $row['gca_descripcion'];
         }
         $ret = array("codigos"=>$ret_c,"calles"=>$ret_v);
-        $key = md5(json_encode($ret));
+        $key = md5(json_encode($ret),JSON_UNESCAPED_UNICODE);
         $ret["key"] = $key;
         
         if(function_exists("apc_store")) {
@@ -82,7 +82,7 @@ class CDH_CALLE extends CDataHandler
         if( isset($ret["key"]) && $ret["key"]==$p )
             return "OK";
         else
-            return json_encode($ret);
+            return json_encode($ret,JSON_UNESCAPED_UNICODE);
     }
 }
 

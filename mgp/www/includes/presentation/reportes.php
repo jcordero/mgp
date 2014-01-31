@@ -46,7 +46,11 @@ sum(if(qu.cqu_actitud in ('NEUTRAL',''),1,0)) as neutral
 			$totals['neutral']+=$row['neutral'];
 		}
 		$tot=array("TOTALES",$totals['totales'],$totals['conforme'],$totals['noconforme'],$totals['nosabe'],$totals['positiva'],$totals['negativa'],$totals['neutral']);
-		return json_encode((object) array("result"=>"OK","rows"=>$rows,"columns"=>array("Operador","Total","Conforme","No conforme","No sabe","Actitud positiva","Actitud negativa","Actitud Neutral"),"totals"=>$tot));
+		return json_encode((object) array(
+                    "result"=>"OK",
+                    "rows"=>$rows,
+                    "columns"=>array("Operador","Total","Conforme","No conforme","No sabe","Actitud positiva","Actitud negativa","Actitud Neutral"),
+                    "totals"=>$tot),JSON_UNESCAPED_UNICODE);
 	}
 	
 	function operador($params)
@@ -147,7 +151,9 @@ sum(if(qu.cqu_actitud in ('NEUTRAL',''),1,0)) as neutral
 		$scaleX = "0,0,$max_total";
 		$image['operador'] = '<img src="http://chart.apis.google.com/chart?chxt=x&chxr='.$scaleX.'&chbh=a&chs=500x300&cht=bhg&chco='.$colores.'&chd=t:'.$series3.'&chds='.$scale.'&chdl='.$labels.'&chtt=Reporte+por+operador">';
 		
-		return json_encode((object) array("result"=>"OK","image"=>$image));
+		return json_encode((object) array(
+                    "result"=>"OK",
+                    "image"=>$image),JSON_UNESCAPED_UNICODE);
 	}
 
 	
@@ -249,7 +255,9 @@ group by qu.cqu_barrio ORDER BY count(*)";
 		$scaleX = "0,0,$max_total";
 		$image['barrio'] = '<img src="http://chart.apis.google.com/chart?chxt=x&chxr='.$scaleX.'&chbh=a&chs=350x850&cht=bhg&chco='.$colores.'&chd=t:'.$series3.'&chds='.$scale.'&chdl='.$labels.'&chtt=Reporte+por+Barrio">';
 		
-		return json_encode((object) array("result"=>"OK","image"=>$image));
+		return json_encode((object) array(
+                    "result"=>"OK",
+                    "image"=>$image),JSON_UNESCAPED_UNICODE);
 	}
 	
 	
@@ -289,7 +297,11 @@ group by qu.cqu_barrio ORDER BY count(*)";
 			$totals['neutral']+=$row['neutral'];
 		}
 		$tot=array("TOTALES",$totals['totales'],$totals['conforme'],$totals['noconforme'],$totals['nosabe'],$totals['positiva'],$totals['negativa'],$totals['neutral']);
-		return json_encode((object) array("result"=>"OK","rows"=>$rows,"columns"=>array("Barrio","Total","Conforme","No conforme","No sabe","Actitud positiva","Actitud negativa","Actitud Neutral"),"totals"=>$tot));
+		return json_encode((object) array(
+                    "result"=>"OK",
+                    "rows"=>$rows,
+                    "columns"=>array("Barrio","Total","Conforme","No conforme","No sabe","Actitud positiva","Actitud negativa","Actitud Neutral"),
+                    "totals"=>$tot),JSON_UNESCAPED_UNICODE);
 	}	
 	
 	
@@ -429,7 +441,9 @@ group by qu.cqu_prestacion ORDER BY count(*) DESC";
 		$scaleX = "0,0,$max_total";
 		$image['prestacion'] = '<img src="http://chart.apis.google.com/chart?chxt=x&chxr='.$scaleX.'&chbh=a&chs=600x500&cht=bhg&chco='.$colores.'&chd=t:'.$series3.'&chds='.$scale.'&chdl='.$labels.'&chtt=Reporte+por+Prestacion">';
 		
-		return json_encode((object) array("result"=>"OK","image"=>$image));
+		return json_encode((object) array(
+                    "result"=>"OK",
+                    "image"=>$image),JSON_UNESCAPED_UNICODE);
 	}
 
 function reportePrestacion($params)
@@ -466,7 +480,11 @@ group by qu.cqu_prestacion ORDER BY count(*) DESC";
 			$totals['neutral']+=$row['neutral'];
 		}
 		$tot=array("TOTALES",$totals['totales'],$totals['conforme'],$totals['noconforme'],$totals['nosabe'],$totals['positiva'],$totals['negativa'],$totals['neutral']);
-		return json_encode((object) array("result"=>"OK","rows"=>$rows,"columns"=>array("Prestación","Total","Conforme","No conforme","No sabe","Actitud positiva","Actitud negativa","Actitud Neutral"),"totals"=>$tot));
+		return json_encode((object) array(
+                    "result"=>"OK",
+                    "rows"=>$rows,
+                    "columns"=>array("Prestación","Total","Conforme","No conforme","No sabe","Actitud positiva","Actitud negativa","Actitud Neutral"),
+                    "totals"=>$tot),JSON_UNESCAPED_UNICODE);
 }
 	
 	
@@ -565,7 +583,9 @@ group by HOUR(cqu_egreso_fecha) ORDER BY 1";
 		$scaleX = "0,0,$max_total";
 		$image['horarios'] = '<img src="http://chart.apis.google.com/chart?chxt=x&chxr='.$scaleX.'&chbh=a&chs=600x400&cht=bhg&chco='.$colores.'&chd=t:'.$series3.'&chds='.$scale.'&chdl='.$labels.'&chtt=Reporte+por+horario">';
 		
-		return json_encode((object) array("result"=>"OK","image"=>$image));
+		return json_encode((object) array(
+                    "result"=>"OK",
+                    "image"=>$image),JSON_UNESCAPED_UNICODE);
 	}
 	
 	function reporteHorarios($params)
@@ -602,7 +622,11 @@ group by HOUR(cqu_egreso_fecha) ORDER BY 1";
 			$totals['neutral']+=$row['neutral'];
 		}
 		$tot=array("TOTALES",$totals['totales'],$totals['conforme'],$totals['noconforme'],$totals['nosabe'],$totals['positiva'],$totals['negativa'],$totals['neutral']);
-		return json_encode((object) array("result"=>"OK","rows"=>$rows,"columns"=>array("Hora","Total","Conforme","No conforme","No sabe","Actitud positiva","Actitud negativa","Actitud Neutral"),"totals"=>$tot));
+		return json_encode((object) array(
+                    "result"=>"OK",
+                    "rows"=>$rows,
+                    "columns"=>array("Hora","Total","Conforme","No conforme","No sabe","Actitud positiva","Actitud negativa","Actitud Neutral"),
+                    "totals"=>$tot),JSON_UNESCAPED_UNICODE);
 	}
 }
 ?>

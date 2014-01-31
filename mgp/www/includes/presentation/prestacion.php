@@ -49,7 +49,7 @@ class CDH_PRESTACION extends CDataHandler
         {
             $conjunto[] =  $row;
         }
-        return json_encode($conjunto);
+        return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
 
     function getCodeDescription($code)
@@ -63,7 +63,7 @@ class CDH_PRESTACION extends CDataHandler
         {
             $conjunto[] = $row;
         }
-        return json_encode($conjunto);
+        return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
 	
 }

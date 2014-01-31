@@ -39,7 +39,7 @@ class CDH_DIRECCION extends CDataHandler
                 catch (SoapFault $exception)
                 {
                     error_log( "direccion.php coordenada_calle_altura() ->".$exception );
-                    return json_encode(array("resultado"	=> 	"error"));
+                    return json_encode(array("resultado"	=> 	"error"),JSON_UNESCAPED_UNICODE);
                 }
 
                 //Recupero el barrio
@@ -51,7 +51,7 @@ class CDH_DIRECCION extends CDataHandler
                 catch (SoapFault $exception)
                 {
                     error_log( "direccion.php zonificacion_latlong() ->".$exception );
-                    return json_encode(array("resultado"	=> 	"error"));
+                    return json_encode(array("resultado"	=> 	"error"),JSON_UNESCAPED_UNICODE);
                 }		 
             }
             else
@@ -72,7 +72,7 @@ class CDH_DIRECCION extends CDataHandler
                 catch (SoapFault $exception)
                 {
                     error_log( "direccion.php coordenada_calle_calle() ->".$exception );
-                    return json_encode(array("resultado"	=> 	"error"));
+                    return json_encode(array("resultado"	=> 	"error"),JSON_UNESCAPED_UNICODE);
                 }
 
 
@@ -85,7 +85,7 @@ class CDH_DIRECCION extends CDataHandler
                 catch (SoapFault $exception)
                 {
                     error_log( "direccion.php zonificacion_latlong() ->".$exception );
-                    return json_encode(array("resultado"	=> 	"error"));
+                    return json_encode(array("resultado"	=> 	"error"),JSON_UNESCAPED_UNICODE);
                 }		 
             }
             else
@@ -143,11 +143,11 @@ class CDH_DIRECCION extends CDataHandler
             catch (SoapFault $exception)
             {
                 error_log( "direccion.php elementos_fijos() ->".$exception );
-                return json_encode(array("resultado"	=> 	"error"));
+                return json_encode(array("resultado"	=> 	"error"),JSON_UNESCAPED_UNICODE);
             }   
         }
                 
-        return json_encode($res);
+        return json_encode($res,JSON_UNESCAPED_UNICODE);
     }
 
     
@@ -204,7 +204,7 @@ class CDH_DIRECCION extends CDataHandler
         while( $row=$primary_db->_fetch_row($rs) ) {
             $lista[] = array("playa"=>$row["glu_nombre"], "lat"=>$row["glu_lat"], "lng"=>$row["glu_lng"]);
         }
-        return json_encode($lista);
+        return json_encode($lista,JSON_UNESCAPED_UNICODE);
     }
 }
 ?>

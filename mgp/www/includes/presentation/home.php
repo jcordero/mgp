@@ -52,7 +52,7 @@ class CDH_HOME extends CDataHandler
         if(strlen($doc)<=8 && $apellido=='' && $ani=="")
         {
             $this->setAnonimo();
-            return json_encode(array( "ciudadanos"=>$conjunto, "url"=>''));
+            return json_encode(array( "ciudadanos"=>$conjunto, "url"=>''),JSON_UNESCAPED_UNICODE);
         }
 
         //Esta declarado el doc?, lo busco por ahi
@@ -140,7 +140,7 @@ class CDH_HOME extends CDataHandler
         
         $resp = array("ciudadanos"=>$conjunto, "url"=>$url);
         error_log("HOME::doBuscar($params) RESPONDE: ".print_r($resp,true));
-        return json_encode($resp);
+        return json_encode($resp,JSON_UNESCAPED_UNICODE);
     }
 
     
@@ -169,7 +169,7 @@ class CDH_HOME extends CDataHandler
         $this->setAnonimo();            
         $url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/sesion_cierre.php?OP=M");
         
-        return json_encode(array("url"=>$url));
+        return json_encode(array("url"=>$url),JSON_UNESCAPED_UNICODE);
     }
 
     /** Crear un Nuevo Ticket
@@ -181,7 +181,7 @@ class CDH_HOME extends CDataHandler
     {
         global $sess;
         $url = $sess->encodeURL(WEB_PATH."/lmodules/tickets/tickets_maint_n.php?OP=N&next=".WEB_PATH."/index.php");
-        return json_encode(array("url"=>$url));
+        return json_encode(array("url"=>$url),JSON_UNESCAPED_UNICODE);
     }
     
     
@@ -197,7 +197,7 @@ class CDH_HOME extends CDataHandler
     	global $sess;
         $doc = $this->m_person->person_id;            
         $url = $sess->encodeURL(WEB_PATH."/lmodules/ciudadanos/ciudadanos_maint.php?OP=M&ciu_code={$doc}&next=".WEB_PATH."/index.php");
-        return json_encode(array("url"=>$url));
+        return json_encode(array("url"=>$url),JSON_UNESCAPED_UNICODE);
     }
     
     
@@ -226,7 +226,7 @@ class CDH_HOME extends CDataHandler
             //No hay datos para buscar... 
             if( $nro=="" || $anio=="")
             {
-            	return json_encode(array());
+            	return json_encode(array(),JSON_UNESCAPED_UNICODE);
             }
         }
 
@@ -236,7 +236,7 @@ class CDH_HOME extends CDataHandler
        	if( $ciu_code=="" || $ciu_code==0)
         {
             //Hay un fulano logeado?
-            return json_encode(array());
+            return json_encode(array(),JSON_UNESCAPED_UNICODE);
         }
 
         //Busco por codigo en los reclamos
@@ -347,7 +347,7 @@ class CDH_HOME extends CDataHandler
             else
                 $conjunto[$key]['url_reiterar'] = "";
         }
-        return json_encode($conjunto);
+        return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
 
     /** Iniciar una sesion.
@@ -374,7 +374,7 @@ class CDH_HOME extends CDataHandler
         else
         {
             error_log("doIniciar requiere 4 paramatros. Recibido: $params");
-            return json_encode("Error: cantidad incorrecta de parametros");
+            return json_encode("Error: cantidad incorrecta de parametros",JSON_UNESCAPED_UNICODE);
         }
         
         //Cargo la sesion
@@ -384,13 +384,13 @@ class CDH_HOME extends CDataHandler
         if($this->m_session->talk_session!=0 && $this->m_session->talk_ani!=$ani )
         {
             $this->doTerminar();
-            return json_encode("Sesion cerrada");
+            return json_encode("Sesion cerrada",JSON_UNESCAPED_UNICODE);
         }
 
         //Si hay una sesion abierta, para el mismo ANI, salgo
         if($this->m_session->talk_session!=0 && $this->m_session->talk_ani==$ani )
         {
-            return json_encode("Sesion abierta");
+            return json_encode("Sesion abierta",JSON_UNESCAPED_UNICODE);
         }
 
         //Por defecto se elije al codigo 0 que es el ciudadano ANONIMO
@@ -447,7 +447,7 @@ class CDH_HOME extends CDataHandler
             error_log("doNuevoTicket Error no se indica sesion a modificar");
         }
 
-        return json_encode(array("url"=>$url));
+        return json_encode(array("url"=>$url),JSON_UNESCAPED_UNICODE);
    }
 
     /** Buscar contactos previos (sesiones) del ciudadano
@@ -477,7 +477,7 @@ class CDH_HOME extends CDataHandler
 
         //Es el usuario ANONIMO?
         if($id==0)
-            return json_encode($conjunto);
+            return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
                 
         //Busco los contactos de este usuario
         $sql = "SELECT cse_code, chi_fecha, chi_motivo, use_code, chi_canal, chi_nota 
@@ -503,7 +503,7 @@ class CDH_HOME extends CDataHandler
             );
         }
         	
-        return json_encode($conjunto);
+        return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
 
     /** Buscar un ciudadano en la base dado su ANI, e iniciar la sesion si el entry_pont != 0
@@ -534,14 +534,14 @@ class CDH_HOME extends CDataHandler
         else
         {
             error_log("doBuscarAni() ERROR Se esperan 5 parametros. Recibi: $params");
-            return json_encode(array());
+            return json_encode(array(),JSON_UNESCAPED_UNICODE);
         }
 
         //Sin sesion iniciada no se puede hacer nada
         if($user_session=="")
         {
             error_log("doBuscarAni No se indica sesion");
-            return json_encode(array());
+            return json_encode(array(),JSON_UNESCAPED_UNICODE);
         }
         else
         {
@@ -563,7 +563,7 @@ class CDH_HOME extends CDataHandler
             $this->m_session->person_apellido = '';
             $this->m_session->person_id = 0;
             $this->m_session->saveSession("person");
-            return json_encode(array());
+            return json_encode(array(),JSON_UNESCAPED_UNICODE);
         }
 
         //busco al ani en las sesiones viejas
@@ -637,7 +637,7 @@ class CDH_HOME extends CDataHandler
     	//Salvo la identificacion en la sesion
         $this->m_session->saveSession("person");
         
-        return json_encode($conjunto);
+        return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
 
     /** Establecer la sesion dado un codigo de ciudadano 
@@ -675,7 +675,7 @@ class CDH_HOME extends CDataHandler
             $this->m_session->person_id = 0;
             $this->m_session->saveSession("person");
 
-            return json_encode(array());
+            return json_encode(array(),JSON_UNESCAPED_UNICODE);
         }
 
         //busco los datos del usuario
@@ -704,7 +704,7 @@ class CDH_HOME extends CDataHandler
             }
         }
         $this->m_session->saveSession("person");
-        return json_encode(array());
+        return json_encode(array(),JSON_UNESCAPED_UNICODE);
     }
     
 	/** Crea un nuevo ID que sea unico */

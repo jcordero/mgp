@@ -63,7 +63,7 @@ class CDH_DASHBOARD extends CDataHandler {
         $contadores['cerrados'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ('cerrado','resuelto','rechazado','rechazado indebido') {$extra}");
         $contadores['vencidos'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ('pendiente','en espera','en curso') and datediff(now(),tic_tstamp_plazo)>0 {$extra}");
         
-        return json_encode(array('tickets' => $conjunto, 'contadores' => $contadores));
+        return json_encode(array('tickets' => $conjunto, 'contadores' => $contadores),JSON_UNESCAPED_UNICODE);
     }
     
     function getTicketInfo($p) {

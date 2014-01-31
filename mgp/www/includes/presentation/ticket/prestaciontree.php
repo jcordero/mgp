@@ -52,7 +52,7 @@ class CDH_PRESTACIONTREE extends CDH_KTREE
         //Armo el Cuestionario        
         $conjunto[] = CDH_CUESTIONARIO::crearCuestionario($prestacion);
         
-        return json_encode($conjunto);
+        return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -76,7 +76,7 @@ class CDH_PRESTACIONTREE extends CDH_KTREE
         {
             $conjunto[] = array('tru_code' => $row['tru_code'],'tru_detalle' => $row['tru_detallle']) ;
         }
-        return json_encode($conjunto);
+        return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
 }
 ?>

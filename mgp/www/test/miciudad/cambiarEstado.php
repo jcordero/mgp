@@ -25,7 +25,7 @@ if($metodo=='PUT') {
     error_log("Recibi operacion: numeroSolicitud=$numeroSolicitud estado=$estado estadoNombre=$estadoNombre fecha=$fecha");
     
     header('HTTP/1.0 201 Status');
-    echo json_encode(array("id" => $estado));
+    echo json_encode(array("id" => $estado),JSON_UNESCAPED_UNICODE);
 }
 else
 {

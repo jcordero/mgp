@@ -495,7 +495,7 @@ class ticket {
                 'tic_tstamp_in'     => ISO8601toDate($this->tic_tstamp_in), 
                 'use_code'          => $sess->getUserId(), 
                 'tic_nota_in'       => $this->tic_nota_in, 
-                'tic_lugar'         => json_encode($this->tic_lugar), 
+                'tic_lugar'         => json_encode($this->tic_lugar,JSON_UNESCAPED_UNICODE), 
                 'tic_barrio'        => $this->tic_georef->tic_barrio, 
                 'tic_cgpc'          => $this->tic_georef->tic_cgpc, 
                 'tic_coordx'        => $this->tic_georef->tic_coordx, 
@@ -656,7 +656,7 @@ class ticket {
                 $this->tic_lugar->id_elemento = $id_elemento;
                 
                 //Actualizo los datos de georeferencia en la base, con el nuevo ID de luminaria
-                $lugar = json_encode($this->tic_georef->createLugar());
+                $lugar = json_encode($this->tic_georef->createLugar(),JSON_UNESCAPED_UNICODE);
                 $params = array(
                     "lugar"             =>  $lugar, 
                     "tic_nro"           =>  $this->tic_nro,

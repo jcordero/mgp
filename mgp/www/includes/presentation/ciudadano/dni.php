@@ -146,7 +146,7 @@ class CDH_DNI extends CDataHandler {
                     );
                 }
             }
-            return json_encode($ret);
+            return json_encode($ret,JSON_UNESCAPED_UNICODE);
         }
         
         private function getOptions() {

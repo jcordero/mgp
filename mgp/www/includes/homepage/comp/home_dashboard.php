@@ -12,7 +12,7 @@ if(!class_exists('home_dashboard'))
                 $dash_config = (isset($_SESSION["dash_config"]) ? $_SESSION["dash_config"] : (object) array("boton"=>"ABIERTOS","canal"=>"","organismo"=>"","prestacion"=>"","barrio"=>""));
                 
                 $html = '   <script type="text/javascript">
-                                var dash_config = '.json_encode($dash_config).';
+                                var dash_config = '.json_encode($dash_config,JSON_UNESCAPED_UNICODE).';
                             </script>
                             
                             <div class="row">

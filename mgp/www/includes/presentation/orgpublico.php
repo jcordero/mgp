@@ -47,7 +47,7 @@ class CDH_ORGPUBLICO extends CDH_SELECTARRAY
             $conjunto[] =  $row;
         }
 
-        return json_encode($conjunto);
+        return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
 	
 }

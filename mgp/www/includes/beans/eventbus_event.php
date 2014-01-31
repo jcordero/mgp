@@ -20,7 +20,7 @@ class eventbus_event {
         $params = array(
             'eev_code'      =>  $primary_db->Sequence('eve_events'),
             'eev_task'      =>  $this->eev_task, 
-            'eev_data'      => json_encode($this->eev_data)
+            'eev_data'      => json_encode($this->eev_data,JSON_UNESCAPED_UNICODE)
         );
         $primary_db->do_execute($sql,$err,$params);
 

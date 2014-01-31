@@ -62,7 +62,7 @@ class CDH_REPORTES extends CDataHandler {
             ); 
         }
         
-        return json_encode($conjunto);
+        return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
     
     function getTicketInfo($p) {
@@ -196,7 +196,7 @@ class CDH_REPORTES extends CDataHandler {
                 )
             )
         );
-        return json_encode($r);
+        return json_encode($r,JSON_UNESCAPED_UNICODE);
     } 
     
     
