@@ -396,9 +396,9 @@ class prestacion {
     }
     
     /** El plazo es un string con tres partes
-     *  <cantidad> <unidad> <tipo>
-     * @param type $tpr_plazo
-     * @return type
+     *  [cantidad] [unidad] [tipo]
+     * @param string $tpr_plazo
+     * @return string[dias, unidad, modo] 
      */
     static function plazoComponents($tpr_plazo) {
         if($tpr_plazo=="")
@@ -492,13 +492,33 @@ class prestacion {
         return $resultado;
     }
     
+    /** Crea una descripcion completa de la prestacion
+     * 
+     * @global cdbdata $primary_db
+     * @param string $tpr_code
+     * @return string
+     */
     static function getFullDescription($tpr_code) {
         global $primary_db;
+        
+        if(function_exists("apc_fetch")) {
+            $resultado = false;
+            $lista = apc_fetch("fullDescription",$resultado);
+            if($resultado && array_key_exists($tpr_code, $lista)) {
+                return $lista[$tpr_code];
+            }
+        }
+        
         $desc = "";
         for($j=2; $j<=strlen($tpr_code); $j+=2) {
             $cod = substr($tpr_code, 0, $j);
             $parte = $primary_db->QueryString("select tpr_detalle from tic_prestaciones where tpr_code='{$cod}'");
             $desc.=($desc=='' ? $parte : ' / '.$parte);
+        }
+        
+        if(function_exists("apc_store")) {
+            $lista[$tpr_code] = $desc;
+            apc_store("fullDescription", $lista);
         }
         
         return $desc;
@@ -586,7 +606,7 @@ class prestacion {
         $p->avance[] = $avance;
         
         //Cuestionario de la prestacion
-        $p->cuestionario = cuestionario::fromForm($obj, $p);
+        $p->cuestionario = cuestionario::fromForm($p);
         
         //Hay que determinar que roles hay que levantar desde la definicion del GIS de prestaciones.
         $coordx = (double) _F($obj,"tic_coordx");

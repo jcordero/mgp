@@ -31,7 +31,7 @@ class CDH_PLAZA extends CDH_SELECTARRAY
 		
 	function getJsIncludes()
 	{	
-		return '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/plaza.js"></script>';
+		return '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ticket/plaza.js"></script>';
 	}
 	
 	function getPlazaDetails($plaza)

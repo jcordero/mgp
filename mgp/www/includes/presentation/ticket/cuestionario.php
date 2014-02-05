@@ -55,7 +55,7 @@ class CDH_CUESTIONARIO extends CDataHandler
         $fld = $this->m_parent;
 
         if($fld->m_ClassParams=='') {
-            error_log("CDH_PRESTACION::loadForm() Falta definir campo prestacion en el classparams.");
+            error_log("CDH_CUESTIONARIO::loadForm() Falta definir campo prestacion en el classparams.");
             $fld->setValue('');
             return;
         }
@@ -67,47 +67,50 @@ class CDH_CUESTIONARIO extends CDataHandler
             return;
         }
 
-        $prestacion = $_POST["m_".$fld->m_ClassParams];
-        if($prestacion=='')
+        $tpr_code = $_POST["m_".$fld->m_ClassParams];
+        if($tpr_code=='')
         {
             $fld->setValue('');
-            error_log("CDH_PRESTACION::loadForm() No hay una prestacion seleccionada.");
+            error_log("CDH_CUESTIONARIO::loadForm() No hay una prestacion seleccionada.");
             return;
         }
 
         //Proceso cuestionario
         $result = array();
-        $sql = "SELECT tpr_code, tcu_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad FROM tic_prestaciones_cuest WHERE tpr_code='{$prestacion}'";
+        $sql = "SELECT * FROM tic_prestaciones_cuest WHERE tpr_code='{$tpr_code}'";
         $re = $primary_db->do_execute($sql);
         while( $myrow=$primary_db->_fetch_row($re) )
         {
             $q = $myrow['tcu_code']; //codigo unico de la pregunta
             $tipo = $myrow['tpr_tipo_preg'];
 
-            //Proceso la(s) respuesta(s) a la pregunta
+            //Proceso la(s) respuesta(s) a la pregunta (si llega en el POST)
             $res = '';
-            if( isset($_POST['cuest_'.$q]) )
+            $id = 'cuest_'.$q;
+            if( isset($_POST[$id]) )
             {
-                $recibido = $_POST['cuest_'.$q];
+                $recibido = $_POST[$id];
                 if( is_array($recibido) )
                 {
                     //Si es un multiple, el valor elegido es un array
-                    foreach($recibido as $rsp)
+                    foreach($recibido as $rsp) {
                         $res.= $rsp.'|';
+                    }
                 }
                 else
                 {
-                    //Si es un checkbox
-                    if($tipo=='CHECKBOX')
+                    //Si es un checkbox (responde con "on" cuando esta marcado)
+                    if($tipo=='CHECKBOX') {
+                        $res = ($recibido=="on" ? "SI" : "NO");
+                    } else {        
                         $res = $recibido;
-                    else        
-                        $res = $recibido;
+                    }
                 }
             }
 
             //Salvo la respuesta
             $result[] = array(
-                'tpr_code'      =>  $prestacion,
+                'tpr_code'      =>  $tpr_code,
                 'tcu_code'      =>  $q, 
                 'tpr_preg'      =>  $myrow['tpr_preg'], 
                 'tpr_tipo_preg' =>  $tipo, 
@@ -117,7 +120,7 @@ class CDH_CUESTIONARIO extends CDataHandler
         }
 
         //Persisto la respuesta como un objeto JSON
-        $fld->setValue(json_encode($result),JSON_UNESCAPED_UNICODE);
+        $fld->setValue( json_encode($result),JSON_UNESCAPED_UNICODE );
     }
 
     
@@ -231,11 +234,11 @@ class CDH_CUESTIONARIO extends CDataHandler
     /**
      * Crea el cuestionario de una prestacion en HTML
      * 
-     * @global type $primary_db
-     * @param type $prestacion
+     * @global cdbdata $primary_db
+     * @param string $tpr_code
      * @return string
      */    
-    static function crearCuestionario($prestacion)
+    static function crearCuestionario($tpr_code)
     {
         global $primary_db;
 
@@ -255,7 +258,7 @@ class CDH_CUESTIONARIO extends CDataHandler
                 </thead>
                 <tbody id="tbody_prestaciones_cuest">';
 
-        $sql2 = "SELECT tpr_code, tcu_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad FROM tic_prestaciones_cuest WHERE tpr_code='{$prestacion}'";
+        $sql2 = "SELECT tpr_code, tcu_code, tpr_orden, tpr_preg, tpr_tipo_preg, tpr_opciones, tpr_miciudad FROM tic_prestaciones_cuest WHERE tpr_code='{$tpr_code}'";
         $re2 = $primary_db->do_execute($sql2);
         
         $cant = 0;
@@ -263,7 +266,7 @@ class CDH_CUESTIONARIO extends CDataHandler
         {
             $buff = '';
             $opciones = $myrow['tpr_opciones']; 
-            $q = $myrow['tcu_code'];
+            $q = $myrow['tcu_code']; //codigo de la pregunta
             $cant++;
             
             switch($myrow['tpr_tipo_preg']) {
@@ -283,46 +286,56 @@ class CDH_CUESTIONARIO extends CDataHandler
                     break;
                 case "MULTIPLE":
                     $partes = explode(';',$opciones);
+                    $cant2 = 1;
                     foreach($partes as $parte)
                     {
                         $p = trim($parte);
-                        $buff.= '<span class="form-inline"><label for="cb_cuest_'.$cant.'">'.$p.'</label> <input type="checkbox" name="cuest_'.$q.'" id="cb_cuest_'.$cant.'"></span>  ';
+                        $buff.= '<span class="form-inline">'.
+                                    '<label for="cb_cuest_'.$cant.'_'.$cant2.'">'.$p.'</label> '.
+                                    '<input type="checkbox" name="cuest_'.$q.'[]" id="cb_cuest_'.$cant.'_'.$cant2.'" value="'.$p.'">'.
+                                '</span>  ';
+                        $cant2++;
                     }
                     break;
                 case "CHECKBOX":
                     $buff.= '<input type="checkbox" name="cuest_'.$q.'">';
                     break;
                 default:
+                    error_log("crearCuestionario($tpr_code) No se conoce el tipo {$myrow['tpr_tipo_preg']}");
             }
             
-            $html.= '<tr><td>'.$myrow['tpr_preg'].'</td><td>'.$buff.'</td></tr>';
+            $html.= '<tr><td>'.$myrow['tpr_preg'].'</td><td>'.$buff.'</td></tr>'."\n";
         }
         $html.= '</tbody>
         </table></div>
         </div>';//Seccion
 
         //Caso que no haya ninguna pregunta para esta prestacion...
-        if($cant==0)
+        if($cant==0) {
             $html = '';
-        
+        }
+        //error_log("crearCuestionario($tpr_code) $html");
         return $html;
     }
 
-    static function htmlVerCuestionario($ticket, $prestacion) {
+    static function htmlVerCuestionario($tic_nro, $prestacion) {
         global $primary_db;
         
-        if($ticket==='' || $prestacion==='')
-                return '';
+        if($tic_nro==='' || $prestacion==='') {
+            return '';
+        }
         
         $h = '<div class="cuestionario">';
-        $sql2 = "SELECT tic_nro, tpr_code, tcu_code, tpr_preg, tpr_tipo_preg, tpr_respuesta, tpr_miciudad FROM tic_ticket_cuestionario WHERE tpr_code='{$prestacion}' and tic_nro='{$ticket}'";
+        $sql2 = "SELECT tic_nro, tpr_code, tcu_code, tpr_preg, tpr_tipo_preg, tpr_respuesta, tpr_miciudad FROM tic_ticket_cuestionario WHERE tpr_code='{$prestacion}' and tic_nro='{$tic_nro}'";
         $re2 = $primary_db->do_execute($sql2);
         while( $row=$primary_db->_fetch_row($re2) )
         {
-            $h.='<div class="cuest form-inline"><span class"preg">'.$row['tpr_preg'].':</span> <span class="resp">'.$row['tpr_respuesta'].'</span></div>';
+            $h.='<div class="cuest form-inline">'.
+                    '<span class"preg">'.$row['tpr_preg'].':</span> '.
+                    '<span class="resp">'.$row['tpr_respuesta'].'</span>'.
+                '</div>';
         }
         $h.='</div>';
         return $h;
     }
 }
-?>

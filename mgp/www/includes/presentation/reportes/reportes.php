@@ -14,20 +14,27 @@ class CDH_REPORTES extends CDataHandler {
         $conjunto = array();
         
         $opc = json_decode($p);
-
-        $sql = "select tic_coordx,tic_coordy,tic_identificador from tic_ticket tic join tic_ticket_prestaciones tpr on tic.tic_nro=tpr.tic_nro left outer join tic_ticket_organismos tor on tpr.tic_nro=tor.tic_nro and tpr.tpr_code=tor.tpr_code WHERE 1=1 ";
+        $estados_abiertos = toSqlList(strtolower(CSession::getParameter($primary_db,"estados.abiertos","pendiente,en espera,en curso,inspección")));
+        $estados_cerrados = toSqlList(strtolower(CSession::getParameter($primary_db,"estados.cerrados","cerrado,resuelto,rechazado,rechazado indebido,finalizado,certificación")));
+       
+        $sql = "select tic_coordx,tic_coordy,tic_identificador ".
+                    "from tic_ticket tic ".
+                        "join tic_ticket_prestaciones tpr on tic.tic_nro=tpr.tic_nro ".
+                        "left outer join tic_ticket_organismos tor on tpr.tic_nro=tor.tic_nro and tpr.tpr_code=tor.tpr_code ".
+                    "WHERE 1=1 ";
 
         if(isset($opc->vencidos) && $opc->vencidos=="on")
-            $sql .= " and tpr.ttp_estado in ('pendiente','en curso','en espera') and tic_tstamp_plazo<NOW()";
+            $sql .= " and tpr.ttp_estado in ({$estados_abiertos}) and tic_tstamp_plazo<NOW()";
         
         //Prestaciones
         if($opc->prestacion!='')
             $sql.=" and tpr.tpr_code like '{$opc->prestacion}%'";
         
-        //Estado
+        //Estado del ticket (abierto o cerrado)
         if($opc->estado_ticket!='')
             $sql.=" and tic_estado='{$opc->estado_ticket}'";
-
+            
+        //Estado de la prestacion (pendiente, en curso, finalizado ... )
         if($opc->estado_prestacion!='')
             $sql.=" and ttp_estado='{$opc->estado_prestacion}'";
 
@@ -46,7 +53,6 @@ class CDH_REPORTES extends CDataHandler {
         //Fecha desde
         if($opc->fecha_desde!='')
             $sql.=" and tic_tstamp_in > STR_TO_DATE('{$opc->fecha_desde}', '%d/%m/%Y')";
-            
             
         //Fecha hasta
         if($opc->fecha_hasta!='')
@@ -83,13 +89,15 @@ class CDH_REPORTES extends CDataHandler {
                     $h.= '<b>Vencido hace:</b> <span class="badge badge-danger">'.intval((time()-$p)/86400, 10).' días</span><br>';
                 }    
             }
-            if($tic->tic_nota_in!="")
+            if($tic->tic_nota_in!="") {
                 $h.= '<b>Nota:</b> '.$tic->tic_nota_in.'<br>';
+            }
             
             //Fotos
             foreach($tic->archivos as $f) {
                 $h .= '<img class="iwimg" src="'.WEB_PATH.'/webservices/foto/'.$f->doc_storage.'"><br>';
             }
+            
             return $h;
         }
         
@@ -102,16 +110,21 @@ class CDH_REPORTES extends CDataHandler {
         
         $valores = array();
         $dias = array();
-        $sql = "select count(*), DATE(tic_tstamp_in) from tic_ticket tic join tic_ticket_prestaciones tpr on tic.tic_nro=tpr.tic_nro left outer join tic_ticket_organismos tor on tpr.tic_nro=tor.tic_nro and tpr.tpr_code=tor.tpr_code WHERE 1=1 ";
+        $sql = "select count(*), DATE(tic_tstamp_in) ".
+                "from tic_ticket tic ".
+                    "join tic_ticket_prestaciones tpr on tic.tic_nro=tpr.tic_nro ".
+                    "left outer join tic_ticket_organismos tor on tpr.tic_nro=tor.tic_nro and tpr.tpr_code=tor.tpr_code ".
+                "WHERE 1=1 ";
         
         //Prestaciones
         if($opc->prestacion!='')
             $sql.=" and tpr.tpr_code like '{$opc->prestacion}%'";
         
-        //Estado
+        //Estado del ticket
         if($opc->estado_ticket!='')
             $sql.=" and tic_estado='{$opc->estado_ticket}'";
 
+        //Estado de la prestacion
         if($opc->estado_prestacion!='')
             $sql.=" and ttp_estado='{$opc->estado_prestacion}'";
 

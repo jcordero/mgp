@@ -509,6 +509,9 @@
 
             <!-- PLAZA --> 
             <field name="plaza" type="varchar" size="100"/>
+            
+            <!-- PLAYA --> 
+            <field name="playa" type="varchar" size="100"/>
         
             <!-- ORGANISMO PUBLICO -->
             <field name="orgpublico" type="varchar" size="100"/>
@@ -522,17 +525,9 @@
             <field name="sepnumero" type="varchar" size="100"/>
             <field name="sepfila" type="varchar" size="100"/>
         
-            <!-- LUMINARIAS -->
-            <field name="mapa_lum" type="int"/>
-            <field name="calle_nombre_lum" type="varchar" size="100"/>
-            <field name="calle_lum" type="int" />
-            <field name="calle_nombre2_lum" type="varchar" size="100"/>
-            <field name="calle2_lum" type="int" />
-            <field name="callenro_lum" type="int"/>
-            <field name="tic_barrio_lum" type="varchar" size="100"/>
-            <field name="tic_cgpc_lum" type="varchar" size="100"/>
+            <!-- LUMINARIAS / SEMAFOROS -->
             <field name="id_elemento" type="varchar" size="100"/>
-            <field name="alternativa_lum" type="varchar" size="20"/>
+          
 
             <!-- COLECTIVOS --> 
             <field name="col_linea" type="varchar" size="100"/>
@@ -583,48 +578,27 @@
 			
             <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
             <field name="tic_cgpc" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
-        </group>
-
-        <group title="Ubicación VILLA" id="villa" render_html="block">
+        
             <field name="villa" presentation="VILLA" label="Villa"  classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
             <field name="vilmanzana" presentation="TEXT" label="Manzana" cols="5" />
             <field name="vilcasa" presentation="TEXT" label="Casa" cols="5" />
-        </group>
-
-        <group title="Ubicación ORGANISMO PUBLICO" id="orgpublico" render_html="block">
+ 
             <field name="orgpublico" presentation="ORGPUBLICO" label="Organismo público" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
             <field name="orgsector" presentation="TEXT" label="Area o sector" />
-        </group>
+ 
+            <field name="plaza" presentation="TICKET::PLAZA" label="Plaza o parque" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
 
-        <group title="Ubicación PLAZA" id="plaza" render_html="block">
-            <field name="plaza" presentation="PLAZA" label="Plaza o parque" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
-        </group>
-		
-        <group title="Ubicación CEMENTERIO" id="cementerio" render_html="block">
+            <field name="playa" presentation="TICKET::PLAYA" label="Playa" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
+
             <field name="cementerio" presentation="CEMENTERIO" label="Cementerio" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
             <field name="sepultura" presentation="SEPULTURA" label="Tipo de sepultura" />
             <field name="sepsector" presentation="TEXT" label="Nombre panteon o boveda" cols="5" />
             <field name="sepcalle" presentation="TEXT" label="Calle" cols="5" />
             <field name="sepnumero" presentation="TEXT" label="Numero" cols="5" />
             <field name="sepfila" presentation="TEXT" label="Fila" cols="5" />
-        </group>
-
-        <group title="Ubicación con elementos" id="luminaria" render_html="block">
-            <field name="mapa_lum" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
-            <field name="alternativa_lum" presentation="TICKET::ALTERNATIVA_GEOREF" label="Alternativa" initialvalue="NRO"/>
-            <field name="calle_lum" presentation="TICKET::CALLE" label="Calle" cols="100" />
-            <field name="calle_nombre_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
-            
-            <field name="calle2_lum" presentation="TICKET::CALLE" label="Cruza calle" cols="100" />
-            <field name="calle_nombre2_lum" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
-            
-            <field name="callenro_lum" presentation="TICKET::ALTURA" label="Altura" cols="5" />
-            <field name="tic_barrio_lum" label="Barrio" presentation="TEXT" readonly="true"/>
-            <field name="tic_cgpc_lum" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
+        
             <field name="id_elemento" label="Elemento" presentation="TEXT" readonly="true" isvisible="true"/>
-        </group>
-
-        <group title="Ubicación COLECTIVO" id="colectivo" render_html="block">
+        
             <field name="col_linea" presentation="TEXT" label="Linea" ismandatory="false"/>
             <field name="col_interno" presentation="TEXT" label="Interno" ismandatory="false"/>
             <field name="col_fecha_hora" presentation="DATETIME" label="Fecha y hora" ismandatory="false"/>

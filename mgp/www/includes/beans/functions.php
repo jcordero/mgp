@@ -237,3 +237,16 @@
 
         return date('d/m/Y H:i:s');
     }
+    
+    /** Convierte una lista separada por comas en un string apto para el sql
+     * 
+     * @param string $lista
+     * @return string
+     */
+    function toSqlList($lista) {
+        $sql = "";
+        foreach( explode(",",$lista) as $opc) {
+            $sql .= ($sql!="" ? "," : "")."'".trim($opc)."'";
+        }
+        return $sql;
+    }

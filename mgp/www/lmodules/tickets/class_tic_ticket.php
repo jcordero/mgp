@@ -60,27 +60,19 @@ class class_tic_ticket extends cobjbase {
         $this->m_fields['vilmanzana'] = new CField(Array("Name"=>"vilmanzana", "Size"=>20, "Order"=>40));
         $this->m_fields['vilcasa'] = new CField(Array("Name"=>"vilcasa", "Size"=>20, "Order"=>41));
         $this->m_fields['plaza'] = new CField(Array("Name"=>"plaza", "Size"=>100, "Order"=>42));
-        $this->m_fields['orgpublico'] = new CField(Array("Name"=>"orgpublico", "Size"=>100, "Order"=>43));
-        $this->m_fields['orgsector'] = new CField(Array("Name"=>"orgsector", "Size"=>100, "Order"=>44));
-        $this->m_fields['cementerio'] = new CField(Array("Name"=>"cementerio", "Size"=>100, "Order"=>45));
-        $this->m_fields['sepultura'] = new CField(Array("Name"=>"sepultura", "Size"=>100, "Order"=>46));
-        $this->m_fields['sepsector'] = new CField(Array("Name"=>"sepsector", "Size"=>100, "Order"=>47));
-        $this->m_fields['sepcalle'] = new CField(Array("Name"=>"sepcalle", "Size"=>100, "Order"=>48));
-        $this->m_fields['sepnumero'] = new CField(Array("Name"=>"sepnumero", "Size"=>100, "Order"=>49));
-        $this->m_fields['sepfila'] = new CField(Array("Name"=>"sepfila", "Size"=>100, "Order"=>50));
-        $this->m_fields['mapa_lum'] = new CField(Array("Name"=>"mapa_lum", "Type"=>"int", "Order"=>51));
-        $this->m_fields['calle_nombre_lum'] = new CField(Array("Name"=>"calle_nombre_lum", "Size"=>100, "Order"=>52));
-        $this->m_fields['calle_lum'] = new CField(Array("Name"=>"calle_lum", "Type"=>"int", "Order"=>53));
-        $this->m_fields['calle_nombre2_lum'] = new CField(Array("Name"=>"calle_nombre2_lum", "Size"=>100, "Order"=>54));
-        $this->m_fields['calle2_lum'] = new CField(Array("Name"=>"calle2_lum", "Type"=>"int", "Order"=>55));
-        $this->m_fields['callenro_lum'] = new CField(Array("Name"=>"callenro_lum", "Type"=>"int", "Order"=>56));
-        $this->m_fields['tic_barrio_lum'] = new CField(Array("Name"=>"tic_barrio_lum", "Size"=>100, "Order"=>57));
-        $this->m_fields['tic_cgpc_lum'] = new CField(Array("Name"=>"tic_cgpc_lum", "Size"=>100, "Order"=>58));
-        $this->m_fields['id_elemento'] = new CField(Array("Name"=>"id_elemento", "Size"=>100, "Order"=>59));
-        $this->m_fields['alternativa_lum'] = new CField(Array("Name"=>"alternativa_lum", "Size"=>20, "Order"=>60));
-        $this->m_fields['col_linea'] = new CField(Array("Name"=>"col_linea", "Size"=>100, "Order"=>61));
-        $this->m_fields['col_interno'] = new CField(Array("Name"=>"col_interno", "Size"=>100, "Order"=>62));
-        $this->m_fields['col_fecha_hora'] = new CField(Array("Name"=>"col_fecha_hora", "Type"=>"datetime", "Order"=>63));
+        $this->m_fields['playa'] = new CField(Array("Name"=>"playa", "Size"=>100, "Order"=>43));
+        $this->m_fields['orgpublico'] = new CField(Array("Name"=>"orgpublico", "Size"=>100, "Order"=>44));
+        $this->m_fields['orgsector'] = new CField(Array("Name"=>"orgsector", "Size"=>100, "Order"=>45));
+        $this->m_fields['cementerio'] = new CField(Array("Name"=>"cementerio", "Size"=>100, "Order"=>46));
+        $this->m_fields['sepultura'] = new CField(Array("Name"=>"sepultura", "Size"=>100, "Order"=>47));
+        $this->m_fields['sepsector'] = new CField(Array("Name"=>"sepsector", "Size"=>100, "Order"=>48));
+        $this->m_fields['sepcalle'] = new CField(Array("Name"=>"sepcalle", "Size"=>100, "Order"=>49));
+        $this->m_fields['sepnumero'] = new CField(Array("Name"=>"sepnumero", "Size"=>100, "Order"=>50));
+        $this->m_fields['sepfila'] = new CField(Array("Name"=>"sepfila", "Size"=>100, "Order"=>51));
+        $this->m_fields['id_elemento'] = new CField(Array("Name"=>"id_elemento", "Size"=>100, "Order"=>52));
+        $this->m_fields['col_linea'] = new CField(Array("Name"=>"col_linea", "Size"=>100, "Order"=>53));
+        $this->m_fields['col_interno'] = new CField(Array("Name"=>"col_interno", "Size"=>100, "Order"=>54));
+        $this->m_fields['col_fecha_hora'] = new CField(Array("Name"=>"col_fecha_hora", "Type"=>"datetime", "Order"=>55));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes

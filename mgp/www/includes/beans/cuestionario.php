@@ -46,7 +46,7 @@ class cuestionario {
      * @param type $prestacion
      * @return \cuestionario
      */
-    static function factoryJSON($ticket_json,$ticket,$prestacion) {
+    static function factoryJSON($ticket_json, $ticket,  prestacion $prestacion) {
         global $primary_db;
         $res = array();
         
@@ -62,11 +62,11 @@ class cuestionario {
                     $cuest->tpr_preg = $row['tpr_preg'];
                     $cuest->tpr_tipo_preg = $row['tpr_tipo_preg'];
                     
-                    if($row['tpr_tipo_preg']=='CHECKBOX')
+                    if($row['tpr_tipo_preg']=='CHECKBOX') {
                         $respuesta = ($preg->tpr_respuesta==1 ? 'SI' : 'NO');
-                    else 
+                    } else { 
                         $respuesta = $preg->tpr_respuesta;
-                        
+                    }
                     
                     $cuest->tpr_respuesta = $respuesta;       
                     $res[] = $cuest;
@@ -101,42 +101,65 @@ class cuestionario {
         return $ret;
     }
     
-    
+    /** Proceso mensaje recibido desde MiCiudad donde son atributos extendidos
+     * 
+     * @global cdbdata $primary_db
+     * @param string $frag
+     */
     function fromJSON($frag) {
         global $primary_db;
         
         $this->tpr_miciudad = _g($frag,'tpr_miciudad');
         $this->tpr_respuesta = _g($frag,'tpr_respuesta');
          
+        //Usando el codigo unico de MiCiudad se consigue el codigo de pregunta local
         if( $this->tpr_miciudad!=='' ) {
             $row = $primary_db->QueryArray("select * from tic_ticket_cuestionario WHERE tpr_miciudad='{$this->tpr_miciudad}'");
-            $this->tcu_code = $row['tcu_code']; 
-            $this->tpr_preg = $row['tpr_preg']; 
-            $this->tpr_tipo_preg = $row['tpr_tipo_preg'];         
+            $this->tcu_code = $row['tcu_code']; //codigo de pregunta local
+            $this->tpr_preg = $row['tpr_preg']; //pregunta
+            $this->tpr_tipo_preg = $row['tpr_tipo_preg']; //tipo de pregunta        
         }
     }
     
     
     /**
-     * Cargo el cuestionario desde la UI
+     * Cargo el cuestionario desde la UI. Es un metodo factory que retorna un array de objetos "cuestionario"
      * 
      * @global type $primary_db
-     * @param type $obj
-     * @param type $p
-     * @return \cuestionario
+     * @param prestacion $p
+     * @return cuestionario[]
      */
-    static function fromForm($obj, $p) {
+    static function fromForm(prestacion $p) {
         global $primary_db;
         $pregs = array();
+        
         
         //Busco las preguntas del cuestionario que correponde a la prestación
         $rs = $primary_db->do_execute("select * from tic_prestaciones_cuest where tpr_code='{$p->tpr_code}'");
         while( $row = $primary_db->_fetch_row($rs) ) {
+            
+            $r = $_POST['cuest_'.$row['tcu_code']];
+            $tipo = $row['tpr_tipo_preg'];
+            $respuesta = "";
+            
+            //Determino la respuesta
+            if( is_array($r) ) {
+                foreach($r as $opc) {
+                    $respuesta.= ($respuesta!="" ? "|" : "").$opc;
+                }
+            } else {
+                if( $tipo=='CHECKBOX' ) {
+                    $respuesta = ($r=='on' ? 'SI' : 'NO');
+                } else {
+                    $respuesta = $r; 
+                }
+            }
+                    
             $c = new cuestionario();
             $c->tcu_code = $row['tcu_code'];
             $c->tpr_miciudad = $row['tpr_miciudad'];
             $c->tpr_preg = $row['tpr_preg'];
-            $c->tpr_respuesta = $_POST['cuest_'.$c->tcu_code];
+            $c->tpr_respuesta = $respuesta;
             $c->tpr_tipo_preg = $row['tpr_tipo_preg'];        
         
             $pregs[] = $c;
@@ -145,4 +168,3 @@ class cuestionario {
         return $pregs;
     }
 }
-?>

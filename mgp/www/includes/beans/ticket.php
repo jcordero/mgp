@@ -589,12 +589,19 @@ class ticket {
      * @return boolean
      */
     function prestacionesTerminadas() {
+        global $primary_db;
         $cerradas = 0;
         $total = count($this->prestaciones);
+        $estados_cerrados = explode(",",strtolower(CSession::getParameter($primary_db,"estados.cerrados","cerrado,resuelto,rechazado,rechazado indebido,finalizado,certificación")));
+        
         foreach($this->prestaciones as $pres) {
             $estado = strtolower($pres->ttp_estado);
-            if( $estado==='cerrado' || $estado==='rechazado' || $estado==='rechazado indebido' || $estado==='resuelto' || $estado==='finalizado') 
-                $cerradas++;
+            foreach($estados_cerrados as $est) {
+                if( $estado == trim($est) ) { 
+                    $cerradas++;
+                    break;
+                }
+            }
         }
         error_log("ticket::prestacionesTerminadas() Total:{$total} Cerradas:{$cerradas}");
         return ($cerradas==$total ? true : false);            

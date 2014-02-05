@@ -52,8 +52,11 @@ class georeferencias {
     public $vilmanzana;
     public $vilcasa;
          
-    /** Plaza o Playa */
+    /** Plaza  */
     public $plaza;
+    
+    /** Playa */
+    public $playa;
     
     /** Organismo publico */
     public $orgpublico;
@@ -133,7 +136,7 @@ class georeferencias {
                     $this->tic_coordx = $obj->lat;
                     $this->tic_coordy = $obj->lng;
             case "PLAYA":
-                    $this->plaza = $obj->playa;
+                    $this->playa = $obj->playa;
                     $this->tic_coordx = $obj->lat;
                     $this->tic_coordy = $obj->lng;
                 break;
@@ -198,8 +201,12 @@ class georeferencias {
                 $this->tic_coordy       = (double) _F($obj,"tic_coordy");
                 break;
             case 'PLAZA':
-            case 'PLAYA':
                 $this->plaza        = _F($obj,"plaza");
+                $this->tic_coordx   = (double) _F($obj,"tic_coordx");
+                $this->tic_coordy   = (double) _F($obj,"tic_coordy");
+                break;
+            case 'PLAYA':
+                $this->playa        = _F($obj,"playa");
                 $this->tic_coordx   = (double) _F($obj,"tic_coordx");
                 $this->tic_coordy   = (double) _F($obj,"tic_coordy");
                 break;
@@ -221,15 +228,15 @@ class georeferencias {
                 break;
             case 'LUMINARIA':
             case 'SEMAFORO':
-                $this->alternativa        = _F($obj,"alternativa_lum");
-                $this->tic_barrio         = _F($obj,"tic_barrio_lum");
-                $this->tic_cgpc           = _F($obj,"tic_cgpc_lum");
-                $this->tic_nro_puerta     = (int) _F($obj,"callenro_lum");
-                $this->tic_calle_nombre   = _F($obj,"calle_nombre_lum");
-                $this->tic_calle_nombre2  = _F($obj,"calle_nombre2_lum");
+                $this->alternativa        = _F($obj,"alternativa");
+                $this->tic_barrio         = _F($obj,"tic_barrio");
+                $this->tic_cgpc           = _F($obj,"tic_cgpc");
+                $this->tic_nro_puerta     = (int) _F($obj,"callenro");
+                $this->tic_calle_nombre   = _F($obj,"calle_nombre");
+                $this->tic_calle_nombre2  = _F($obj,"calle_nombre2");
                 $this->id_elemento        = intval(_F($obj,"id_elemento"),10);
-                $this->tic_calle          = _F($obj,"calle_lum");
-                $this->tic_calle2         = _F($obj,"calle2_lum");
+                $this->tic_calle          = _F($obj,"calle");
+                $this->tic_calle2         = _F($obj,"calle2");
                 $this->id_cuadra          = _F($obj,"tic_id_cuadra");
                 $this->tic_coordx         = (double) _F($obj,"tic_coordx");
                 $this->tic_coordy         = (double) _F($obj,"tic_coordy");
@@ -339,7 +346,7 @@ class georeferencias {
             case "PLAYA":
                 $geo = array(
     			'tipo'          => 'PLAYA',
-    			'playa'         => $this->plaza,
+    			'playa'         => $this->playa,
                         'lat'           => $this->tic_coordx,
     			'lng'           => $this->tic_coordy,
     		);
@@ -425,7 +432,7 @@ class georeferencias {
                  break;
 
             case "PLAYA":
-                $mostrar.= '<b>Playa:</b> '.$this->plaza.'<br/>';
+                $mostrar.= '<b>Playa:</b> '.$this->playa.'<br/>';
                 break;
             case "PLAZA":
                 $mostrar.= '<b>Plaza:</b> '.$this->plaza.'<br/>';

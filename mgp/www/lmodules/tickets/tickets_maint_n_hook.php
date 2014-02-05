@@ -40,7 +40,7 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
 
         //Completo los valores que se van a usar mas adelante
         $this->m_plazo = $ticket->tic_tstamp_plazo;
-        $this->m_prestacion_detalle = $ticket->prestaciones[0]->tpr_description;
+        $this->m_prestacion_detalle = $ticket->prestaciones[0]->tpr_description_full;
         $this->m_identificador = $ticket->tic_identificador;
         
         return $res;

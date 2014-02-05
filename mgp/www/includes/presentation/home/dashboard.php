@@ -8,7 +8,7 @@ class CDH_DASHBOARD extends CDataHandler {
     {
         parent::__construct($parent);
     }
-    
+
     function getTickets($p) {
         global $primary_db;
       
@@ -16,37 +16,40 @@ class CDH_DASHBOARD extends CDataHandler {
         $_SESSION["dash_config"] = $dash_config;
         $extra = "";
         
+        $estados_abiertos = toSqlList(strtolower(CSession::getParameter($primary_db,"estados.abiertos","pendiente,en espera,en curso,inspección")));
+        $estados_cerrados = toSqlList(strtolower(CSession::getParameter($primary_db,"estados.cerrados","cerrado,resuelto,rechazado,rechazado indebido,finalizado,certificación")));
+       
         //Opciones = TODOS, ABIERTOS, CERRADOS, VENCIDOS
         switch($dash_config->boton) {
             case "ABIERTOS":
-                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_tickets where tic_coordx<>0 and ttp_estado in ('pendiente','en espera','en curso')";
+                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_tickets where tic_coordx<>0 and ttp_estado in ({$estados_abiertos})";
                 break;
             case "CERRADOS":
-                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_tickets where tic_coordx<>0 and ttp_estado in ('cerrado','resuelto','rechazado','rechazado indebido')";
+                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_tickets where tic_coordx<>0 and ttp_estado in ({$estados_cerrados})";
                 break;
             case "VENCIDOS":
-                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_tickets where tic_coordx<>0 and ttp_estado in ('pendiente','en espera','en curso') and datediff(now(),tic_tstamp_plazo)>0";
+                $sql = "select tic_coordx,tic_coordy,tic_identificador from v_tickets where tic_coordx<>0 and ttp_estado in ({$estados_abiertos}) and datediff(now(),tic_tstamp_plazo)>0";
                 break;
             default:
                 $sql = "select tic_coordx,tic_coordy,tic_identificador from v_tickets where tic_coordx<>0";
         }
         
         //Canal de ingreso
-        if($dash_config->canal!="")
+        if($dash_config->canal!="") {
             $extra .= " and tic_canal='{$dash_config->canal}'";
-        
+        }
         //Barrio
-        if($dash_config->barrio!="")
+        if($dash_config->barrio!=""){
             $extra .= " and tic_barrio='{$dash_config->barrio}'";
-                
+        }
         //Prestacion
-        if($dash_config->prestacion!="")
+        if($dash_config->prestacion!="") {
             $extra .= " and tpr_code like '{$dash_config->prestacion}%'";
-                
+        }
         //Organismo
-        if($dash_config->organismo!="")
+        if($dash_config->organismo!="") {
             $extra .= " and tor_code='{$dash_config->organismo}'";
-
+        }
         //Tickets
         $conjunto = array();
         $rs = $primary_db->do_execute($sql.$extra);
@@ -59,9 +62,9 @@ class CDH_DASHBOARD extends CDataHandler {
         }
         
         //Contadores
-        $contadores['abiertos'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ('pendiente','en espera','en curso') {$extra}");
-        $contadores['cerrados'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ('cerrado','resuelto','rechazado','rechazado indebido') {$extra}");
-        $contadores['vencidos'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ('pendiente','en espera','en curso') and datediff(now(),tic_tstamp_plazo)>0 {$extra}");
+        $contadores['abiertos'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ({$estados_abiertos}) {$extra}");
+        $contadores['cerrados'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ({$estados_cerrados}) {$extra}");
+        $contadores['vencidos'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ({$estados_abiertos}) and datediff(now(),tic_tstamp_plazo)>0 {$extra}");
         
         return json_encode(array('tickets' => $conjunto, 'contadores' => $contadores),JSON_UNESCAPED_UNICODE);
     }
@@ -77,8 +80,9 @@ class CDH_DASHBOARD extends CDataHandler {
             $h.= '<b>'.$tic->tic_identificador.'</b> <b>Canal:</b> '.$tic->tic_canal.'<br>';
             $h.= '<b>Estado:</b> '.$pres->ttp_estado.' <b>Ingreso:</b> '.ISO8601toDate($tic->tic_tstamp_in).'<br>';
             $h.= '<b>Vencimiento:</b> '.ISO8601toDate($tic->tic_tstamp_plazo).'<br>';
-            if($tic->tic_nota_in!="")
+            if($tic->tic_nota_in!="") {
                 $h.= '<b>Nota:</b> '.$tic->tic_nota_in.'<br>';
+            }
             
             //Direccion y lumninaria
             

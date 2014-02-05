@@ -1,10 +1,5 @@
 
-var luminariaOnIcon = null;
-var luminariaIcon = null;
-var luminariaIlegalIcon = null;
-var luminariaIlegalOnIcon = null;
-var semaforoIcon = null;
-var semaforoOnIcon = null;
+
 
 function MostrarMapa(id,param_str)
 {
@@ -131,13 +126,7 @@ function crearMapa3(id) {
  * @returns {map}
  */
 function crearMapa(id) {
-   
-    luminariaIcon = sess_web_path+'/images/mapicons/luminaria.png';
-    luminariaOnIcon = sess_web_path+'/images/mapicons/luminaria_on.png';
-    luminariaIlegalIcon = sess_web_path+'/images/mapicons/luminaria_ilegal.png';
-    luminariaIlegalOnIcon = sess_web_path+'/images/mapicons/luminaria_ilegal_on.png';
-    semaforoIcon = sess_web_path+'/images/mapicons/semaforo.png';
-    semaforoOnIcon = sess_web_path+'/images/mapicons/semaforo_on.png';
+  
     return crearMapa3(id);
 }
 
