@@ -164,7 +164,7 @@ function valida_direccion() {
         'cod_calle2':calle2,
         'nom_calle2':calle2_nombre,
         'altura':altura,
-        'gis':layer_gis,
+        'gis':gis_layer,
         'alternativa':alternativa
     };
     new rem_request(this,function(obj,json){
@@ -209,14 +209,14 @@ function valida_direccion() {
                     for(var j=0;j<cant;j++) {
                         var pt = lista_elementos[j];
 
-                        if(layer_gis==1) {
+                        if(gis_layer==1) {
                             if(pt.com==="ILEGAL")
                                 lista_elementos[j].marker = createMarker([pt.lat,pt.lng],"Ilegal "+pt.calle+' '+pt.altura,mapa,luminariaIlegalIcon,marker_click,j);
                             else
                                 lista_elementos[j].marker = createMarker([pt.lat,pt.lng],"Luminaria "+pt.calle+' '+pt.altura,mapa,luminariaIcon,marker_click,j);
                         }
 
-                        if(layer_gis==2) {
+                        if(gis_layer==2) {
                             lista_elementos[j].marker = createMarker([pt.lat,pt.lng],"Semáforo "+pt.id,mapa,semaforoIcon,marker_click,j);
                         }
 
@@ -239,9 +239,6 @@ function valida_direccion() {
  * @returns {void}
  */
 function cambia_direccion() {
-    var calle = $('#m_calle').val();
-    var calle2 = $('#m_calle2').val();
-
     $("#lm_tic_barrio").html("");
     $("#lm_id_elemento").html("");
     
@@ -572,10 +569,10 @@ function cambio_prestacion(codigo)
                 //Determino el layer gis
                 switch(gis_tipo) {
                     case "LUMINARIA":
-                        layer_gis = 1;
+                        gis_layer = 1;
                         break;
                     case "SEMAFORO":
-                        layer_gis = 2;
+                        gis_layer = 2;
                         break;
                 }
                 
