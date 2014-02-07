@@ -41,12 +41,15 @@ class CDH_PRESTACIONTREE extends CDH_KTREE
         global $primary_db;
 
         //Datos de la prestacion
-        $sql = "SELECT tpr_tipo,tpr_ubicacion FROM tic_prestaciones WHERE tpr_code='$prestacion'";
+        $sql = "SELECT tpr_tipo,tpr_ubicacion FROM tic_prestaciones WHERE tpr_code='{$prestacion}'";
         $re = $primary_db->do_execute($sql);
         $conjunto = array();
         while( $row=$primary_db->_fetch_row($re) )
         {
-            $conjunto[] =  array('tpr_tipo'=>$row['tpr_tipo'], 'tpr_ubicacion'=>$row['tpr_ubicacion']);
+            $conjunto[] =  array(
+                'tpr_tipo'      =>  $row['tpr_tipo'], 
+                'tpr_ubicacion' =>  $row['tpr_ubicacion']
+            );
         }
 
         //Armo el Cuestionario        
@@ -79,4 +82,3 @@ class CDH_PRESTACIONTREE extends CDH_KTREE
         return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
 }
-?>

@@ -258,12 +258,12 @@ class prestacion {
 
     /** Cargo una prestacion desde el ticket que viene de la API de MiCiudad
      * 
-     * @global type $primary_db
-     * @param type $ticket
-     * @param type $parent
-     * @return type
+     * @global cdbdata $primary_db
+     * @param string $ticket
+     * @param ticket $parent
+     * @return prestacion[]
      */
-    static function fromJSON($ticket_json, $ticket) {
+    static function fromJSON($ticket_json, ticket $ticket) {
         global $primary_db;
         
         $prest = new prestacion();

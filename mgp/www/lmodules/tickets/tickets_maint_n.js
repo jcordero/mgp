@@ -10,7 +10,7 @@ var last_marker_clicked = null;
 
 /** Mapa
  * 
- * @type google.maps
+ * @type google.maps.Map
  */
 var mapa = {};
 
@@ -22,7 +22,7 @@ var lista_elementos = [];
 
 /** Marker donde va el domicilio ingresado
  * 
- * @type google.marker
+ * @type google.maps.Marker
  */
 var marker_domicilio = null;
 
@@ -233,6 +233,7 @@ function valida_direccion() {
             }
     },"TICKET::DIRECCION","validarDireccion", JSON.stringify(params));
 }
+
 
 /** Muestro los campos editables nuevamente de la direccion
  * 

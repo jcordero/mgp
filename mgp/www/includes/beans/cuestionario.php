@@ -1,4 +1,5 @@
 <?php
+include_once 'beans/miciudad_crossreference.php';
 
 class cuestionario {
     public $tcu_code; 
@@ -40,13 +41,13 @@ class cuestionario {
 
     /**
      * 
-     * @global type $primary_db
-     * @param type $ticket_json
-     * @param type $ticket
-     * @param type $prestacion
-     * @return \cuestionario
+     * @global cdbdata $primary_db
+     * @param string $ticket_json
+     * @param ticket $ticket
+     * @param prestacion $prestacion
+     * @return \cuestionario[]
      */
-    static function factoryJSON($ticket_json, $ticket,  prestacion $prestacion) {
+    static function factoryJSON($ticket_json, ticket $ticket,  prestacion $prestacion) {
         global $primary_db;
         $res = array();
         
@@ -118,6 +119,9 @@ class cuestionario {
             $this->tcu_code = $row['tcu_code']; //codigo de pregunta local
             $this->tpr_preg = $row['tpr_preg']; //pregunta
             $this->tpr_tipo_preg = $row['tpr_tipo_preg']; //tipo de pregunta        
+            
+            //Convierto los codigos a texto
+            $this->tpr_respuesta = miciudad_crossreference::convertToText($this->tpr_respuesta);
         }
     }
     
@@ -156,11 +160,11 @@ class cuestionario {
             }
                     
             $c = new cuestionario();
-            $c->tcu_code = $row['tcu_code'];
-            $c->tpr_miciudad = $row['tpr_miciudad'];
-            $c->tpr_preg = $row['tpr_preg'];
-            $c->tpr_respuesta = $respuesta;
-            $c->tpr_tipo_preg = $row['tpr_tipo_preg'];        
+            $c->tcu_code        = $row['tcu_code'];
+            $c->tpr_miciudad    = $row['tpr_miciudad'];
+            $c->tpr_preg        = $row['tpr_preg'];
+            $c->tpr_respuesta   = $respuesta;
+            $c->tpr_tipo_preg   = $row['tpr_tipo_preg'];        
         
             $pregs[] = $c;
         }

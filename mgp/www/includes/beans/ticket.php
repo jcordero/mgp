@@ -132,13 +132,24 @@ class ticket {
         }
     }
     
+    /** Obtener la primera prestacion del ticket
+     * 
+     * @return prestacion
+     */
+    function getFirstPrestacion() {
+        if(count($this->prestaciones)>0) {
+            return $this->prestaciones[0];
+        }
+        return null;
+    }
+    
     /**
      * Agrega un ticket al sistema
      * 
-     * @global type $primary_db
-     * @global type $sess
-     * @param type $ticket (un objeto ticket anonimo desde JSON)
-     * @return type
+     * @global cdbdata $primary_db
+     * @global CSession $sess
+     * @param string $ticket (un objeto ticket anonimo desde JSON)
+     * @return void
      */    
      function fromJSON($ticket) {
         
@@ -152,14 +163,14 @@ class ticket {
             //Fecha de carga
             if( $this->tic_tstamp_in==='' )
                 $this->tic_tstamp_in = DatetoISO8601('');
+   
+            //Agrego Prestacion
+            $this->prestaciones = prestacion::fromJSON($ticket,$this);
 
             //Tipo de georeferencia
             $this->tic_georef = new georeferencias();
-            $this->tic_georef->fromJSON($ticket);
+            $this->tic_georef->fromJSON($ticket,$this);
             $this->tic_lugar = $this->tic_georef->createLugar();
-            
-            //Agrego Prestacion
-            $this->prestaciones = prestacion::fromJSON($ticket,$this);
             
             //Agrego Ciudadano Solicitante
             $ciu = new solicitante();

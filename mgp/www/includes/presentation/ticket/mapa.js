@@ -72,6 +72,7 @@ function crearMapa3(id) {
     var mapa = new google.maps.Map(document.getElementById(id),mapOptions);
     mapa.setTilt(0);
 
+    google.maps.event.addListener(mapa, 'dragend', drag_event);
 
     //Define custom WMS tiled layer
     var SLPLayer = new google.maps.ImageMapType({
@@ -148,4 +149,8 @@ function createMarker( latlng, label, mapa, icon, click_event, index) {
         m.lum_index = index;
          
     return m;
+}
+
+function drag_event() {
+    console.log("evento drag " + (new Date()).getTime() );
 }

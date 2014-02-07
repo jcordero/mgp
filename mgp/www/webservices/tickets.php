@@ -152,4 +152,3 @@ function actualizo_ticket($tipo,$anio,$nro,$cambio_estado_ticket) {
     );
 }
 
-?>

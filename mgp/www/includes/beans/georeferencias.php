@@ -247,22 +247,66 @@ class georeferencias {
         }
     }
     
-    
-    public function fromJSON($obj) {
+    /** Creo el objeto de georeferencia a partir del JSON enviado por MiCiudad
+     * 
+     * @param string $obj
+     * @param ticket $ticket
+     */
+    public function fromJSON($obj, ticket $ticket) {
+        global $primary_db;
+        $tpr_code = "";
         
         $this->id_elemento     = (int) _g($obj,'id_luminaria');
+        $this->tic_coordx       = (double) _g($obj,'tic_coordx');
+        $this->tic_coordy       = (double) _g($obj,'tic_coordy');
         
-        //Solo hay dos tipos por domicilio o luminaria
-        $this->tipo_georef = _g($obj,'tipo_georef');
+        //Que tipo de georeferencia tiene esta prestacion?
+        $prest = $ticket->getFirstPrestacion();
+        if($prest)
+            $tpr_code = $prest->tpr_code;
+        $this->tipo_georef = $primary_db->QueryString("select tpr_ubicacion from tic_prestaciones where tpr_code='{$tpr_code}' limit 1");
+        
+        //$this->tipo_georef = _g($obj,'tipo_georef');
         if($this->tipo_georef==='')
             $this->tipo_georef = ($this->id_elemento===0 ? 'DOMICILIO' : 'LUMINARIA');
-            
+        
+        //Ajustes segun el tipo de geo en la prestacion
+        switch($this->tipo_georef) {
+            case "LUMINARIA":
+                break;
+            case "SEMAFORO":
+                $this->id_elemento = (int) _g($obj,'id_semaforo');
+                break;
+            case "DOMICILIO":
+                $this->id_elemento = "";
+                break;
+            case "PLAYA":
+                $this->playa = "";
+                //Determino la playa usando el GIS
+                $ws = new SoapClient("http://gis.mardelplata.gob.ar/webservice/zonificacion.php?wsdl");
+                try
+                {
+                    $b = $ws->zonificacion_latlong($this->tic_coordy,$this->tic_coordx,3);
+                    $this->playa = $b->descripcion;
+                    error_log("georeferencias::fromJSON() Playa (long={$this->tic_coordy},lat={$this->tic_coordx}) ->".print_r($b,true));
+                }
+                catch (SoapFault $exception)
+                {
+                    error_log( "georeferencias::fromJSON() Playa ->".$exception );
+                }		 
+                break;
+            case "COLECTIVO":
+                $this->id_elemento = "";
+                break;
+            default:
+                break;
+        }
+        
         //Ubicacion
         $this->alternativa      = "NRO";
         $this->tic_barrio       = _g($obj,'tic_barrio');
         $this->tic_cgpc         = _g($obj,'tic_cgpc');
-        $this->tic_coordx       = (double) _g($obj,'tic_coordx');
-        $this->tic_coordy       = (double) _g($obj,'tic_coordy');
+        
         $this->tic_nombre_fantasia = _g($obj,'tic_lugar');
         $this->tic_calle_nombre = _g($obj,'tic_calle_nombre');
         $this->tic_nro_puerta   = (int) _g($obj,'tic_nro_puerta');
