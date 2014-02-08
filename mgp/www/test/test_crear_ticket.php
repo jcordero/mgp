@@ -9,6 +9,10 @@ $url = "http://mgp/mgp/webservices/tickets";
 //PRODUCCION
 //$url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets";
     
+/* 'playa' => 'Cabo Largo',
+    'lat' => '-38.0985',
+    'lng' => '-57.5452',
+ */
 
 //DECLARACION DEL TICKET
 $ingreso_ticket = array(

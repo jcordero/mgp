@@ -281,19 +281,8 @@ class georeferencias {
                 $this->id_elemento = "";
                 break;
             case "PLAYA":
-                $this->playa = "";
-                //Determino la playa usando el GIS
-                $ws = new SoapClient("http://gis.mardelplata.gob.ar/webservice/zonificacion.php?wsdl");
-                try
-                {
-                    $b = $ws->zonificacion_latlong($this->tic_coordx,$this->tic_coordy,3);
-                    $this->playa = $b->descripcion;
-                    error_log("georeferencias::fromJSON() Playa (long={$this->tic_coordx},lat={$this->tic_coordy}) ->".print_r($b,true));
-                }
-                catch (SoapFault $exception)
-                {
-                    error_log( "georeferencias::fromJSON() Playa ->".$exception );
-                }		 
+                $this->playa = $this->determinarPlaya($this->tic_coordx, $this->tic_coordy);
+                
                 break;
             case "COLECTIVO":
                 $this->id_elemento = "";
@@ -490,5 +479,64 @@ class georeferencias {
        }
        
        return $mostrar;
+   }
+   
+   function determinarPlaya($lat,$lng) {
+       global $primary_db;
+       //Normalizo a 4 decimales
+       $lat1 = substr($lat,0,8); //sprintf("%0.4f", $lat);
+       $lng1 = substr($lng,0,8); //sprintf("%0.4f", $lng);
+       $playas = array();
+       
+       //Recupero las playas existentes del cache
+       if(function_exists("apc_fetch")) {
+           $existe = false;
+           $p = apc_fetch("listadoPlayas",$existe);
+           if($existe)
+               $playas = $p;
+       }
+
+       //Si el cache esta vacio, recupero las playas desde la base de datos
+       if(count($playas)==0) {
+            $rs = $primary_db->do_execute("SELECT * FROM geo_lugares where glu_geo_tipo='PLAYA'");
+            while( $row=$primary_db->_fetch_row($rs) ) {
+                $playas[] = (object) array(
+                    "playa"     =>  $row["glu_nombre"],
+                    "lat"       =>  substr($row["glu_lat"],0,8), //sprintf("%0.4f", $row["glu_lat"]),
+                    "lng"       =>  substr($row["glu_lng"],0,8) //sprintf("%0.4f", $row["glu_lng"])
+                );
+            }
+            
+           if(function_exists("apc_store")) {
+               apc_store("listadoPlayas",$playas);
+           }
+       }       
+       
+       //Busco una coincidencia de coordenadas
+       foreach($playas as $pl) {
+           error_log("{$pl->playa} ({$pl->lat}, {$pl->lng}) ({$lat1}, {$lng1}) ");
+           if( $pl->lat == $lat1 && $pl->lng == $lng1 ) {
+               return $pl->playa;
+           }
+       }
+       
+       return "Sin determinar";
+   }
+   
+   function determinarPlayaGIS($lat,$lng) {
+       //Determino la playa usando el GIS
+        $ws = new SoapClient("http://gis.mardelplata.gob.ar/webservice/zonificacion.php?wsdl");
+        try
+        {
+            $b = $ws->zonificacion_latlong($lat,$lng,3);
+            error_log("georeferencias::fromJSON() Playa (long={$lng},lat={$lat}) ->".print_r($b,true));
+            return $b->descripcion;
+        }
+        catch (SoapFault $exception)
+        {
+            error_log( "georeferencias::fromJSON() Playa ->".$exception );
+        }	
+        
+        return "Sin determinar";
    }
 }
