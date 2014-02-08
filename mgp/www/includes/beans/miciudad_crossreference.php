@@ -8,11 +8,11 @@ class miciudad_crossreference {
             case 166:
                 return "SI";
             case 168:
-                return "En el Balneario";
+                return "En el balneario";
             case 169:
-                return "En la Playa";
+                return "En la playa";
             case 170:
-                return "En Espacios Verdes Anexos";
+                return "En espacios verdes anexos";
             default:
                 return $val;
         }

@@ -286,9 +286,9 @@ class georeferencias {
                 $ws = new SoapClient("http://gis.mardelplata.gob.ar/webservice/zonificacion.php?wsdl");
                 try
                 {
-                    $b = $ws->zonificacion_latlong($this->tic_coordy,$this->tic_coordx,3);
+                    $b = $ws->zonificacion_latlong($this->tic_coordx,$this->tic_coordy,3);
                     $this->playa = $b->descripcion;
-                    error_log("georeferencias::fromJSON() Playa (long={$this->tic_coordy},lat={$this->tic_coordx}) ->".print_r($b,true));
+                    error_log("georeferencias::fromJSON() Playa (long={$this->tic_coordx},lat={$this->tic_coordy}) ->".print_r($b,true));
                 }
                 catch (SoapFault $exception)
                 {

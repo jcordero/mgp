@@ -13,64 +13,124 @@ include_once 'beans/georeferencias.php';
 include_once 'beans/evento_historia.php';
 
 class ticket {
-    /** Nro interno del ticket */
+    /** Nro interno del ticket 
+     *
+     * @var int 
+     */
     protected $tic_nro;
     
-    /** Identificador publico del ticket "TIPO NRO/AÑO" */
+    /** Identificador publico del ticket "TIPO NRO/AÑO" 
+     *
+     * @var string
+     */
     public $tic_identificador;
         
-    /** Tipo de ticket (RECLAMO, DENUNCIA, QUEJA, SOLICITUD) */
+    /** Tipo de ticket (RECLAMO, DENUNCIA, QUEJA, SOLICITUD)
+     *
+     * @var string
+     */
     public $tic_tipo;
     
-    /** Codigo del ticket al que este esta asociado este */
+    /** Codigo del ticket al que este esta asociado este
+     *
+     * @var int
+     */
     public $tic_nro_asociado;
     
-    /** Fecha de ingreso del ticket ISO8601 */
+    /** Fecha de ingreso del ticket ISO8601
+     *
+     * @var string
+     */
     public $tic_tstamp_in;
     
-    /** Operador que ingreso el ticket */
+    /** Operador que ingreso el ticket 
+     *
+     * @var string 
+     */
     public $use_code;
     
-    /** Nota cargada al ingresar el ticket */
+    /** Nota cargada al ingresar el ticket
+     *
+     * @var string
+     */
     public $tic_nota_in;
     
-    /** Estado global del ticket ABIERTO / CERRADO / CANCELADO */
+    /** Estado global del ticket ABIERTO / CERRADO / CANCELADO
+     *
+     * @var string
+     */
     public $tic_estado;
     
-    /** Objeto que contiene la información del lugar en formato JSON */
+    /** Objeto que contiene la información del lugar en formato JSON 
+     *
+     * @var object 
+     */
     public $tic_lugar;
     
-    /** Objeto de georeferencia */
+    /** Objeto de georeferencia
+     *
+     * @var georeferencias 
+     */
     protected $tic_georef;
     
-    /** Canal de ingreso: web, movil, call, presencial */
+    /** Canal de ingreso: web, movil, call, presencial
+     *
+     * @var string
+     */
     public $tic_canal;
     
-    /** Fecha de vencimiento del ticket ISO8601*/
+    /** Fecha de vencimiento del ticket ISO8601
+     *
+     * @var string
+     */
     public $tic_tstamp_plazo;
     
-    /** Fecha en la que se cierra o cancela el ticket */
+    /** Fecha en la que se cierra o cancela el ticket 
+     *
+     * @var string
+     */
     public $tic_tstamp_cierre;
     
-    /** Array con las prestaciones */
+    /** Array con las prestaciones 
+     *
+     * @var prestacion[] 
+     */
     public $prestaciones;
     
-    /** Array con las personas que solicitan el ticket */ 
+    /** Array con las personas que solicitan el ticket
+     *
+     * @var solicitante[]
+     */ 
     public $solicitantes;
     
-    /** Array con las personas que han reiterado este ticket */
+    /** Array con las personas que han reiterado este ticket 
+     *
+     * @var reiteracion[]
+     */
     public $reiteraciones;
     
-    /** Lista de tickets */
+    /** Lista de tickets 
+     *
+     * @var ticket[]
+     */
     public $asociados;
     
-    /** Array con los archivos adjuntos */
+    /** Array con los archivos adjuntos
+     *
+     * @var archivo[]
+     */
     public $archivos;
     
-    /** Foto */
+    /** Foto 
+     *
+     * @var string
+     */
     protected $media;
     
-    /** Array de errores de proceso */
+    /** Array de errores de proceso
+     *
+     * @var string
+     */
     protected $errors;
     
     function __construct() {
@@ -134,7 +194,7 @@ class ticket {
     
     /** Obtener la primera prestacion del ticket
      * 
-     * @return prestacion
+     * @return prestacion|null
      */
     function getFirstPrestacion() {
         if(count($this->prestaciones)>0) {
@@ -451,11 +511,14 @@ class ticket {
          if((double)$this->tic_georef->tic_coordy===0)
              $this->addError("Campo obligatorio tic_coordy faltante");
 
-         if($this->tic_georef->tic_calle_nombre==='')
-             $this->addError("Campo obligatorio tic_calle_nombre faltante");
+         if($this->tic_georef->tipo_georef==='DOMICILIO' || $this->tic_georef->tipo_georef==='LUMINARIA' || $this->tic_georef->tipo_georef==='SEMAFORO') {
+        
+            if($this->tic_georef->tic_calle_nombre==='')
+                $this->addError("Campo obligatorio tic_calle_nombre faltante");
 
-         if((int)$this->tic_georef->tic_nro_puerta===0 && $this->tic_georef->$tic_calle_nombre2==='')
-             $this->addError("Campo obligatorio tic_nro_puerta o tic_calle_nombre2 faltante");
+            if((int)$this->tic_georef->tic_nro_puerta===0 && $this->tic_georef->tic_calle_nombre2==='') 
+                $this->addError("Campo obligatorio tic_nro_puerta o tic_calle_nombre2 faltante");
+         }
          
          //Prestacion
          if(!isset($this->prestaciones[0]))
@@ -496,8 +559,8 @@ class ticket {
          $this->tic_identificador = $this->tic_tipo.' '.$tic_numero.'/'.$tic_anio;
            
          //Salvo el ticket (tic_ticket)
-         $sql1 = "insert into tic_ticket (tic_nro  ,tic_numero  ,tic_anio  ,tic_tipo    ,tic_tstamp_in    ,use_code    ,tic_nota_in    ,tic_estado,tic_lugar    ,tic_barrio    ,tic_cgpc    ,tic_coordx  ,tic_coordy  ,tic_id_cuadra,tic_forms,tic_canal    , tic_tstamp_plazo    ,tic_tstamp_cierre,tic_calle_nombre    ,tic_nro_puerta  ,tic_nro_asociado,tic_identificador    ,tic_id_elemento  ) 
-                                  values (:tic_nro:,:tic_numero:,:tic_anio:,':tic_tipo:',':tic_tstamp_in:',':use_code:',':tic_nota_in:','ABIERTO' ,':tic_lugar:',':tic_barrio:',':tic_cgpc:',:tic_coordx:,:tic_coordy:,0            ,0        ,':tic_canal:', ':tic_tstamp_plazo:',null             ,':tic_calle_nombre:',:tic_nro_puerta:,null            ,':tic_identificador:',:tic_id_elemento:)";
+         $sql1 = "insert into tic_ticket (tic_nro  ,tic_numero  ,tic_anio  ,tic_tipo    ,tic_tstamp_in    ,use_code    ,tic_nota_in    ,tic_estado,tic_lugar    ,tic_barrio    ,tic_cgpc    ,tic_coordx  ,tic_coordy  ,tic_id_cuadra,tic_forms,tic_canal    , tic_tstamp_plazo    ,tic_tstamp_cierre,tic_calle_nombre    ,tic_nro_puerta  ,tic_nro_asociado,tic_identificador    ,tic_id_elemento  ,tic_cruza_calle    ) ".
+                                 "values (:tic_nro:,:tic_numero:,:tic_anio:,':tic_tipo:',':tic_tstamp_in:',':use_code:',':tic_nota_in:','ABIERTO' ,':tic_lugar:',':tic_barrio:',':tic_cgpc:',:tic_coordx:,:tic_coordy:,0            ,0        ,':tic_canal:', ':tic_tstamp_plazo:',null             ,':tic_calle_nombre:',:tic_nro_puerta:,null            ,':tic_identificador:',:tic_id_elemento:,':tic_cruza_calle:')";
          $params1 = array(
                 'tic_nro'           => $this->tic_nro,
                 'tic_numero'        => $tic_numero, 
@@ -512,7 +575,8 @@ class ticket {
                 'tic_coordx'        => $this->tic_georef->tic_coordx, 
                 'tic_coordy'        => $this->tic_georef->tic_coordy, 
                 'tic_calle_nombre'  => $this->tic_georef->tic_calle_nombre, 
-                'tic_nro_puerta'    => $this->tic_georef->tic_nro_puerta, 
+                'tic_nro_puerta'    => $this->tic_georef->tic_nro_puerta,
+                'tic_cruza_calle'   => $this->tic_georef->tic_calle_nombre2,
                 'tic_identificador' => $this->tic_identificador,
                 'tic_canal'         => $this->tic_canal,
                 'tic_tstamp_plazo'  => ISO8601toDate($this->tic_tstamp_plazo),
