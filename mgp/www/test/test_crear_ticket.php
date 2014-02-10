@@ -1,10 +1,10 @@
 <?php
 
 //DESARROLLO
-$url = "http://mgp/mgp/webservices/tickets";
+//$url = "http://mgp/mgp/webservices/tickets";
 
 //TEST
-//$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
+$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
 
 //PRODUCCION
 //$url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets";
