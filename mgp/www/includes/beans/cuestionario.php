@@ -40,6 +40,7 @@ class cuestionario {
     }
 
     /**
+     * Procesa el mensaje recibido de MiCiudad
      * 
      * @global cdbdata $primary_db
      * @param string $ticket_json
@@ -55,7 +56,7 @@ class cuestionario {
             foreach( $ticket_json->ttp_cuestionario as $preg ) {
                 $cuest = new cuestionario();
 
-                //Busco la pregunta loca segun el identificador de miciudad
+                //Busco la pregunta segun el identificador de miciudad
                 $row = $primary_db->QueryArray("select * from tic_prestaciones_cuest where tpr_miciudad='{$preg->tpr_miciudad}' and tpr_code='{$prestacion->tpr_code}'");
                 if($row) {
                     $cuest->tcu_code = $row['tcu_code'];
@@ -63,11 +64,10 @@ class cuestionario {
                     $cuest->tpr_preg = $row['tpr_preg'];
                     $cuest->tpr_tipo_preg = $row['tpr_tipo_preg'];
                     
-                    if($row['tpr_tipo_preg']=='CHECKBOX') {
-                        $respuesta = ($preg->tpr_respuesta==1 ? 'SI' : 'NO');
-                    } else { 
+                    if($cuest->tpr_tipo_preg=="CHECKBOX" || $cuest->tpr_tipo_preg=="LISTA" || $cuest->tpr_tipo_preg=="MULTIPLE")
+                        $respuesta = miciudad_crossreference::convertToText($preg->tpr_respuesta);
+                    else
                         $respuesta = $preg->tpr_respuesta;
-                    }
                     
                     $cuest->tpr_respuesta = $respuesta;       
                     $res[] = $cuest;
@@ -102,7 +102,7 @@ class cuestionario {
         return $ret;
     }
     
-    /** Proceso mensaje recibido desde MiCiudad donde son atributos extendidos
+    /** 
      * 
      * @global cdbdata $primary_db
      * @param string $frag

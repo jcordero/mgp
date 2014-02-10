@@ -27,7 +27,10 @@ $ingreso_ticket = array(
     'tic_coordx'        =>  -38.09848,
     'tic_coordy'        =>  -57.545197,
     'tic_calle_nombre'  =>  "",
-    'tic_nro_puerta'    =>  0
+    'tic_nro_puerta'    =>  0,
+    'ttp_cuestionario'  =>  array(
+                                (object) array("tpr_miciudad"=>"323", "tpr_respuesta"=>"169")
+                            )
 );
 
 $ingreso_ticket_json = json_encode($ingreso_ticket,JSON_UNESCAPED_UNICODE);
