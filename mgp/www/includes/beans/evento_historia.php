@@ -73,14 +73,14 @@ class evento_historia {
      * 
      * @global type $primary_db
      * @param ciudadano $ciudadano
-     * @return \evento
+     * @return \evento_historia
      */
     static function factoryByCiudadano(ciudadano $ciudadano) {
         global $primary_db;
         $eventos = array();
         $rs = $primary_db->do_execute("select * from ciu_historial_contactos where ciu_code='{$ciudadano->ciu_code}' order by chi_fecha desc");
         while( $row=$primary_db->_fetch_row($rs) ) {
-            $ev = new evento();
+            $ev = new evento_historia();
             $ev->chi_canal  = $row['chi_canal'];
             $ev->chi_code   = $row['chi_code'];
             $ev->chi_fecha  = DatetoISO8601($row['chi_fecha']);

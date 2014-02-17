@@ -1,17 +1,17 @@
 <?php
 
 //DESARROLLO
-//$url = "http://mgp/mgp/webservices/tickets";
+$url = "http://mgp/mgp/webservices/tickets";
 
 //TEST
-$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
+//$url = "http://mgp.commsys.com.ar/mgp/webservices/tickets";
 
 //PRODUCCION
 //$url = "http://147.mardelplata.gob.ar/mgp/webservices/tickets";
     
 /* 'playa' => 'Cabo Largo',
     'lat' => '-38.0985',
-    'lng' => '-57.5452',
+    'lng' => '-57.5452', 
  */
 
 //DECLARACION DEL TICKET
@@ -19,17 +19,17 @@ $ingreso_ticket = array(
     'object'            =>  "ingreso_ticket",
     'tic_tipo'          =>  "RECLAMO",
     'tic_nota_in'       =>  "Una nota inicial",
-    'ciu_nombre'        =>  "Jorge",
-    'ciu_apellido'      =>  "Cordero",
+    'ciu_nombre'        =>  "Romina",
+    'ciu_apellido'      =>  "Borgonovo",
     'ciu_movil'         =>  "1541435224",
-    'ciu_documento'     =>  "ARG DNI 20470276",
+    'ciu_documento'     =>  "ARG DNI 25569985",
     'tpr_code'          =>  "030601",
     'tic_coordx'        =>  -38.09848,
     'tic_coordy'        =>  -57.545197,
     'tic_calle_nombre'  =>  "",
     'tic_nro_puerta'    =>  0,
     'ttp_cuestionario'  =>  array(
-                                (object) array("tpr_miciudad"=>"323", "tpr_respuesta"=>"169")
+                                (object) array("tpr_miciudad"=>"321", "tpr_respuesta"=>"169")
                             )
 );
 
