@@ -681,7 +681,7 @@ create table v_tickets (
   tic_nro_puerta int null,
   tic_nro_asociado int null,
   tic_identificador varchar(45) null,
-  
+  tic_id_elemento int null,
   tpr_code varchar(20) not null,
   tru_code int null,
   ttp_cuestionario varchar(3000) null,
@@ -755,6 +755,7 @@ CREATE TABLE v_ticket_ciu (
     tic_nro_puerta VARCHAR(50) NULL,
     tic_nro_asociado VARCHAR(50) NULL,
     tic_identificador VARCHAR(50) NULL,
+    tic_id_elemento INT NULL,
     ciu_code VARCHAR(50) NULL,
     ttc_tstamp DATETIME NULL,
     ciu_nombres VARCHAR(50) NULL,
@@ -826,5 +827,6 @@ CREATE TABLE v_ticket_vencido (
     tic_lugar VARCHAR(500) NULL,
     tic_barrio VARCHAR(50) NULL,
     tic_nota_in VARCHAR(50) NULL,
+    tic_id_elemento INT NULL,
     constraint pk_v_ticket_vencido primary key clustered (tic_nro) 
 )

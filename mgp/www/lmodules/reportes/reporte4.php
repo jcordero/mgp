@@ -25,9 +25,9 @@ class rep4_sl extends csearchandlist {
 		$this->m_render_html = 'BLOCK';
 		$this->m_render_pdml = 'BLOCK';
 
-        $this->m_search_fields = array('tic_tstamp_in','tpr_code');
+        $this->m_search_fields = array('tic_tstamp_in','tpr_code','tic_id_elemento');
 
-        $this->addAction(3,"../tickets/ticket_maint.php?OP=V&next=../reportes/reporte4.php&last=1",array(new caction_param('tic_nro')),"","ver","V","","");
+        $this->addAction(4,"../tickets/ticket_maint.php?OP=V&next=../reportes/reporte4.php&last=1",array(new caction_param('tic_nro')),"","ver","V","","");
     }
 
     //Inicializo la parte de busqueda
@@ -36,7 +36,8 @@ class rep4_sl extends csearchandlist {
 
     /* Campos de busqueda */
         $this->m_obj->GetField("tic_tstamp_in")->SetDisplayValues(Array("Name"=>"tic_tstamp_in", "Label"=>"Ingreso", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATERANGE", "IsVisible"=>true));
-        $this->m_obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsForDB"=>true, "Order"=>122, "Presentation"=>"REPORTES::PRESTACIONES", "IsNullable"=>false, "IsVisible"=>true));
+        $this->m_obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsForDB"=>true, "Order"=>123, "Presentation"=>"REPORTES::PRESTACIONES", "IsNullable"=>false, "IsVisible"=>true));
+        $this->m_obj->GetField("tic_id_elemento")->SetDisplayValues(Array("Name"=>"tic_id_elemento", "Label"=>"ID Elemento", "Type"=>"int", "IsForDB"=>true, "Order"=>122, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 
 }
@@ -59,37 +60,37 @@ class col101 extends ccolumn
     }
 }
 
-class col129 extends ccolumn
+class col130 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
         $this->m_title = 'Organismo';
-        $this->m_order = '129';
+        $this->m_order = '130';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'tor_code';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>129, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>130, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true));
     }
 }
 
-class col122 extends ccolumn
+class col123 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
         $this->m_title = 'Prestación';
-        $this->m_order = '122';
+        $this->m_order = '123';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'tpr_code';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsForDB"=>true, "Order"=>122, "Presentation"=>"REPORTES::PRESTACIONES", "IsNullable"=>false, "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Size"=>20, "IsForDB"=>true, "Order"=>123, "Presentation"=>"REPORTES::PRESTACIONES", "IsNullable"=>false, "IsVisible"=>true));
     }
 }
 
@@ -110,20 +111,20 @@ class col104 extends ccolumn
     }
 }
 
-class col33 extends ccolumn
+class col34 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
         $this->m_title = 'Fin';
-        $this->m_order = '33';
+        $this->m_order = '34';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'tmp_tstamp_out';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tmp_tstamp_out", "Label"=>"Fin", "Type"=>"datetime", "Order"=>33, "Presentation"=>"DATERANGE", "IsVisible"=>true, "ClassParams"=>"datetime"));
+         $this->m_fields[] = new CField(Array("Name"=>"tmp_tstamp_out", "Label"=>"Fin", "Type"=>"datetime", "Order"=>34, "Presentation"=>"DATERANGE", "IsVisible"=>true, "ClassParams"=>"datetime"));
     }
 }
 
@@ -144,20 +145,20 @@ class col116 extends ccolumn
     }
 }
 
-class col125 extends ccolumn
+class col126 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
         $this->m_title = 'Estado';
-        $this->m_order = '125';
+        $this->m_order = '126';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'ttp_estado';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"ttp_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>125, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"ttp_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>126, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
     }
 }
 
@@ -175,6 +176,23 @@ class col121 extends ccolumn
 
         //Campos de la columna
          $this->m_fields[] = new CField(Array("Name"=>"tic_identificador", "Label"=>"Identificador", "Size"=>45, "IsForDB"=>true, "Order"=>121, "Presentation"=>"TEXT", "IsVisible"=>true));
+    }
+}
+
+class col122 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'ID Elemento';
+        $this->m_order = '122';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tic_id_elemento';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tic_id_elemento", "Label"=>"ID Elemento", "Type"=>"int", "IsForDB"=>true, "Order"=>122, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 }
 
@@ -212,37 +230,37 @@ class col106 extends ccolumn
     }
 }
 
-class col31 extends ccolumn
+class col32 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
         $this->m_title = 'Duracion';
-        $this->m_order = '31';
+        $this->m_order = '32';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'tmp_duracion';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tmp_duracion", "Label"=>"Duracion", "Size"=>50, "Type"=>"text", "Order"=>31, "Presentation"=>"TEXT", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tmp_duracion", "Label"=>"Duracion", "Size"=>50, "Type"=>"text", "Order"=>32, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 }
 
-class col32 extends ccolumn
+class col33 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
         $this->m_title = 'Excedido';
-        $this->m_order = '32';
+        $this->m_order = '33';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'tmp_excedido';
         $this->m_width = '';
 
         //Campos de la columna
-         $this->m_fields[] = new CField(Array("Name"=>"tmp_excedido", "Label"=>"Excedido", "Size"=>50, "Type"=>"text", "Order"=>32, "Presentation"=>"TEXT", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"tmp_excedido", "Label"=>"Excedido", "Size"=>50, "Type"=>"text", "Order"=>33, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 }
 
@@ -257,17 +275,18 @@ class rep4_table extends ctable
 
         //Agrego las columnas a la tabla
         $this->m_cols[101] = new col101($this);
-        $this->m_cols[129] = new col129($this);
-        $this->m_cols[122] = new col122($this);
+        $this->m_cols[130] = new col130($this);
+        $this->m_cols[123] = new col123($this);
         $this->m_cols[104] = new col104($this);
-        $this->m_cols[33] = new col33($this);
+        $this->m_cols[34] = new col34($this);
         $this->m_cols[116] = new col116($this);
-        $this->m_cols[125] = new col125($this);
+        $this->m_cols[126] = new col126($this);
         $this->m_cols[121] = new col121($this);
+        $this->m_cols[122] = new col122($this);
         $this->m_cols[108] = new col108($this);
         $this->m_cols[106] = new col106($this);
-        $this->m_cols[31] = new col31($this);
         $this->m_cols[32] = new col32($this);
+        $this->m_cols[33] = new col33($this);
     }
 
 }

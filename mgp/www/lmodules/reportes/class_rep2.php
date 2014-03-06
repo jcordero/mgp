@@ -30,16 +30,17 @@ class rep2 extends cobjbase {
         $this->m_fields['tic_lugar'] = new CField(Array("Name"=>"tic_lugar", "Size"=>500, "IsForDB"=>true, "Order"=>110));
         $this->m_fields['tic_barrio'] = new CField(Array("Name"=>"tic_barrio", "Size"=>50, "IsForDB"=>true, "Order"=>111));
         $this->m_fields['tic_nota_in'] = new CField(Array("Name"=>"tic_nota_in", "Size"=>50, "IsForDB"=>true, "Order"=>112));
+        $this->m_fields['tic_id_elemento'] = new CField(Array("Name"=>"tic_id_elemento", "Type"=>"int", "IsForDB"=>true, "Order"=>113));
 
         //--Contenedores de Clases dependientes
         // No hay clases dependientes
 
         //Consultas particulares a la base de datos
-        $this->m_loaddb_sql = "SELECT tic_nro, tor_code, tpr_code, tpr_detalle, tic_tstamp_in, tic_tstamp_plazo, ttp_estado, vencido, tic_identificador, tic_lugar, tic_barrio, tic_nota_in FROM v_ticket_vencido  WHERE tic_nro= :tic_nro_key:";
-        $this->m_objfactory_sql = "SELECT tic_nro, tor_code, tpr_code, tpr_detalle, tic_tstamp_in, tic_tstamp_plazo, ttp_estado, vencido, tic_identificador, tic_lugar, tic_barrio, tic_nota_in FROM v_ticket_vencido";
+        $this->m_loaddb_sql = "SELECT tic_nro, tor_code, tpr_code, tpr_detalle, tic_tstamp_in, tic_tstamp_plazo, ttp_estado, vencido, tic_identificador, tic_lugar, tic_barrio, tic_nota_in, tic_id_elemento FROM v_ticket_vencido  WHERE tic_nro= :tic_nro_key:";
+        $this->m_objfactory_sql = "SELECT tic_nro, tor_code, tpr_code, tpr_detalle, tic_tstamp_in, tic_tstamp_plazo, ttp_estado, vencido, tic_identificador, tic_lugar, tic_barrio, tic_nota_in, tic_id_elemento FROM v_ticket_vencido";
         $this->m_objfactory_suffix_sql = "order by tor_code,tpr_code,tic_tstamp_in";
-        $this->m_savedb_update_sql = "UPDATE v_ticket_vencido SET tic_nro= :tic_nro:, tor_code= :tor_code:, tpr_code= :tpr_code:, tpr_detalle= :tpr_detalle:, tic_tstamp_in= :tic_tstamp_in:, tic_tstamp_plazo= :tic_tstamp_plazo:, ttp_estado= :ttp_estado:, vencido= :vencido:, tic_identificador= :tic_identificador:, tic_lugar= :tic_lugar:, tic_barrio= :tic_barrio:, tic_nota_in= :tic_nota_in: WHERE tic_nro=:tic_nro_key:";
-        $this->m_savedb_insert_sql = "INSERT INTO v_ticket_vencido(tic_nro, tor_code, tpr_code, tpr_detalle, tic_tstamp_in, tic_tstamp_plazo, ttp_estado, vencido, tic_identificador, tic_lugar, tic_barrio, tic_nota_in) VALUES (:tic_nro:, :tor_code:, :tpr_code:, :tpr_detalle:, :tic_tstamp_in:, :tic_tstamp_plazo:, :ttp_estado:, :vencido:, :tic_identificador:, :tic_lugar:, :tic_barrio:, :tic_nota_in:)";
+        $this->m_savedb_update_sql = "UPDATE v_ticket_vencido SET tic_nro= :tic_nro:, tor_code= :tor_code:, tpr_code= :tpr_code:, tpr_detalle= :tpr_detalle:, tic_tstamp_in= :tic_tstamp_in:, tic_tstamp_plazo= :tic_tstamp_plazo:, ttp_estado= :ttp_estado:, vencido= :vencido:, tic_identificador= :tic_identificador:, tic_lugar= :tic_lugar:, tic_barrio= :tic_barrio:, tic_nota_in= :tic_nota_in:, tic_id_elemento= :tic_id_elemento: WHERE tic_nro=:tic_nro_key:";
+        $this->m_savedb_insert_sql = "INSERT INTO v_ticket_vencido(tic_nro, tor_code, tpr_code, tpr_detalle, tic_tstamp_in, tic_tstamp_plazo, ttp_estado, vencido, tic_identificador, tic_lugar, tic_barrio, tic_nota_in, tic_id_elemento) VALUES (:tic_nro:, :tor_code:, :tpr_code:, :tpr_detalle:, :tic_tstamp_in:, :tic_tstamp_plazo:, :ttp_estado:, :vencido:, :tic_identificador:, :tic_lugar:, :tic_barrio:, :tic_nota_in:, :tic_id_elemento:)";
         $this->m_savedb_delete_sql = "DELETE FROM v_ticket_vencido WHERE tic_nro=:tic_nro_key:";
         $this->m_savedb_purge_sql = "DELETE FROM v_ticket_vencido";
         $this->m_savedb_total_sql = "SELECT COUNT(*) as cant FROM v_ticket_vencido ";

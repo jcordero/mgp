@@ -124,6 +124,7 @@
                 <searchfield name="tpr_code"        presentation="REPORTES::PRESTACIONES" label="Prestación" />
                 <searchfield name="ciu_nombres"     presentation="TEXT" label="Nombre" />
                 <searchfield name="ciu_apellido"    presentation="TEXT" label="Apellido" />
+                <searchfield name="tic_id_elemento" presentation="TEXT" label="ID Elemento" />
                 
                 <listfield name="tic_nro"           presentation="INT" label="Codigo" isvisible="false"/>
                 <listfield name="tic_tstamp_in"     presentation="DATERANGE" label="Ingreso"/>
@@ -132,6 +133,7 @@
                 <listfield name="tpr_code"          presentation="TEXT" label="Prestación" />
                 <listfield name="tpr_detalle"       presentation="TEXT" label="Prestación" />
                 <listfield name="tic_nota_in"       presentation="TEXT" label="Nota" />
+                <listfield name="tic_id_elemento"   presentation="TEXT" label="ID Elemento" />
                 <listfield name="ciu_nombres"       presentation="TEXT" label="Nombre" />
                 <listfield name="ciu_apellido"      presentation="TEXT" label="Apellido" />
                 <listfield name="ciu_email"         presentation="TEXT" label="EMail" />
@@ -166,6 +168,7 @@
                 <searchfield name="tpr_code"            presentation="REPORTES::PRESTACIONES" label="Prestación" />
                 <searchfield name="tor_code"            presentation="TICKET::ORGANISMO" label="Organismo" />
                 <searchfield name="tic_barrio"          presentation="REPORTES::BARRIO" label="Barrio" />
+                <searchfield name="tic_id_elemento"     presentation="TEXT" label="ID Elemento" />
                 
                 <listfield name="tic_nro"           presentation="INT" label="Codigo" isvisible="false"/>
                 <listfield name="tor_code"          presentation="TICKET::ORGANISMO" label="Organismo" />
@@ -176,6 +179,7 @@
                 <listfield name="vencido"           presentation="TEXT" label="Excedido" />
                 <listfield name="ttp_estado"        presentation="TEXT" label="Estado" />
                 <listfield name="tic_identificador" presentation="TEXT" label="Identificador" />
+                <listfield name="tic_id_elemento"   presentation="TEXT" label="ID Elemento" />
                 <listfield name="tic_lugar"         presentation="TICKET::DIRECCION" label="Dirección" />
                 <listfield name="tic_barrio"        presentation="REPORTES::BARRIO" label="Barrio" isvisible="false"/>
                 <listfield name="tic_nota_in"       presentation="TEXT" label="Nota" />
@@ -207,6 +211,7 @@
                 <searchfield name="tic_tstamp_in"       presentation="DATERANGE" label="Ingreso"/>
                 <searchfield name="tpr_code"            presentation="REPORTES::PRESTACIONES" label="Prestación" />
                 <searchfield name="tic_lugar"           presentation="REPORTES::LUMINARIA" label="Luminaria" />
+                <searchfield name="tic_id_elemento"     presentation="TEXT" label="ID Elemento" />
                 
                 <listfield name="tic_nro"           presentation="INT" label="Codigo" isvisible="false"/>
                 <listfield name="tor_code"          presentation="TICKET::ORGANISMO" label="Organismo" />
@@ -215,6 +220,7 @@
                 <listfield name="tic_tstamp_plazo"  presentation="DATERANGE" label="Plazo" classparams="datetime" />
                 <listfield name="ttp_estado"        presentation="REPORTES::ESTADO_PRESTACION" label="Estado" />
                 <listfield name="tic_identificador" presentation="TEXT" label="Identificador" />
+                <listfield name="tic_id_elemento"   presentation="TEXT" label="ID Elemento" />
                 <listfield name="tic_lugar"         presentation="TICKET::DIRECCION" label="Dirección" />
                 <listfield name="tic_nota_in"       presentation="TEXT" label="Nota" />
                 
@@ -245,7 +251,8 @@
 			
                 <searchfield name="tic_tstamp_in"       presentation="DATERANGE" label="Ingreso"/>
                 <searchfield name="tpr_code"            presentation="REPORTES::PRESTACIONES" label="Prestación" />
-                
+                <searchfield name="tic_id_elemento"     presentation="TEXT" label="ID Elemento" />
+                 
                 <listfield name="tic_nro"           presentation="INT" label="Codigo" isvisible="false"/>
                 <listfield name="tor_code"          presentation="TICKET::ORGANISMO" label="Organismo" />
                 <listfield name="tpr_code"          presentation="REPORTES::PRESTACIONES" label="Prestación" />
@@ -254,6 +261,7 @@
                 <listfield name="tic_tstamp_plazo"  presentation="DATERANGE" label="Plazo" classparams="datetime" />
                 <listfield name="ttp_estado"        presentation="REPORTES::ESTADO_PRESTACION" label="Estado" />
                 <listfield name="tic_identificador" presentation="TEXT" label="Identificador" />
+                <listfield name="tic_id_elemento"   presentation="TEXT" label="ID Elemento" />
                 <listfield name="tic_lugar"         presentation="TICKET::DIRECCION" label="Dirección" />
                 <listfield name="tic_nota_in"       presentation="TEXT" label="Nota" />
                 <listfield name="tmp_duracion"      presentation="TEXT" label="Duracion" />

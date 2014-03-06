@@ -25,9 +25,9 @@ class rep2_sl extends csearchandlist {
 		$this->m_render_html = 'BLOCK';
 		$this->m_render_pdml = 'BLOCK';
 
-        $this->m_search_fields = array('tic_tstamp_in','tic_tstamp_plazo','tpr_code','tor_code','tic_barrio');
+        $this->m_search_fields = array('tic_tstamp_in','tic_tstamp_plazo','tpr_code','tor_code','tic_barrio','tic_id_elemento');
 
-        $this->addAction(6,"../tickets/ticket_maint.php?OP=V&next=../reportes/reporte2.php&last=1",array(new caction_param('tic_nro')),"","ver","V","","");
+        $this->addAction(7,"../tickets/ticket_maint.php?OP=V&next=../reportes/reporte2.php&last=1",array(new caction_param('tic_nro')),"","ver","V","","");
     }
 
     //Inicializo la parte de busqueda
@@ -40,6 +40,7 @@ class rep2_sl extends csearchandlist {
         $this->m_obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Label"=>"Prestación", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "Presentation"=>"REPORTES::PRESTACIONES", "IsVisible"=>true));
         $this->m_obj->GetField("tor_code")->SetDisplayValues(Array("Name"=>"tor_code", "Label"=>"Organismo", "Type"=>"int", "IsForDB"=>true, "Order"=>102, "Presentation"=>"TICKET::ORGANISMO", "IsVisible"=>true));
         $this->m_obj->GetField("tic_barrio")->SetDisplayValues(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"REPORTES::BARRIO", "IsVisible"=>true));
+        $this->m_obj->GetField("tic_id_elemento")->SetDisplayValues(Array("Name"=>"tic_id_elemento", "Label"=>"ID Elemento", "Type"=>"int", "IsForDB"=>true, "Order"=>113, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 
 }
@@ -198,6 +199,23 @@ class col109 extends ccolumn
     }
 }
 
+class col113 extends ccolumn
+{
+    function __construct($parent)
+    {
+        parent::__construct($parent);
+        $this->m_title = 'ID Elemento';
+        $this->m_order = '113';
+        $this->m_isvisible = true;
+        $this->m_align = 'left';
+        $this->m_sort_field = 'tic_id_elemento';
+        $this->m_width = '';
+
+        //Campos de la columna
+         $this->m_fields[] = new CField(Array("Name"=>"tic_id_elemento", "Label"=>"ID Elemento", "Type"=>"int", "IsForDB"=>true, "Order"=>113, "Presentation"=>"TEXT", "IsVisible"=>true));
+    }
+}
+
 class col110 extends ccolumn
 {
     function __construct($parent)
@@ -249,13 +267,13 @@ class col112 extends ccolumn
     }
 }
 
-class col113 extends ccolumn
+class col114 extends ccolumn
 {
     function __construct($parent)
     {
         parent::__construct($parent);
         $this->m_title = 'Ciudadano';
-        $this->m_order = '113';
+        $this->m_order = '114';
         $this->m_isvisible = true;
         $this->m_align = 'left';
         $this->m_sort_field = 'tic_nro';
@@ -285,10 +303,11 @@ class rep2_table extends ctable
         $this->m_cols[108] = new col108($this);
         $this->m_cols[107] = new col107($this);
         $this->m_cols[109] = new col109($this);
+        $this->m_cols[113] = new col113($this);
         $this->m_cols[110] = new col110($this);
         $this->m_cols[111] = new col111($this);
         $this->m_cols[112] = new col112($this);
-        $this->m_cols[113] = new col113($this);
+        $this->m_cols[114] = new col114($this);
     }
 
 }
