@@ -414,6 +414,7 @@ function reset_form()
         id_elemento.m_mandatory = false;
         col_linea.m_mandatory = false;
 
+        $("#rubro").hide();
         cambia_direccion();
 
         $("#contenido_domicilio input,select,textarea").each (function(){
@@ -467,7 +468,8 @@ function cambio_prestacion(codigo)
         if( jdata[0].tpr_tipo==="DENUNCIA" )
         {
             rubro.m_mandatory = true;
-
+            $("#rubro").show();
+            
             //Completo el combo rubro
             new rem_request(this,function(obj,json){
                 if(json==="")
@@ -476,6 +478,7 @@ function cambio_prestacion(codigo)
                     return; //No hay detalle de la prestacion
                 }
                 var jdata2 = JSON.parse( json );
+                var objrubro = document.getElementById("m_rubro");
                 fillCombo(objrubro,jdata2,objrubro.id,"tru_code","","tru_detalle");    
             },"TICKET::PRESTACIONTREE","getRubroPrest",codigo);
         }

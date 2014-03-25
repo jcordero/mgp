@@ -77,7 +77,7 @@ class CDH_PRESTACIONTREE extends CDH_KTREE
         $conjunto = array();
         while( $row=$primary_db->_fetch_row($re) )
         {
-            $conjunto[] = array('tru_code' => $row['tru_code'],'tru_detalle' => $row['tru_detallle']) ;
+            $conjunto[] = array('tru_code' => $row['tru_code'],'tru_detalle' => $row['tru_detalle']) ;
         }
         return json_encode($conjunto,JSON_UNESCAPED_UNICODE);
     }
