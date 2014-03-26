@@ -278,6 +278,9 @@ class prestacion {
             $prest->tpr_description_full    = self::getFullDescription($prest->tpr_code);
             $prest->tpr_tipo                = $row['tpr_tipo'];
             
+            //Ajusto el tipo del ticket
+            $ticket->tic_tipo = $prest->tpr_tipo;
+            
             //El plazo viene en dos partes, una donde esta la cantidad y otra donde esta la unidad. Ejemplo: 2 dias
             list($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo) = self::plazoComponents($row['tpr_plazo']);
             $prest->ttp_tstamp_plazo        = self::getVencimiento($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo);

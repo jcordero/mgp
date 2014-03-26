@@ -274,7 +274,8 @@ class ticket {
     static protected function generaCodigoTicket($tipo,$anio)
     {
         global $primary_db;
-        return $primary_db->Sequence("$tipo-$anio");
+        //return $primary_db->Sequence("$tipo-$anio");
+        return $primary_db->Sequence("RECLAMO-$anio");
     }
     
     /** Agrega al ticket una foto, que viene codificada en formato base64
@@ -447,8 +448,15 @@ class ticket {
         } else {
             if($this->tic_nro==0 || $this->tic_nro=='') {
                 $this->tic_nro = $primary_db->QueryString("select tic_nro from tic_ticket where tic_identificador='{$this->tic_identificador}'");
-                if( intval($this->tic_nro)==0 ) 
-                    return false; //El ticket pedido no existe         
+                if( intval($this->tic_nro)==0 ) {
+                    //Pruebo si es una denuncia... 
+                    $p = explode(" ",$this->tic_identificador);
+                    $this->tic_identificador = "DENUNCIA ".$p[1];
+                    $this->tic_nro = $primary_db->QueryString("select tic_nro from tic_ticket where tic_identificador='{$this->tic_identificador}'");
+                    if( intval($this->tic_nro)==0 ) {
+                        return false; //El ticket pedido no existe
+                    }
+                }
             }      
         }
                 
