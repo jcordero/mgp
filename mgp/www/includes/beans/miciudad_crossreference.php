@@ -13,21 +13,40 @@ class miciudad_crossreference {
         184 => array(9, "Venta Mayorista"),
     );
     
+    public static $valores = array(
+        165 => "NO",
+        166 => "SI",
+        168 => "En el balneario",
+        169 => "En la playa",
+        170 => "En espacios verdes anexos",
+        
+        171 => "Bebidas",
+        172 => "Conservas", 
+        173 => "Productos frescos",
+        174 => "Comidas elaboradas y envasadas",
+        
+        175 => "Productos frescos",
+        176 => "Comidas elaboradas y envasadas",
+   
+        177 => "1 a 5",
+        178 => "6 a 10",
+        179 => "Más de 10",
+        
+        180 => "Bebidas",
+        181 => "Conservas",
+        182 => "Productos frescos",
+        183 => "Comidas elaboradas y envasadas",
+        
+        184 => "Productos frescos",
+        185 => "Comidas elaboradas y envasadas"
+    );
+    
     static function convertToText($val) {
-        switch($val) {
-            case 165:
-                return "NO";
-            case 166:
-                return "SI";
-            case 168:
-                return "En el balneario";
-            case 169:
-                return "En la playa";
-            case 170:
-                return "En espacios verdes anexos";
-            default:
-                return $val;
-        }
+        if(isset(self::$valores[$val])) {
+            return self::$valores[$val];
+        } else {
+            return "";
+        }         
     }
     
     static function convertToRubro($val) {
