@@ -430,9 +430,16 @@ class prestacion {
         return array($plazo, $plazo_unit, $plazo_tipo);
     }
     
+    /** Calcular la fecha de vencimiento
+     * 
+     * @global cdbdata $primary_db
+     * @param int $cant cantidad de ...
+     * @param string $unit unidad DAY, HOUR, MINUTE
+     * @param string $tipo forma de contar los dias LABORALES o CORRIDOS
+     * @return string Fecha de vencimiento Y-m-d H:i:s
+     */
     static function getVencimiento($cant, $unit, $tipo) {
-        global $primary_db;
-        
+        //error_log("getVencimiento(\$cant=$cant, \$unit=$unit, \$tipo=$tipo) * * *");
         $hoy = time();
         
         $hoy_dia    = (int) date('j',$hoy);
@@ -459,35 +466,56 @@ class prestacion {
         
         //Tipo de lapso
         if($tipo==='LABORALES') {
+            $feriados = self::getFeriados();
             
-            //Cuantos dias hay en el medio entre hoy y el vencimiento?
-            $agregar = 0;
-            for($j=$hoy;$j<$vencimiento;$j+=86400) {
+            //Cuantos dias no laborales hay en el medio entre hoy y el vencimiento?
+            for($j=$hoy; $j<$vencimiento; $j+=86400) {
+                $fecha = date('Y-m-d',$j);
+
                 if( date('D',$j)==='Sat' || date('D',$j)==='Sun' ) {
-                        $agregar++;
+                    //error_log("prestacion::getVencimiento() agrego dia x fin de semana ($fecha)");
+                    $vencimiento+=86400;
                 } else {
-                    //Es un dia de semana, pero feriado?
-                    $fecha = date('Y-m-d',$j);
-                    $f = $primary_db->QueryString("select count(*) as cant from tic_feriados where tfe_tstamp_in='{$fecha}'");
-                    if((int)$f===1)
-                        $agregar++;
+                    //Es un dia de semana, pero es feriado?
+                    if(isset($feriados[$fecha])) {
+                        //error_log("prestacion::getVencimiento() agrego dia x feriado ({$fecha}) - {$feriados[$fecha]}");
+                        $vencimiento+=86400;
+                    }
                 }
             }
-            $vencimiento+=$agregar*86400;
             
             //Si el vencimiento cae un Sabado, debo pasarlo 2 dias al Lunes
-            if( date('D',$vencimiento)==='Sat' )
+            if( date('D',$vencimiento)==='Sat' ){
+                //error_log("prestacion::getVencimiento() agrego 2 dias x terminar en sabado ($fecha)");
                 $vencimiento += 86400 * 2;
-            
+            }
             //Si el vencimiento cae un Domingo, debo pasarlo 1 dia al Lunes
-            if( date('D',$vencimiento)==='Sun' )
-                    $vencimiento += 86400;
+            if( date('D',$vencimiento)==='Sun' ){
+                //error_log("prestacion::getVencimiento() agrego dia x terminar en domingo ($fecha)");
+                $vencimiento += 86400;
+            }
+            $fecha = date('Y-m-d',$vencimiento);
+            if(isset($feriados[$fecha])) {
+                //error_log("prestacion::getVencimiento() agrego dia x terminar en feriado ({$fecha}) - {$feriados[$fecha]}");
+                $vencimiento+=86400;
+            }
         }
         $resultado = date('Y-m-d H:i:s',$vencimiento);
-        error_log("getVencimiento(\$cant=$cant, \$unit=$unit, \$tipo=$tipo) resultado  ".$resultado);
+        error_log("prestacion::getVencimiento(\$cant=$cant, \$unit=$unit, \$tipo=$tipo) resultado  ".$resultado);
         return $resultado;
     }
     
+    static function getFeriados() {
+        global $primary_db;
+        $feriados = array();
+        $rs = $primary_db->do_execute("select * from tic_feriados");
+        while( $row = $primary_db->_fetch_row($rs) ) {
+            $feriados[substr($row["tfe_tstamp_in"],0,10)] = $row["tfe_desc"];
+        }
+        //error_log("prestacion::getFeriados() ".print_r($feriados,true));
+        return $feriados;
+    }
+        
     /** Crea una descripcion completa de la prestacion
      * 
      * @global cdbdata $primary_db
