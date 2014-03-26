@@ -173,8 +173,8 @@ class prestacion {
         $errores = array();
           
         //Creo una prestacion (tic_ticket_prestaciones)
-        $sql2 = "insert into tic_ticket_prestaciones (tic_nro  , tpr_code    , tru_code  , ttp_estado    , ttp_prioridad    , ttp_tstamp_plazo    , ttp_alerta) 
-                                              values (:tic_nro:, ':tpr_code:', :tru_code:, ':ttp_estado:', ':ttp_prioridad:', ':ttp_tstamp_plazo:', ':ttp_alerta:')";
+        $sql2 = "insert into tic_ticket_prestaciones (tic_nro  , tpr_code    , tru_code  , ttp_estado    , ttp_prioridad    , ttp_tstamp_plazo    , ttp_alerta) ".
+                                             "values (:tic_nro:, ':tpr_code:', :tru_code:, ':ttp_estado:', ':ttp_prioridad:', ':ttp_tstamp_plazo:', ':ttp_alerta:')";
         $params2 = array(
             'tic_nro'             => $ticket->getNro(), 
             'tpr_code'            => $this->tpr_code, 
@@ -189,17 +189,17 @@ class prestacion {
         $primary_db->do_execute($sql2,$errores,$params2);
                 
         //Le creo un primer registro de avance
-        foreach($this->avance as $av)
+        foreach($this->avance as $av) {
             $av->save($ticket, $this->tpr_code);
-         
+        }
         //Salvo los organismos
-        foreach($this->organismos as $org)
+        foreach($this->organismos as $org) {
             $org->save($ticket, $this->tpr_code);
-
+        }
         //Salvo el cuestionario
-        foreach($this->cuestionario as $preg)
+        foreach($this->cuestionario as $preg) {
             $preg->save($ticket, $this->tpr_code);
-        
+        }
         //Notifica al event bus
         $eev_task = $primary_db->QueryString("select eev_task from tic_prestaciones where tpr_code='{$this->tpr_code}'");
         if($eev_task!=='') {
@@ -231,26 +231,27 @@ class prestacion {
     static function factory($tic_nro) {
         global $primary_db;
         $ret = array();
-        $sql = "select * from tic_ticket_prestaciones ttp 
-                    LEFT OUTER JOIN tic_prestaciones tpr ON ttp.tpr_code=tpr.tpr_code
-                    LEFT OUTER JOIN tic_rubros tru ON ttp.tru_code=tru.tru_code    
-                WHERE ttp.tic_nro='{$tic_nro}'";
+        $sql = "select * from tic_ticket_prestaciones ttp ".
+                    "LEFT OUTER JOIN tic_prestaciones tpr ON ttp.tpr_code=tpr.tpr_code ".
+                    "LEFT OUTER JOIN tic_rubros tru ON ttp.tru_code=tru.tru_code ".    
+               "WHERE ttp.tic_nro='{$tic_nro}'";
         $rs = $primary_db->do_execute($sql);
         while( $row=$primary_db->_fetch_row($rs) ) {
             $prest = new prestacion();
             
-            $prest->tpr_code          = $row['tpr_code'];
-            $prest->tpr_description   = $row['tpr_detalle'];
-            $prest->tru_code          = $row['tru_code'];
-            $prest->tru_description   = $row['tru_detalle'];
-            $prest->ttp_estado        = $row['ttp_estado'];
-            $prest->ttp_prioridad     = $row['ttp_prioridad'];
-            $prest->ttp_tstamp_plazo  = DatetoISO8601($row['ttp_tstamp_plazo']); 
-            $prest->ttp_alerta        = $row['ttp_alerta'];
-            $prest->avance            = avance::factory($tic_nro, $row['tpr_code']);
-            $prest->organismos        = organismo::factory($tic_nro, $row['tpr_code']);
-            $prest->cuestionario      = cuestionario::factory($tic_nro, $row['tpr_code']); 
+            $prest->tpr_code            = $row['tpr_code'];
+            $prest->tpr_description     = $row['tpr_detalle'];
+            $prest->tru_code            = $row['tru_code'];
+            $prest->tru_description     = $row['tru_detalle'];
+            $prest->ttp_estado          = $row['ttp_estado'];
+            $prest->ttp_prioridad       = $row['ttp_prioridad'];
+            $prest->ttp_tstamp_plazo    = DatetoISO8601($row['ttp_tstamp_plazo']); 
+            $prest->ttp_alerta          = $row['ttp_alerta'];
+            $prest->avance              = avance::factory($tic_nro, $row['tpr_code']);
+            $prest->organismos          = organismo::factory($tic_nro, $row['tpr_code']);
+            $prest->cuestionario        = cuestionario::factory($tic_nro, $row['tpr_code']); 
             $prest->tpr_description_full = self::getFullDescription($prest->tpr_code);
+            
             $ret[] = $prest;
         }
         return $ret;
@@ -267,23 +268,20 @@ class prestacion {
         global $primary_db;
         
         $prest = new prestacion();
-        $prest->tpr_code = _g($ticket_json,'tpr_code');
-        $prest->ttp_estado = 'pendiente';
+        $prest->tpr_code    = _g($ticket_json,'tpr_code');
+        $prest->ttp_estado  = 'pendiente';
         
         //Datos de la prestacion
         $row = $primary_db->QueryArray("select tpr_tipo,tpr_detalle,tpr_plazo from tic_prestaciones where tpr_code='{$prest->tpr_code}'");
-        if( $row )
-        {
-            $prest->tpr_description = $row['tpr_detalle'];
-            $prest->tpr_description_full = self::getFullDescription($prest->tpr_code);
-            $prest->tpr_tipo = $row['tpr_tipo'];
+        if( $row ) {
+            $prest->tpr_description         = $row['tpr_detalle'];
+            $prest->tpr_description_full    = self::getFullDescription($prest->tpr_code);
+            $prest->tpr_tipo                = $row['tpr_tipo'];
             
             //El plazo viene en dos partes, una donde esta la cantidad y otra donde esta la unidad. Ejemplo: 2 dias
             list($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo) = self::plazoComponents($row['tpr_plazo']);
-            $prest->ttp_tstamp_plazo = self::getVencimiento($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo);
-        }
-        else
-        {
+            $prest->ttp_tstamp_plazo        = self::getVencimiento($prest->plazo, $prest->plazo_unit, $prest->plazo_tipo);
+        } else {
             //No existe la prestacion
             $ticket->addError("La prestación codigo {$prest->tpr_code} no existe.");
             return array($prest);
@@ -294,14 +292,12 @@ class prestacion {
         //busco la prioridad ahi. Caso contrario se inician todos los tickets
         //con la misma prioridad.
         //Si esta declarada la georeferencia ahi, entonces le doy precedencia sobre la declarada en la prestación
-        if($prest->tpr_tipo=="DENUNCIA")
-        {
+        if($prest->tpr_tipo=="DENUNCIA") {
             $prest->tru_code = _g($ticket_json,"rubro");
             $prest->tru_description = $primary_db->QueryString("select tru_detalle from tic_rubros where tru_code='{$prest->tru_code}'");
                     
             $row = $primary_db->QueryArray("select tpr_prioridad,tor_code,tto_figura from tic_prestaciones_rubros where tpr_code='{$prest->tpr_code}' and tru_code='{$prest->tru_code}'");
-            if( $row )
-            {
+            if( $row ) {
                 $prest->ttp_prioridad = $row['tpr_prioridad'];
                 $tor_code = $row['tor_code'];
                 $tto_figura= $row['tto_figura'];
@@ -318,13 +314,10 @@ class prestacion {
             } 
             
             //Esta declarada la prioridad?
-            if($prest->ttp_prioridad=="")
-            {
+            if($prest->ttp_prioridad=="") {
                 $prest->ttp_prioridad = "1.1";
             }
-        }
-        else
-        {
+        } else {
             //Queja, Reclamo, Solicitud
             $prest->tru_code = 0;
             $prest->tru_description = '';

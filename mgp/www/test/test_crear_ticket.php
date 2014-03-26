@@ -11,7 +11,10 @@ $url = "http://mgp/mgp/webservices/tickets";
     
 /* 'playa' => 'Cabo Largo',
     'lat' => '-38.0985',
-    'lng' => '-57.5452', 
+    'lng' => '-57.5452',
+ * 
+ * 
+ * {"tipo":"DOMICILIO","alternativa":"NRO","calle_nombre":"SALTA","calle":null,"callenro":2100,"piso":"","dpto":"","nombre_fantasia":"","barrio":"PLAZA PERALTA RAMOS","comuna":"","lat":-37.99987411499,"lng":-57.557281494141,"calle_nombre2":null,"calle2":null} 
  */
 
 //DECLARACION DEL TICKET
@@ -23,13 +26,13 @@ $ingreso_ticket = array(
     'ciu_apellido'      =>  "Borgonovo",
     'ciu_movil'         =>  "1541435224",
     'ciu_documento'     =>  "ARG DNI 25569985",
-    'tpr_code'          =>  "030601",
-    'tic_coordx'        =>  -38.09848,
-    'tic_coordy'        =>  -57.545197,
-    'tic_calle_nombre'  =>  "",
-    'tic_nro_puerta'    =>  0,
+    'tpr_code'          =>  "0901",
+    'tic_coordx'        =>  -37.99987411499,
+    'tic_coordy'        =>  -57.557281494141,
+    'tic_calle_nombre'  =>  "SALTA",
+    'tic_nro_puerta'    =>  2100,
     'ttp_cuestionario'  =>  array(
-                                (object) array("tpr_miciudad"=>"321", "tpr_respuesta"=>"169")
+                                (object) array("tpr_miciudad"=>"325", "tpr_respuesta"=>"182") //Rubro:: Pizzeria
                             )
 );
 

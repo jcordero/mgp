@@ -2,23 +2,49 @@
 include_once 'beans/miciudad_crossreference.php';
 
 class cuestionario {
-    public $tcu_code; 
-    public $tpr_preg; 
+    /** Codigo de la pregunta del cuestionario
+     *
+     * @var int 
+     */
+    public $tcu_code;
+    /** Pregunta
+     *
+     * @var string 
+     */
+    public $tpr_preg;
+    /** Tipo de pregunta
+     *
+     * @var string TEXTO, LISTA, MULTIPLE, CHECKBOX 
+     */
     public $tpr_tipo_preg; 
+    /** Respuesta a la pregunta
+     *
+     * @var string En caso de multiple, lista separada por comas 
+     */
     public $tpr_respuesta; 
+    /** Codigo para la pregunta usado en MiCiudad
+     *
+     * @var int 
+     */
     public $tpr_miciudad;
     
     function __construct() {
         
     }
     
-    function save($parent, $tpr_code) {
+    /** Salvar el contenido de la pregunta en la prestacion y ticket
+     * 
+     * @global cdbdata $primary_db
+     * @param ticket $parent
+     * @param string $tpr_code
+     */
+    function save(ticket $parent, $tpr_code) {
         global $primary_db;
         $errores = array();
         
         //salvo la pregunta (tic_ticket_cuestionario)
-        $sql3 = "insert into tic_ticket_cuestionario (tic_nro  , tpr_code   , tcu_code , tpr_preg   , tpr_tipo_preg   , tpr_respuesta   , tpr_miciudad) 
-                                              values (:tic_nro:,':tpr_code:',:tcu_code:,':tpr_preg:',':tpr_tipo_preg:',':tpr_respuesta:',':tpr_miciudad:')";
+        $sql3 = "insert into tic_ticket_cuestionario (tic_nro  , tpr_code   , tcu_code , tpr_preg   , tpr_tipo_preg   , tpr_respuesta   , tpr_miciudad   ) ". 
+                                             "values (:tic_nro:,':tpr_code:',:tcu_code:,':tpr_preg:',':tpr_tipo_preg:',':tpr_respuesta:',':tpr_miciudad:')";
         $params3 = array(
               'tic_nro'         => $parent->getNro(), 
               'tpr_code'        => $tpr_code, 
@@ -32,11 +58,18 @@ class cuestionario {
 
     }
     
+    /** Crear una pregunta para una prestacion de un ticket
+     * 
+     * @param type $tic_nro_ticket
+     * @param type $tpr_code
+     * @return type
+     */
     static function factory($tic_nro_ticket,$tpr_code) {
-        if(is_object($tic_nro_ticket))
+        if(is_object($tic_nro_ticket)) {
             return self::factoryJSON ($tic_nro_ticket);
-        else 
+        } else { 
             return self::factoryDB ($tic_nro_ticket, $tpr_code);
+        }
     }
 
     /**
@@ -64,18 +97,30 @@ class cuestionario {
                     $cuest->tpr_preg = $row['tpr_preg'];
                     $cuest->tpr_tipo_preg = $row['tpr_tipo_preg'];
                     
-                    if($cuest->tpr_tipo_preg=="CHECKBOX" || $cuest->tpr_tipo_preg=="LISTA" || $cuest->tpr_tipo_preg=="MULTIPLE")
+                    if($cuest->tpr_tipo_preg=="CHECKBOX" || $cuest->tpr_tipo_preg=="LISTA" || $cuest->tpr_tipo_preg=="MULTIPLE") {
                         $respuesta = miciudad_crossreference::convertToText($preg->tpr_respuesta);
-                    else
+                    } else {
                         $respuesta = $preg->tpr_respuesta;
-                    
+                    }
                     $cuest->tpr_respuesta = $respuesta;       
                     $res[] = $cuest;
                 }
                 else
                 {
                     //El atributo extendido de miCiudad no se encuentra
-                    $ticket->addError("El atributo {$preg->tpr_miciudad} no se encuentra en el sistema.");
+                    //Es el "rubro" ?
+                    $miciudad_rubro = (defined("MICIUDAD_RUBRO") ? MICIUDAD_RUBRO : 0);
+                    if( $preg->tpr_miciudad == $miciudad_rubro ) {
+                        //Cual es el rubro?
+                        $rubro = miciudad_crossreference::convertToRubro($preg->tpr_respuesta);
+                        if($rubro) {
+                            $prestacion->tru_code       = $rubro[0]; 
+                            $prestacion->tru_description= $rubro[1];
+                            $prestacion->ttp_prioridad  = "1";
+                        }
+                    } else {
+                        $ticket->addError("El atributo {$preg->tpr_miciudad} no se encuentra en el sistema.");
+                    }
                 }
             }
         }

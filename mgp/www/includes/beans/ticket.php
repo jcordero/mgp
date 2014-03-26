@@ -221,26 +221,26 @@ class ticket {
             $this->tic_nota_in      = _g($ticket,'tic_nota_in');
     
             //Fecha de carga
-            if( $this->tic_tstamp_in==='' )
+            if( $this->tic_tstamp_in==='' ) {
                 $this->tic_tstamp_in = DatetoISO8601('');
-   
+            }
             //Agrego Prestacion
             $this->prestaciones = prestacion::fromJSON($ticket,$this);
 
             //Tipo de georeferencia
-            $this->tic_georef = new georeferencias();
+            $this->tic_georef   = new georeferencias();
             $this->tic_georef->fromJSON($ticket,$this);
-            $this->tic_lugar = $this->tic_georef->createLugar();
+            $this->tic_lugar    = $this->tic_georef->createLugar();
             
             //Agrego Ciudadano Solicitante
             $ciu = new solicitante();
-            $ciu->ciu_nombres       = _g($ticket,'ciu_nombre');
-            $ciu->ciu_apellido      = _g($ticket,'ciu_apellido');
-            $ciu->ciu_telefono_movil = _g($ticket,'ciu_movil');
-            $ciu->ciu_email         = _g($ticket,'ciu_email');
-            $ciu->ciu_documento     = _g($ticket,'ciu_documento');
-            $ciu->ttc_tstamp        = $this->tic_tstamp_in;
-            $this->solicitantes[] = $ciu;
+            $ciu->ciu_nombres           = _g($ticket,'ciu_nombre');
+            $ciu->ciu_apellido          = _g($ticket,'ciu_apellido');
+            $ciu->ciu_telefono_movil    = _g($ticket,'ciu_movil');
+            $ciu->ciu_email             = _g($ticket,'ciu_email');
+            $ciu->ciu_documento         = _g($ticket,'ciu_documento');
+            $ciu->ttc_tstamp            = $this->tic_tstamp_in;
+            $this->solicitantes[]       = $ciu;
                                 
             //Foto
             $this->media = _g($ticket,'media');
@@ -249,9 +249,9 @@ class ticket {
                 
             //Canal de ingreso
             $this->tic_canal = strtoupper( _g($ticket,'tic_canal') );
-            if($this->tic_canal=='')
+            if($this->tic_canal=='') {
                 $this->tic_canal = 'MOVIL';
-            
+            }
             //Estado del ticket
             $this->tic_estado = 'ABIERTO';
             

@@ -25,6 +25,7 @@ define("CMD_UPDATE_PLATAFORMA","ls");
 
 define("PHP_CMD","/usr/bin/php -c /opt/local/etc/php54/php.ini -d include_path=.:/Users/jcordero/plataforma4/Plataforma4/includes:/Users/jcordero/plataforma4_sites/mgp_git/mgp/www/includes");
 
+define("MICIUDAD_RUBRO",325);
 define("DEBUG",		true);
 define("DEFAULT_SMTP",1);
 //Fin de la configuracion
