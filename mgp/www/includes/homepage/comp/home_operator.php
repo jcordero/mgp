@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /* Pantalla inicial para el operador del call
  *
  * CASO ESPERA:
@@ -17,16 +18,11 @@
 include_once 'homepage/comp/talk.php';
 include_once "common/cfield.php";
 
-if(!class_exists('home_operator'))
-{
-	class home_operator
-	{
-            public function Render($context)
-            {
-                $content = array(); 
-                $errors = array(); 
-                                 
-         	$tab2 = '
+class home_operator {
+
+    public function Render(ccontext $context) {
+        
+        $tab2 = '
          	<div id="offline" class="alert">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <strong>Atención!</strong>
@@ -74,10 +70,8 @@ if(!class_exists('home_operator'))
             	</div>
             	
         	</div>'; // cierro tickets
-
-            
 //LLamadas anteriores
-         	$tab3 = '
+        $tab3 = '
          	<div id="calls" class="container">	
 	          	<div class="row">
 	          		<div id="calls_tbl" class="span12"></div>
@@ -94,11 +88,8 @@ if(!class_exists('home_operator'))
               	</div>
               	
 			</div>'; //cierro calls
-
-			
-			
 //Ciudadanos por ANI
-         	$tab4 = '
+        $tab4 = '
          	<div id="ciudadanos" class="container">
 				<div class="row">
 					<div id="ciudadanos_tbl" class="span12"></div>
@@ -114,10 +105,8 @@ if(!class_exists('home_operator'))
 	            </div>
 	            
 			</div>'; //cierro ciudadanos
-
-						
 //Armo el TAB
-			$html = '
+        $html = '
 		
 			<ul class="nav nav-tabs" data-tabs="tabs">
     			<li class="active"><a href="#tab1" data-toggle="tab">Tickets</a></li>
@@ -126,25 +115,22 @@ if(!class_exists('home_operator'))
   			</ul>
 		
 			<div class="tab-content">
-				<div class="tab-pane active" id="tab1">'.$tab2.'</div>
+				<div class="tab-pane active" id="tab1">' . $tab2 . '</div>
 
-    			<div class="tab-pane" id="tab2">'.$tab3.'</div>
+    			<div class="tab-pane" id="tab2">' . $tab3 . '</div>
 
-    			<div class="tab-pane" id="tab3">'.$tab4.'</div>	
+    			<div class="tab-pane" id="tab3">' . $tab4 . '</div>	
 			</div>	
 	
 		';
-			
-			//Bloque TALK
-			$t = new talk();
-                	list($cnt,$err,$includes) = $t->Render($context);
-                        if(count($err)>0)
-                            $errors = array_merge($errors, $err);
-                        
-			$content["home_operator"] = $cnt['talk'].$html;
-			return array( $content, $errors, $includes );
-		}
-	}
-}
 
-?>	
+        //Bloque TALK
+        $t = new talk();
+        $t->Render($context);
+               
+        $context->add_content($context->m_key, $html, true);
+        
+        return;
+    }
+
+}

@@ -1,54 +1,67 @@
 <?php 
-if(!class_exists('home_dashboard'))
-{
-	class home_dashboard
-	{
-            public function Render($context)
-            {
-                $includes = array();
-                $content = array();
-                $errors = array();
-                
-                $dash_config = (isset($_SESSION["dash_config"]) ? $_SESSION["dash_config"] : (object) array("boton"=>"ABIERTOS","canal"=>"","organismo"=>"","prestacion"=>"","barrio"=>""));
-                
-                $html = '   <script type="text/javascript">
-                                var dash_config = '.json_encode($dash_config,JSON_UNESCAPED_UNICODE).';
-                            </script>
-                            
-                            <div class="row">
-                                <div class="span12">
-                                    <h4 id="mi_titulo">Tablero indicador 147</h4> 
-                                </div>
-                            </div>
-                            
-                            <div class="row" id="contadores">
-                                <div class="span2"><button id="bAbiertos" class="btn btn-large" onclick="ejecutar_consulta(\'ABIERTOS\')"><h4><i class="icon-inbox"></i> <span id="cAbiertos"></span></h4> Pendientes<br>En Curso</button></div>
-                                <div class="span2"><button id="bCerrados" class="btn btn-large" onclick="ejecutar_consulta(\'CERRADOS\')"><h4><i class="icon-ok-sign"></i> <span id="cCerrados"></span></h4> Resueltos Rechazados</button></div>
-                                <div class="span2"><button id="bVencidos" class="btn btn-large" onclick="ejecutar_consulta(\'VENCIDOS\')"><h4><i class="icon-exclamation-sign"></i> <span id="cVencidos"></span></h4> Tickets<br>Vencidos</button></div>
-                                <div class="span6">
-                                    <div class="form-inline">
-                                        <label class="control-label" for="canal">Canal</label> '.$this->makeSelect('canal').'
-                                        <label class="control-label" for="organismo">Organismo</label> '.$this->makeSelect('organismo').'
-                                    </div>
-                                    <div class="form-inline">
-                                        <label class="control-label" for="prestacion">Prestación</label> '.$this->makeSelect('prestacion').'
-                                    </div>
-                                    <div class="form-inline">
-                                        <label class="control-label" for="barrio">Barrio</label> '.$this->makeSelect('barrio').'
-                                    </div>
-                                    <div class="progress progress-striped active" id="cargando">
-                                        <div class="bar"></div>
-                                    </div>
-                                </div>
-                            </div>
-                  
-                            
-                            <div class="row">
-                                <div id="reporte_mapa"></div>
-                            </div>
-                ';
+if(!class_exists('home_dashboard')) {
+    class home_dashboard {
+        public function Render(ccontext $context) {
+            $includes = array();
 
-                //$includes[] = '<script type="text/javascript" src="common/Highcharts-3/js/highcharts.js"></script>';
+            $dash_config = (isset($_SESSION["dash_config"]) ? $_SESSION["dash_config"] : (object) array("boton"=>"ABIERTOS","canal"=>"","organismo"=>"","prestacion"=>"","barrio"=>""));
+            ob_start();
+ ?>
+<script type="text/javascript">
+    var dash_config = <?php echo json_encode($dash_config,JSON_UNESCAPED_UNICODE); ?>
+</script>
+                            
+        <div class="row">
+            <div class="col-xs-12">
+                <h4 id="mi_titulo">Tablero indicador 147</h4> 
+            </div>
+        </div>
+                            
+        <div class="row" id="contadores">
+            <div class="col-xs-2">
+                <button id="bAbiertos" class="btn" onclick="ejecutar_consulta(\'ABIERTOS\')">
+                    <h4><i class="glyphicon glyphicon-inbox"></i> <span id="cAbiertos"></span></h4> Pendientes, En Curso
+                </button></div>
+            <div class="col-xs-2"><button id="bCerrados" class="btn" onclick="ejecutar_consulta(\'CERRADOS\')">
+                    <h4><i class="glyphicon glyphicon-ok"></i> <span id="cCerrados"></span></h4> Resueltos, Rechazados
+                </button></div>
+            <div class="col-xs-2"><button id="bVencidos" class="btn" onclick="ejecutar_consulta(\'VENCIDOS\')">
+                    <h4><i class="glyphicon glyphicon-warning-sign"></i> <span id="cVencidos"></span></h4> Vencidos
+                </button></div>
+            <div class="col-xs-6">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="canal">Canal</label>
+                        <div class="col-sm-10"><?php $this->makeSelect('canal'); ?></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="organismo">Organismo</label> 
+                        <div class="col-sm-10"><?php $this->makeSelect('organismo') ?></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="prestacion">Prestación</label> 
+                        <div class="col-sm-10"><?php $this->makeSelect('prestacion') ?></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="barrio">Barrio</label> 
+                        <div class="col-sm-10"><?php $this->makeSelect('barrio') ?></div>
+                    </div>
+                    
+                    <div class="progress progress-striped active" id="cargando">
+                        <div class="bar"></div>
+                    </div>
+                </form>
+            </div>
+                  
+            <div class="row">
+                <div id="reporte_mapa"></div>
+            </div>
+<?php
+                $html = ob_get_clean();
+
                 $includes[] = '<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDbNPUeZ1qDaGdShuVhRIT9Cgb_NZzuPRw&amp;sensor=false"></script>';
                 $includes[] = '<script type="text/javascript" src="lmodules/reportes/markerclusterer.js"></script>';
                 $includes[] = '<script type="text/javascript" src="includes/homepage/comp/home_dashboard.js"></script>';
@@ -60,17 +73,19 @@ if(!class_exists('home_dashboard'))
     #reporte_mapa img { max-width: none; max-height: none; }
     .iwimg {height: 128px;width: auto;}
     #contadores {margin-top:10px; margin-bottom:10px;}
+    #contadores button {width:100%;}
     .bar {width: 100%!important;}
     #cargando {display:none;}
 </style>';
                 
-		$content["home_dashboard"] = $css.$html;
-		return array( $content, $errors, $includes );
+		$context->add_content($context->m_key, $css.$html);
+                $context->add_includes($includes);
+		return;
 	}
         
         private function makeSelect($tipo) {
             global $primary_db;
-            $html = '<select name="'.$tipo.'" id="'.$tipo.'"><option value="">todos'; 
+            $html = '<select class="form-control input-sm" name="'.$tipo.'" id="'.$tipo.'"><option value="">todos'; 
             
             switch ($tipo) {
                 case "canal":
@@ -219,19 +234,17 @@ if(!class_exists('home_dashboard'))
                     //Ordeno los barrios alfabeticamente
                     asort($barrios);
                 
-                    foreach($barrios as $n)
+                    foreach($barrios as $n) {
                         $html.= '<option value="'.$n.'">'.$n;     
-
+                    }
                     break;
                 default:
             }
             
             $html.= '</select>';
-            return $html;
+            echo $html;
         }
 
     }
     
 }
-
-?>	

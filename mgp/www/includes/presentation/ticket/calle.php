@@ -1,10 +1,11 @@
 <?php 
 include_once "common/cdatatypes.php";
-
-class CDH_CALLE extends CDataHandler 
-{
-    function __construct($parent) 
-    {
+/**
+ * Este campo guarda el codigo de la calle y su nombre, en un string separado por un pipe
+ * 
+ */
+class CDH_CALLE extends CDataHandler {
+    function __construct($parent) {
         parent::__construct($parent);
         $fld = $this->m_parent;
         $fld->m_search="fix";
@@ -19,28 +20,24 @@ class CDH_CALLE extends CDataHandler
 
     
     function AutocompleterDataSource($pars) {
-        global $primary_db;
         $ret = array();
 
         list($term,$id) = explode("|",$pars);
 
         $client = new SoapClient("http://gis.mardelplata.gob.ar/webservice/ws_calles.php?wsdl");
-        try
-        {
+        try {
             $r = $client->callejero_mgp($term);
-            foreach($r as $posible)
+            foreach($r as $posible) {
                 $ret[] = array("value"=>$posible->codigo ,"label"=>$posible->descripcion);	
-        }
-        catch (SoapFault $exception)
-        {
-            error_log( "CDH_CALLE callejero_mgp() ->".$exception );
+            }
+        } catch (SoapFault $exception) {
+            error_log( "CDH_CALLE AutocompleterDataSource() ->".$exception );
         }
        
         return json_encode($ret,JSON_UNESCAPED_UNICODE);
     }
     
-    function getJsIncludes()
-    {	
+    function getJsIncludes() {	
         return '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ticket/calle.js"></script>';
     }
     
@@ -54,35 +51,56 @@ class CDH_CALLE extends CDataHandler
     function getCallejero($p) {
         global $primary_db;
         
+        //existe un callejero en el cache APC?
         if(function_exists("apc_fetch")) {
             $resultado = false;
             $ret = apc_fetch("callejero",$resultado);
             if($resultado) {
-                //Las claves coinciden? retorno OK, si no coinciden mando el nuevo dataset
-                if( isset($ret["key"]) && $ret["key"]==$p )
+                //Si existe, la clave del navegador y la local coinciden?
+                //Si es asi retorno OK, si no coinciden mando el nuevo dataset al navegador
+                if( isset($ret["key"]) && $ret["key"]==$p ) {
                     return "OK";
-                else
+                } else {
                     return json_encode($ret,JSON_UNESCAPED_UNICODE);
+                }
             }
         }
+        //No existe el callejero en el cache APC...
         
+        //Creo una nueva version del callejero desde la DB
         $rs = $primary_db->do_execute("select * from geo_calles order by gca_descripcion");
         while( $row=$primary_db->_fetch_row($rs) ) {
             $ret_c[] = $row['gca_codigo'];
             $ret_v[] = $row['gca_descripcion'];
         }
         $ret = array("codigos"=>$ret_c,"calles"=>$ret_v);
-        $key = md5(json_encode($ret),JSON_UNESCAPED_UNICODE);
+        
+        //Creo el hash de esta version del callejero
+        $key = md5(json_encode($ret_c,JSON_UNESCAPED_UNICODE));
         $ret["key"] = $key;
         
+        //Salvo el resultado para la proxima, en el cache del APC
         if(function_exists("apc_store")) {
             apc_store("callejero", $ret);
         }        
         
-        if( isset($ret["key"]) && $ret["key"]==$p )
+        //Evaluo la key del navegador con la key local para determinar si hace falta 
+        //volver a enviar el callejero
+        if( isset($ret["key"]) && $ret["key"]==$p ) {
             return "OK";
-        else
+        } else {
             return json_encode($ret,JSON_UNESCAPED_UNICODE);
+        }
     }
+    
+    function getHelperValue($cn,$val) {
+        $fld = $this->m_parent;
+        $p = explode("|", $val);
+        if(isset($p[1])) {
+            $fld->writeAltValue($p[1]);
+            return $p[1];
+        }
+        return "";
+    }	
 }
 

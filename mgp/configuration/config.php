@@ -3,7 +3,7 @@ include_once "common/cdbdata.php";
 
 //Archivo de configuracion generado automaticamente. No cambiar a mano
 $primary_db = new cdbdata("localhost","root","armada","mgp","utf-8","mysql");
-$padron_db = new cdbdata("localhost","root","armada","padron_nac","utf-8","mysql");
+$padron_db = new cdbdata("localhost","root","armada","padron_2013","utf-8","mysql");
 $db_pool = array("primary_db"=>$primary_db, "padron_db"=>$padron_db);
 
 //define("LOG_PATH",	"/Users/jcordero/plataforma4_sites/mgp_git/mgp/log/");

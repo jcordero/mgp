@@ -29,7 +29,7 @@ function ejecutar_consulta() {
     
     $('#bloque_filtro .contenido').collapse('hide');
     
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
         var jdata = JSON.parse(json);
 
         //Hago el grafico

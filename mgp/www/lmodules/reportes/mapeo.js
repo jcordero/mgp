@@ -45,7 +45,7 @@ function ejecutar_consulta() {
     
     $('#bloque_filtro .contenido').collapse('hide');
     
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
         var jdata = JSON.parse(json);
 
         var markers = [];
@@ -65,7 +65,7 @@ function ejecutar_consulta() {
     
 function mostrar_ticket(ev) {
     var marker = this;
-    new rem_request(this,function(obj,html){
+    new p4.rem_request(this,function(obj,html){
         var infowindow = new google.maps.InfoWindow({
             content: html
         });

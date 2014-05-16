@@ -39,7 +39,7 @@ function mostrarPagina(nro,filt) {
     }
     
     var params = pagnro+"|"+filtro+"|"+buscar;
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
         var obj = JSON.parse(json);
         var o = obj.tickets;
         var l = o.length;
@@ -89,7 +89,7 @@ function trabajar(ticket) {
         return;
     trabajarBusy = true;
 
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
         document.location.href = json;
     },"TICKET::TICKETS","updateTicket",ticket);
 }

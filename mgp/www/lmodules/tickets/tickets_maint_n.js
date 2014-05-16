@@ -143,17 +143,17 @@ function valida_direccion() {
     var alternativa = $('#m_alternativa').val();
     	
     if(calle.length!==5) {
-        alert_box('Debe completar la calle antes de validar la dirección');
+        p4.alert_box('Debe completar la calle antes de validar la dirección');
         return;
     }
 
     if(altura==='' && alternativa==='NRO') {
-        alert_box('Debe completar la altura antes de validar la dirección');
+        p4.alert_box('Debe completar la altura antes de validar la dirección');
         return;
     }
 
     if(calle2.length!==5 && alternativa==='CALLE') {
-        alert_box('Debe completar la calle que cruza antes de validar la dirección');
+        p4.alert_box('Debe completar la calle que cruza antes de validar la dirección');
         return;
     }
 
@@ -167,7 +167,7 @@ function valida_direccion() {
         'gis':gis_layer,
         'alternativa':alternativa
     };
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
             var o = JSON.parse(json);
             $('#progress1').remove();
             if(o.resultado==='ok') {
@@ -229,7 +229,7 @@ function valida_direccion() {
             }
             else
             {
-                alert_box("La dirección indicada no existe", "Validar dirección");
+                p4.alert_box("La dirección indicada no existe", "Validar dirección");
             }
     },"TICKET::DIRECCION","validarDireccion", JSON.stringify(params));
 }
@@ -451,11 +451,11 @@ function cambio_prestacion(codigo)
     reset_form();
     
     //Pedir datos sobre detalle de prestacion
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
         
         if(json==="")
         {
-            alert_box("El servidor no esta respondiendo.",'Error');
+            p4.alert_box("El servidor no esta respondiendo.",'Error');
             return; //No hay detalle de la prestacion
         }
         var jdata = JSON.parse(json);
@@ -471,10 +471,10 @@ function cambio_prestacion(codigo)
             $("#rubro").show();
             
             //Completo el combo rubro
-            new rem_request(this,function(obj,json){
+            new p4.rem_request(this,function(obj,json){
                 if(json==="")
                 {
-                    alert_box("El servidor no esta respondiendo.",'Error');
+                    p4.alert_box("El servidor no esta respondiendo.",'Error');
                     return; //No hay detalle de la prestacion
                 }
                 var jdata2 = JSON.parse( json );
@@ -524,7 +524,7 @@ function cambio_prestacion(codigo)
                 var combo = $("#m_playa");
                 combo.empty();
                 combo.append('<option data-id="-1" value="">');
-                new rem_request(this,function(obj,json){
+                new p4.rem_request(this,function(obj,json){
                     playas = JSON.parse(json);
 
                     for(var j=0;j<playas.length;j++) 
@@ -582,7 +582,7 @@ function cambio_prestacion(codigo)
                 
                 break;
             default:
-                    alert_box("Tipo de georeferencia desconocida: "+gis_tipo,"Error");
+                    p4.alert_box("Tipo de georeferencia desconocida: "+gis_tipo,"Error");
         }
        
         divobj.show();

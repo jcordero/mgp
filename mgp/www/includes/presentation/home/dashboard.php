@@ -50,6 +50,7 @@ class CDH_DASHBOARD extends CDataHandler {
         if($dash_config->organismo!="") {
             $extra .= " and tor_code='{$dash_config->organismo}'";
         }
+        
         //Tickets
         $conjunto = array();
         $rs = $primary_db->do_execute($sql.$extra);
@@ -62,11 +63,14 @@ class CDH_DASHBOARD extends CDataHandler {
         }
         
         //Contadores
-        $contadores['abiertos'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ({$estados_abiertos}) {$extra}");
-        $contadores['cerrados'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ({$estados_cerrados}) {$extra}");
-        $contadores['vencidos'] = $primary_db->QueryString("select count(*) from v_tickets where ttp_estado in ({$estados_abiertos}) and datediff(now(),tic_tstamp_plazo)>0 {$extra}");
-        
-        return json_encode(array('tickets' => $conjunto, 'contadores' => $contadores),JSON_UNESCAPED_UNICODE);
+        $contadores['abiertos'] = $primary_db->QueryString("select count(*) as c from v_tickets where ttp_estado in ({$estados_abiertos}) {$extra}");
+        $contadores['cerrados'] = $primary_db->QueryString("select count(*) as c from v_tickets where ttp_estado in ({$estados_cerrados}) {$extra}");
+        $contadores['vencidos'] = $primary_db->QueryString("select count(*) as c from v_tickets where ttp_estado in ({$estados_abiertos}) and datediff(now(),tic_tstamp_plazo)>0 {$extra}");
+       
+        return json_encode(array(
+            'tickets'       => $conjunto, 
+            'contadores'    => $contadores
+            ),JSON_UNESCAPED_UNICODE);
     }
     
     function getTicketInfo($p) {

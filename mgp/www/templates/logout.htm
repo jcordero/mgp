@@ -4,17 +4,12 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><com:title/></title>
-    <com:security/>
-    <com:jsincludes/>
-    <link href="/mgp/var/commsys.css" media="screen,print" type="text/css" rel="stylesheet" />
-	<style>
-	#payload {width:100%;}
-	</style>
+    <!-- Le styles -->
+    <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/mgp/var/sitio.css" />
 <script>
-function iniciar()
-{
-	setTimeout('irAHome()',10000);
-}
+function iniciar() { setTimeout('irAHome()',10000); }
+function irAHome() { document.location.href = "/index.php"; }
 </script>
 </head>
 <body onLoad="iniciar()">
@@ -35,5 +30,7 @@ function iniciar()
 	    </table>    
 	</div>
 </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </body>
 </html>

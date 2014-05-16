@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /* Control para el operador de CALL CENTER
  *
  * talk_status CONECTADO/EN ESPERA
@@ -15,49 +16,45 @@
  * talk_session
  */
 
-if(!class_exists('talk'))
-{
-    include_once "common/cfield.php";
-	include_once "beans/call_status.php";
-	include_once "beans/person_status.php";
-	
-	class talk
-	{
-  		private $m_session;
-  		private $m_person;
-  		
-		 function __construct()
-	    {
-		    $this->m_session = new call_status(); //Crea el objeto y carga los valores desde la sesion
-		    $this->m_person = new person_status();
-		}
-		
-		public function Render($context)
-		{
-			global $primary_db;
 
-			if( strstr(strtolower($_SESSION["groups"]),"home_operator")===false )
-			{
-				$content["talk"] = "";
-				return array( $content, array() );
-			}
-			
-            $html = '
+include_once "common/cfield.php";
+include_once "beans/call_status.php";
+include_once "beans/person_status.php";
+
+class talk {
+
+    private $m_session;
+    private $m_person;
+
+    function __construct() {
+        $this->m_session = new call_status(); //Crea el objeto y carga los valores desde la sesion
+        $this->m_person = new person_status();
+    }
+
+    public function Render(ccontext $context) {
+        global $primary_db;
+
+        if (strstr(strtolower($_SESSION["groups"]), "home_operator") === false) {
+            $content["talk"] = "";
+            return array($content, array());
+        }
+
+        $html = '
 <script type="text/javascript">
-	var person = '.$this->m_person->toJSON().';
-	var talk = '.$this->m_session->toJSON().';
+	var person = ' . $this->m_person->toJSON() . ';
+	var talk = ' . $this->m_session->toJSON() . ';
 </script>
 	                    
 <div id="talk" class="row">
 	<div class="span7">
             <div id="talk_search">';
-			    
-	    //Esto genera los campos pm_person_doc (pais) tm_person_doc (tipo doc) y nm_person_doc (nro doc)    
-            $doc = new CField(array("presentation"=>"CIUDADANO::DNI","name"=>"person_doc","label"=>"","isvisible"=>true,"classparams"=>"no_search","value"=>$this->m_person->person_doc,"initialvalue"=>"ARG DNI "));
-            $doc->NewInstance($primary_db);
-            $html.=$doc->RenderFilterForm($primary_db);
-            
-            $html.= '
+
+        //Esto genera los campos pm_person_doc (pais) tm_person_doc (tipo doc) y nm_person_doc (nro doc)    
+        $doc = new CField(array("presentation" => "CIUDADANO::DNI", "name" => "person_doc", "label" => "", "isvisible" => true, "classparams" => "no_search", "value" => $this->m_person->person_doc, "initialvalue" => "ARG DNI "));
+        $doc->NewInstance($primary_db);
+        $html.=$doc->RenderFilterForm($primary_db);
+
+        $html.= '
                 <button onclick="boton_buscar()" class="btn btn-primary"><i class="icon-search"></i>  Buscar</button>
             </div>
 		
@@ -74,21 +71,21 @@ if(!class_exists('talk'))
 
 	<div id="indicadores" class="span2 offset2">';
 
-            //Al iniciar una sesion se crea un nuevo objeto sesion. El mismo se inicia con la
-            //persona identificada. Si no hay una persona identificada, se busca el ANI en la base
-            //para identificar a la persona de ser posible antes de iniciar la sesion.
-            //Una sesion anonima, se puede hacer nominal con solo identificar a la persona con la sesion abierta.
-            
-            $html.= '<button id="talk_status" class="btn">'.$this->m_session->talk_status.'</button>  '; //EN ESPERA
-            $html.= '<button id="person_status" class="btn">'.$this->m_person->person_status.'</button>'; //ANONIMO
-            $html.= '
+        //Al iniciar una sesion se crea un nuevo objeto sesion. El mismo se inicia con la
+        //persona identificada. Si no hay una persona identificada, se busca el ANI en la base
+        //para identificar a la persona de ser posible antes de iniciar la sesion.
+        //Una sesion anonima, se puede hacer nominal con solo identificar a la persona con la sesion abierta.
+
+        $html.= '<button id="talk_status" class="btn">' . $this->m_session->talk_status . '</button>  '; //EN ESPERA
+        $html.= '<button id="person_status" class="btn">' . $this->m_person->person_status . '</button>'; //ANONIMO
+        $html.= '
 	</div>
 	
 	
 </div>';
 
-            
-            $style = '
+
+        $style = '
 <style>
     #indicadores{border: solid 1px #ddd;border-radius:5px;padding:10px;text-align:center;margin-top:10px;}
     #identificado {border:solid 1px #ccc;border-radius:5px;background:#efefef;margin-top:10px;margin-bottom:10px;padding-bottom:5px;}
@@ -102,16 +99,15 @@ if(!class_exists('talk'))
     .btn-small {width:90px;}
 </style>
             ';
-            
-			$content["talk"] = $style.$html;
-			$includes[] = '<script type="text/javascript" src="'.WEB_PATH.'/includes/home_call.js"></script>';
-                        $includes[] = '<script type="text/javascript" src="'.WEB_PATH.'/includes/presentation/ciudadano/dni.js"></script>';
-			$includes[] = '<script type="text/javascript">initDNI("person_doc", {});</script>';
 
-			$err = array();
-			return array( $content, $err, $includes );
-		}
-	}
+        $includes[] = '<script type="text/javascript" src="' . WEB_PATH . '/includes/home_call.js"></script>';
+        $includes[] = '<script type="text/javascript" src="' . WEB_PATH . '/includes/presentation/ciudadano/dni.js"></script>';
+        $includes[] = '<script type="text/javascript">initDNI("person_doc", {});</script>';
+
+        
+        $context->add_content($context->m_key, $style.$html);
+        $context->add_includes($includes);
+        return;
+    }
+
 }
-
-?>	

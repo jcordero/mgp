@@ -35,7 +35,7 @@ function chg_orgpublico(obj)
 	var jdata = eval('(' + json + ')');
 
 	//Busco la lista de campos
-	var params = extractParams(obj.id);
+	var params = p4.extractParams(obj.id);
 	if(params.length!=7)
 	{
 		alert("El objeto ORGPUBLICO requiere 7 parametros");

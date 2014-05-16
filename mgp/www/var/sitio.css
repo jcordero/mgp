@@ -1,0 +1,28 @@
+/* 
+    Created on : 08/04/2014, 22:59:06
+    Author     : jcordero
+*/
+html, body { height: 100%;}
+.back1, .back2 {position:absolute;top:0px;left:0px;width:100%;height:156px;background:#e0ded8;}
+.back2 {height:45px;background:#000;top:115px;}
+#wrap {min-height: 100%;height:auto!important;height: 100%;margin: 0 auto -40px;padding-bottom: 40px;}
+#push,#footer {height: 40px;}
+#footer {background-color: #e0ded8;}
+#footer div p {margin:10px 10px 10px;}
+div#head {height: 156px;/*width: 100%;*/position: relative;z-index: 3; /*para arreglar bug de IE*/}
+#head_center {position: relative;margin:auto;text-align:left;height:115px;background: url("/mgp/images/rayitas.png") repeat-y transparent;background-position:right;}
+#head_nav {position: relative;height:45px;}
+img.logo {position:relative;top:10px;}
+#appmenu {position:relative;top:6px;max-width:1200px;min-width: 750px;margin:0px;text-align:left;}
+#payload {padding-top: 10px;}
+.k-header { background:transparent!important; border: none!important;}
+.k-link {color: #eee;text-decoration: none!important;font-weight: normal!important;font-family: Verdana, Arial, sans-serif!important;font-size: 13px!important;}
+.k-group .k-item span {color: #222!important;}
+
+#boton_buscar {text-align: right;}
+.botones-navegacion {text-align: right;}
+#resultado {margin-top: 5px;}
+
+.acciones, .submitbutton {text-align: right;}
+.borrado {background-color: #f66!important;}
+.user {height: auto;}

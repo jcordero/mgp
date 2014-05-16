@@ -45,9 +45,9 @@ function ejecutar_consulta(tipo) {
 }
 
 function refrescarDash() {
-    new rem_request(this,function(obj,json){
-        var jdata = JSON.parse(json);
+    new p4.rem_request(this,function(obj,json){
         $('#cargando').hide();
+        var jdata = JSON.parse(json);
         
         //Refresco el valor de los Contadores
         $('#cAbiertos').html(jdata.contadores.abiertos);
@@ -80,7 +80,7 @@ function mostrar_ticket(ev) {
     var marker = this;
     $('#cargando').show();
 
-    new rem_request(this,function(obj,html){
+    new p4.rem_request(this,function(obj,html){
         var infowindow = new google.maps.InfoWindow({
             content: html
         });

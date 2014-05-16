@@ -14,7 +14,7 @@ function reporte() {
     
     var pars = {desde:desde,hasta:hasta,prestacion:prestacion,rechazados:rechazados};
     $("#resultados").html('Calculando... <div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
         $("#resultados").html(json);
     },"REPORTES::REPORTES","getTiemposMedios",JSON.stringify(pars));
 }

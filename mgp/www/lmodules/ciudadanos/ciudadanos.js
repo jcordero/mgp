@@ -1,5 +1,12 @@
 $(document).ready(function(){
-
+    //Ajuste del ancho de la direccion
+    
+    $("#bloque_datos_personales").after("<div class=\"row\"><div id=\"para_direccion\" class=\"col-sm-7\"></div><div id=\"para_mapa\" class=\"col-sm-5\"></div></div>")
+    var blq = $("#bloque_direccion").detach();
+    $("#para_direccion").append(blq);
+    var mp = $("#m_tmp_mapa").detach();
+    $("#para_mapa").append(mp);
+    
     //campos extra en las direcciones
     $('#ciu_dir_calle .fld').append('<div class="fldl"></div>');
     $('#ciu_dir_nro .fld').append('<div class="fldl"></div>');
@@ -18,18 +25,18 @@ $(document).ready(function(){
     	var altura = $('#m_ciu_dir_nro').val();
     	
     	if(calle==='') {
-            alert_box('Debe completar la calle antes de validar la dirección');
+            p4.alert_box('Debe completar la calle antes de validar la dirección');
     	return;
     	}
 
     	if(altura==='') {
-            alert_box('Debe completar la altura antes de validar la dirección');
+            p4.alert_box('Debe completar la altura antes de validar la dirección');
             return;
     	}
 
         //$calle,$calle2,$altura,$luminarias,$alternativa
         var params = calle + '||' + altura + '||NRO';
-    	new rem_request(this,function(obj,json){
+    	new p4.rem_request(this,function(obj,json){
     		var o = JSON.parse(json);
     		//Actualizo los valores
     		$('#m_ciu_coord_x').val(o.latitud);

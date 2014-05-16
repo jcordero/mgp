@@ -20,7 +20,7 @@ function chg_plaza(obj)
 	//Recupero los valores a setear
         var pl = playas[ix];
         
-	var params = extractParams(obj.id);
+	var params = p4.extractParams(obj.id);
         
         if(params.lat)
             $("#m_"+params.lat).val(pl.lat);

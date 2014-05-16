@@ -1,22 +1,23 @@
 <?php
 
-if (!class_exists('soft_version')) {
+if (!class_exists('softversion')) {
     include_once "common/cfield.php";
 
-    class soft_version {
+    class softversion {
 
-        public function Render($context) {
+        public function Render(ccontext $context) {
             $html = "";
-
+            
             $softversion = file_get_contents(HOME_PATH . "www/version.txt");
             $arrvers = explode("|", $softversion);
 
             $html.= "Versión " . $arrvers[0] . " fecha: " . $arrvers[1];
-            $content["soft_version"] = $html;
-            return array($content, array());
+            $context->add_content($context->m_key, $html);
+            
+            return;
         }
 
     }
 
 }
-?>
+

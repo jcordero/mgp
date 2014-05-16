@@ -33,7 +33,7 @@ function armar_home_page() {
         }
     }
     catch(err) {
-        alert_box(err,"ATENCION");
+        p4.alert_box(err,"ATENCION");
     }
 }
 
@@ -114,30 +114,30 @@ function boton_buscar()
     
     if(doc_nro==="")
     {
-        alert_box('Debe ingresar primero un número de documento','ATENCION');
+        p4.alert_box('Debe ingresar primero un número de documento','ATENCION');
         return false;
     }
 
     //Pongo en espera...
-    esperar("Buscando datos del ciudadano...");
+    p4.esperar("Buscando datos del ciudadano...");
 	
     //Identificador compuesto del DOC
     var doc = pais + " " + doc_tipo + " " + doc_nro;
     person.person_doc = doc;
 	
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
     	var jdata = JSON.parse(json);
     	if(!jdata)
         {
-            listo();
-            alert_box("Buscar no retorna resultados","ERROR");
+            p4.listo();
+            p4.alert_box("Buscar no retorna resultados","ERROR");
         }
         else
         {
             //si el array esta vacio... No hay coincidencias
             if(jdata.url!=='')
             {
-                listo();
+                p4.listo();
                 confirm_box('Es la primera vez que se ingresa este documento. Se pasará a la pantalla de carga de datos personales.', "ATENCION",function(){
                     irA(jdata.url);
                 });
@@ -158,7 +158,7 @@ function boton_buscar()
             	            	                
             	armar_panel();
             	armar_home_page();
-                listo();
+                p4.listo();
             }
         }	
     },"HOME","doBuscar",doc + '|' + nombres + '|' + apellido + '|' + talk.talk_ani + '|' + pais);
@@ -173,10 +173,10 @@ function boton_iniciar()
     var ani = $('#m_talk_ani').val();
     //$ani | $call_id | $entry_point | $skill 
     var params = ani + "|||";
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
     	if(json==='')
         {
-            alert_box("Iniciar no retorna resultados", "ERROR");
+            p4.alert_box("Iniciar no retorna resultados", "ERROR");
         }
         else
         {
@@ -207,10 +207,10 @@ function boton_iniciar()
  */
 function boton_terminar()
 {
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
     	if(json==='')
         {
-            alert_box("Terminar no retorna resultados", "ERROR");
+            p4.alert_box("Terminar no retorna resultados", "ERROR");
         }
         else
         {
@@ -226,10 +226,10 @@ function boton_terminar()
  */
 function boton_anonimo()
 {
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
     	if(json==='')
         {
-            alert_box("doAnonimo no retorna resultados", "ERROR");
+            p4.alert_box("doAnonimo no retorna resultados", "ERROR");
         }
         else
         {
@@ -245,10 +245,10 @@ function boton_anonimo()
  */
 function boton_modificar()
 {
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
     	if(json==="")
         {
-            alert_box("doModificar no retorna resultados", "ERROR");
+            p4.alert_box("doModificar no retorna resultados", "ERROR");
         }
         else
         {
@@ -279,10 +279,10 @@ function boton_buscar_ani()
 function buscar_ani(ani,entry_point,call_id,skill)
 {
     var params =  ani + '|' + entry_point + '|' + call_id + '|' + skill;
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
     	if(json==='')
         {
-            alert_box("BuscarContactos no retorna resultados", "ERROR");
+            p4.alert_box("BuscarContactos no retorna resultados", "ERROR");
         }
         else
         {
@@ -318,7 +318,7 @@ function buscar_ani(ani,entry_point,call_id,skill)
             {
             	var div = document.getElementById("ciudadanos_tbl");
             	div.innerHTML = "";
-            	alert_box("No se ha encontrado ningún registro","Búsqueda por nro. teléfonico");
+            	p4.alert_box("No se ha encontrado ningún registro","Búsqueda por nro. teléfonico");
             }
         }
     	
@@ -335,10 +335,10 @@ function boton_buscar_contactos()
     var fecha_hasta = $('#m_calls_fecha_hasta').val();
     
     var params =  fecha_desde + '|' + fecha_hasta;
-    new rem_request(this,function(obj,json) {
+    new p4.rem_request(this,function(obj,json) {
     	if(json==='')
         {
-            alert_box("BuscarContactos no retorna resultados", "ERROR");
+            p4.alert_box("BuscarContactos no retorna resultados", "ERROR");
         }
         else
         {
@@ -359,10 +359,10 @@ function boton_buscar_tickets()
     var anio = $('#m_tickets_anio').val();
     
     var params =  tipo + '|' + nro + '|' + anio;
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
     	if(json==='')
         {
-            alert_box("BuscarTickets no retorna resultados", "ERROR");
+            p4.alert_box("BuscarTickets no retorna resultados", "ERROR");
         }
         else
         {
@@ -370,7 +370,7 @@ function boton_buscar_tickets()
             if( jdata && jdata.length>0 )
                 completar_tabla_tickets(jdata);
             else
-                alert_box("El ticket solicitado no se encuentra.","Buscar");
+                p4.alert_box("El ticket solicitado no se encuentra.","Buscar");
         }	
     },"HOME","doBuscarTickets",params);
 }
@@ -387,10 +387,10 @@ function buscar_tickets_ciudadano()
     	completar_tabla_tickets(null);
     	return;
     }
-    new rem_request(this, function(obj,json){
+    new p4.rem_request(this, function(obj,json){
     	if(json==='')
         {
-            alert_box("BuscarTickets no retorna resultados","ERROR");
+            p4.alert_box("BuscarTickets no retorna resultados","ERROR");
         }
         else
         {
@@ -406,10 +406,10 @@ function buscar_tickets_ciudadano()
  */
 function boton_nuevo_ticket()
 {
-    new rem_request(this,function(obj,json){
+    new p4.rem_request(this,function(obj,json){
         if(json=="")
         {
-            alert_box("doNuevoTicket no retorna resultados","ERROR");
+            p4.alert_box("doNuevoTicket no retorna resultados","ERROR");
         }
         else
         {
@@ -551,11 +551,11 @@ function irA(url)
 function setSession(ciu_code)
 {
     var params =  ciu_code + '|' + '';
-    new rem_request(this, function(obj,json){
+    new p4.rem_request(this, function(obj,json){
         var jdata = JSON.parse(json);
         if(!jdata)
         {
-            alert_box("setSession no retorna resultados", "ERROR");
+            p4.alert_box("setSession no retorna resultados", "ERROR");
         }
         else
         {
@@ -690,7 +690,7 @@ function reiterar(tic_nro) {
         $('#reiteracion_dialog').modal('hide');
         //Pido la reiteracion el backend
         var nota = $('#reitNota').val();
-        new rem_request(this,function(obj,json){
+        new p4.rem_request(this,function(obj,json){
             //No responde nada
             $('#reiteracion_dialog').html('').remove();
         },"HOME","reiterarTicket",tic_nro + '|' + nota);

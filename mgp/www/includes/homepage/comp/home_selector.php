@@ -1,10 +1,8 @@
 <?php
 
 class home_selector {
-    public function Render($context)
+    public function Render(ccontext $context)
     {
-        $includes = array(); 
-        
         //Crear un menu para elegir la home page
         $html = '<a id="home_selector" href="#"><img src="'.WEB_PATH.'/images/default/profile_large.gif"></a>';
         $html.= '<div class="hide" id="home_selector_panel">Home: <select onchange="cambio_home(this)">';
@@ -18,10 +16,11 @@ class home_selector {
         }
         
         foreach($homes as $gr) {
-            if($gr == $dh->home)
+            if($gr == $dh->home) {
                 $html.= '<option value="'.$gr.'" selected>'.substr($gr,5);
-            else
+            } else {
                 $html.= '<option value="'.$gr.'">'.substr($gr,5);
+            }
         }
 
         
@@ -31,10 +30,10 @@ class home_selector {
             #home_selector {heigth:32px; width:32px; cursor:hand;z-index:10;float:right;margin-top: -23px;}
             #home_selector_panel {position:absolute;padding:15px;border:1px solid #444;border-radius:8px;background:#ddd;top:40px;}
         </style>";
-        
-        $content["home_selector"] = $style.$html; //.'<script type="text/javascript">'.file_get_contents('./includes/homepage/comp/home_selector.js').'</script>';
-        $includes[] = '<script type="text/javascript" src="./includes/homepage/comp/home_selector.js"></script>';
-        return array( $content, $includes );
+
+        $context->add_content($context->m_key, $style.$html); //.'<script type="text/javascript">'.file_get_contents('./includes/homepage/comp/home_selector.js').'</script>';
+        $context->add_includes('<script type="text/javascript" src="./includes/homepage/comp/home_selector.js"></script>');
+        return;
     }
     
     function crearListaHomes() {
@@ -46,8 +45,9 @@ class home_selector {
         foreach($groups as $gr)
         {
             $usr_gr = strtolower(trim($gr));
-            if(substr($usr_gr,0,5)=="home_")
+            if(substr($usr_gr,0,5)=="home_") {
                 $home_groups[] = $usr_gr;
+            }
         }
 
         return $home_groups;

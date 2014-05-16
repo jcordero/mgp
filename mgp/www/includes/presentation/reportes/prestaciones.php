@@ -1,10 +1,8 @@
 <?php
 include_once "presentation/selectarray.php";
 
-class CDH_PRESTACIONES extends CDH_SELECTARRAY 
-{
-	function __construct($parent) 
-	{
+class CDH_PRESTACIONES extends CDH_SELECTARRAY {
+	function __construct($parent) {
             global $primary_db;
             parent::__construct($parent);
             
@@ -24,12 +22,12 @@ class CDH_PRESTACIONES extends CDH_SELECTARRAY
             }
             
             //Salvo en el cache
-            if(function_exists('apc_store')) 
+            if(function_exists('apc_store')) {
                 apc_store('lista_prestaciones',$this->m_array);
+            }
 	}
         
-        function objectFactoryQuery($relax) 
-	{
+        function objectFactoryQuery($relax) {
             $fld = $this->m_parent;
             //$type = strtoupper($fld->m_Type);
             $val = $fld->getValue();

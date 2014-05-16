@@ -32,7 +32,7 @@ function chg_playa(obj)
         marker_domicilio = createMarker([pl.lat,pl.lng], 'Playa ' + pl.playa, mapa);
         
         //Seteo los campos del form
-	var params = extractParams(obj.id);
+	var params = p4.extractParams(obj.id);
         
         if(params.lat)
             $("#m_"+params.lat).val(pl.lat);

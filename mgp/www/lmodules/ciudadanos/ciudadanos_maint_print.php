@@ -1,6 +1,6 @@
 <?php // Extension para implementar un metodo de impresion
-require_once "common/code128barcode.class.php";
-require_once "pdml/pdml.php";
+include_once "barcode/128/code128.class.php";
+include_once "pdml/pdml.php";
 
 class ciu_ciudadanos_n_print extends cclass_maint_print
 {
@@ -40,7 +40,7 @@ class ciu_ciudadanos_n_print extends cclass_maint_print
 
 		//Encabezado
 		$o.= '<div left="10mm" top="10mm" height="30mm" width="19cm">';
-		$o.= '<img src="/images/default/header_gcba2.jpg" width="10cm" height="30mm"></div>';
+		$o.= '<img src="'.HOME_PATH.'www/images/mdq.jpg" width="10cm" height="30mm"></div>';
 
 		//Marco fecha
 		$pa = '<div left="150mm" top="60mm" height="20mm" width="19cm"><table>';
@@ -53,9 +53,13 @@ class ciu_ciudadanos_n_print extends cclass_maint_print
 		$dpr_apellido = $p->getField("ciu_apellido")->getValue();
 		$dpr_nombres = $p->getField("ciu_nombres")->getValue();
 		$dpr_nacimiento = $p->getField("ciu_nacimiento")->getValue();
-		$dpr_tipo_doc = "";
-		$dpr_doc_nro = $p->getField("ciu_doc_nro")->getValue();
-			
+		
+                //Puede tener varios documentos
+                $dpr_tipo_doc = "";
+                $dpr_doc_nro = ""; 
+                foreach($p->m_childs['ciu_identificacion'] as $id) {
+                    $dpr_doc_nro .= ($dpr_doc_nro=="" ? "" : ", ").$id->getField("ciu_nro_doc")->getValue();
+                }			
 
 		$pa= '<div left="1cm" top="6cm" width="19cm"'.$bordes1.'>';
 		$pa.= '<table><tr><td><b>Datos personales</b></td></tr></table>';
@@ -127,10 +131,11 @@ class ciu_ciudadanos_n_print extends cclass_maint_print
 		//Codigo de barra - hora de impresion
 		$arch_barras = HOME_PATH."temp/".md5(time())."a.jpg";
 		$cod_barras = 'CIU '.$codigo;
-		$barcode = new code128barcode();
-		$bars = array("bars"=>$barcode->output($cod_barras), "text"=>$cod_barras);
-		barcode_outimage($bars['text'],$bars['bars'], 3, "jpg", 0, '',$arch_barras);
-		$o.= '<div left="1cm" top="28cm">Impreso: '.date("d-m-Y h:i:s").'</div>';
+                
+                $barcode = new phpCode128($cod_barras, 150);
+                $barcode->saveBarcode($arch_barras);
+				
+                $o.= '<div left="1cm" top="28cm">Impreso: '.date("d-m-Y h:i:s").'</div>';
 		$o.= '<div left="145mm" top="255mm"><img src="'.$arch_barras.'" width="5cm" height="2cm"></div>';
 
 		//Imprimo si esta definida la etiqueta <footer></footer>.
@@ -153,7 +158,7 @@ class ciu_ciudadanos_n_print extends cclass_maint_print
 			//Retorno un script para abrir el downloader...			
 			$nl = "\n";
 			$html.=  "<script language=\"javascript\">".$nl;
-			$html.= '	doDownload( "'.WEB_PATH.'/common/download.php?tmp='.basename($arch).'&mime='. urlencode("application/pdf").'");'.$nl;
+			$html.= '	p4.doDownload( "'.WEB_PATH.'/common/download.php?tmp='.basename($arch).'&mime='. urlencode("application/pdf").'");'.$nl;
 			$html.= "</script>".$nl;
 		
 		}

@@ -1,108 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8">
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <title><com:title/></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:com="http://www.commsys.com.ar">
+    <head>
+        <meta charset="utf-8"></meta>
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <title><com:title/></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <com:security/>
+        <com:jsincludes/>
 
-    <!-- Le styles -->
-    <link rel="stylesheet" type="text/css" href="/mgp/common/bootstrap/css/bootstrap.min.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/mgp/common/bootstrap/css/bootstrap-responsive.css" />
-    <style>
-    	html, body { height: 100%;}
-        body {color:black;margin:0px;padding:0px;font: 10pt Verdana,Arial,sans-serif;}
-      	#wrap {min-height: 100%;height:auto!important;height: 100%;margin: 0 auto -40px;}
-      	#push,#footer {height: 40px;}
-      	#footer {background-color: #e0ded8;}
-        #footer div p {margin:10px 10px 10px;}
-        .box {background:#efefef;padding:15px;border:solid 1px #eee; border-radius:5px;}
-        div#head {height: 156px;width: 100%;position: relative;z-index: 3; /*para arreglar bug de IE*/}
-        #head_center {position: relative;margin:auto;text-align:left;height:115px;background: url("/mgp/images/rayitas.png") repeat-y transparent;background-position:right;}
-        #head_nav {position: relative;height:41px;}
-        img.logo {position:relative;top:10px;}
-        .homepage {min-height:100%;}
-        #appmenu {position:relative;top:6px;max-width:1200px;min-width: 750px;margin:0px;text-align:left;}
-        .back1, .back2 {position:absolute;top:0px;left:0px;width:100%;height:156px;background:#e0ded8;}
-        .back2 {height:41px;background:#000;top:115px;}
+        <!-- Le styles -->
+        <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="/mgp/var/sitio.css" />
         
-        #identificado, #tickets {display: none;}
-        select {width: auto!important;}
-        #mapa {height:250px;width:250px;}
-        #mis_tickets .it {font-style: italic;font-size: .9em;color: #444;}
-        #mis_tickets .st {font-size: 8pt;}
-        #reitNota {width: 97%;}
-        .tab-content {margin-bottom: 45px;}
-        h5 {color:#484888;}
-        .nav {background: #ccc;}
-        #navegador {margin-top: 5px;margin-bottom: 5px;}
-    </style>
-</head>
+        
+        <link rel="stylesheet" href="/mgp/assets/css/font-awesome.min.css" />
 
-<body onLoad="onPageLoad()" class="homepage">
-    <div class="back1"></div>
-    <div class="back2"></div>
-    <div class="container" id="wrap">
-        <div id="head">
-            <div id="head_center" class="container">
-                <a href="/mgp/index.php"><img src="/mgp/images/mdq.png" class="logo"></a>
-                <com:homepage.comp.mpfwho/>
+        <!--[if IE 7]>
+          <link rel="stylesheet" href="/mgp/assets/css/font-awesome-ie7.min.css" />
+        <![endif]-->
+
+        <!-- page specific plugin styles -->
+
+        <!-- fonts -->
+        <link rel="stylesheet" href="/mgp/assets/css/ace-fonts.css" />
+
+        <!-- ace styles -->
+        <link rel="stylesheet" href="/mgp/assets/css/ace.min.css" />
+        <link rel="stylesheet" href="/mgp/assets/css/ace-rtl.min.css" />
+        <link rel="stylesheet" href="/mgp/assets/css/ace-skins.min.css" />
+        
+        <!--[if lte IE 8]>
+          <link rel="stylesheet" href="/mgp/assets/css/ace-ie.min.css" />
+        <![endif]-->
+
+        <!-- ace settings handler -->
+        <script src="/mgp/assets/js/uncompressed/ace-extra.js"></script>
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+        <!--[if lt IE 9]>
+        <script src="/mgp/assets/js/html5shiv.js"></script>
+        <script src="/mgp/assets/js/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="back1"></div>
+        <div class="back2"></div>
+        <div class="container" id="wrap">
+            <div id="head">
+                <div id="head_center">
+                    <a href="/mgp/index.php"><img src="/mgp/images/mdq.png" class="logo"></a>
+                </div>
+                <div id="head_nav">
+                    <div class="navbar-header pull-left">
+                        <div id="appmenu"></div>
+                    </div>
+                    
+                    <div class="navbar-header pull-right" role="navigation">
+                        <ul id="botones_top" class="nav ace-nav">
+                            <!-- Identity -->
+                            <li id="identity" data-widget="/identity">
+                                <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                    <img class="nav-user-photo" src="/mgp/assets/avatars/user.jpg" alt="Usuario" />
+                                    <span class="user-info">
+                                        <small>Bienvenido,</small>
+                                        usuario
+                                    </span>
+
+                                    <i class="icon-caret-down"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div id="head_nav">
-                <div id="appmenu" class="container"></div>
-                <com:homepage.comp.home_selector/>
-            </div>
-        </div>
-	
-        <com:homepage.comp.dynhome/>
-    </div>	
-    <div id="footer">
-        <div class="container"><p class="muted credit"><com:homepage.comp.soft_version/><p></div>
-    </div>
 
-  
-  <!-- Le javascript
-    ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
-    <com:security/>
-    <com:jsincludes/>
-    <style>
-     	#appmenu {position:relative;top:6px; }
-        .k-header, .k-grid-header, .k-toolbar, .k-grouping-header, .k-tooltip, .k-pager-wrap, .k-button, .k-draghandle {background-color: #000;}
-        .k-widget, .k-input, .k-textbox, .k-group, .k-content, .k-header, .k-editable-area, .k-separator, .k-colorpicker .k-arrow-down, .k-autocomplete, .k-dropdown-wrap, .k-toolbar, 
-        .k-group-footer td, .k-grid-footer, .k-footer-template td, .k-state-default, .k-state-default .k-select, .k-state-disabled, .k-grid-header-wrap, .k-grid-header, .k-grid td, 
-        .k-grid-footer-wrap, .k-pager-wrap, .k-grouping-header, .k-grouping-header .k-group-indicator, .k-dropdown-wrap, .k-autocomplete, .k-panelbar > .k-item > .k-link, 
-        .k-panel > .k-item > .k-link, .k-panelbar .k-panel, .k-panelbar .k-content, .k-calendar th, .k-slider-track, .k-splitbar, .k-dropzone-active, .k-upload-files, .k-tiles, 
-        .k-toolbar, .k-dropdown-wrap, .k-tooltip, .k-progress {border-color: #000;}
-        .k-header {color: #ddd;background: transparent;border: none;}
-        .k-item {}
-        .k-link {text-decoration: none!important;font-weight: normal!important;font-family: Verdana, Arial, sans-serif!important;font-size: 13px!important;}
-    </style>
-    <script type="text/javascript" src="/mgp/common/bootstrap/js/bootstrap.min.js"></script>
+            <com:homepage.comp.dynhome/>
+        </div>	
+        <div id="footer">
+            <div class="container">
+                <p class="muted credit"><com:homepage.comp.softversion/><p>
+                        </div>
+                        </div>
 
-    <script type="text/javascript">
-        $(document).ready(function(){
-            // Funciones para animar los iconos cuando carga el home
-            function doAnimation(image) {
-                if($.fadeIn) {
-                    image.fadeIn(150, function() {
-                        // wait until animation is done and recurse if there are more animations
-                        if(animations.length > 0) doAnimation(animations.shift());
-                    });
-                }
-            }
 
-            var animations = new Array();
+                        <!-- Le javascript
+                          ================================================== -->
+                        <!-- Placed at the end of the document so the pages load faster -->
+                        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
-            $(".boton").each(function() {
-                animations.push($(this));
-            });
-            doAnimation(animations.shift());
-        });
-    </script>
+                        <script type="text/javascript">
+                            // Funciones para animar los iconos cuando carga el home
+                            function doAnimation(image) {
+                                if ($.fadeIn) {
+                                    image.fadeIn(150, function() {
+                                        // wait until animation is done and recurse if there are more animations
+                                        if (animations.length > 0)
+                                            doAnimation(animations.shift());
+                                    });
+                                }
+                            }
 
-    </body>
-</html>
+                            $(document).ready(function() {
+
+                                var animations = new Array();
+
+                                $(".boton").each(function() {
+                                    animations.push($(this));
+                                });
+                                doAnimation(animations.shift());
+
+                                $("*[data-widget]").each(function() {
+                                    var w = $(this).data("widget");
+                                    $(this).load("/mgp/widget.php?" + w);
+                                });
+                            });
+                        </script>
+
+                        </body>
+                        </html>
