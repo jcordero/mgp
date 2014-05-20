@@ -31,7 +31,9 @@ class CDH_DIRECCION extends CDataHandler {
         //Convierto calle y altura en latitud y longitud
         $client = new SoapClient("http://gis.mardelplata.gob.ar/webservice/2.php?wsdl");
         $client_barrio = new SoapClient("http://gis.mardelplata.gob.ar/webservice/zonificacion.php?wsdl");
-
+        $r = (object) array("lat" => 0, "lng" => 0);
+        $b = (object) array("descripcion" => '');
+        
         if ($o->alternativa == 'NRO') {
             if ($o->cod_calle != '' && $o->altura != '') {
                 try {
@@ -40,20 +42,8 @@ class CDH_DIRECCION extends CDataHandler {
                     error_log("direccion.php coordenada_calle_altura() ->" . $exception);
                     return json_encode(array("resultado" => "error"), JSON_UNESCAPED_UNICODE);
                 }
-
-                //Recupero el barrio
-                try {
-                    $b = $client_barrio->zonificacion_latlong($r->lng, $r->lat, 1);
-                    error_log("direccion.php zonificacion_latlong(long={$r->lng},lat={$r->lat},layer=1) ->" . print_r($b, true));
-                } catch (SoapFault $exception) {
-                    error_log("direccion.php zonificacion_latlong() ->" . $exception);
-                    return json_encode(array("resultado" => "error"), JSON_UNESCAPED_UNICODE);
-                }
             } else {
-                error_log("Falta código de calle/altura! calle={$o->cod_calle} altura={$o->altura}");
-                $r->lat = 0;
-                $r->lng = 0;
-                $b->descripcion = '';
+                error_log("Falta código de calle/altura! calle={$o->cod_calle} altura={$o->altura}");        
             }
         } else {
             if ($o->cod_calle != '' && $o->cod_calle2 != '') {
@@ -63,24 +53,47 @@ class CDH_DIRECCION extends CDataHandler {
                     error_log("direccion.php coordenada_calle_calle() ->" . $exception);
                     return json_encode(array("resultado" => "error"), JSON_UNESCAPED_UNICODE);
                 }
-
-
-                //Recupero el barrio
-                try {
-                    $b = $client_barrio->zonificacion_latlong($r->lng, $r->lat, 1);
-                    error_log("direccion.php zonificacion_latlong(long={$r->lng},lat={$r->lat},layer=1) ->" . print_r($b, true));
-                } catch (SoapFault $exception) {
-                    error_log("direccion.php zonificacion_latlong() ->" . $exception);
-                    return json_encode(array("resultado" => "error"), JSON_UNESCAPED_UNICODE);
-                }
             } else {
                 error_log("Faltan códigos de calles! calle={$o->cod_calle} calle2={$o->cod_calle2}");
-                $r->lat = 0;
-                $r->lng = 0;
-                $b->descripcion = '';
             }
         }
 
+        if($r->lat!=0 && $r->lng!=0 ) {
+
+            //Recupero el barrio (Layer 1)
+            try {
+                $b = $client_barrio->zonificacion_latlong($r->lng, $r->lat, 1);
+                error_log("direccion.php zonificacion_latlong(long={$r->lng},lat={$r->lat},layer=1) ->" . print_r($b, true));
+            } catch (SoapFault $exception) {
+                error_log("direccion.php zonificacion_latlong() ->" . $exception);
+                return json_encode(array("resultado" => "error"), JSON_UNESCAPED_UNICODE);
+            }
+            
+            if(substr($o->prestacion,0,2)=="03") {
+                //Recupero la info de limpieza
+                $limpieza = array(
+                    (object) array("codigo"=>212,"nombre"=>"Recoleccion de bolsa negra","servicio"=>""),
+                    (object) array("codigo"=>213,"nombre"=>"Recoleccion de bolsa verde","servicio"=>""),
+                    (object) array("codigo"=>214,"nombre"=>"Recolección de ramas, pasto y residuos no habituales, etc.","servicio"=>""),
+                    (object) array("codigo"=>215,"nombre"=>"Barrido","servicio"=>""),
+                    (object) array("codigo"=>216,"nombre"=>"Baldeo","servicio"=>""),
+                    (object) array("codigo"=>217,"nombre"=>"Corte de pasto","servicio"=>"")
+                );
+                foreach($limpieza as $ix=>$serv) {
+                    try {
+                        $layer = $serv->codigo;
+                        $limpieza[$ix]->servicio = $client->latlng_serviciolimpieza($layer, $r->lat, $r->lng);
+                        error_log("direccion.php latlng_serviciolimpieza(long={$r->lng},lat={$r->lat},layer={$layer}) ->" . print_r($limpieza[$ix]->servicio, true));
+                    } catch (SoapFault $exception) {
+                        error_log("direccion.php latlng_serviciolimpieza(long={$r->lng},lat={$r->lat},layer={$layer}) ->" . $exception);
+                        return json_encode(array("resultado" => "error"), JSON_UNESCAPED_UNICODE);
+                    }
+                }
+            } else {
+                $limpieza = "NO";
+            } 
+        }
+        
         //Es una direccion imposible?
         if ($r->lat == 0 && $r->lng == 0) {
             $resultado = "error";
@@ -89,15 +102,16 @@ class CDH_DIRECCION extends CDataHandler {
         }
         
         $res = array(
-            "resultado" => $resultado,
-            "latitud" => $r->lat,
-            "longitud" => $r->lng,
-            "barrio" => $b->descripcion,
-            "calle" => $o->nom_calle,
-            "cod_calle" => $o->cod_calle,
-            "nro" => $o->altura,
-            "calle2" => $o->nom_calle2,
-            "cod_calle2" => $o->cod_calle2,
+            "resultado"             => $resultado,
+            "latitud"               => $r->lat,
+            "longitud"              => $r->lng,
+            "barrio"                => $b->descripcion,
+            "calle"                 => $o->nom_calle,
+            "cod_calle"             => $o->cod_calle,
+            "nro"                   => $o->altura,
+            "calle2"                => $o->nom_calle2,
+            "cod_calle2"            => $o->cod_calle2,
+            "servicios_limpieza"    => $limpieza
         );
 
         error_log("direccion::validarDireccion() " . print_r($res, true));

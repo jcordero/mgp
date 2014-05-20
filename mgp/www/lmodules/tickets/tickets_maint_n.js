@@ -87,6 +87,15 @@ $(document).ready(function() {
         rubro.m_mandatory = false;
     }
     
+    //Espacio en las direcciones
+    
+    $("#contenido_domicilio").append('<div class="row"><div id="cd_compacto" class="col-xs-8"></div><div id="panel_limpieza" class="col-xs-4"></div></div>');
+    $("#contenido_domicilio").children(".form-group").each(function(){
+        if(this.id!="mapa") {
+            $("#cd_compacto").append( $(this).detach() );
+        }
+    });
+    
     //campos extra en las direcciones
     var e = '<p class="form-control-static"></p>';
     $('#alternativa div').append(e);
@@ -132,13 +141,14 @@ $(document).ready(function() {
  * @returns {void}
  */
 function valida_direccion() {
-    var calle = $('#m_calle').val();
-    var calle_nombre = $('#hm_calle').val();
-    var calle2 = $('#m_calle2').val();
-    var calle2_nombre = $('#hm_calle2').val();
-    var altura = $('#m_callenro').val();
-    var alternativa = $('#m_alternativa').val();
-    	
+    var calle           = $('#m_calle').val();
+    var calle_nombre    = $('#hm_calle').val();
+    var calle2          = $('#m_calle2').val();
+    var calle2_nombre   = $('#hm_calle2').val();
+    var altura          = $('#m_callenro').val();
+    var alternativa     = $('#m_alternativa').val();
+    var prestacion      = $('#m_prestacion').val();
+    
     if(calle.length<5) {
         p4.alert_box('Debe completar la calle antes de validar la dirección','Atención');
         return;
@@ -163,7 +173,8 @@ function valida_direccion() {
         'nom_calle2':calle2_nombre,
         'altura':altura,
         'gis':gis_layer,
-        'alternativa':alternativa
+        'alternativa':alternativa,
+        'prestacion':prestacion
     };
     new p4.rem_request(this,function(obj,json){
             var o = JSON.parse(json);
@@ -196,6 +207,11 @@ function valida_direccion() {
                 
                 //Ajuste del formulario
                 direccion_validada();
+                
+                //Pastilla servicios limpieza
+                if(o.servicios_limpieza!="NO") {
+                    dibujar_servicio_limpieza(o.servicios_limpieza);
+                }
                 
                 //Mostrar elementos
                 if(gis_tipo=="LUMINARIA" || gis_tipo=="SEMAFORO") {
@@ -314,7 +330,7 @@ function direccion_validada() {
  */
 function setAlertLuminaria() {
     if( $('#alert_luminaria').length===0 )
-    $('#contenido_domicilio').append('<div id="alert_luminaria" class="alert alert-info" style="width: 700px;">'+
+    $('#cd_compacto').append('<div id="alert_luminaria" class="alert alert-info">'+
                 '<h4>Atención!</h4>'+
                     'Debe seleccionar una luminaria en el mapa para terminar la georefencia y poder salvar el ticket.'+
                 '</div>');
@@ -603,4 +619,18 @@ function cambio_prestacion(codigo) {
             cuest.innerHTML = jdata[1];
         }    
     },"TICKET::PRESTACIONTREE","getDetails",codigo);
+}
+
+function dibujar_servicio_limpieza(s) {
+    var h = '   <div class="panel panel-default">'+
+            '       <div class="panel-heading"><h4>Servicios</h4></div>'+
+            '       <div class="panel-body">';
+    for(var j=0;j<s.length;j++) {
+        var serv = s[j];
+        h +='           <p><h5>' + serv.nombre + '</h5><i>' + serv.servicio + '</i></p>';
+    }
+    h +=    '      </div>' +
+            '  </div>';
+            
+    $("#panel_limpieza").html(h);           
 }
