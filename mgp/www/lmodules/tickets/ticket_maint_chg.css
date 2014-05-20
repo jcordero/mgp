@@ -1,19 +1,10 @@
 
-.mapa {
-    position: absolute;
-    left: 700px;
-    top: -30px;
-    display: block;
-    z-index: 1;
-}
+#m_mapa { float: right; width: 350px;height: 350px;}
+#mapa {height: 30px;}
 
-.mapa img {
-    z-index: 10;
-    width: 350px;
-    height: 250px;
-}
+#bloque_ubicacion {height: 440px;}
 
-.k-ie .mapa {left: 550px;}
+/* .k-ie .mapa {left: 550px;} */
 
 .cuest .resp { font-style: italic;}
 .cuest .preg { font-weight: bold;}

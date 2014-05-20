@@ -1,191 +1,191 @@
 <ayaxphpclass>
 
-<!-- CLASE ORGANISMOS -->
-<make object="class"> 
-	<build out_file="class_tic_organismos.php" classname="class_tic_organismos" classlabel="Organismos">
-		<parse in_file="../mgp.sql" tablename="tic_organismos"/>
-		<method objfactoryquerysuffix="order by tor_sigla"/>
-		<field name="tor_code" sequence="tic_organismos"/>
+    <!-- CLASE ORGANISMOS -->
+    <make object="class"> 
+        <build out_file="class_tic_organismos.php" classname="class_tic_organismos" classlabel="Organismos">
+            <parse in_file="../mgp.sql" tablename="tic_organismos"/>
+            <method objfactoryquerysuffix="order by tor_sigla"/>
+            <field name="tor_code" sequence="tic_organismos"/>
                 
-                <field name="tmp_file1" type="varchar" size="200" presentation="FILEUPLOAD"/>
-                <field name="tmp_file2" type="varchar" size="200" presentation="FILEUPLOAD"/>
-	</build>
-</make>
+            <field name="tmp_file1" type="varchar" size="200" presentation="FILEUPLOAD"/>
+            <field name="tmp_file2" type="varchar" size="200" presentation="FILEUPLOAD"/>
+        </build>
+    </make>
 
-<!--  BUSCAR ORGANISMOS -->
-<make object="search_and_list">
-	<build out_file="organismos.php" classname="class_tic_organismos" title="Consulta de organismos"  template_html="default.htm">
+    <!--  BUSCAR ORGANISMOS -->
+    <make object="search_and_list">
+        <build out_file="organismos.php" classname="class_tic_organismos" title="Consulta de organismos"  template_html="default.htm">
 		
-		<searchfield name="tor_code" presentation="INT" label="Código"/>
-		<searchfield name="tor_sigla" presentation="TEXT" label="Sigla" cols="10"/>
-		<searchfield name="tor_nombre" presentation="TEXT" label="Nombre"/>
-		<searchfield name="tor_estado" presentation="ACTIVO" label="Estado"/>
-		<searchfield name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo"/>
+            <searchfield name="tor_code" presentation="INT" label="Código"/>
+            <searchfield name="tor_sigla" presentation="TEXT" label="Sigla" cols="10"/>
+            <searchfield name="tor_nombre" presentation="TEXT" label="Nombre"/>
+            <searchfield name="tor_estado" presentation="ACTIVO" label="Estado"/>
+            <searchfield name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo"/>
 		
-		<listfield name="tor_code" presentation="INT" label="Código"/>
-		<listfield name="tor_sigla" presentation="TEXT" label="Sigla"/>
-		<listfield name="tor_nombre" presentation="TEXT" label="Nombre"/>
-		<listfield name="tor_estado" presentation="ACTIVO" label="Estado"/>
-		<listfield name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo"/>
-		<listfield name="tor_contacto" presentation="TEXT" label="Contacto"/>
+            <listfield name="tor_code" presentation="INT" label="Código"/>
+            <listfield name="tor_sigla" presentation="TEXT" label="Sigla"/>
+            <listfield name="tor_nombre" presentation="TEXT" label="Nombre"/>
+            <listfield name="tor_estado" presentation="ACTIVO" label="Estado"/>
+            <listfield name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo"/>
+            <listfield name="tor_contacto" presentation="TEXT" label="Contacto"/>
 		
-		<action label="ver" target="organ_maint.php?OP=V" operation="V">
-			<sendfield classname="class_tic_organismos" name="tor_code"/>
-		</action>
-        <action label="modifica" target="organ_maint.php?OP=M" operation="M">
-			<sendfield classname="class_tic_organismos" name="tor_code"/>
-		</action>
-	</build>
-</make>
+            <action label="ver" target="organ_maint.php?OP=V" operation="V">
+                <sendfield classname="class_tic_organismos" name="tor_code"/>
+            </action>
+            <action label="modifica" target="organ_maint.php?OP=M" operation="M">
+                <sendfield classname="class_tic_organismos" name="tor_code"/>
+            </action>
+        </build>
+    </make>
 
-<!-- MOSTRAR CAMBIAR ORGANISMO -->
-<make object="table_maint"> 
-	<build out_file="organ_maint.php" classname="class_tic_organismos" title="Mantenimiento de organismo" next="organismos.php?last=1&amp;OP=L" template_html="default.htm">
+    <!-- MOSTRAR CAMBIAR ORGANISMO -->
+    <make object="table_maint"> 
+        <build out_file="organ_maint.php" classname="class_tic_organismos" title="Mantenimiento de organismo" next="organismos.php?last=1&amp;OP=L" template_html="default.htm">
 		
-		<group title="Organismo" id="asunto">
-                    <field name="tor_code" presentation="INT" label="Código" readonly="true"/>
-                    <field name="tor_sigla" presentation="TEXT" label="Sigla" cols="10" ismandatory="true"/>
-                    <field name="tor_nombre" presentation="TEXT" label="Nombre" ismandatory="true"/>
-                    <field name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo" ismandatory="true"/>
-                    <field name="tor_contacto" presentation="TEXTAREA" label="Contacto" rows="4" cols="60"/>
-		</group>
+            <group title="Organismo" id="asunto">
+                <field name="tor_code" presentation="INT" label="Código" readonly="true"/>
+                <field name="tor_sigla" presentation="TEXT" label="Sigla" cols="10" ismandatory="true"/>
+                <field name="tor_nombre" presentation="TEXT" label="Nombre" ismandatory="true"/>
+                <field name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo" ismandatory="true"/>
+                <field name="tor_contacto" presentation="TEXTAREA" label="Contacto" rows="4" cols="60"/>
+            </group>
 		
-		<group title="Ubicacion" id="ubicacion">
-                    <field name="tor_padre" presentation="TICKET::ORGANISMO" label="Organismo padre"/>
-               </group>
+            <group title="Ubicacion" id="ubicacion">
+                <field name="tor_padre" presentation="TICKET::ORGANISMO" label="Organismo padre"/>
+            </group>
 		
-		<group title="Estado" id="estado">
-                    <field name="tor_estado" presentation="ACTIVO" label="Estado"/>
-                    <field name="tor_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true"/>
-                    <field name="use_code" presentation="USER" label="Operador" readonly="true"/>
-		</group>
+            <group title="Estado" id="estado">
+                <field name="tor_estado" presentation="ACTIVO" label="Estado"/>
+                <field name="tor_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true"/>
+                <field name="use_code" presentation="USER" label="Operador" readonly="true"/>
+            </group>
 		
-		<group title="Alertas" id="alertas">
-                    <field name="tor_email" presentation="EMAIL" label="EMail"/>
-                    <field name="tor_notificar" presentation="SINO" label="Notificar?"/>
-		</group>
+            <group title="Alertas" id="alertas">
+                <field name="tor_email" presentation="EMAIL" label="EMail"/>
+                <field name="tor_notificar" presentation="SINO" label="Notificar?"/>
+            </group>
 		
-		<!-- Botones de accion para redireccionar después de salvar la página -->
-		<action operation="L" label="Listado de organismos" target="organismos.php?last=1&amp;OP=L"  note="Listado de organismos"/>
-	</build>
-</make>
+            <!-- Botones de accion para redireccionar después de salvar la página -->
+            <action operation="L" label="Listado de organismos" target="organismos.php?last=1&amp;OP=L"  note="Listado de organismos"/>
+        </build>
+    </make>
 
-<!-- NUEVO ORGANISMO -->
-<make object="table_maint">
-	<build out_file="organ_maint_n.php" classname="class_tic_organismos" title="Nuevo organismo" next="organismos.php?last=1&amp;OP=L" template_html="default.htm">
+    <!-- NUEVO ORGANISMO -->
+    <make object="table_maint">
+        <build out_file="organ_maint_n.php" classname="class_tic_organismos" title="Nuevo organismo" next="organismos.php?last=1&amp;OP=L" template_html="default.htm">
 
-		<group title="Organismo" id="asunto">
-			<field name="tor_code" presentation="INT" label="Código" readonly="true" isvisible="false"/>
-			<field name="tor_sigla" presentation="TEXT" label="Sigla" cols="10" ismandatory="true"/>
-			<field name="tor_nombre" presentation="TEXT" label="Nombre" ismandatory="true"/>
-            <field name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo" ismandatory="true"/>
-            <field name="tor_contacto" presentation="TEXTAREA" label="Contacto" rows="4" cols="60"/>
-		</group>
+            <group title="Organismo" id="asunto">
+                <field name="tor_code" presentation="INT" label="Código" readonly="true" isvisible="false"/>
+                <field name="tor_sigla" presentation="TEXT" label="Sigla" cols="10" ismandatory="true"/>
+                <field name="tor_nombre" presentation="TEXT" label="Nombre" ismandatory="true"/>
+                <field name="tor_tipo" presentation="ORGANISMOTIPO" label="Tipo" ismandatory="true"/>
+                <field name="tor_contacto" presentation="TEXTAREA" label="Contacto" rows="4" cols="60"/>
+            </group>
 
-		<group title="Ubicacion" id="ubicacion">
-			<field name="tor_padre" presentation="TICKET::ORGANISMO" label="Organismo padre"/>
-		</group>
+            <group title="Ubicacion" id="ubicacion">
+                <field name="tor_padre" presentation="TICKET::ORGANISMO" label="Organismo padre"/>
+            </group>
 
-		<group title="Estado" id="estado">
-			<field name="tor_estado" presentation="ACTIVO" label="Estado" initialvalue="ACTIVO"/>
-			<field name="tor_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true" classparams="force"/>
-			<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true"/>
-		</group>
+            <group title="Estado" id="estado">
+                <field name="tor_estado" presentation="ACTIVO" label="Estado" initialvalue="ACTIVO"/>
+                <field name="tor_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true" classparams="force"/>
+                <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true"/>
+            </group>
 
-		<group title="Alertas" id="alertas">
-			<field name="tor_email" presentation="EMAIL" label="EMail"/>
-			<field name="tor_notificar" presentation="SINO" label="Notificar?"/>
-		</group>
+            <group title="Alertas" id="alertas">
+                <field name="tor_email" presentation="EMAIL" label="EMail"/>
+                <field name="tor_notificar" presentation="SINO" label="Notificar?"/>
+            </group>
 		
-		<!-- Botones de accion para redireccionar después de salvar la página -->
-		<action operation="L" label="Listado de organismos" target="organismos.php?last=1&amp;OP=L"  note="Listado de organismos"/>
+            <!-- Botones de accion para redireccionar después de salvar la página -->
+            <action operation="L" label="Listado de organismos" target="organismos.php?last=1&amp;OP=L"  note="Listado de organismos"/>
 
-	</build>
-</make>
-
-
-<!-- CLASE RUBROS -->
-<make object="class">
-	<build out_file="class_tic_rubros.php" classname="class_tic_rubros" classlabel="Rubros">
-		<parse in_file="../mgp.sql" tablename="tic_rubros"/>
-		<method objfactoryquerysuffix="order by tru_detalle"/>
-		<field name="tru_code" sequence="tic_rubros"/>
-	</build>
-</make>
-
-<!--  BUSCAR RUBROS -->
-<make object="search_and_list">
-	<build out_file="rubros.php" classname="class_tic_rubros" title="Consulta de rubros"  template_html="default.htm">
-
-		<searchfield name="tru_code" presentation="INT" label="Código"/>
-		<searchfield name="tru_detalle" presentation="TEXT" label="Nombre"/>
-		<searchfield name="tru_estado" presentation="ACTIVO" label="Estado"/>
-
-		<listfield name="tru_code" presentation="INT" label="Código"/>
-		<listfield name="tru_detalle" presentation="TEXT" label="Nombre"/>
-		<listfield name="tru_estado" presentation="ACTIVO" label="Estado"/>
-		<listfield name="tru_tstamp" presentation="DATETIME" label="Fecha"/>
-		<listfield name="use_code" presentation="USER" label="Usuario"/>
-
-		<action label="ver" target="rubro_maint.php?OP=V" operation="V">
-			<sendfield classname="class_tic_rubros" name="tru_code"/>
-		</action>
-        <action label="modifica" target="rubro_maint.php?OP=M" operation="M">
-			<sendfield classname="class_tic_rubros" name="tru_code"/>
-		</action>
-	</build>
-</make>
-
-<!-- MOSTRAR CAMBIAR RUBRO -->
-<make object="table_maint">
-	<build out_file="rubro_maint.php" classname="class_tic_rubros" title="Mantenimiento de rubro" next="rubros.php?last=1&amp;OP=L" template_html="default.htm">
-
-		<group title="Rubro" id="asunto">
-			<field name="tru_code" presentation="INT" label="Código" readonly="true"/>
-			<field name="tru_detalle" presentation="TEXT" label="Nombre" ismandatory="true"/>
-		</group>
-
-		<group title="Estado" id="estado">
-			<field name="tru_estado" presentation="ACTIVO" label="Estado"/>
-			<field name="tru_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true"/>
-			<field name="use_code" presentation="USER" label="Operador" readonly="true"/>
-		</group>
-
-		<!-- Botones de accion para redireccionar después de salvar la página -->
-		<action operation="L" label="Listado de rubros" target="rubros.php?last=1&amp;OP=L"  note="Listado de rubros"/>
-
-	</build>
-</make>
-
-<!-- NUEVO RUBRO -->
-<make object="table_maint">
-	<build out_file="rubro_maint_n.php" classname="class_tic_rubros" title="Nuevo rubro" next="rubros.php?last=1&amp;OP=L" template_html="default.htm">
-
-		<group title="Rubro" id="asunto">
-			<field name="tru_code" presentation="INT" label="Código" readonly="true" isvisible="false"/>
-			<field name="tru_detalle" presentation="TEXT" label="Nombre" ismandatory="true"/>
-		</group>
-
-		<group title="Estado" id="estado">
-			<field name="tru_estado" presentation="ACTIVO" label="Estado" ismandatory="true" initialvalue="ACTIVO"/>
-			<field name="tru_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true" classparams="force"/>
-			<field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" />
-		</group>
-
-		<!-- Botones de accion para redireccionar después de salvar la página -->
-		<action operation="L" label="Listado de rubros" target="rubros.php?last=1&amp;OP=L"  note="Listado de rubros"/>
-		<action operation="N" label="Nuevo rubro" target="rubro_maint_n.php?OP=N"  note="Nuevo rubro"/>
-
-	</build>
-</make>
+        </build>
+    </make>
 
 
+    <!-- CLASE RUBROS -->
+    <make object="class">
+        <build out_file="class_tic_rubros.php" classname="class_tic_rubros" classlabel="Rubros">
+            <parse in_file="../mgp.sql" tablename="tic_rubros"/>
+            <method objfactoryquerysuffix="order by tru_detalle"/>
+            <field name="tru_code" sequence="tic_rubros"/>
+        </build>
+    </make>
+
+    <!--  BUSCAR RUBROS -->
+    <make object="search_and_list">
+        <build out_file="rubros.php" classname="class_tic_rubros" title="Consulta de rubros"  template_html="default.htm">
+
+            <searchfield name="tru_code" presentation="INT" label="Código"/>
+            <searchfield name="tru_detalle" presentation="TEXT" label="Nombre"/>
+            <searchfield name="tru_estado" presentation="ACTIVO" label="Estado"/>
+
+            <listfield name="tru_code" presentation="INT" label="Código"/>
+            <listfield name="tru_detalle" presentation="TEXT" label="Nombre"/>
+            <listfield name="tru_estado" presentation="ACTIVO" label="Estado"/>
+            <listfield name="tru_tstamp" presentation="DATETIME" label="Fecha"/>
+            <listfield name="use_code" presentation="USER" label="Usuario"/>
+
+            <action label="ver" target="rubro_maint.php?OP=V" operation="V">
+                <sendfield classname="class_tic_rubros" name="tru_code"/>
+            </action>
+            <action label="modifica" target="rubro_maint.php?OP=M" operation="M">
+                <sendfield classname="class_tic_rubros" name="tru_code"/>
+            </action>
+        </build>
+    </make>
+
+    <!-- MOSTRAR CAMBIAR RUBRO -->
+    <make object="table_maint">
+        <build out_file="rubro_maint.php" classname="class_tic_rubros" title="Mantenimiento de rubro" next="rubros.php?last=1&amp;OP=L" template_html="default.htm">
+
+            <group title="Rubro" id="asunto">
+                <field name="tru_code" presentation="INT" label="Código" readonly="true"/>
+                <field name="tru_detalle" presentation="TEXT" label="Nombre" ismandatory="true"/>
+            </group>
+
+            <group title="Estado" id="estado">
+                <field name="tru_estado" presentation="ACTIVO" label="Estado"/>
+                <field name="tru_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true"/>
+                <field name="use_code" presentation="USER" label="Operador" readonly="true"/>
+            </group>
+
+            <!-- Botones de accion para redireccionar después de salvar la página -->
+            <action operation="L" label="Listado de rubros" target="rubros.php?last=1&amp;OP=L"  note="Listado de rubros"/>
+
+        </build>
+    </make>
+
+    <!-- NUEVO RUBRO -->
+    <make object="table_maint">
+        <build out_file="rubro_maint_n.php" classname="class_tic_rubros" title="Nuevo rubro" next="rubros.php?last=1&amp;OP=L" template_html="default.htm">
+
+            <group title="Rubro" id="asunto">
+                <field name="tru_code" presentation="INT" label="Código" readonly="true" isvisible="false"/>
+                <field name="tru_detalle" presentation="TEXT" label="Nombre" ismandatory="true"/>
+            </group>
+
+            <group title="Estado" id="estado">
+                <field name="tru_estado" presentation="ACTIVO" label="Estado" ismandatory="true" initialvalue="ACTIVO"/>
+                <field name="tru_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true" classparams="force"/>
+                <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" />
+            </group>
+
+            <!-- Botones de accion para redireccionar después de salvar la página -->
+            <action operation="L" label="Listado de rubros" target="rubros.php?last=1&amp;OP=L"  note="Listado de rubros"/>
+            <action operation="N" label="Nuevo rubro" target="rubro_maint_n.php?OP=N"  note="Nuevo rubro"/>
+
+        </build>
+    </make>
 
 
 
-<!-- CLASE PRESTACIONES -->
-<make object="class">
-	<build out_file="class_tic_prestaciones.php" classname="class_tic_prestaciones" classlabel="Prestaciones">
+
+
+    <!-- CLASE PRESTACIONES -->
+    <make object="class">
+        <build out_file="class_tic_prestaciones.php" classname="class_tic_prestaciones" classlabel="Prestaciones">
             <parse in_file="../mgp.sql" tablename="tic_prestaciones"/>
             <method objfactoryquerysuffix="order by tpr_detalle"/>
 		
@@ -205,271 +205,269 @@
                 <parse in_file="../mgp.sql" tablename="tic_prestaciones_rubros"/>
                 <key parent="tpr_code" child="tpr_code"/>
             </build>
-	</build>
-</make>
+        </build>
+    </make>
 
-<!--  BUSCAR PRESTACIONES -->
-<make object="search_and_list">
-	<build out_file="prestaciones.php" classname="class_tic_prestaciones" title="Consulta de prestaciones"  template_html="default.htm">
+    <!--  BUSCAR PRESTACIONES -->
+    <make object="search_and_list">
+        <build out_file="prestaciones.php" classname="class_tic_prestaciones" title="Consulta de prestaciones"  template_html="default.htm">
 
-		<searchfield name="tpr_code" presentation="TEXT" label="Código" cols="10"/>
-		<searchfield name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo"/>
-		<searchfield name="tpr_detalle" presentation="TEXT" label="Detalle"/>
-		<searchfield name="tpr_estado" presentation="ACTIVO" label="Estado"/>
-		<searchfield name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación"/>
+            <searchfield name="tpr_code" presentation="TEXT" label="Código" cols="10"/>
+            <searchfield name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo"/>
+            <searchfield name="tpr_detalle" presentation="TEXT" label="Detalle"/>
+            <searchfield name="tpr_estado" presentation="ACTIVO" label="Estado"/>
+            <searchfield name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación"/>
 
-		<listfield name="tpr_code" presentation="TEXT" label="Código"/>
-		<listfield name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo"/>
-		<listfield name="tpr_detalle" presentation="TEXT" label="Detalle"/>
-		<listfield name="tpr_estado" presentation="ACTIVO" label="Estado"/>
-		<listfield name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación"/>
-		<listfield name="tpr_plazo" presentation="TEXT" label="Plazo"/>
+            <listfield name="tpr_code" presentation="TEXT" label="Código"/>
+            <listfield name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo"/>
+            <listfield name="tpr_detalle" presentation="TEXT" label="Detalle"/>
+            <listfield name="tpr_estado" presentation="ACTIVO" label="Estado"/>
+            <listfield name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación"/>
+            <listfield name="tpr_plazo" presentation="TEXT" label="Plazo"/>
 
-		<action label="ver" target="prest_maint.php?OP=V" operation="V">
-			<sendfield classname="class_tic_prestaciones" name="tpr_code"/>
-		</action>
-        <action label="modifica" target="prest_maint.php?OP=M" operation="M">
-			<sendfield classname="class_tic_prestaciones" name="tpr_code"/>
-		</action>
-	</build>
-</make>
+            <action label="ver" target="prest_maint.php?OP=V" operation="V">
+                <sendfield classname="class_tic_prestaciones" name="tpr_code"/>
+            </action>
+            <action label="modifica" target="prest_maint.php?OP=M" operation="M">
+                <sendfield classname="class_tic_prestaciones" name="tpr_code"/>
+            </action>
+        </build>
+    </make>
 
-<!--  MOSTRAR MODIFICAR PRESTACIONES -->
-<make object="table_maint">
-    <build out_file="prest_maint.php" classname="class_tic_prestaciones" title="Mantenimiento de prestacion" next="prestaciones.php?last=1&amp;OP=L" template_html="default.htm">
+    <!--  MOSTRAR MODIFICAR PRESTACIONES -->
+    <make object="table_maint">
+        <build out_file="prest_maint.php" classname="class_tic_prestaciones" title="Mantenimiento de prestacion" next="prestaciones.php?last=1&amp;OP=L" template_html="default.htm">
 
-	<group title="Prestación" id="asunto">
-            <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
-            <field name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
-            <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true"/>
-            <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="true"/>
-            <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>
-	</group>
+            <group title="Prestación" id="asunto">
+                <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
+                <field name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" ismandatory="true"/>
+                <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true"/>
+                <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="true"/>
+                <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>
+            </group>
 
-	<group title="Ayuda y búsqueda" id="buscar">
-            <field name="tpr_metadata" presentation="TEXTAREA" label="Descripción" rows="5" cols="60"/>
-            <field name="tpr_keywords" presentation="TEXTAREA" label="Palabras clave"  rows="5" cols="60" note="separar con comas"/>
-	</group>
+            <group title="Ayuda y búsqueda" id="buscar">
+                <field name="tpr_metadata" presentation="TEXTAREA" label="Descripción" rows="5" cols="60"/>
+                <field name="tpr_keywords" presentation="TEXTAREA" label="Palabras clave"  rows="5" cols="60" note="separar con comas"/>
+            </group>
 
-	<group title="Clasificación" id="ubicacion">
-            <field name="tpr_code" presentation="TEXT" label="Código" readonly="false"/>
-	</group>
+            <group title="Clasificación" id="ubicacion">
+                <field name="tpr_code" presentation="TEXT" label="Código" readonly="false"/>
+            </group>
 
-	<group title="Estado" id="estado">
-            <field name="tpr_estado" presentation="ACTIVO" label="Estado"/>
-            <field name="tpr_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true"/>
-            <field name="use_code" presentation="USER" label="Operador" readonly="true"/>
-	</group>
+            <group title="Estado" id="estado">
+                <field name="tpr_estado" presentation="ACTIVO" label="Estado"/>
+                <field name="tpr_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true"/>
+                <field name="use_code" presentation="USER" label="Operador" readonly="true"/>
+            </group>
 
-        <group title="Administración delegada" id="admin">
-            <field name="tpr_admin" presentation="TICKET::ORGANISMO" label="Administrable por" note="Organismo"/>
-        </group>
+            <group title="Administración delegada" id="admin">
+                <field name="tpr_admin" presentation="TICKET::ORGANISMO" label="Administrable por" note="Organismo"/>
+            </group>
 	
-        <group title="Notificaciones" id="notifica">
-            <field name="tpr_al_inicio" presentation="TEXT" label="Al inicio" note="(correo electrónico)"/>
-            <field name="tpr_al_final" presentation="TEXT" label="Al final" note="(correo electrónico)"/>
-            <field name="tpr_al_vencimiento" presentation="TEXT" label="Al vencimiento" note="(correo electrónico)"/>
-        </group>
+            <group title="Notificaciones" id="notifica">
+                <field name="tpr_al_inicio" presentation="TEXT" label="Al inicio" note="(correo electrónico)"/>
+                <field name="tpr_al_final" presentation="TEXT" label="Al final" note="(correo electrónico)"/>
+                <field name="tpr_al_vencimiento" presentation="TEXT" label="Al vencimiento" note="(correo electrónico)"/>
+            </group>
 
-        <group title="Estados optativos" id="estados_opt">
-            <field name="tor_code_inspeccion" presentation="TICKET::ORGANISMO" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
-            <field name="tor_code_verificacion" presentation="TICKET::ORGANISMO" label="Al final certificación" note="código de organismo que hace la certificación"/>
-        </group>
+            <group title="Estados optativos" id="estados_opt">
+                <field name="tor_code_inspeccion" presentation="TICKET::ORGANISMO" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
+                <field name="tor_code_verificacion" presentation="TICKET::ORGANISMO" label="Al final certificación" note="código de organismo que hace la certificación"/>
+            </group>
 
-        <group title="Asociación automática de tickets" id="asociar">
-            <field name="tpr_asociar_radio" presentation="INT" label="Radio en metros" note="todos los tickets abiertos de esta prestación se asociarán si están próximos esta distacia"/>
-            <field name="eev_task" presentation="TEXT" label="Ruteo externo" note="completar para las prestaciones que se traten en un sistema integrado"/>
-        </group>
+            <group title="Asociación automática de tickets" id="asociar">
+                <field name="tpr_asociar_radio" presentation="INT" label="Radio en metros" note="todos los tickets abiertos de esta prestación se asociarán si están próximos esta distacia"/>
+                <field name="eev_task" presentation="TEXT" label="Ruteo externo" note="completar para las prestaciones que se traten en un sistema integrado"/>
+            </group>
 		
-        <!-- CUESTIONARIO -->
-        <table relationclass="" classname="class_tic_prestaciones_cuest" title="Cuestionario" add="true" delete="true" update="true">
-            <column title="Orden" order="1">
-                <field name="tpr_code" isvisible="false"/>
-                <field name="tcu_code" isvisible="false"/>
-                <field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true" cols="10"/>
-           </column>
-            <column title="Pregunta" order="2">
-                <field name="tpr_preg" presentation="TEXT" label="Pregunta" ismandatory="true" cols="100"/>
-            </column>
-            <column title="Tipo" order="3">
-                <field name="tpr_tipo_preg" presentation="CUESTOPCIONES" label="Tipo" ismandatory="true"/>
-            </column>
-            <column title="Opciones" order="4">
-                <field name="tpr_opciones" presentation="TEXTAREA" rows="4" cols="50" label="Opciones" />
-            </column>
-            <column title="MiCiudad" order="5">
-                <field name="tpr_miciudad" presentation="TEXT" label="Código MiCiudad" cols="10"/>
-            </column>
-        </table>
+            <!-- CUESTIONARIO -->
+            <table relationclass="" classname="class_tic_prestaciones_cuest" title="Cuestionario" add="true" delete="true" update="true">
+                <column title="Orden" order="1">
+                    <field name="tpr_code" isvisible="false"/>
+                    <field name="tcu_code" isvisible="false"/>
+                    <field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true" cols="10"/>
+                </column>
+                <column title="Pregunta" order="2">
+                    <field name="tpr_preg" presentation="TEXT" label="Pregunta" ismandatory="true" cols="100"/>
+                </column>
+                <column title="Tipo" order="3">
+                    <field name="tpr_tipo_preg" presentation="CUESTOPCIONES" label="Tipo" ismandatory="true"/>
+                </column>
+                <column title="Opciones" order="4">
+                    <field name="tpr_opciones" presentation="TEXTAREA" rows="4" cols="50" label="Opciones" />
+                </column>
+                <column title="MiCiudad" order="5">
+                    <field name="tpr_miciudad" presentation="TEXT" label="Código MiCiudad" cols="10"/>
+                </column>
+            </table>
 
-        <!-- GIS -->
-        <table relationclass="" classname="class_tic_prestaciones_gis" title="GIS" add="true" delete="true" update="true">
-            <column title="Campo" order="1">
-                <field name="tpr_code" isvisible="false"/>
-                <field name="tpg_code" isvisible="false"/>
-                <field name="tpg_gis_campo" presentation="TICKET::GISGRILLA" label="Campo" />
-            </column>
-            <column title="Valor" order="2">
-                <field name="tpg_gis_valor" presentation="TEXT" label="Valor" />
-            </column>
-            <column title="Usar GIS?" order="3">
-                <field name="tpg_usa_gis" presentation="SINO" label="Usar GIS?" ismandatory="true"/>
-            </column>
-            <column title="Organismo" order="4">
-                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
-            </column>
-            <column title="Figura" order="5">
-                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
-                <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="false"/>
+            <!-- GIS -->
+            <table relationclass="" classname="class_tic_prestaciones_gis" title="GIS" add="true" delete="true" update="true">
+                <column title="Campo" order="1">
+                    <field name="tpr_code" isvisible="false"/>
+                    <field name="tpg_code" isvisible="false"/>
+                    <field name="tpg_gis_campo" presentation="TICKET::GISGRILLA" label="Campo" />
+                </column>
+                <column title="Valor" order="2">
+                    <field name="tpg_gis_valor" presentation="TEXT" label="Valor" />
+                </column>
+                <column title="Usar GIS?" order="3">
+                    <field name="tpg_usa_gis" presentation="SINO" label="Usar GIS?" ismandatory="true"/>
+                </column>
+                <column title="Organismo" order="4">
+                    <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
+                </column>
+                <column title="Figura" order="5">
+                    <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
+                    <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="false"/>
  
-                <field name="tpg_tstamp" presentation="DATETIME" label="Fecha" isvisible="false" />
-                <field name="use_code" presentation="CURRENTUSER" label="Operador" isvisible="false" />
-            </column>
+                    <field name="tpg_tstamp" presentation="DATETIME" label="Fecha" isvisible="false" />
+                    <field name="use_code" presentation="CURRENTUSER" label="Operador" isvisible="false" />
+                </column>
             
-        </table>
+            </table>
 
-        <!-- Rubros -->
-        <table relationclass="" classname="class_tic_prestaciones_rubros" title="Rubros relacionados" add="true" delete="true" update="true">
-            <column title="Rubro" order="1">
-                <field name="tpr_code" isvisible="false"/>
-                <field name="tru_code" presentation="RUBRO" label="Rubro" />
-            </column>
-            <column title="Prioridad" order="2">
-                <field name="tpr_prioridad" presentation="PRIORIDAD" label="Prioridad" />
-            </column>
-            <column title="Organismo" order="3">
-                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
-            </column>
-            <column title="Figura" order="4">
-                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
-            </column>
-        </table>
+            <!-- Rubros -->
+            <table relationclass="" classname="class_tic_prestaciones_rubros" title="Rubros relacionados" add="true" delete="true" update="true">
+                <column title="Rubro" order="1">
+                    <field name="tpr_code" isvisible="false"/>
+                    <field name="tru_code" presentation="RUBRO" label="Rubro" />
+                </column>
+                <column title="Prioridad" order="2">
+                    <field name="tpr_prioridad" presentation="PRIORIDAD" label="Prioridad" />
+                </column>
+                <column title="Organismo" order="3">
+                    <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
+                </column>
+                <column title="Figura" order="4">
+                    <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true" js_initial="literal('RESPONSABLE')"/>
+                </column>
+            </table>
 
-        <!-- Botones de accion para redireccionar después de salvar la página -->
-        <action operation="L" label="Listado de prestaciones" target="prestaciones.php?last=1&amp;OP=L" note="Listado de prestaciones"/>
+            <!-- Botones de accion para redireccionar después de salvar la página -->
+            <action operation="L" label="Listado de prestaciones" target="prestaciones.php?last=1&amp;OP=L" note="Listado de prestaciones"/>
 
-    </build>
-</make>
-
-
-<!--  NUEVA PRESTACION -->
-<make object="table_maint">
-	<build out_file="prest_maint_n.php" classname="class_tic_prestaciones" title="Mantenimiento de prestacion" next="prestaciones.php?last=1&amp;OP=L" template_html="default.htm">
-
-	<group title="Prestación" id="asunto">
-            <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
-            <field name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" ismandatory="true" initialvalue="RECLAMO"/>
-            <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true" initialvalue="DOMICILIO"/>
-            <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="true" initialvalue="2 Días"/>
-            <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>
-        </group>
-
-	<group title="Clasificación" id="ubicacion">
-            <field name="tpr_code" presentation="TEXT" label="Código" ismandatory="true" cols="10" note="ej: 0102 para rama 01 subrama 02"/>
-	</group>
-
-	<group title="Búsqueda" id="buscar">
-            <field name="tpr_metadata" presentation="TEXTAREA" label="Descripción" rows="5" cols="60"/>
-            <field name="tpr_keywords" presentation="TEXT" label="Palabras clave"/>
-        </group>
-
-        <group title="Estado" id="estado">
-            <field name="tpr_estado" presentation="ACTIVO" label="Estado" initialvalue="ACTIVO"/>
-            <field name="tpr_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true" classparams="force"/>
-            <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true"/>
-        </group>
-
-        <group title="Administración delegada" id="admin">
-            <field name="tpr_admin" presentation="TICKET::ORGANISMO" label="Administrable por" note="codigo de organismo"/>
-        </group>
-
-        <group title="Notificaciones" id="notifica">
-            <field name="tpr_al_inicio" presentation="TEXT" label="Al inicio"/>
-            <field name="tpr_al_final" presentation="TEXT" label="Al final"/>
-            <field name="tpr_al_vencimiento" presentation="TEXT" label="Al vencimiento"/>
-        </group>
-
-        <group title="Estados optativos" id="estados_opt">
-            <field name="tor_code_inspeccion" presentation="TICKET::ORGANISMO" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
-            <field name="tor_code_verificacion" presentation="TICKET::ORGANISMO" label="Al final certificación" note="código de organismo que hace la certificación"/>
-        </group>
-
-        <group title="Asociación automática de tickets" id="asociar">
-            <field name="tpr_asociar_radio" presentation="INT" label="Radio en metros" note="todos los tickets abiertos de esta prestación se asociarán si están próximos esta distacia"/>
-        </group>
-
-        <!-- CUESTIONARIO -->
-        <table relationclass="" classname="class_tic_prestaciones_cuest" title="Cuestionario" add="true" delete="true" update="true">
-            <column title="Orden" order="1">
-                <field name="tpr_code" isvisible="false"/>
-                <field name="tcu_code" isvisible="false"/>
-                <field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true"/>
-            </column>
-            <column title="Pregunta" order="2">
-                <field name="tpr_preg" presentation="TEXT" label="Pregunta" ismandatory="true"/>
-            </column>
-            <column title="Tipo" order="3">
-                <field name="tpr_tipo_preg" presentation="CUESTOPCIONES" label="Tipo" ismandatory="true"/>
-            </column>
-            <column title="Opciones" order="4">
-                <field name="tpr_opciones" presentation="TEXTAREA" ROWS="4" COLS="50" label="Opciones" />
-            </column>
-            <column title="MiCiudad" order="5">
-                <field name="tpr_miciudad" presentation="TEXT" label="Código MiCiudad" cols="10"/>
-            </column>
-        </table>
-
-        <!-- GIS -->
-        <table relationclass="" classname="class_tic_prestaciones_gis" title="GIS" add="true" delete="true" update="true">
-            <column title="Campo" order="1">
-                <field name="tpr_code" isvisible="false"/>
-                <field name="tpg_code" isvisible="false"/>
-                <field name="tpg_gis_campo" presentation="TICKET::GISGRILLA" label="Campo" />
-            </column>
-            <column title="Valor" order="2">
-                <field name="tpg_gis_valor" presentation="TEXT" label="Valor" />
-            </column>
-            <column title="Usar GIS?" order="3">
-                <field name="tpg_usa_gis" presentation="SINO" label="Usar GIS?" ismandatory="true"/>
-            </column>
-            <column title="Organismo" order="4">
-                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
-            </column>
-            <column title="Figura" order="5">
-                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true"/>
-                <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="false"/>
-            </column>
-            <column title="Auditoria" order="6">
-                <field name="tpg_tstamp" presentation="DATETIME" label="Fecha" readonly="true" />
-                <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" />
-            </column>
-        </table>
-
-        <!-- Rubros -->
-        <table relationclass="" classname="class_tic_prestaciones_rubros" title="Rubros relacionados" add="true" delete="true" update="true">
-            <column title="Rubro" order="1">
-                <field name="tpr_code" isvisible="false"/>
-                <field name="tru_code" presentation="RUBRO" label="Rubro" />
-            </column>
-            <column title="Prioridad" order="2">
-                <field name="tpr_prioridad" presentation="PRIORIDAD" label="Prioridad" />
-            </column>
-            <column title="Organismo" order="3">
-                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
-            </column>
-            <column title="Figura" order="4">
-                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true" initialvalue="RESPONSABLE"/>
-            </column>			
-        </table>
-
-        <!-- Botones de accion para redireccionar después de salvar la página -->
-        <action operation="L" label="Listado de prestaciones" target="prestaciones.php?last=1&amp;OP=L"  note="Listado de prestaciones"/>
-        <action operation="N" label="Nueva prestación" target="prest_maint_n.php?OP=N"  note="Nueva prestación"/>
-
-	</build>
-</make>
+        </build>
+    </make>
 
 
+    <!--  NUEVA PRESTACION -->
+    <make object="table_maint">
+        <build out_file="prest_maint_n.php" classname="class_tic_prestaciones" title="Mantenimiento de prestacion" next="prestaciones.php?last=1&amp;OP=L" template_html="default.htm">
+
+            <group title="Prestación" id="asunto">
+                <field name="tpr_detalle" presentation="TEXT" label="Detalle" ismandatory="true"/>
+                <field name="tpr_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" ismandatory="true" initialvalue="RECLAMO"/>
+                <field name="tpr_ubicacion" presentation="TICKET::UBICACION" label="Ubicación" ismandatory="true" initialvalue="DOMICILIO"/>
+                <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="true" initialvalue="2 Días"/>
+                <field name="tpr_show" presentation="TICKET::MOSTRAR_EN" label="Mostrar en" ismandatory="false" initialvalue="web,movil,telefono,en persona"/>
+            </group>
+
+            <group title="Clasificación" id="ubicacion">
+                <field name="tpr_code" presentation="TEXT" label="Código" ismandatory="true" cols="10" note="ej: 0102 para rama 01 subrama 02"/>
+            </group>
+
+            <group title="Búsqueda" id="buscar">
+                <field name="tpr_metadata" presentation="TEXTAREA" label="Descripción" rows="5" cols="60"/>
+                <field name="tpr_keywords" presentation="TEXT" label="Palabras clave"/>
+            </group>
+
+            <group title="Estado" id="estado">
+                <field name="tpr_estado" presentation="ACTIVO" label="Estado" initialvalue="ACTIVO"/>
+                <field name="tpr_tstamp" presentation="DATETIME" label="Fecha Act." readonly="true" classparams="force"/>
+                <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true"/>
+            </group>
+
+            <group title="Administración delegada" id="admin">
+                <field name="tpr_admin" presentation="TICKET::ORGANISMO" label="Administrable por" note="codigo de organismo"/>
+            </group>
+
+            <group title="Notificaciones" id="notifica">
+                <field name="tpr_al_inicio" presentation="TEXT" label="Al inicio"/>
+                <field name="tpr_al_final" presentation="TEXT" label="Al final"/>
+                <field name="tpr_al_vencimiento" presentation="TEXT" label="Al vencimiento"/>
+            </group>
+
+            <group title="Estados optativos" id="estados_opt">
+                <field name="tor_code_inspeccion" presentation="TICKET::ORGANISMO" label="Al inicio inspección" note="código de organismo que hace la inspección"/>
+                <field name="tor_code_verificacion" presentation="TICKET::ORGANISMO" label="Al final certificación" note="código de organismo que hace la certificación"/>
+            </group>
+
+            <group title="Asociación automática de tickets" id="asociar">
+                <field name="tpr_asociar_radio" presentation="INT" label="Radio en metros" note="todos los tickets abiertos de esta prestación se asociarán si están próximos esta distacia"/>
+            </group>
+
+            <!-- CUESTIONARIO -->
+            <table relationclass="" classname="class_tic_prestaciones_cuest" title="Cuestionario" add="true" delete="true" update="true">
+                <column title="Orden" order="1">
+                    <field name="tpr_code" isvisible="false"/>
+                    <field name="tcu_code" isvisible="false"/>
+                    <field name="tpr_orden" presentation="INT" label="Orden" ismandatory="true"/>
+                </column>
+                <column title="Pregunta" order="2">
+                    <field name="tpr_preg" presentation="TEXT" label="Pregunta" ismandatory="true"/>
+                </column>
+                <column title="Tipo" order="3">
+                    <field name="tpr_tipo_preg" presentation="CUESTOPCIONES" label="Tipo" ismandatory="true"/>
+                </column>
+                <column title="Opciones" order="4">
+                    <field name="tpr_opciones" presentation="TEXTAREA" ROWS="4" COLS="50" label="Opciones" />
+                </column>
+                <column title="MiCiudad" order="5">
+                    <field name="tpr_miciudad" presentation="TEXT" label="Código MiCiudad" cols="10"/>
+                </column>
+            </table>
+
+            <!-- GIS -->
+            <table relationclass="" classname="class_tic_prestaciones_gis" title="GIS" add="true" delete="true" update="true">
+                <column title="Campo" order="1">
+                    <field name="tpr_code" isvisible="false"/>
+                    <field name="tpg_code" isvisible="false"/>
+                    <field name="tpg_gis_campo" presentation="TICKET::GISGRILLA" label="Campo" />
+                </column>
+                <column title="Valor" order="2">
+                    <field name="tpg_gis_valor" presentation="TEXT" label="Valor" />
+                </column>
+                <column title="Usar GIS?" order="3">
+                    <field name="tpg_usa_gis" presentation="SINO" label="Usar GIS?" ismandatory="true"/>
+                </column>
+                <column title="Organismo" order="4">
+                    <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
+                </column>
+                <column title="Figura" order="5">
+                    <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true"/>
+                    <field name="tpr_plazo" presentation="TICKET::PLAZO" label="Plazo" ismandatory="false"/>
+                </column>
+                <column title="Auditoria" order="6">
+                    <field name="tpg_tstamp" presentation="DATETIME" label="Fecha" readonly="true" />
+                    <field name="use_code" presentation="CURRENTUSER" label="Operador" readonly="true" />
+                </column>
+            </table>
+
+            <!-- Rubros -->
+            <table relationclass="" classname="class_tic_prestaciones_rubros" title="Rubros relacionados" add="true" delete="true" update="true">
+                <column title="Rubro" order="1">
+                    <field name="tpr_code" isvisible="false"/>
+                    <field name="tru_code" presentation="RUBRO" label="Rubro" />
+                </column>
+                <column title="Prioridad" order="2">
+                    <field name="tpr_prioridad" presentation="PRIORIDAD" label="Prioridad" />
+                </column>
+                <column title="Organismo" order="3">
+                    <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo" ismandatory="true"/>
+                </column>
+                <column title="Figura" order="4">
+                    <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura" ismandatory="true" initialvalue="RESPONSABLE"/>
+                </column>			
+            </table>
+
+            <!-- Botones de accion para redireccionar después de salvar la página -->
+            <action operation="L" label="Listado de prestaciones" target="prestaciones.php?last=1&amp;OP=L"  note="Listado de prestaciones"/>
+            <action operation="N" label="Nueva prestación" target="prest_maint_n.php?OP=N"  note="Nueva prestación"/>
+
+        </build>
+    </make>
 
 
 
@@ -477,10 +475,12 @@
 
 
 
-<!-- CLASE TICKETS class_tic_ticket.php -->
-<make object="class">
-	<build out_file="class_tic_ticket.php" classname="class_tic_ticket" classlabel="Ticket">
-	<parse in_file="../mgp.sql" tablename="tic_ticket"/>
+
+
+    <!-- CLASE TICKETS class_tic_ticket.php -->
+    <make object="class">
+        <build out_file="class_tic_ticket.php" classname="class_tic_ticket" classlabel="Ticket">
+            <parse in_file="../mgp.sql" tablename="tic_ticket"/>
 
             <field name="forms" type="int"/>
             <field name="prestacion" type="varchar" size="20"/>
@@ -534,624 +534,633 @@
             <field name="col_interno" type="varchar" size="100"/>
             <field name="col_fecha_hora" type="datetime" />
             
-    </build>
-</make>
+        </build>
+    </make>
 
 
-<!-- INGRESO DE UN TICKET desde el call center tickets_maint_n.php -->
-<make object="table_maint">
-    <build out_file="tickets_maint_n.php" classname="class_tic_ticket" title="Alta de un ticket" default_operation="N" template_html="ticket.htm" >
-        <include file="tickets_maint_n.js"/>
-        <!-- Numero de ticket y año se asignan al salvar -->
+    <!-- INGRESO DE UN TICKET desde el call center tickets_maint_n.php -->
+    <make object="table_maint">
+        <build out_file="tickets_maint_n.php" classname="class_tic_ticket" title="Alta de un ticket" default_operation="N" template_html="ticket.htm" >
+            <include file="tickets_maint_n.js"/>
+            <!-- Numero de ticket y año se asignan al salvar -->
 
-        <!-- Problema primario -->
-	<group title="Asunto" id="reclamo" render_html="block">
-            <field name="forms" presentation="SEQUENCE" classparams="forms" isvisible="false"/>
+            <!-- Problema primario -->
+            <group title="Asunto" id="reclamo" render_html="block">
+                <field name="forms" presentation="SEQUENCE" classparams="forms" isvisible="false"/>
 
-            <field name="prestacion" presentation="TICKET::PRESTACIONTREE" label="Prestación" cols="27" ismandatory="true" classparams="cuestionario"/>
-            <field name="rubro" presentation="RUBRO" label="Rubro" classparams="no_fill"/>
-            <field name="tic_nota_in" presentation="TEXTAREA" label="Observación" cols="60" rows="4"/>
-            <field name="use_code" presentation="CURRENTUSER" label="Operador" isvisible="false"/>
-            <field name="tipo_georef" presentation="TEXT" label="Tipo georeferencia" isvisible="false"/>
-            <field name="cuestionario" presentation="TICKET::CUESTIONARIO" label="Cuestionario" isvisible="false" classparams="prestacion"/>		
-	</group>
+                <field name="prestacion" presentation="TICKET::PRESTACIONTREE" label="Prestación" cols="27" ismandatory="true" classparams="cuestionario"/>
+                <field name="rubro" presentation="RUBRO" label="Rubro" classparams="no_fill"/>
+                <field name="tic_nota_in" presentation="TEXTAREA" label="Observación" cols="60" rows="4"/>
+                <field name="use_code" presentation="CURRENTUSER" label="Operador" isvisible="false"/>
+                <field name="tipo_georef" presentation="TEXT" label="Tipo georeferencia" isvisible="false"/>
+                <field name="cuestionario" presentation="TICKET::CUESTIONARIO" label="Cuestionario" isvisible="false" classparams="prestacion"/>		
+            </group>
 
-        <!-- Ubicacion del problema -->
-	<group title="Ubicación DOMICILIO" id="domicilio" render_html="block">
-            <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
-            <field name="alternativa" presentation="TICKET::ALTERNATIVA_GEOREF" label="Alternativa"  initialvalue="NRO"/>
-            <field name="calle" presentation="TICKET::CALLE" label="Calle" cols="60" />
-            <field name="calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
+            <!-- Ubicacion del problema -->
+            <group title="Ubicación DOMICILIO" id="domicilio" render_html="block">
+                <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" readonly="true"/>
+                <field name="alternativa" presentation="TICKET::ALTERNATIVA_GEOREF" label="Alternativa"  initialvalue="NRO"/>
+                <field name="calle" presentation="TICKET::CALLE" label="Calle" cols="60" />
+                <field name="calle_nombre" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
             
-            <field name="calle2" presentation="TICKET::CALLE" label="Cruza calle" cols="60"  />
-            <field name="calle_nombre2" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
+                <field name="calle2" presentation="TICKET::CALLE" label="Cruza calle" cols="60"  />
+                <field name="calle_nombre2" presentation="TEXT" label="Nombre de la calle" readonly="true" isvisible="false"/>
 
-            <field name="callenro" presentation="TICKET::ALTURA" label="Altura" cols="5" />
+                <field name="callenro" presentation="TICKET::ALTURA" label="Altura" cols="5" />
             
-            <field name="piso" presentation="INT" label="Piso" cols="5" />
-            <field name="dpto" presentation="TEXT" label="Departamento" cols="5" />
-            <field name="nombre_fantasia" presentation="TEXT" label="Nom.fantasía" isvisible="false"/>
+                <field name="piso" presentation="INT" label="Piso" cols="5" />
+                <field name="dpto" presentation="TEXT" label="Departamento" cols="5" />
+                <field name="nombre_fantasia" presentation="TEXT" label="Nom.fantasía" isvisible="false"/>
 
-            <field name="tic_id_cuadra" presentation="TEXT" label="id cuadra" isvisible="false" readonly="true"/>
-            <field name="tic_coordx" presentation="TEXT" label="lat" isvisible="false" readonly="true"/>
-            <field name="tic_coordy" presentation="TEXT" label="lng" isvisible="false" readonly="true"/>
+                <field name="tic_id_cuadra" presentation="TEXT" label="id cuadra" isvisible="false" readonly="true"/>
+                <field name="tic_coordx" presentation="TEXT" label="lat" isvisible="false" readonly="true"/>
+                <field name="tic_coordy" presentation="TEXT" label="lng" isvisible="false" readonly="true"/>
 			
-            <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
-            <field name="tic_cgpc" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
+                <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
+                <field name="tic_cgpc" label="Comuna" presentation="TEXT" readonly="true" isvisible="false"/>
         
-            <field name="villa" presentation="VILLA" label="Villa"  classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
-            <field name="vilmanzana" presentation="TEXT" label="Manzana" cols="5" />
-            <field name="vilcasa" presentation="TEXT" label="Casa" cols="5" />
+                <field name="villa" presentation="VILLA" label="Villa"  classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
+                <field name="vilmanzana" presentation="TEXT" label="Manzana" cols="5" />
+                <field name="vilcasa" presentation="TEXT" label="Casa" cols="5" />
  
-            <field name="orgpublico" presentation="ORGPUBLICO" label="Organismo público" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
-            <field name="orgsector" presentation="TEXT" label="Area o sector" />
+                <field name="orgpublico" presentation="ORGPUBLICO" label="Organismo público" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
+                <field name="orgsector" presentation="TEXT" label="Area o sector" />
  
-            <field name="plaza" presentation="TICKET::PLAZA" label="Plaza o parque" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
+                <field name="plaza" presentation="TICKET::PLAZA" label="Plaza o parque" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
 
-            <field name="playa" presentation="TICKET::PLAYA" label="Playa" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
+                <field name="playa" presentation="TICKET::PLAYA" label="Playa" classparams="{calle:'calle',altura:'callenro',lat:'tic_coordx',lng:'tic_coordy',barrio:'tic_barrio',comuna:'tic_cgpc'}"/>
 
-            <field name="cementerio" presentation="CEMENTERIO" label="Cementerio" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
-            <field name="sepultura" presentation="SEPULTURA" label="Tipo de sepultura" />
-            <field name="sepsector" presentation="TEXT" label="Nombre panteon o boveda" cols="5" />
-            <field name="sepcalle" presentation="TEXT" label="Calle" cols="5" />
-            <field name="sepnumero" presentation="TEXT" label="Numero" cols="5" />
-            <field name="sepfila" presentation="TEXT" label="Fila" cols="5" />
+                <field name="cementerio" presentation="CEMENTERIO" label="Cementerio" classparams="calle|callenro|calle_nombre|tic_coordx|tic_coordy|tic_barrio|tic_cgpc"/>
+                <field name="sepultura" presentation="SEPULTURA" label="Tipo de sepultura" />
+                <field name="sepsector" presentation="TEXT" label="Nombre panteon o boveda" cols="5" />
+                <field name="sepcalle" presentation="TEXT" label="Calle" cols="5" />
+                <field name="sepnumero" presentation="TEXT" label="Numero" cols="5" />
+                <field name="sepfila" presentation="TEXT" label="Fila" cols="5" />
         
-            <field name="id_elemento" label="Elemento" presentation="TEXT" readonly="true" isvisible="true"/>
+                <field name="id_elemento" label="Elemento" presentation="TEXT" readonly="true" isvisible="true"/>
         
-            <field name="col_linea" presentation="TEXT" label="Linea" ismandatory="false"/>
-            <field name="col_interno" presentation="TEXT" label="Interno" ismandatory="false"/>
-            <field name="col_fecha_hora" presentation="DATETIME" label="Fecha y hora" ismandatory="false"/>
-        </group>
+                <field name="col_linea" presentation="TEXT" label="Linea" ismandatory="false"/>
+                <field name="col_interno" presentation="TEXT" label="Interno" ismandatory="false"/>
+                <field name="col_fecha_hora" presentation="DATETIME" label="Fecha y hora" ismandatory="false"/>
+            </group>
 		
 
-        <!-- Botones de accion para redireccionar después de salvar la página -->
-        <action operation="N" label="Nuevo ticket" target="tickets_maint_n.php?OP=N" note="Cargar nuevo ticket"/>
+            <!-- Botones de accion para redireccionar después de salvar la página -->
+            <action operation="N" label="Nuevo ticket" target="tickets_maint_n.php?OP=N" note="Cargar nuevo ticket"/>
 
-        <action operation="P" label="Imprimir comprobante" target="ticket_maint.php?OP=P" note="Imprimir comprobante">
-            <sendfield name="forms" classname="class_tic_ticket"/>
-            <sendfield name="tic_nro" classname="class_tic_ticket"/>
-        </action>
+            <action operation="P" label="Imprimir comprobante" target="ticket_maint.php?OP=P" note="Imprimir comprobante">
+                <sendfield name="forms" classname="class_tic_ticket"/>
+                <sendfield name="tic_nro" classname="class_tic_ticket"/>
+            </action>
 
-        <action operation="L" label="Consulta de tickets" target="tickets.php?last=1&amp;OP=L" note="Consulta de tickets"/>
-    </build>
-</make>
+            <action operation="L" label="Consulta de tickets" target="tickets.php?last=1&amp;OP=L" note="Consulta de tickets"/>
+        </build>
+    </make>
 
 
-<!-- CLASE BUSCAR TICKETS class_v_tickets1.php -->
-<make object="class">
-	<build out_file="class_v_tickets1.php" classname="class_v_tickets1" classlabel="Tickets">
-		<parse in_file="../mgp.sql" tablename="v_tickets"/>
-    </build>
-</make>
+    <!-- CLASE BUSCAR TICKETS class_v_tickets1.php -->
+    <make object="class">
+        <build out_file="class_v_tickets1.php" classname="class_v_tickets1" classlabel="Tickets">
+            <parse in_file="../mgp.sql" tablename="v_tickets"/>
+        </build>
+    </make>
 
-<!--  BUSCAR TICKETS tickets.php -->
-<make object="search_and_list">
-    <build out_file="tickets.php" classname="class_v_tickets1" title="Consulta de tickets" >
+    <!--  BUSCAR TICKETS tickets.php -->
+    <make object="search_and_list">
+        <build out_file="tickets.php" classname="class_v_tickets1" title="Consulta de tickets" >
 
-	<searchfield name="tic_identificador" presentation="TEXT" label="Identificador" cols="45"/>
-        <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10" initialvalue="2014" />
-	<searchfield name="tic_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" search="fix" initialvalue="RECLAMO"/>
-        <searchfield name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
-        <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
-	<searchfield name="tor_code" presentation="REPORTES::ORGANISMO" label="Organismo"/>
-	<searchfield name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestacion"/>
-	<searchfield name="tru_code" presentation="RUBRO" label="Rubro"/>
-	<searchfield name="tic_calle_nombre" presentation="TEXT" label="Calle"/>
-	<searchfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
-	<searchfield name="tic_barrio" presentation="REPORTES::BARRIO" label="Barrio"/>
+            <searchfield name="tic_identificador" presentation="TEXT" label="Identificador" cols="45"/>
+            <searchfield name="tic_anio" presentation="TEXT" label="Año" cols="10" initialvalue="2014" />
+            <searchfield name="tic_tipo" presentation="TICKET::PRESTACIONTIPO" label="Tipo" search="fix" initialvalue="RECLAMO"/>
+            <searchfield name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
+            <searchfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
+            <searchfield name="tor_code" presentation="REPORTES::ORGANISMO" label="Organismo"/>
+            <searchfield name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestacion"/>
+            <searchfield name="tru_code" presentation="RUBRO" label="Rubro"/>
+            <searchfield name="tic_calle_nombre" presentation="TEXT" label="Calle"/>
+            <searchfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro"/>
+            <searchfield name="tic_barrio" presentation="REPORTES::BARRIO" label="Barrio"/>
 		
-        <listfield name="tic_nro" presentation="TEXT" isvisible="false"/>
-        <listfield name="tic_identificador" presentation="TEXT" label="Identificador"/>
-        <listfield name="tic_anio" presentation="TEXT" label="Año" cols="10" isvisible="false"/>
-	<listfield name="tic_tipo" presentation="TEXT" label="Tipo" isvisible="false"/>
-        <listfield name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
-        <listfield name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
-        <listfield name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestacion"/>
-        <listfield name="tru_code" presentation="RUBRO" label="Rubro"/>
-        <listfield name="tic_calle_nombre" presentation="TEXT" label="Calle" isvisible="false"/>
-        <listfield name="tic_nro_puerta" presentation="INTRANGE" label="Nro" isvisible="false"/>
-        <listfield name="tic_barrio" presentation="REPORTES::BARRIO" label="Barrio" isvisible="false"/>
-        <listfield name="tic_nota_in" presentation="TEXT" label="Nota"/>
-        <listfield name="tor_code" presentation="REPORTES::ORGANISMO" label="Organismo"/>
-        <listfield name="tto_figura" presentation="TEXT" label="Rol"/>
-        <listfield name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección"/>
-        <listfield name="tic_nro" presentation="TICKET::RECLAMANTE" label="Ciudadano"/>
-		
-        <action operation="V" label="ver" target="ticket_maint.php?OP=V" >
-            <sendfield classname="class_v_tickets1" name="tic_nro"/>
-        </action>
-
-        <action operation="P" label="imprimir" target="ticket_maint.php?OP=P" >
-            <sendfield classname="class_v_tickets1" name="tic_nro"/>
-        </action>
-    </build>
-</make>
-
-<!-- CLASE CONSULTA DE UN TICKET class_tic_ticket_upd.php -->
-<make object="class">
-    <build out_file="class_tic_ticket_upd.php" classname="class_tic_ticket_upd" classlabel="Ticket">
-	<parse in_file="../mgp.sql" tablename="tic_ticket"/>
-        <field name="mapa" type="varchar" size="50"/>
-        
-        <field name="tmp_accion" type="varchar" size="50"/>
-        <field name="tmp_nuevo_estado" type="varchar" size="50"/>
-        <field name="tmp_prestacion" type="varchar" size="50"/>
-        <field name="tmp_nota" type="varchar" size="50"/>
-
-        <!-- PRESTACIONES -->
-        <build classname="class_tic_ticket_prestaciones" classlabel="Prestaciones">
-            <parse in_file="../mgp.sql" tablename="tic_ticket_prestaciones"/>
-            <key parent="tic_nro" child="tic_nro"/>
-        </build>
-
-        <!-- ORGANISMOS -->
-        <build classname="class_tic_ticket_organismos" classlabel="Organismos">
-            <parse in_file="../mgp.sql" tablename="tic_ticket_organismos"/>
-            <key parent="tic_nro" child="tic_nro"/>
-        </build>
-
-        <!-- AVANCE -->
-        <build classname="class_tic_avance" classlabel="Avance">
-            <parse in_file="../mgp.sql" tablename="tic_avance"/>
-            <key parent="tic_nro" child="tic_nro"/>
-        </build>
-
-        <!-- RECLAMANTES -->
-        <build classname="class_tic_ticket_ciudadano" classlabel="Ciudadano">
-            <parse in_file="../mgp.sql" tablename="tic_ticket_ciudadano"/>
-            <key parent="tic_nro" child="tic_nro"/>
-        </build>
-
-        <!-- REITERACIONES -->
-        <build classname="class_tic_ticket_ciudadano_reit" classlabel="Reiteracion">
-            <parse in_file="../mgp.sql" tablename="tic_ticket_ciudadano_reit"/>
-            <key parent="tic_nro" child="tic_nro"/>
-        </build>
-
-        <!--BLOQUE PARA ARCHIVOS ADJUNTOS-->
-        <build classname="cfile" classlabel="Adjuntos" classtype="file" fileid="ticket">
-            <field name="use_code" label="Operador" type="varchar" size="50"/>
-            <field name="std_code" label="Codigo remito" type="varchar" size="50"/>
-            <field name="doc_code" label="Codigo" type="varchar" size="50"/>
-            <field name="doc_name" label="Archivo" type="varchar" size="200"/>
-            <field name="doc_tstamp" label="Fecha" type="DATETIME" />
-            <field name="doc_mime" label="Clase" type="varchar" size="50"/>
-            <field name="doc_size" label="Tamaño" type="int" />
-            <field name="doc_storage" label="URI" type="varchar" size="200"/>
-            <field name="doc_note" label="Nota" type="varchar" size="200"/>
-        </build>
-
-    </build>
-</make>
-
-<!-- FORMULARIO CONSULTA DE UN TICKET ticket_maint.php -->
-<make object="table_maint">
-    <build out_file="ticket_maint.php" classname="class_tic_ticket_upd" title="Mantenimiento de un ticket" next="tickets.php?last=1&amp;OP=L" >
-        <include file="ticket_maint.css"/>
-        
-        <!-- Ubicacion del problema -->
-	<group title="Ubicación" id="ubicacion" render_html="block">
-            <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
-            <field name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección" />
-            <field name="tic_id_cuadra" presentation="TEXT" label="x" isvisible="false"/>
-            <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
-            <field name="tic_coordy" presentation="TEXT" label="y" isvisible="false"/>
-            <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
-            <field name="tic_cgpc" label="CGPC" presentation="TEXT" readonly="true" isvisible="false"/>
-	</group>
-
-        <group title="Ticket" id="ticket" render_html="block">
-            <field name="tic_nro" isvisible="false" presentation="TEXT" label="Número" readonly="true"/>
-            <field name="tic_anio" isvisible="false" presentation="TEXT" label="Año" readonly="true"/>
-            <field name="tic_tipo" isvisible="false" presentation="TEXT" label="Tipo" readonly="true"/>
-            <field name="tic_identificador" isvisible="true" presentation="TEXT" label="Identificador" readonly="true"/>
-        </group>
-                
-        <!-- Estado -->
-        <group title="Estado" id="estado" render_html="block">
-            <field name="tic_tstamp_in" presentation="DATETIME" label="Ingreso ticket" readonly="true" />
-            <field name="tic_tstamp_plazo" presentation="DATETIME" label="Plazo estimado" readonly="true"/>
-            <field name="tic_tstamp_cierre" presentation="DATETIME" label="Cierre ticket" readonly="true"/>
-            <field name="tic_estado" presentation="REPORTES::ESTADO_TICKET" label="Estado" readonly="true"/>
-            <field name="tic_nota_in" presentation="TEXT" label="Nota al ingreso" readonly="true"/>
-            
-            <field name="tmp_accion" isvisible="false"/>
-            <field name="tmp_nuevo_estado" isvisible="false"/>
-            <field name="tmp_prestacion" isvisible="false"/>
-            <field name="tmp_nota" isvisible="false"/>
-        </group>
-
-        <!-- PRESTACIONES -->
-        <table relationclass="" classname="class_tic_ticket_prestaciones" title="Prestaciones" add="false" delete="false" update="false">
-            <column title="Prestación" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestación"/>
-            </column>
-            <column title="Rubro" order="2">
-                <field name="tru_code" presentation="RUBRO" label="Rubro"/>
-            </column>
-            <column title="Cuestionario" order="3">
-                <field name="ttp_cuestionario" presentation="TICKET::CUESTIONARIO" label="Cuestionario"/>
-            </column>
-            <column title="Prioridad" order="4">
-                <field name="ttp_prioridad" presentation="PRIORIDAD" label="Prioridad"/>
-            </column>
-            <column title="Estado" order="5">
-                <field name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
-            </column>
-        </table>
-
-        <!-- AVANCE -->
-        <table relationclass="" classname="class_tic_avance" title="Avance" add="false" delete="false" update="false">
-            <column title="Fecha" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="tpr_code" isvisible="false"/>
-            </column>
-            <column title="Est.Inicial" order="2">
-                <field name="tic_estado_in" presentation="REPORTES::ESTADO_PRESTACION" label="Estado inicial"/>
-                <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
-                <field name="use_code_in" presentation="USER" label="Operador"/>
-            </column>
-            <column title="Est.Final" order="3">
-                <field name="tic_estado_out" presentation="REPORTES::ESTADO_PRESTACION" label="Estado final"/>
-                <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha"/>
-                <field name="use_code_out" presentation="USER" label="Operador"/>
-            </column>
-            <column title="Nota" order="5">
-                <field name="tav_nota" presentation="TEXTAREA" label="Nota" cols="60" rows="4"/>
-            </column>
-            <column title="Motivo" order="6">
-                <field name="tic_motivo" presentation="TEXT" label="Motivo"/>
-            </column>
-        </table>
-
-        <!-- ORGANISMOS -->
-        <table relationclass="" classname="class_tic_ticket_organismos" title="Organismos" add="false" delete="false" update="false">
-            <column title="Organismo" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo"/>
-            </column>
-            <column title="Figura" order="2">
-                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura"/>
-            </column>
-        </table>
-
-
-        <!-- RECLAMANTES -->
-        <table relationclass="" classname="class_tic_ticket_ciudadano" title="Solicitantes" add="false" delete="false" update="false">
-            <column title="Fecha" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
-            </column>
-            <column title="Ciudadano" order="2">
-                <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano"/>
-            </column>
-            <column title="Nota" order="3">
-                <field name="ttc_nota" presentation="TEXT" label="Nota"/>
-            </column>
-        </table>
-
-
-        <!-- REITERACIONES -->
-        <table relationclass="" classname="class_tic_ticket_ciudadano_reit" title="Reiteraciones" add="false" delete="false" update="false">
-            <column title="Fecha" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
-            </column>
-            <column title="Ciudadano" order="2">
-                <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano"/>
+            <table>
+                <column title="Ticket">
+                    <field name="tic_nro" presentation="TEXT" isvisible="false"/>
+                    <field name="tic_identificador" presentation="TEXT" label="Identificador"/>
+                    <field name="tic_anio" presentation="TEXT" label="Año" cols="10" isvisible="false"/>
+                    <field name="tic_tipo" presentation="TEXT" label="Tipo" isvisible="false"/>
+                    <field name="tic_tstamp_in" presentation="DATERANGE" label="Ingresado"/>
                 </column>
-            <column title="Nota" order="3">
-                <field name="ttc_nota" presentation="TEXT" label="Nota"/>
-            </column>
-        </table>
+                <column title="Estado">
+                    <field name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
+                    
+                    <field name="tor_code" presentation="REPORTES::ORGANISMO" label="Organismo"/>
+                    <field name="tto_figura" presentation="TEXT" label="Rol"/>
+                </column>     
+                <column title="Prestacion">
+                    <field name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestacion"/>
+                    <field name="tru_code" presentation="RUBRO" label="Rubro"/>
+                </column>     
+                <column title="Dirección">
+                    <field name="tic_calle_nombre" presentation="TEXT" label="Calle" isvisible="false"/>
+                    <field name="tic_nro_puerta" presentation="INTRANGE" label="Nro" isvisible="false"/>
+                    <field name="tic_barrio" presentation="REPORTES::BARRIO" label="Barrio" isvisible="false"/>
+                    <field name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección"/>
+                </column>     
+                <column title="Reclamante">
+                    <field name="tic_nro" presentation="TICKET::RECLAMANTE" label="Ciudadano"/>
+                    <field name="tic_nota_in" presentation="TEXT" label="Nota"/>
+                    
+                </column>     
+            </table>
+		
+            <action operation="V" label="ver" target="ticket_maint.php?OP=V" >
+                <sendfield classname="class_v_tickets1" name="tic_nro"/>
+            </action>
 
-        <!-- BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
-        <table relationclass="" classname="cfile" title="Archivos adjuntos" add="true" delete="true" isfile="true">
-            <column title="Archivo" order="1">
-                <field name="doc_code" isvisible="false"/>
-                <field name="doc_name" label="Archivo" presentation="TEXT"/>
-                <field name="doc_storage" label="Archivo" presentation="FILE" isvisible="false"/>
-            </column>
-            <column title="Tipo" order="2">
-                <field name="doc_tstamp" label="Fecha" presentation="DATETIME" isvisible="false"/>
-                <field name="doc_mime" label="Clase" presentation="TEXT" cols="50"/>
-            </column>
-            <column title="Medida" order="3">
-                <field name="doc_size" label="Medida" presentation="TEXT" />
-            </column>
-            <column title="Nota" order="4">
-                <field name="doc_note" label="Nota" cols="50" rows="5" presentation="TEXTAREA"/>
-            </column>
-        </table>
-        <!-- FIN BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+            <action operation="P" label="imprimir" target="ticket_maint.php?OP=P" >
+                <sendfield classname="class_v_tickets1" name="tic_nro"/>
+            </action>
+        </build>
+    </make>
 
-
-        <!-- Botones de accion para redireccionar después de salvar la página -->
-        <action operation="P" label="Imprimir comprobante" target="ticket_maint.php?OP=P" note="Imprimir comprobante">
-            <sendfield name="tic_nro" classname="class_tic_ticket_upd"/>
-        </action>
-
-        <action operation="L" label="Consulta de tickets" target="tickets.php?last=1&amp;OP=L"  note="Consulta de tickets"/>
-    </build>
-</make>
-
-
-
-
-
-<!-- FORMULARIO CAMBIO DE ESTADO DE UN TICKET -->
-<make object="table_maint">
-    <build out_file="ticket_maint_chg.php" classname="class_tic_ticket_upd" title="Cambio de estado de un ticket" next="/index.php" >
-        <include file="ticket_maint_chg.css"/>
-        <include file="ticket_maint_chg.js"/>
+    <!-- CLASE CONSULTA DE UN TICKET class_tic_ticket_upd.php -->
+    <make object="class">
+        <build out_file="class_tic_ticket_upd.php" classname="class_tic_ticket_upd" classlabel="Ticket">
+            <parse in_file="../mgp.sql" tablename="tic_ticket"/>
+            <field name="mapa" type="varchar" size="50"/>
         
-        <!-- Ubicacion del problema -->
-	<group title="Ubicación" id="ubicacion" render_html="block">
-            <field name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección" />
-            <field name="mapa" presentation="TICKET::MAPA" label="Ubicación" classparams="tic_coordx|tic_coordy" rows="150" cols="150" readonly="true"/>
-            <field name="tic_id_cuadra" presentation="TEXT" label="x" isvisible="false"/>
-            <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
-            <field name="tic_coordy" presentation="TEXT" label="y" isvisible="false"/>
-            <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true"/>
-            <field name="tic_cgpc" label="CGPC" presentation="TEXT" readonly="true" isvisible="false"/>
-	</group>
+            <field name="tmp_accion" type="varchar" size="50"/>
+            <field name="tmp_nuevo_estado" type="varchar" size="50"/>
+            <field name="tmp_prestacion" type="varchar" size="50"/>
+            <field name="tmp_nota" type="varchar" size="50"/>
 
-        <group title="Ticket" id="ticket" render_html="block">
-            <field name="tic_nro" isvisible="false" presentation="TEXT" label="Número" readonly="true"/>
-            <field name="tic_anio" isvisible="false" presentation="TEXT" label="Año" readonly="true"/>
-            <field name="tic_tipo" isvisible="false" presentation="TEXT" label="Tipo" readonly="true"/>
-            <field name="tic_identificador" isvisible="true" presentation="TEXT" label="Identificador" readonly="true"/>
-        </group>
-                
-        <!-- Estado -->
-        <group title="Estado" id="estado" render_html="block">
-            <field name="tic_tstamp_in" presentation="DATETIME" label="Ingreso ticket" readonly="true" />
-            <field name="tic_tstamp_plazo" presentation="DATETIME" label="Plazo estimado" readonly="true"/>
-            <field name="tic_tstamp_cierre" presentation="DATETIME" label="Cierre ticket" readonly="true"/>
-            <field name="tic_estado" presentation="TEXT" label="Estado" readonly="true"/>
-            <field name="tic_nota_in" presentation="TEXT" label="Nota al ingreso" readonly="true"/>
+            <!-- PRESTACIONES -->
+            <build classname="class_tic_ticket_prestaciones" classlabel="Prestaciones">
+                <parse in_file="../mgp.sql" tablename="tic_ticket_prestaciones"/>
+                <key parent="tic_nro" child="tic_nro"/>
+            </build>
+
+            <!-- ORGANISMOS -->
+            <build classname="class_tic_ticket_organismos" classlabel="Organismos">
+                <parse in_file="../mgp.sql" tablename="tic_ticket_organismos"/>
+                <key parent="tic_nro" child="tic_nro"/>
+            </build>
+
+            <!-- AVANCE -->
+            <build classname="class_tic_avance" classlabel="Avance">
+                <parse in_file="../mgp.sql" tablename="tic_avance"/>
+                <key parent="tic_nro" child="tic_nro"/>
+            </build>
+
+            <!-- RECLAMANTES -->
+            <build classname="class_tic_ticket_ciudadano" classlabel="Ciudadano">
+                <parse in_file="../mgp.sql" tablename="tic_ticket_ciudadano"/>
+                <key parent="tic_nro" child="tic_nro"/>
+            </build>
+
+            <!-- REITERACIONES -->
+            <build classname="class_tic_ticket_ciudadano_reit" classlabel="Reiteracion">
+                <parse in_file="../mgp.sql" tablename="tic_ticket_ciudadano_reit"/>
+                <key parent="tic_nro" child="tic_nro"/>
+            </build>
+
+            <!--BLOQUE PARA ARCHIVOS ADJUNTOS-->
+            <build classname="cfile" classlabel="Adjuntos" classtype="file" fileid="ticket">
+                <field name="use_code" label="Operador" type="varchar" size="50"/>
+                <field name="std_code" label="Codigo remito" type="varchar" size="50"/>
+                <field name="doc_code" label="Codigo" type="varchar" size="50"/>
+                <field name="doc_name" label="Archivo" type="varchar" size="200"/>
+                <field name="doc_tstamp" label="Fecha" type="DATETIME" />
+                <field name="doc_mime" label="Clase" type="varchar" size="50"/>
+                <field name="doc_size" label="Tamaño" type="int" />
+                <field name="doc_storage" label="URI" type="varchar" size="200"/>
+                <field name="doc_note" label="Nota" type="varchar" size="200"/>
+            </build>
+
+        </build>
+    </make>
+
+    <!-- FORMULARIO CONSULTA DE UN TICKET ticket_maint.php -->
+    <make object="table_maint">
+        <build out_file="ticket_maint.php" classname="class_tic_ticket_upd" title="Mantenimiento de un ticket" next="tickets.php?last=1&amp;OP=L" >
+            <include file="ticket_maint.css"/>
+     
+            <group title="Ticket" id="ticket" render_html="block">
+                <field name="tic_nro" isvisible="false" presentation="TEXT" label="Número" readonly="true"/>
+                <field name="tic_anio" isvisible="false" presentation="TEXT" label="Año" readonly="true"/>
+                <field name="tic_tipo" isvisible="false" presentation="TEXT" label="Tipo" readonly="true"/>
+                <field name="tic_identificador" isvisible="true" presentation="TEXT" label="Identificador" readonly="true"/>
+            </group>
+           
+            <!-- Ubicacion del problema -->
+            <group title="Ubicación" id="ubicacion" render_html="block">
+                <field name="mapa" presentation="TICKET::MAPA" label="" classparams="tic_coordx|tic_coordy" readonly="true"/>
+                <field name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección" />
+                <field name="tic_id_cuadra" presentation="TEXT" label="x" isvisible="false"/>
+                <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
+                <field name="tic_coordy" presentation="TEXT" label="y" isvisible="false"/>
+                <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true" isvisible="false"/>
+                <field name="tic_cgpc" label="CGPC" presentation="TEXT" readonly="true" isvisible="false"/>
+            </group>
+
+            <!-- Estado -->
+            <group title="Estado" id="estado" render_html="block">
+                <field name="tic_tstamp_in" presentation="DATETIME" label="Ingreso ticket" readonly="true" />
+                <field name="tic_tstamp_plazo" presentation="DATETIME" label="Plazo estimado" readonly="true"/>
+                <field name="tic_tstamp_cierre" presentation="DATETIME" label="Cierre ticket" readonly="true"/>
+                <field name="tic_estado" presentation="REPORTES::ESTADO_TICKET" label="Estado" readonly="true"/>
+                <field name="tic_nota_in" presentation="TEXT" label="Nota al ingreso" readonly="true"/>
             
-            <field name="tmp_accion" isvisible="false"/>
-            <field name="tmp_nuevo_estado" isvisible="false"/>
-            <field name="tmp_prestacion" isvisible="false"/>
-            <field name="tmp_nota" isvisible="false"/>
-        </group>
+                <field name="tmp_accion" isvisible="false"/>
+                <field name="tmp_nuevo_estado" isvisible="false"/>
+                <field name="tmp_prestacion" isvisible="false"/>
+                <field name="tmp_nota" isvisible="false"/>
+            </group>
 
-        <!-- PRESTACIONES -->
-        <table relationclass="" classname="class_tic_ticket_prestaciones" title="Prestaciones" add="false" delete="false" update="false">
-            <column title="Prestación" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestación"/>
-            </column>
-            <column title="Rubro" order="2">
-                <field name="tru_code" presentation="RUBRO" label="Rubro"/>
-            </column>
-            <column title="Cuestionario" order="3">
-                <field name="ttp_cuestionario" presentation="TICKET::CUESTIONARIO" label="Cuestionario"/>
-            </column>
-            <column title="Prioridad" order="4">
-                <field name="ttp_prioridad" presentation="PRIORIDAD" label="Prioridad"/>
-            </column>
-            <column title="Estado" order="5">
-                <field name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
-            </column>
-        </table>
-
-        <!-- AVANCE -->
-        <table relationclass="" classname="class_tic_avance" title="Avance" add="false" delete="false" update="false">
-            <column title="Fecha" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="tpr_code" isvisible="false"/>
-            </column>
-            <column title="Est.Inicial" order="2">
-                <field name="tic_estado_in" presentation="REPORTES::ESTADO_PRESTACION" label="Estado inicial"/>
-                <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
-                <field name="use_code_in" presentation="USER" label="Operador"/>
-            </column>
-            <column title="Est.Final" order="3">
-                <field name="tic_estado_out" presentation="REPORTES::ESTADO_PRESTACION" label="Estado final"/>
-                <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha"/>
-                <field name="use_code_out" presentation="USER" label="Operador"/>
-            </column>
-            <column title="Nota" order="5">
-                <field name="tav_nota" presentation="TEXTAREA" label="Nota" cols="60" rows="4"/>
-            </column>
-            <column title="Motivo" order="6">
-                <field name="tic_motivo" presentation="TEXT" label="Motivo"/>
-            </column>
-        </table>
-
-        <!-- ORGANISMOS -->
-        <table relationclass="" classname="class_tic_ticket_organismos" title="Organismos" add="false" delete="false" update="false">
-            <column title="Organismo" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo"/>
-            </column>
-            <column title="Figura" order="2">
-                <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura"/>
-            </column>
-        </table>
-
-
-        <!-- RECLAMANTES -->
-        <table relationclass="" classname="class_tic_ticket_ciudadano" title="Solicitantes" add="false" delete="false" update="false">
-            <column title="Fecha" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
-            </column>
-            <column title="Ciudadano" order="2">
-                <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano"/>
-            </column>
-            <column title="Nota" order="3">
-                <field name="ttc_nota" presentation="TEXT" label="Nota"/>
-            </column>
-        </table>
-
-
-        <!-- REITERACIONES -->
-        <table relationclass="" classname="class_tic_ticket_ciudadano_reit" title="Reiteraciones" add="false" delete="false" update="false">
-            <column title="Fecha" order="1">
-                <field name="tic_nro" isvisible="false"/>
-                <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
-            </column>
-            <column title="Ciudadano" order="2">
-                <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano"/>
+            <!-- PRESTACIONES -->
+            <table relationclass="" classname="class_tic_ticket_prestaciones" title="Prestaciones" add="false" delete="false" update="false">
+                <column title="Prestación" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestación"/>
                 </column>
-            <column title="Nota" order="3">
-                <field name="ttc_nota" presentation="TEXT" label="Nota"/>
-            </column>
-        </table>
+                <column title="Rubro" order="2">
+                    <field name="tru_code" presentation="RUBRO" label="Rubro"/>
+                </column>
+                <column title="Cuestionario" order="3">
+                    <field name="ttp_cuestionario" presentation="TICKET::CUESTIONARIO" label="Cuestionario"/>
+                </column>
+                <column title="Prioridad" order="4">
+                    <field name="ttp_prioridad" presentation="PRIORIDAD" label="Prioridad"/>
+                </column>
+                <column title="Estado" order="5">
+                    <field name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
+                </column>
+            </table>
 
-        <!-- BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
-        <table relationclass="" classname="cfile" title="Archivos adjuntos" add="true" delete="true" isfile="true">
-            <column title="Archivo" order="1">
-                <field name="doc_code" isvisible="false"/>
-                <field name="doc_name" label="Archivo" presentation="TEXT"/>
-                <field name="doc_storage" label="Archivo" presentation="FILE" isvisible="false"/>
-            </column>
-            <column title="Tipo" order="2">
-                <field name="doc_tstamp" label="Fecha" presentation="DATETIME" isvisible="false"/>
-                <field name="doc_mime" label="Clase" presentation="TEXT" cols="50"/>
-            </column>
-            <column title="Medida" order="3">
-                <field name="doc_size" label="Medida" presentation="TEXT" />
-            </column>
-            <column title="Nota" order="4">
-                <field name="doc_note" label="Nota" cols="50" rows="5" presentation="TEXTAREA"/>
-            </column>
-        </table>
-        <!-- FIN BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+            <!-- AVANCE -->
+            <table relationclass="" classname="class_tic_avance" title="Avance" add="false" delete="false" update="false">
+                <column title="Est.Inicial" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="tpr_code" isvisible="false"/>
+                
+                    <field name="tic_estado_in" presentation="REPORTES::ESTADO_PRESTACION" label="Estado inicial"/>
+                    <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
+                    <field name="use_code_in" presentation="USER" label="Operador"/>
+            
+                    <field name="tic_estado_out" presentation="REPORTES::ESTADO_PRESTACION" label="Estado final" isvisible="false"/>
+                    <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha" isvisible="false"/>
+                    <field name="use_code_out" presentation="USER" label="Operador" isvisible="false"/>
+                </column>
+                <column title="Nota" order="2">
+                    <field name="tav_nota" presentation="TEXTAREA" label="Nota" cols="60" rows="4"/>
+                </column>
+                <column title="Motivo" order="3">
+                    <field name="tic_motivo" presentation="TEXT" label="Motivo"/>
+                </column>
+            </table>
 
-
-        <!-- Botones de accion para redireccionar después de salvar la página -->
-        <action operation="P" label="Imprimir comprobante" target="ticket_maint.php?OP=P" note="Imprimir comprobante">
-            <sendfield name="tic_nro" classname="class_tic_ticket_upd"/>
-        </action>
-
-        <action operation="L" label="Consulta de tickets" target="tickets.php?last=1&amp;OP=L"  note="Consulta de tickets"/>
-    </build>
-</make>
-
-
-
-
-
-
-
-
-
-<!-- CLASE GEOREF -->
-<make object="class"> 
-	<build out_file="class_tic_georef.php" classname="class_tic_georef" classlabel="GeoRef">
-		<parse in_file="../mgp.sql" tablename="tic_georef"/>
-		<method objfactoryquerysuffix="order by tge_nombre"/>
-		<field name="tmp_prestacion" type="varchar" size="100" />
-	</build>
-</make>
+            <!-- ORGANISMOS -->
+            <table relationclass="" classname="class_tic_ticket_organismos" title="Organismos" add="false" delete="false" update="false">
+                <column title="Organismo" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo"/>
+                </column>
+                <column title="Figura" order="2">
+                    <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura"/>
+                </column>
+            </table>
 
 
-<!--  BUSCAR GeoReferencias -->
-<make object="search_and_list">
-	<build out_file="georefs.php" classname="class_tic_georef" title="Consulta de GeoReferencias" >
+            <!-- RECLAMANTES -->
+            <table relationclass="" classname="class_tic_ticket_ciudadano" title="Solicitantes" add="false" delete="false" update="false">
+                <column title="Fecha" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
+                </column>
+                <column title="Ciudadano" order="2">
+                    <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano"/>
+                </column>
+                <column title="Nota" order="3">
+                    <field name="ttc_nota" presentation="TEXT" label="Nota"/>
+                </column>
+            </table>
+
+
+            <!-- REITERACIONES -->
+            <table relationclass="" classname="class_tic_ticket_ciudadano_reit" title="Reiteraciones" add="false" delete="false" update="false">
+                <column title="Fecha" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
+                </column>
+                <column title="Ciudadano" order="2">
+                    <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano"/>
+                </column>
+                <column title="Nota" order="3">
+                    <field name="ttc_nota" presentation="TEXT" label="Nota"/>
+                </column>
+            </table>
+
+            <!-- BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+            <table relationclass="" classname="cfile" title="Archivos adjuntos" add="true" delete="true" isfile="true">
+                <column title="Archivo" order="1">
+                    <field name="doc_code" isvisible="false"/>
+                    <field name="doc_name" label="Archivo" presentation="TEXT"/>
+                    <field name="doc_storage" label="Archivo" presentation="FILE" isvisible="false"/>
+                </column>
+                <column title="Tipo" order="2">
+                    <field name="doc_tstamp" label="Fecha" presentation="DATETIME" isvisible="false"/>
+                    <field name="doc_mime" label="Clase" presentation="TEXT" cols="50"/>
+                </column>
+                <column title="Medida" order="3">
+                    <field name="doc_size" label="Medida" presentation="TEXT" />
+                </column>
+                <column title="Nota" order="4">
+                    <field name="doc_note" label="Nota" cols="50" rows="5" presentation="TEXTAREA"/>
+                </column>
+            </table>
+            <!-- FIN BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+
+
+            <!-- Botones de accion para redireccionar después de salvar la página -->
+            <action operation="P" label="Imprimir comprobante" target="ticket_maint.php?OP=P" note="Imprimir comprobante">
+                <sendfield name="tic_nro" classname="class_tic_ticket_upd"/>
+            </action>
+
+            <action operation="L" label="Consulta de tickets" target="tickets.php?last=1&amp;OP=L"  note="Consulta de tickets"/>
+        </build>
+    </make>
+
+
+
+
+
+    <!-- FORMULARIO CAMBIO DE ESTADO DE UN TICKET -->
+    <make object="table_maint">
+        <build out_file="ticket_maint_chg.php" classname="class_tic_ticket_upd" title="Cambio de estado de un ticket" next="/index.php" >
+            <include file="ticket_maint_chg.css"/>
+            <include file="ticket_maint_chg.js"/>
+
+            <group title="Ticket" id="ticket" render_html="block">
+                <field name="tic_nro" isvisible="false" presentation="TEXT" label="Número" readonly="true"/>
+                <field name="tic_anio" isvisible="false" presentation="TEXT" label="Año" readonly="true"/>
+                <field name="tic_tipo" isvisible="false" presentation="TEXT" label="Tipo" readonly="true"/>
+                <field name="tic_identificador" isvisible="true" presentation="TEXT" label="Identificador" readonly="true"/>
+            </group>
+                    
+            <!-- Ubicacion del problema -->
+            <group title="Ubicación" id="ubicacion" render_html="block">
+                <field name="mapa" presentation="TICKET::MAPA" label="" classparams="tic_coordx|tic_coordy" readonly="true"/>
+                <field name="tic_lugar" presentation="TICKET::DIRECCION" label="Dirección" />
+                <field name="tic_id_cuadra" presentation="TEXT" label="x" isvisible="false"/>
+                <field name="tic_coordx" presentation="TEXT" label="x" isvisible="false"/>
+                <field name="tic_coordy" presentation="TEXT" label="y" isvisible="false"/>
+                <field name="tic_barrio" label="Barrio" presentation="TEXT" readonly="true" isvisible="false"/>
+                <field name="tic_cgpc" label="CGPC" presentation="TEXT" readonly="true" isvisible="false"/>
+            </group>
+
+            <!-- Estado -->
+            <group title="Estado" id="estado" render_html="block">
+                <field name="tic_tstamp_in" presentation="DATETIME" label="Ingreso ticket" readonly="true" />
+                <field name="tic_tstamp_plazo" presentation="DATETIME" label="Plazo estimado" readonly="true"/>
+                <field name="tic_tstamp_cierre" presentation="DATETIME" label="Cierre ticket" readonly="true"/>
+                <field name="tic_estado" presentation="REPORTES::ESTADO_TICKET" label="Estado" readonly="true"/>
+                <field name="tic_nota_in" presentation="TEXT" label="Nota al ingreso" readonly="true"/>
+            
+                <field name="tmp_accion" isvisible="false"/>
+                <field name="tmp_nuevo_estado" isvisible="false"/>
+                <field name="tmp_prestacion" isvisible="false"/>
+                <field name="tmp_nota" isvisible="false"/>
+            </group>
+
+            <!-- PRESTACIONES -->
+            <table relationclass="" classname="class_tic_ticket_prestaciones" title="Prestaciones" add="false" delete="false" update="false">
+                <column title="Prestación" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestación"/>
+                </column>
+                <column title="Rubro" order="2">
+                    <field name="tru_code" presentation="RUBRO" label="Rubro"/>
+                </column>
+                <column title="Cuestionario" order="3">
+                    <field name="ttp_cuestionario" presentation="TICKET::CUESTIONARIO" label="Cuestionario"/>
+                </column>
+                <column title="Prioridad" order="4">
+                    <field name="ttp_prioridad" presentation="PRIORIDAD" label="Prioridad"/>
+                </column>
+                <column title="Estado" order="5">
+                    <field name="ttp_estado" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
+                </column>
+            </table>
+
+            <!-- AVANCE -->
+            <table relationclass="" classname="class_tic_avance" title="Avance" add="false" delete="false" update="false">
+                <column title="Fecha" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="tpr_code" isvisible="false"/>
+                    <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
+                </column>
+                <column title="Est.Inicial" order="2">
+                    <field name="tic_estado_in" presentation="REPORTES::ESTADO_PRESTACION" label="Estado inicial"/>
+                    <field name="use_code_in" presentation="USER" label="Operador"/>
+                
+                    <field name="tic_estado_out" presentation="REPORTES::ESTADO_PRESTACION" label="Estado final" isvisible="false"/>
+                    <field name="tav_tstamp_out" presentation="DATETIME" label="Fecha" isvisible="false"/>
+                    <field name="use_code_out" presentation="USER" label="Operador" isvisible="false"/>
+                </column>
+                <column title="Nota" order="5">
+                    <field name="tav_nota" presentation="TEXTAREA" label="Nota" cols="60" rows="4"/>
+                </column>
+                <column title="Motivo" order="6">
+                    <field name="tic_motivo" presentation="TEXT" label="Motivo"/>
+                </column>
+            </table>
+
+            <!-- ORGANISMOS -->
+            <table relationclass="" classname="class_tic_ticket_organismos" title="Organismos" add="false" delete="false" update="false">
+                <column title="Organismo" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="tor_code" presentation="TICKET::ORGANISMO" label="Organismo"/>
+                </column>
+                <column title="Figura" order="2">
+                    <field name="tto_figura" presentation="TICKET::GISFIGURA" label="Figura"/>
+                </column>
+            </table>
+
+            <!-- RECLAMANTES -->
+            <table relationclass="" classname="class_tic_ticket_ciudadano" title="Solicitantes" add="false" delete="false" update="false">
+                <column title="Fecha" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
+                </column>
+                <column title="Ciudadano" order="2">
+                    <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano"/>
+                </column>
+                <column title="Nota" order="3">
+                    <field name="ttc_nota" presentation="TEXT" label="Nota"/>
+                </column>
+            </table>
+
+            <!-- REITERACIONES -->
+            <table relationclass="" classname="class_tic_ticket_ciudadano_reit" title="Reiteraciones" add="false" delete="false" update="false">
+                <column title="Fecha" order="1">
+                    <field name="tic_nro" isvisible="false"/>
+                    <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
+                </column>
+                <column title="Ciudadano" order="2">
+                    <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano"/>
+                </column>
+                <column title="Nota" order="3">
+                    <field name="ttc_nota" presentation="TEXT" label="Nota"/>
+                </column>
+            </table>
+
+            <!-- BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+            <table relationclass="" classname="cfile" title="Archivos adjuntos" add="true" delete="true" isfile="true">
+                <column title="Archivo" order="1">
+                    <field name="doc_code" isvisible="false"/>
+                    <field name="doc_name" label="Archivo" presentation="TEXT"/>
+                    <field name="doc_storage" label="Archivo" presentation="FILE" isvisible="false"/>
+                </column>
+                <column title="Tipo" order="2">
+                    <field name="doc_tstamp" label="Fecha" presentation="DATETIME" isvisible="false"/>
+                    <field name="doc_mime" label="Clase" presentation="TEXT" cols="50"/>
+                </column>
+                <column title="Medida" order="3">
+                    <field name="doc_size" label="Medida" presentation="TEXT" />
+                </column>
+                <column title="Nota" order="4">
+                    <field name="doc_note" label="Nota" cols="50" rows="5" presentation="TEXTAREA"/>
+                </column>
+            </table>
+            <!-- FIN BLOQUE FIJO PARA ARCHIVOS ADJUNTOS -->
+
+
+            <!-- Botones de accion para redireccionar después de salvar la página -->
+            <action operation="P" label="Imprimir comprobante" target="ticket_maint.php?OP=P" note="Imprimir comprobante">
+                <sendfield name="tic_nro" classname="class_tic_ticket_upd"/>
+            </action>
+
+            <action operation="L" label="Consulta de tickets" target="tickets.php?last=1&amp;OP=L"  note="Consulta de tickets"/>
+        </build>
+    </make>
+
+
+
+
+
+
+
+
+
+    <!-- CLASE GEOREF -->
+    <make object="class"> 
+        <build out_file="class_tic_georef.php" classname="class_tic_georef" classlabel="GeoRef">
+            <parse in_file="../mgp.sql" tablename="tic_georef"/>
+            <method objfactoryquerysuffix="order by tge_nombre"/>
+            <field name="tmp_prestacion" type="varchar" size="100" />
+        </build>
+    </make>
+
+
+    <!--  BUSCAR GeoReferencias -->
+    <make object="search_and_list">
+        <build out_file="georefs.php" classname="class_tic_georef" title="Consulta de GeoReferencias" >
 		
-		<searchfield name="tge_tipo" presentation="TICKET::UBICACION" label="Tipo"/>
-		<searchfield name="tge_nombre" presentation="TEXT" label="Nombre"/>
+            <searchfield name="tge_tipo" presentation="TICKET::UBICACION" label="Tipo"/>
+            <searchfield name="tge_nombre" presentation="TEXT" label="Nombre"/>
 		
-		<listfield name="tge_tipo" presentation="TICKET::UBICACION" label="Tipo"/>
-		<listfield name="tge_nombre" presentation="TEXT" label="Nombre"/>
-		<listfield name="tge_otra_denominacion" presentation="TEXT" label="Otra Den."/>
-		<listfield name="tge_calle_nombre" presentation="TEXT" label="Calle"/>
-		<listfield name="tge_altura" presentation="INT" label="Altura"/>
-		<listfield name="tge_cgpc" presentation="TEXT" label="Comuna"/>
-		<listfield name="tge_barrio" presentation="REPORTES::BARRIO" label="Barrio"/>
+            <listfield name="tge_tipo" presentation="TICKET::UBICACION" label="Tipo"/>
+            <listfield name="tge_nombre" presentation="TEXT" label="Nombre"/>
+            <listfield name="tge_otra_denominacion" presentation="TEXT" label="Otra Den."/>
+            <listfield name="tge_calle_nombre" presentation="TEXT" label="Calle"/>
+            <listfield name="tge_altura" presentation="INT" label="Altura"/>
+            <listfield name="tge_cgpc" presentation="TEXT" label="Comuna"/>
+            <listfield name="tge_barrio" presentation="REPORTES::BARRIO" label="Barrio"/>
 		
-		<action label="ver" target="georef_maint.php?OP=V" operation="V">
-			<sendfield classname="class_tic_georef" name="tge_tipo"/>
-			<sendfield classname="class_tic_georef" name="tge_nombre"/>
-		</action>
+            <action label="ver" target="georef_maint.php?OP=V" operation="V">
+                <sendfield classname="class_tic_georef" name="tge_tipo"/>
+                <sendfield classname="class_tic_georef" name="tge_nombre"/>
+            </action>
 	
-		<action label="Modificar" target="georef_maint.php?OP=M" operation="M">
-			<sendfield classname="class_tic_georef" name="tge_tipo"/>
-			<sendfield classname="class_tic_georef" name="tge_nombre"/>
-		</action>
+            <action label="Modificar" target="georef_maint.php?OP=M" operation="M">
+                <sendfield classname="class_tic_georef" name="tge_tipo"/>
+                <sendfield classname="class_tic_georef" name="tge_nombre"/>
+            </action>
 		
-	</build>
-</make>
+        </build>
+    </make>
 
-<!-- EDITAR UNA GEOREFERENCIA -->
-<make object="table_maint"> 
-	<build out_file="georef_maint.php" classname="class_tic_georef" title="Editar/Ingresar una GeoReferencia" 
-	next="georefs.php?OP=L&amp;last=1">
+    <!-- EDITAR UNA GEOREFERENCIA -->
+    <make object="table_maint"> 
+        <build out_file="georef_maint.php" classname="class_tic_georef" title="Editar/Ingresar una GeoReferencia" 
+               next="georefs.php?OP=L&amp;last=1">
 		
-		<group title="Referencia" id="asunto">
-			<field name="tge_tipo" presentation="TICKET::UBICACION" label="Tipo"/>
-			<field name="tge_nombre" presentation="TEXT" label="Nombre"/>
-			<field name="tge_otra_denominacion" presentation="TEXTAREA" label="Otras denominaciones" cols="50" rows="4" />
-		</group>
+            <group title="Referencia" id="asunto">
+                <field name="tge_tipo" presentation="TICKET::UBICACION" label="Tipo"/>
+                <field name="tge_nombre" presentation="TEXT" label="Nombre"/>
+                <field name="tge_otra_denominacion" presentation="TEXTAREA" label="Otras denominaciones" cols="50" rows="4" />
+            </group>
 		
-		<group title="Ubicacion" id="ubicacion">
-			<field name="tge_calle" presentation="INT" label="Codigo calle" />
-			<field name="tge_calle_nombre" presentation="TEXT" label="Nombre Calle" />
-			<field name="tge_altura" presentation="INT" label="Altura Calle" />
-			<field name="tge_cgpc" presentation="TEXT" label="CGPC" />
-			<field name="tge_barrio" presentation="REPORTES::BARRIO" label="Barrio" />
-		</group>
+            <group title="Ubicacion" id="ubicacion">
+                <field name="tge_calle" presentation="INT" label="Codigo calle" />
+                <field name="tge_calle_nombre" presentation="TEXT" label="Nombre Calle" />
+                <field name="tge_altura" presentation="INT" label="Altura Calle" />
+                <field name="tge_cgpc" presentation="TEXT" label="CGPC" />
+                <field name="tge_barrio" presentation="REPORTES::BARRIO" label="Barrio" />
+            </group>
 		
-		<group title="Mapa" id="mapa">
-			<field name="tge_coordx" presentation="FLOAT" label="Coord X" />
-			<field name="tge_coordy" presentation="FLOAT" label="Coord Y" />
-			<field name="tmp_prestacion" presentation="ARBOL" label="Prestacion" />
+            <group title="Mapa" id="mapa">
+                <field name="tge_coordx" presentation="FLOAT" label="Coord X" />
+                <field name="tge_coordy" presentation="FLOAT" label="Coord Y" />
+                <field name="tmp_prestacion" presentation="ARBOL" label="Prestacion" />
 			
-		</group>
+            </group>
 		
-	</build>
-</make>
+        </build>
+    </make>
 
 
-<!-- CLASE FERIADOS -->
-<make object="class"> 
-    <build out_file="class_tic_feriados.php" classname="class_tic_feriados" classlabel="Feriados">
-        <parse in_file="../mgp.sql" tablename="tic_feriados"/>
-        <method objfactoryquerysuffix="order by tfe_tstamp_in"/>
-    </build>
-</make>
+    <!-- CLASE FERIADOS -->
+    <make object="class"> 
+        <build out_file="class_tic_feriados.php" classname="class_tic_feriados" classlabel="Feriados">
+            <parse in_file="../mgp.sql" tablename="tic_feriados"/>
+            <method objfactoryquerysuffix="order by tfe_tstamp_in"/>
+        </build>
+    </make>
 
 
-<!--  CONSULTAR FERIADOS -->
-<make object="search_and_list">
-	<build out_file="feriados.php" classname="class_tic_feriados" title="Consulta de Feriados" >
+    <!--  CONSULTAR FERIADOS -->
+    <make object="search_and_list">
+        <build out_file="feriados.php" classname="class_tic_feriados" title="Consulta de Feriados" >
 		
-		<searchfield name="tfe_tstamp_in" presentation="DATERANGE" label="Fecha"/>
-		<searchfield name="tfe_desc" presentation="TEXT" label="Nombre"/>
+            <searchfield name="tfe_tstamp_in" presentation="DATERANGE" label="Fecha"/>
+            <searchfield name="tfe_desc" presentation="TEXT" label="Nombre"/>
 		
-		<listfield name="tfe_tstamp_in" presentation="DATERANGE" label="Fecha"/>
-		<listfield name="tfe_desc" presentation="TEXT" label="Nombre"/>
+            <listfield name="tfe_tstamp_in" presentation="DATERANGE" label="Fecha"/>
+            <listfield name="tfe_desc" presentation="TEXT" label="Nombre"/>
 		
-		<action label="Eliminar" target="feriados_maint.php?OP=B" operation="B">
-                    <sendfield classname="class_tic_feriados" name="tfe_tstamp_in"/>
-		</action>
+            <action label="Eliminar" target="feriados_maint.php?OP=B" operation="B">
+                <sendfield classname="class_tic_feriados" name="tfe_tstamp_in"/>
+            </action>
 	
-		<action label="Modificar" target="feriados_maint.php?OP=M" operation="M">
-                    <sendfield classname="class_tic_feriados" name="tfe_tstamp_in"/>
-		</action>
-	</build>
-</make>
+            <action label="Modificar" target="feriados_maint.php?OP=M" operation="M">
+                <sendfield classname="class_tic_feriados" name="tfe_tstamp_in"/>
+            </action>
+        </build>
+    </make>
 
-<!-- EDITAR UN FERIADO -->
-<make object="table_maint"> 
-    <build out_file="feriados_maint.php" classname="class_tic_feriados" title="Día feriado" next="feriados.php?OP=L&amp;last=1">
+    <!-- EDITAR UN FERIADO -->
+    <make object="table_maint"> 
+        <build out_file="feriados_maint.php" classname="class_tic_feriados" title="Día feriado" next="feriados.php?OP=L&amp;last=1">
 		
-        <group title="Día" id="dia">
-            <field name="tfe_tstamp_in" presentation="DATE" label="Fecha"/>
-            <field name="tfe_desc" presentation="TEXT" label="Nombre"/>
-        </group>
+            <group title="Día" id="dia">
+                <field name="tfe_tstamp_in" presentation="DATE" label="Fecha"/>
+                <field name="tfe_desc" presentation="TEXT" label="Nombre"/>
+            </group>
 			
-        <action label="Nuevo feriado" target="feriados_maint.php?OP=N" operation="N">
-        </action>	
-    </build>
-</make>
+            <action label="Nuevo feriado" target="feriados_maint.php?OP=N" operation="N">
+            </action>	
+        </build>
+    </make>
 
 
 </ayaxphpclass>

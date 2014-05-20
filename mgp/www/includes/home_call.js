@@ -434,12 +434,12 @@ function completar_tabla_tickets(datos)
     var b = "<table class=\"table table-striped\">" +
                     "  <thead>" +
                     "    <tr>" +
-                    "		<th>Ticket</th>" +
+                    "		<th style=\"width:100px;\">Ticket</th>" +
                     "		<th>Estado</th>" +
                     "		<th style=\"width:168px;\">Fechas</th>" +
                     "		<th>Prestaciones</th>" +
                     "		<th>Ubicación</th>" +
-                    "		<th>Acción</th>" +
+                    "		<th style=\"width:100px;\">Acción</th>" +
                     "	 </tr>" +
                     "  </thead>" +
                     "  <tbody>";
@@ -448,11 +448,11 @@ function completar_tabla_tickets(datos)
     {
         for(j=0;j<datos.length;j++)
         {
-            var estado = datos[j].estado==='ABIERTO' ? '<span class="badge badge-info">Abierto</span>' : '<span class="badge badge-success">Cerrado</span>';
+            var estado = (datos[j].estado==='ABIERTO' ? '<span class="badge badge-info">Abierto</span>' : '<span class="badge badge-success">Cerrado</span>') + '<br>';
             var cerrado = datos[j].cerrado!=='' ? "<br><b>Cerrado:</b> <br>"+datos[j].cerrado : '';
             var reiterado = datos[j].reiterado!=='' ? "<br><b>Reiterado:</b> <br>"+datos[j].reiterado : '';
             var v = parseInt(datos[j].vencido);
-            var vencido = v>0 ? '<br><span class="badge badge-important">Vencido '+v+(v===1 ? ' día' : ' días')+'</span>' : '';
+            var vencido = (v>0 ? '<br><span class="badge badge-important">Vencido '+v+(v===1 ? ' día' : ' días')+'</span><br>' : '');
             var c = "";
             switch(datos[j].estado_prestacion){
                 case "pendiente":
@@ -498,10 +498,10 @@ function completar_tabla_tickets(datos)
                "  <td>";
        
             if(datos[j].url_ver!=="")
-                b+="<button onclick=\"irA('"+datos[j].url_ver+"')\" class=\"btn btn-small\"><i class=\"icon-folder-open\"></i> Ver</button>  <br>";
+                b+="<button onclick=\"irA('"+datos[j].url_ver+"')\" class=\"btn btn-sm\"><i class=\"icon-folder-open\"></i> Ver</button>  <br>";
 
             if(datos[j].url_reiterar!=="")
-                b+="<button onclick=\"irA('"+datos[j].url_reiterar+"')\" class=\"btn btn-small\"><i class=\"icon-fire\"></i> Reiterar</button> <br>";
+                b+="<button onclick=\"irA('"+datos[j].url_reiterar+"')\" class=\"btn btn-sm\"><i class=\"icon-fire\"></i> Reiterar</button> <br>";
             
             b+=renderMapa(datos[j].ubicacion);
             
@@ -516,7 +516,14 @@ function completar_tabla_tickets(datos)
     b+="</tbody></table>";
 
     $("#tickets_tbl").html(b);		
-    $("#tickets_tbl .mapa").popover();
+    $("#tickets_tbl .mapa").on('show.bs.popover', function () {
+        var mio = this;
+        $("#tickets_tbl .mapa").each(function(){
+            if(this!=mio) {
+                $(this).popover('hide');
+            }
+        });
+    }).popover();
 }
 
 /** Genera el HTML con la direccion
@@ -526,8 +533,8 @@ function completar_tabla_tickets(datos)
  */
 function renderMapa(objDir) {
     if(objDir && objDir.lat && objDir.lng) {
-        var mapa = "<img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + objDir.lat + "&y=" + objDir.lng + "&w=250&h=250&r=250\'>";        
-        return " <button class=\"btn btn-small mapa\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i> Mapa</button>";
+        var mapa = "<div class=\'po_map\'><img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + objDir.lat + "&y=" + objDir.lng + "&w=250&h=250&r=250\'></div>";        
+        return " <button class=\"btn btn-sm mapa\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i> Mapa</button>";
     } 
     return "";
 }

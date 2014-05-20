@@ -12,8 +12,10 @@ class CDH_DASHBOARD extends CDataHandler {
     function getTickets($p) {
         global $primary_db;
       
+        //Obtengo el objeto dash_config y lo salvo en la sesion
         $dash_config = json_decode($p);
         $_SESSION["dash_config"] = $dash_config;
+        error_log("CDH_DASHBOARD::getTickets() dash_config = ".print_r($dash_config,true));
         $extra = "";
         
         $estados_abiertos = toSqlList(strtolower(CSession::getParameter($primary_db,"estados.abiertos","pendiente,en espera,en curso,inspección")));
@@ -43,12 +45,12 @@ class CDH_DASHBOARD extends CDataHandler {
             $extra .= " and tic_barrio='{$dash_config->barrio}'";
         }
         //Prestacion
-        if($dash_config->prestacion!="") {
-            $extra .= " and tpr_code like '{$dash_config->prestacion}%'";
+        if($dash_config->prestacion->codigo!="") {
+            $extra .= " and tpr_code like '{$dash_config->prestacion->codigo}%'";
         }
         //Organismo
-        if($dash_config->organismo!="") {
-            $extra .= " and tor_code='{$dash_config->organismo}'";
+        if($dash_config->organismo->codigo!="") {
+            $extra .= " and tor_code='{$dash_config->organismo->codigo}'";
         }
         
         //Tickets
@@ -81,14 +83,15 @@ class CDH_DASHBOARD extends CDataHandler {
             $pres = $tic->prestaciones[0];
             
             $h = '<h5>'.$pres->tpr_code.' - '.$pres->tpr_description_full.'</h5>';
-            $h.= '<b>'.$tic->tic_identificador.'</b> <b>Canal:</b> '.$tic->tic_canal.'<br>';
-            $h.= '<b>Estado:</b> '.$pres->ttp_estado.' <b>Ingreso:</b> '.ISO8601toDate($tic->tic_tstamp_in).'<br>';
-            $h.= '<b>Vencimiento:</b> '.ISO8601toDate($tic->tic_tstamp_plazo).'<br>';
+            $h.= '<b>'.$tic->tic_identificador.'</b><br>';
+            $h.= '<b>Estado:</b> '.$pres->ttp_estado.' <b>Ingreso:</b> '.ISO8601toLocale($tic->tic_tstamp_in).' <b>Canal:</b> '.$tic->tic_canal.'<br>';
+            $h.= '<b>Vencimiento:</b> '.ISO8601toLocale($tic->tic_tstamp_plazo).'<br>';
             if($tic->tic_nota_in!="") {
                 $h.= '<b>Nota:</b> '.$tic->tic_nota_in.'<br>';
             }
             
             //Direccion y lumninaria
+            $h.= '<b>Ubicación:</b> '.$tic->generarTextoDireccion().'<br>';
             
             //Fotos
             foreach($tic->archivos as $f) {

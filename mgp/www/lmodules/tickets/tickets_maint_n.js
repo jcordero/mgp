@@ -8,12 +8,6 @@
  */
 var last_marker_clicked = null;
 
-/** Mapa
- * 
- * @type google.maps.Map
- */
-var mapa = {};
-
 /** Lista de luminarias o semaforos
  * 
  * @type Array
@@ -94,17 +88,20 @@ $(document).ready(function() {
     }
     
     //campos extra en las direcciones
-    $('#alternativa .fld').append('<div class="fldl"></div>');
-    $('#calle .fld').append('<div class="fldl"></div>');
-    $('#calle2 .fld').append('<div class="fldl"></div>');
-    $('#callenro .fld').append('<div class="fldl"></div>');
-    $('#piso .fld').append('<div class="fldl"></div>');
-    $('#dpto .fld').append('<div class="fldl"></div>');
+    var e = '<p class="form-control-static"></p>';
+    $('#alternativa div').append(e);
+    $('#calle div').append(e);
+    $('#calle2 div').append(e);
+    $('#callenro div').append(e);
+    $('#piso div').append(e);
+    $('#dpto div').append(e);
  
     /* Boton de validar la direccion */
     $('#contenido_domicilio').after(
-        '<div><button class="btn" id="valida_direccion"><i class="icon-globe"></i> Validar Dirección</button> '+
-        '<button class="btn hide" id="cambia_direccion"><i class="icon-globe"></i> Cambiar Dirección</button></div>');
+        '<div>'+
+            '<button class="btn" id="valida_direccion"><i class="icon-globe"></i> Validar Dirección</button> '+
+            '<button class="btn" id="cambia_direccion"><i class="icon-globe"></i> Cambiar Dirección</button>'+
+        '</div>');
        
     /* Opcion de escribir la direccion */
     $('#m_alternativa').change(function(){
@@ -142,26 +139,27 @@ function valida_direccion() {
     var altura = $('#m_callenro').val();
     var alternativa = $('#m_alternativa').val();
     	
-    if(calle.length!==5) {
-        p4.alert_box('Debe completar la calle antes de validar la dirección');
+    if(calle.length<5) {
+        p4.alert_box('Debe completar la calle antes de validar la dirección','Atención');
         return;
     }
 
     if(altura==='' && alternativa==='NRO') {
-        p4.alert_box('Debe completar la altura antes de validar la dirección');
+        p4.alert_box('Debe completar la altura antes de validar la dirección','Atención');
         return;
     }
 
-    if(calle2.length!==5 && alternativa==='CALLE') {
-        p4.alert_box('Debe completar la calle que cruza antes de validar la dirección');
+    if(calle2.length<5 && alternativa==='CALLE') {
+        p4.alert_box('Debe completar la calle que cruza antes de validar la dirección','Atención');
         return;
     }
-
+    var cod_calle = calle.split("|")[0];
+    var cod_calle2 = calle2.split("|")[0];
     $('#m_mapa').parent().append('<div id="progress1" class="progress progress-striped active"><div class="bar" style="width:100%;"></div></div>');
     var params = { 
-        'cod_calle':calle,
+        'cod_calle':cod_calle,
         'nom_calle':calle_nombre,        
-        'cod_calle2':calle2,
+        'cod_calle2':cod_calle2,
         'nom_calle2':calle2_nombre,
         'altura':altura,
         'gis':gis_layer,
@@ -186,15 +184,15 @@ function valida_direccion() {
                 $('#m_calle_nombre2').val(o.calle2);
                 
                 //Seteo mapa centrado en coordenadas
-                var center = new google.maps.LatLng(o.latitud,o.longitud);
-                mapa.setCenter(center);
-                mapa.setZoom(18);
+                mapa.obj.centro = new google.maps.LatLng(o.latitud,o.longitud);
+                mapa.obj.mapa.setCenter(mapa.obj.centro);
+                mapa.obj.mapa.setZoom(18);
                 
                 //Marker en el domicilio
-                if(marker_domicilio!==null)
+                if(marker_domicilio!==null){
                     marker_domicilio.setMap(null);
-                    
-                marker_domicilio = createMarker([o.latitud,o.longitud], o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''), mapa);
+                }
+                marker_domicilio = mapa.obj.createMarker([o.latitud,o.longitud], o.calle + ' ' + o.nro + (o.calle2!=='' ? ' y '+o.calle2 : ''), mapa.obj.mapa);
                 
                 //Ajuste del formulario
                 direccion_validada();
@@ -210,25 +208,25 @@ function valida_direccion() {
                         var pt = lista_elementos[j];
 
                         if(gis_layer==1) {
-                            if(pt.com==="ILEGAL")
-                                lista_elementos[j].marker = createMarker([pt.lat,pt.lng],"Ilegal "+pt.calle+' '+pt.altura,mapa,luminariaIlegalIcon,marker_click,j);
-                            else
-                                lista_elementos[j].marker = createMarker([pt.lat,pt.lng],"Luminaria "+pt.calle+' '+pt.altura,mapa,luminariaIcon,marker_click,j);
+                            if(pt.com==="ILEGAL"){
+                                lista_elementos[j].marker = mapa.obj.createMarker([pt.lat,pt.lng],"Ilegal "+pt.calle+' '+pt.altura,mapa.obj.mapa,luminariaIlegalIcon,marker_click,j);
+                            }else{
+                                lista_elementos[j].marker = mapa.obj.createMarker([pt.lat,pt.lng],"Luminaria "+pt.calle+' '+pt.altura,mapa.obj.mapa,luminariaIcon,marker_click,j);
+                            }
                         }
 
                         if(gis_layer==2) {
-                            lista_elementos[j].marker = createMarker([pt.lat,pt.lng],"Semáforo "+pt.id,mapa,semaforoIcon,marker_click,j);
+                            lista_elementos[j].marker = mapa.obj.createMarker([pt.lat,pt.lng],"Semáforo "+pt.id,mapa.obj.mapa,semaforoIcon,marker_click,j);
                         }
 
                         lista_elementos[j].com = pt.com; 
                     }
                     
-                    if(gis_tipo=="LUMINARIA")
+                    if(gis_tipo=="LUMINARIA") {
                         setAlertLuminaria();
+                    }
                 }            
-            }
-            else
-            {
+            }else{
                 p4.alert_box("La dirección indicada no existe", "Validar dirección");
             }
     },"TICKET::DIRECCION","validarDireccion", JSON.stringify(params));
@@ -244,21 +242,21 @@ function cambia_direccion() {
     $("#lm_id_elemento").html("");
     
     //Oculto los campos read only
-    $('#calle .fldl').hide();
-    $('#callenro .fldl').hide();
-    $('#piso .fldl').hide();
-    $('#dpto .fldl').hide();
+    $('#calle p').hide();
+    $('#callenro p').hide();
+    $('#piso p').hide();
+    $('#dpto p').hide();
 
     //Muestro los campo editables
     $('#alternativa').show();
-    $('#calle .fld input').show();
-    $('#calle .fld img').show();
-    $('#callenro .fld input').show();
-    $('#piso .fld input').show();
-    $('#dpto .fld input').show();
-    $('#calle2 .fld input').show();
-    $('#calle2 .fld img').show();
-    $('#callenro2 .fld input').show();
+    $('#calle input').show();
+    $('#calle span').show();
+    $('#callenro input').show();
+    $('#piso input').show();
+    $('#dpto input').show();
+    $('#calle2 input').show();
+    $('#calle2 span').show();
+    $('#callenro2 input').show();
 
     //Muestro los botones
     $('#cambia_direccion').hide();
@@ -272,9 +270,9 @@ function cambia_direccion() {
     $('#m_callenro').val("");
     
     //Reseteo el mapa
-    if(mapa.setZoom)
-        mapa = crearMapa('m_mapa');
-    
+    if(mapa.obj.mapa) {
+        mapa.obj.crearMapa('m_mapa');
+    }
     
     $('#alert_luminaria').remove();
 }
@@ -286,20 +284,20 @@ function cambia_direccion() {
 function direccion_validada() {
     //Oculto la calle y altura
     $('#alternativa').hide();
-    $('#calle .fld input').hide();
-    $('#calle .fld img').hide();
-    $('#callenro .fld input').hide();
-    $('#piso .fld input').hide();
-    $('#dpto .fld input').hide();
-    $('#calle2 .fld input').hide();
-    $('#calle2 .fld img').hide();
+    $('#calle input').hide();
+    $('#calle span').hide();
+    $('#callenro input').hide();
+    $('#piso input').hide();
+    $('#dpto input').hide();
+    $('#calle2 input').hide();
+    $('#calle2 span').hide();
    
     //Pongo los campos ReadOnly
-    $('#calle .fldl').html( $('#hm_calle').val() ).show();
-    $('#callenro .fldl').html( $('#m_callenro').val() ).show();
-    $('#piso .fldl').html( $('#m_piso').val() ).show();
-    $('#dpto .fldl').html( $('#m_dpto').val() ).show();
-    $('#calle2 .fldl').html( $('#hm_calle2').val() ).show();
+    $('#calle p').html( $('#hm_calle').val() ).show();
+    $('#callenro p').html( $('#m_callenro').val() ).show();
+    $('#piso p').html( $('#m_piso').val() ).show();
+    $('#dpto p').html( $('#m_dpto').val() ).show();
+    $('#calle2 p').html( $('#hm_calle2').val() ).show();
 
     //Cambio los botones
     $('#valida_direccion').hide();
@@ -316,11 +314,10 @@ function direccion_validada() {
  */
 function setAlertLuminaria() {
     if( $('#alert_luminaria').length===0 )
-    $('#contenido_domicilio').append('<div id="alert_luminaria" class="alert alert-block" style="width: 700px;"> \n\
-                <button type="button" class="close" data-dismiss="alert">&times;</button> \n\
-                <h4>Atención!</h4> \n\
-                    Debe seleccionar una luminaria en el mapa para terminar la georefencia y poder salvar el ticket. \n\
-                </div>');
+    $('#contenido_domicilio').append('<div id="alert_luminaria" class="alert alert-info" style="width: 700px;">'+
+                '<h4>Atención!</h4>'+
+                    'Debe seleccionar una luminaria en el mapa para terminar la georefencia y poder salvar el ticket.'+
+                '</div>');
 }
 
 /** Procesa el click sobre un elemento
@@ -341,6 +338,7 @@ function marker_click(event) {
                 last_marker_clicked.marker.setIcon(luminariaIcon);
             }
         }
+        
         if(gis_tipo=="SEMAFORO") {
             last_marker_clicked.marker.setIcon(semaforoIcon);
         }
@@ -348,11 +346,13 @@ function marker_click(event) {
             
     //Paso el marker seleccionado a estado activo
     if(gis_tipo=="LUMINARIA") {
-        if( elem.com === "ILEGAL" ) 
+        if( elem.com === "ILEGAL" ) {
             elem.marker.setIcon(luminariaIlegalOnIcon);
-        else
+        } else {
             elem.marker.setIcon(luminariaOnIcon);
+        }
     }
+    
     if(gis_tipo=="SEMAFORO") {
         elem.marker.setIcon(semaforoOnIcon);
     }
@@ -396,12 +396,10 @@ function marker_click(event) {
  * 
  * @returns {void}
  */
-function reset_form()
-{
+function reset_form() {
     //Oculto todos los bloques
     var divdomicilio = $("#bloque_domicilio");
-    if(divdomicilio.length)
-    {
+    if(divdomicilio.length) {
     	divdomicilio.hide();
     	calle.m_mandatory = false;
     	callenro.m_mandatory = false;	
@@ -419,10 +417,11 @@ function reset_form()
 
         $("#contenido_domicilio input,select,textarea").each (function(){
             if(this.id!="m_rubro" && this.id!="m_tic_nota_in") {
-                if(this.type==="textarea")
+                if(this.type==="textarea") {
                     $(this).html("");
-                else
+                } else {
                     $(this).val("");
+                }
                 $("#"+this.id.substr(2)).hide();
                 //console.log("oculto "+this.id.substr(2));
             }
@@ -430,7 +429,7 @@ function reset_form()
         
         last_marker_clicked = null;
         marker_domicilio = null;
-        mapa = {};
+        mapa.obj.mapa = null;
         lista_elementos = [];
         gis_layer = 0;
         gis_tipo = "";
@@ -445,47 +444,42 @@ function reset_form()
  * @param {string} codigo
  * @returns {void}
  */
-function cambio_prestacion(codigo)
-{	    
+function cambio_prestacion(codigo) {	    
     //Ocultar la georeferencia
     reset_form();
     
     //Pedir datos sobre detalle de prestacion
     new p4.rem_request(this,function(obj,json){
         
-        if(json==="")
-        {
+        if(json==="") {
             p4.alert_box("El servidor no esta respondiendo.",'Error');
             return; //No hay detalle de la prestacion
         }
         var jdata = JSON.parse(json);
-        if(!jdata)
-        {
+        if(!jdata) {
             return; //No hay detalle de la prestacion
         }
         
         //Activar el rubro si es una DENUNCIA
-        if( jdata[0].tpr_tipo==="DENUNCIA" )
-        {
+        if( jdata[0].tpr_tipo==="DENUNCIA" ){
             rubro.m_mandatory = true;
             $("#rubro").show();
             
             //Completo el combo rubro
             new p4.rem_request(this,function(obj,json){
-                if(json==="")
-                {
+                if(json==="") {
                     p4.alert_box("El servidor no esta respondiendo.",'Error');
                     return; //No hay detalle de la prestacion
                 }
                 var jdata2 = JSON.parse( json );
                 var objrubro = document.getElementById("m_rubro");
-                fillCombo(objrubro,jdata2,objrubro.id,"tru_code","","tru_detalle");    
+                p4.fillCombo(objrubro,jdata2,objrubro.id,"tru_code","","tru_detalle");    
             },"TICKET::PRESTACIONTREE","getRubroPrest",codigo);
         }
 
         //Tipo de georeferencia
         gis_tipo = jdata[0].tpr_ubicacion;
-        setValuePair("m_tipo_georef",gis_tipo,gis_tipo);
+        p4.setValuePair("m_tipo_georef",gis_tipo,gis_tipo);
         
         //Bloque de geo en el formulario
         var divobj = $("#bloque_domicilio");
@@ -527,9 +521,9 @@ function cambio_prestacion(codigo)
                 new p4.rem_request(this,function(obj,json){
                     playas = JSON.parse(json);
 
-                    for(var j=0;j<playas.length;j++) 
+                    for(var j=0;j<playas.length;j++){ 
                         combo.append('<option data-id="'+j+'" value="'+playas[j].playa+'">'+playas[j].playa);
-
+                    }
                 },"TICKET::DIRECCION","listaDePlayas","");
 
                 $("#valida_direccion").hide();
@@ -590,16 +584,14 @@ function cambio_prestacion(codigo)
         //Activo el mapa interactivo en el centro de MDQ
         if(gis_tipo!="COLECTIVO") {
             $("#m_mapa").show();
-            if(typeof mapa.setCenter === 'undefined') {
-                mapa = crearMapa('m_mapa');
+            if(mapa.obj.mapa == null) {
+                mapa.obj.crearMapa('m_mapa');
             } else {
                 var center = new google.maps.LatLng(-38.0086358938483,-57.5388003290637);
-                mapa.setCenter(center);
-                mapa.setZoom(13);
+                mapa.obj.mapa.setCenter(center);
+                mapa.obj.mapa.setZoom(13);
             }
-        }
-        else
-        {
+        } else {
             $("#m_mapa").hide();
             $("#valida_direccion").hide();
         }
@@ -607,11 +599,8 @@ function cambio_prestacion(codigo)
         //Cargar el cuestionario?
         var params = prestacion.m_params;
         var cuest = document.getElementById("m_"+ params + "_placeholder");
-        if(cuest && jdata[1])
-        {
+        if(cuest && jdata[1]) {
             cuest.innerHTML = jdata[1];
-        }
-    
+        }    
     },"TICKET::PRESTACIONTREE","getDetails",codigo);
-    
 }

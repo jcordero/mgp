@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 
 <!-- Fragmento de pagina html que indica el exito una operacion -->
-<div id="pageSuccess">
-	<div style="width: 450px; min-height: 100px;padding: 10px;margin-left:275px;margin-top:10px;margin-bottom:10px;" class="ui-widget ui-widget-content ui-corner-all">
-		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<tr>
-				<td><img src="/mgp/images/default/success-grande.png" style="width:75px;height:98px;"/></td>
-				<td style="width:20px;"></td>
-				<td><com:msgok/></td>
-			</tr>
-     	</table>
+<div id="pageSuccess" class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-1"><img src="/mgp/images/default/success-grande.png"/></div>
+            <div class="col-xs-10 col-xs-offset-1"><com:msgok/></div>
+        </div>
 
-		<div id="pageSuccessActions">
-			<com:actions/>
-		</div>
-	</div>
+        <div class="row" id="pageSuccessActions">
+            <div class="col-xs-12">
+                <com:actions/>
+            </div>
+        </div>
+    </div>
 </div>

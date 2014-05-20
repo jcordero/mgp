@@ -19,10 +19,30 @@ img.logo {position:relative;top:10px;}
 .k-link {color: #eee;text-decoration: none!important;font-weight: normal!important;font-family: Verdana, Arial, sans-serif!important;font-size: 13px!important;}
 .k-group .k-item span {color: #222!important;}
 
-#boton_buscar {text-align: right;}
-.botones-navegacion {text-align: right;}
-#resultado {margin-top: 5px;}
+
 
 .acciones, .submitbutton {text-align: right;}
 .borrado {background-color: #f66!important;}
 .user {height: auto;}
+
+.input-sm {min-height: 30px;height:auto;}
+
+/* Search and list */
+.listado {background-color: #fff;}
+#boton_buscar {text-align: right;}
+.botones-navegacion {text-align: right;}
+#resultado {margin-top: 5px;}
+#resultado table {background-color: #fff;}
+#resultado table .col-xs-9 {clear: left;}
+#resultado table .col-xs-3 {padding: 0px;}
+#resultado table .input-sm { height: auto; }
+.acciones button {margin-top: 5px;}
+#nav_bar {padding-top: 5px;}
+
+/*File upload*/
+#uploadDialog p {margin-bottom: 5px;margin-top: 10px;}
+#uploadDialog textarea {width: 100%;}
+
+/* Fin con exito */
+#pageSuccess img {width:75px;height:98px;}
+#pageSuccess .btn {margin-bottom: 5px;}

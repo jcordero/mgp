@@ -48,44 +48,49 @@ class CDH_DNI extends CDataHandler {
             $val3 = (isset($lista[2]) ? $lista[2] : "");
 
             $html = "<div id=\"{$fld->m_Name}\" class=\"form-group input-sm\">
-                        <label class=\"control-label col-sm-2\">{$fld->m_Label}</label>
-                        <div class=\"col-sm-9 form-inline\">
+                        <label class=\"control-label col-xs-3\">{$fld->m_Label}</label>
+                        <div class=\"col-xs-9 form-inline\">
                             <input type=\"hidden\" name=\"{$name}\" id=\"{$id}\" value=\"{$val}\"/>";
 
             if ($fld->m_IsReadOnly==true) {
                 $html.="<p class=\"form-control-static\">{$val}</p>";
             } else {
                 //Pais
-                $html.=  "<div class=\"form-group col-sm-6\">"
-                        ."  <select class=\"form-control\" name=\"p{$name}\" id=\"p{$id}\" data-selected=\"{$val1}\">";
-                $html.=$this->getOptions();
-                $html.=  "  </select>"
+                $html.=  "<div class=\"form-group col-xs-6\">"
+                        ."  <select class=\"form-control input-sm\" name=\"p{$name}\" id=\"p{$id}\" data-selected=\"{$val1}\">"
+                            .$this->getOptions()
+                        ."  </select>"
                         ."</div>";
 
                 //Tipo de documento
-                $html.="<div class=\"form-group col-sm-2\">
-                            <select class=\"form-control\" name=\"t{$name}\" id=\"t{$id}\" data-selected=\"{$val2}\">
-                                <option value=\"DNI\">DNI
-                                <option value=\"LE\" >LE
-                                <option value=\"LC\" >LC
-                                <option value=\"PAS\">PAS
-                                <option value=\"CI\" >CI
-                                <option value=\"PRE\">PRE
+                $html.="<div class=\"form-group col-xs-2\">
+                            <select class=\"form-control input-sm\" name=\"t{$name}\" id=\"t{$id}\" data-selected=\"{$val2}\">
+                                <option value=\"DNI\">DNI</option>
+                                <option value=\"LE\" >LE</option>
+                                <option value=\"LC\" >LC</option>
+                                <option value=\"PAS\">PAS</option>
+                                <option value=\"CI\" >CI</option>
+                                <option value=\"PRE\">PRE</option>
                             </select>
                         </div>
                 ";
 
                 //Nro de documento
-                $html.="<div class=\"form-group col-sm-4\">
-                            <div class=\"input-group\">
-                                <input class=\"form-control\" type=\"text\" name=\"n{$name}\" id=\"n{$id}\" value=\"{$val3}\" maxlength=\"15\"/>
-                ";
-
                 if ($fld->m_ClassParams != "no_search") {
-                    $html.="    <span class=\"input-group-addon\" onclick=\"chg_docid(this)\" id=\"b{$id}\"><i class=\"glyphicon glyphicon-search\" ></i></span>";
+                    $html.= "<div class=\"form-group col-xs-4\">
+                                <div class=\"input-group\">
+                                    <input class=\"form-control input-sm\" type=\"text\" name=\"n{$name}\" id=\"n{$id}\" value=\"{$val3}\" maxlength=\"15\"/>"
+                            ."      <span class=\"input-group-addon\" onclick=\"chg_docid(this)\" id=\"b{$id}\"><i class=\"glyphicon glyphicon-search\" ></i></span>"
+                            ."  </div>"
+                            ."</div>";    
+                } else {
+                    $html.="<div class=\"form-group col-xs-4\">
+                                <input class=\"form-control input-sm\" type=\"text\" name=\"n{$name}\" id=\"n{$id}\" value=\"{$val3}\" maxlength=\"15\"/>"
+                            . "</div>";
                 }
-                $html.="    </div>"
-                        . "</div>";
+                
+                
+                
             }
             $html.="</div></div>";
         }

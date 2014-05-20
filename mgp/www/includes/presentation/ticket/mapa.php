@@ -29,16 +29,13 @@ class CDH_MAPA extends CDataHandler {
         $id = $name;
 
         if ($fld->m_IsVisible) {
-            $mapa = '<div id="mapa"><div id="' . $id . '"></div></div>';
+            $mapa = '<div id="'.$id.'"></div>';
 
             if ($showlabel) {
-                $html.="<div class=\"itm\">"
-                        . "<div class=\"desc\">$fld->m_Label</div>"
-                        . "<div class=\"fldro\">$mapa</div>"
+                $html   .="<div id=\"{$fld->m_Name}\" class=\"form-group input-sm\">"
+                            . "<label class=\"col-xs-3 control-label\" for=\"{$id}\">{$fld->m_Label}</label>"
+                            . "<div class=\"input-group col-xs-9\">$mapa</div>"
                         . "</div>";
-                if ($fld->m_Label == "") {
-                    error_log("RenderReadOnly($fld->m_Name) no tiene etiqueta declarada");
-                }
             } else {
                 $html.=$mapa;
             }
@@ -75,7 +72,11 @@ class CDH_MAPA extends CDataHandler {
 
         //Si es read only, pongo el valor del campo dentro un HIDDEN, si no muestro el campo editable
         //if ($ro) {
-            $html.= '<div id="' . $id . '"></div>';
+            $mapa   = '<div id="' . $id . '"></div>';
+            $html   .="<div id=\"{$fld->m_Name}\" class=\"form-group input-sm\">"
+                            . "<label class=\"col-xs-3 control-label\" for=\"{$id}\">{$fld->m_Label}</label>"
+                            . "<div class=\"input-group col-xs-9\">$mapa</div>"
+                        . "</div>";
         //} else {
             //El campo es editable, se usa para editar un registro
             //Anulo la funcion de busqueda flexible asi no sale el indicador
@@ -108,10 +109,7 @@ class CDH_MAPA extends CDataHandler {
             $id = $name;
         }
         
-        $html.='<div class="mapa">'
-                . '<div id="' . $id . '"></div>'
-                . '</div>' . "\n";
-
+        $html.= '<div id="' . $id . '"></div>';
         return $html;
     }
 

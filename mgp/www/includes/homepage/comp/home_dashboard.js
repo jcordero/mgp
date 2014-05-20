@@ -2,11 +2,42 @@ var map = null;
 
 $(document).ready(function(){
     initialize(); 
-    $('#canal').val(dash_config.canal).change(function(){dash_config.canal=$(this).val();refrescarDash();});
-    $('#barrio').val(dash_config.barrio).change(function(){dash_config.barrio=$(this).val();refrescarDash();});
-    $('#organismo').val(dash_config.organismo).change(function(){dash_config.organismo=$(this).val();refrescarDash();});
-    $('#prestacion').val(dash_config.prestacion).change(function(){dash_config.prestacion=$(this).val();refrescarDash();});
+    
+    $('#canal')
+            .val(dash_config.canal)
+            .change(function(){
+                dash_config.canal=$(this).val();
+                dibujar_filtros();
+                refrescarDash();
+            });
+    $('#barrio')
+            .val(dash_config.barrio)
+            .change(function(){
+                dash_config.barrio=$(this).val();
+                dibujar_filtros();
+                refrescarDash();
+            });
+    $('#organismo')
+            .val(dash_config.organismo.codigo)
+            .change(function(){
+                dash_config.organismo.codigo=$(this).val();
+                dash_config.organismo.nombre=$(this).children(':selected').text();
+                dibujar_filtros();
+                refrescarDash();
+            });
+    $('#prestacion')
+            .val(dash_config.prestacion.codigo)
+            .change(function(){
+                dash_config.prestacion.codigo=$(this).val();
+                dash_config.prestacion.nombre=$(this).children(':selected').text();
+                dibujar_filtros();
+                refrescarDash();
+            });
 
+    dibujar_filtros();
+    $("#filtros button").on("click",function(){
+        $("#filtro_dialog").modal('show');
+    });
     ejecutar_consulta(dash_config.boton);
 });
 
@@ -22,6 +53,18 @@ function initialize() {
 
 }
 
+function dibujar_filtros() {
+    var h = '<div class="row">'+
+            '   <div class="col-xs-6">Canal: '+(dash_config.canal=="" ? "todos" : dash_config.canal)+'</div>' +
+            '   <div class="col-xs-6">Barrio: '+(dash_config.barrio=="" ? "todos" : dash_config.barrio)+'</div>' +
+            '</div>'+
+            '<div class="row">'+
+            '   <div class="col-xs-6">Organismo: '+(dash_config.organismo.codigo=="" ? "todos" : dash_config.organismo.nombre)+'</div>' +
+            '   <div class="col-xs-6">Prestación: '+(dash_config.prestacion.codigo=="" ? "todos" : dash_config.prestacion.nombre)+'</div>'+
+            '</div>';
+    $("#filtros .actuales").html(h);
+}
+
 var gMarkers = [];
 var gMarkerCluster = {};
 
@@ -33,18 +76,26 @@ function ejecutar_consulta(tipo) {
     $('#bCerrados').removeClass('btn-danger');
     $('#bVencidos').removeClass('btn-danger');
 
-    if(tipo==="ABIERTOS")
-        $('#bAbiertos').addClass('btn-danger');
-    if(tipo==="CERRADOS")
-        $('#bCerrados').addClass('btn-danger');
-    if(tipo==="VENCIDOS")
-        $('#bVencidos').addClass('btn-danger');
-    
+    switch(tipo) {
+        case "ABIERTOS":
+            $('#bAbiertos').addClass('btn-danger');
+            break;
+        case "CERRADOS":
+            $('#bCerrados').addClass('btn-danger');
+            break;
+        case "VENCIDOS":
+            $('#bVencidos').addClass('btn-danger');
+            break;
+        default:
+            console.error("home_dashboard ejecutar_consulta() tipo no conocido ["+tipo+"]");
+    }
     dash_config.boton = tipo;
+    
     refrescarDash();
 }
 
 function refrescarDash() {
+    $('#cargando').show();
     new p4.rem_request(this,function(obj,json){
         $('#cargando').hide();
         var jdata = JSON.parse(json);
@@ -55,19 +106,19 @@ function refrescarDash() {
         $('#cVencidos').html(jdata.contadores.vencidos);
         
         //Reseteo los markers anteriores
-        if(typeof gMarkerCluster.clearMarkers === "function")
+        if(typeof gMarkerCluster.clearMarkers === "function"){
             gMarkerCluster.clearMarkers();
+        }
         gMarkers = [];
         
         //Creo los markers nuevos
         var tickets = jdata.tickets;
         for (var i = 0; i < tickets.length; i++) {
-          var ticket = tickets[i];
-          var latLng = new google.maps.LatLng(ticket.lat,ticket.lng);
-          var marker = new google.maps.Marker({ position: latLng, title:ticket.id });
-          gMarkers.push(marker);
-          google.maps.event.addListener(marker, 'click', mostrar_ticket);
-
+            var ticket = tickets[i];
+            var latLng = new google.maps.LatLng(ticket.lat,ticket.lng);
+            var marker = new google.maps.Marker({ position: latLng, title:ticket.id });
+            gMarkers.push(marker);
+            google.maps.event.addListener(marker, 'click', mostrar_ticket);
         }
         gMarkerCluster = new MarkerClusterer(map, gMarkers);
         gMarkerCluster.setMaxZoom(14);

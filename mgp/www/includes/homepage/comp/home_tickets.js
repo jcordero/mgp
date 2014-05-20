@@ -28,14 +28,15 @@ function mostrarPagina(nro,filt) {
         $('#cerrados').removeClass('btn-danger');
         $('#vencidos').removeClass('btn-danger');
 
-        if(filtro=="ABIERTOS")
+        if(filtro=="ABIERTOS") {
             $('#abiertos').addClass('btn-danger');
-
-        if(filtro=="CERRADOS")
+        }
+        if(filtro=="CERRADOS") {
             $('#cerrados').addClass('btn-danger');
-
-        if(filtro=="VENCIDOS")
+        }
+        if(filtro=="VENCIDOS") {
             $('#vencidos').addClass('btn-danger');
+        }
     }
     
     var params = pagnro+"|"+filtro+"|"+buscar;
@@ -52,14 +53,14 @@ function mostrarPagina(nro,filt) {
                     "<td><span style=\"font-size:1.1em;\">" + o[j].prestacion + "</span><br><span class=\"it\">" + o[j].nota + "</span></td>" +
                     "<td>" + o[j].texto_dir + "</td>" +
                     "<td>" + renderEstado( o[j].estado_prest ) + "<br>" + o[j].rol + "</td>" +
-                    "<td><button style=\"width:100px;\" class=\"btn btn-small\" onclick=\"trabajar(\'" + o[j].ticket + "\')\"><i class=\"icon-wrench\"></i> Trabajar</button><br><br> " + renderDireccion(o[j].direccion) + 
+                    "<td><button style=\"width:100px;\" class=\"btn btn-sm\" onclick=\"trabajar(\'" + o[j].ticket + "\')\"><i class=\"icon-wrench\"></i> Trabajar</button><br><br> " + renderDireccion(o[j].direccion) + 
                     "</td></tr>";
             b.append(h);
         }
 
-        if(l==0)
+        if(l==0) {
             $("#sin_tickets").html("Sin tickets "+filtro).show();
-
+        }
         $("#mis_tickets .mapa").popover();
         $("#carga_tickets").hide();
         $("#mi_titulo").html(obj.titulo);
@@ -75,8 +76,8 @@ function mostrarPagina(nro,filt) {
                     
 function renderDireccion(o) {
     if(o && o.lat && o.lng) {
-        var mapa = "<img id=\'mapa\' src=\'" + sess_web_path + "/common/mapa.php?x=" + o.lat + "&y=" + o.lng + "&w=250&h=250&r=250\'>";
-        var d = " <button style=\"width:100px;\" class=\"btn btn-small mapa\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i> Mapa</button>";
+        var mapa = "<div style='width:250px;height:250px;'><img id='mapa' src='" + sess_web_path + "/common/mapa.php?x=" + o.lat + "&y=" + o.lng + "&w=250&h=250&r=250'></div>";
+        var d = " <button style=\"width:100px;\" class=\"btn btn-sm mapa\" data-toggle=\"popover\" title=\"Ubicación\" data-html=\"true\" data-content=\"" + mapa + "\" ><i class=\"icon-globe\"></i> Mapa</button>";
         
         return d;
     } 

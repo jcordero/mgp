@@ -7,51 +7,12 @@ include_once "class_tic_ticket_upd.php";
 
 //Genero las clases de los handlers
 
-if( !class_exists('ubicacion_gr') ) {
-class ubicacion_gr extends cform_group {
-    function __construct($parent) {
-        parent::__construct($parent);
-        $this->m_title = 'Ubicación'; //Titulo del grupo
-        $this->m_order = 0; //Orden de presentacion de este grupo
-        $this->m_id = 'ubicacion'; //Id para los wizards
-        $this->m_note = ''; //Nota
-        $this->m_image = ''; //Imagen
-        $this->m_render_html = 'BLOCK'; //Forma de generar el contenido HTML
-        $this->m_render_pdml = 'PARENT'; //Forma de generar el contenido PDF
-        $this->m_comment = '';// Comentario del formulario
-        $this->m_css_prefix = '';// Prefijo CSS
-
-        //Campos del grupo
-        $this->m_fields[] = 'class_tic_ticket_upd:tic_lugar';
-        $this->m_fields[] = 'class_tic_ticket_upd:mapa';
-        $this->m_fields[] = 'class_tic_ticket_upd:tic_id_cuadra';
-        $this->m_fields[] = 'class_tic_ticket_upd:tic_coordx';
-        $this->m_fields[] = 'class_tic_ticket_upd:tic_coordy';
-        $this->m_fields[] = 'class_tic_ticket_upd:tic_barrio';
-        $this->m_fields[] = 'class_tic_ticket_upd:tic_cgpc';
-
-    }
-
-    public function InitializeInstance() {
-        //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_lugar")->SetDisplayValues(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>1000, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TICKET::DIRECCION", "IsVisible"=>true, "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Size"=>50, "Order"=>24, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_id_cuadra")->SetDisplayValues(Array("Name"=>"tic_id_cuadra", "Label"=>"x", "Type"=>"int", "IsForDB"=>true, "Order"=>114, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"double", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_coordy")->SetDisplayValues(Array("Name"=>"tic_coordy", "Label"=>"y", "Type"=>"double", "IsForDB"=>true, "Order"=>113, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_barrio")->SetDisplayValues(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>110, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_cgpc")->SetDisplayValues(Array("Name"=>"tic_cgpc", "Label"=>"CGPC", "Size"=>20, "IsForDB"=>true, "Order"=>111, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
-    }
-}
-}
-
-
 if( !class_exists('ticket_gr') ) {
 class ticket_gr extends cform_group {
     function __construct($parent) {
         parent::__construct($parent);
         $this->m_title = 'Ticket'; //Titulo del grupo
-        $this->m_order = 1; //Orden de presentacion de este grupo
+        $this->m_order = 0; //Orden de presentacion de este grupo
         $this->m_id = 'ticket'; //Id para los wizards
         $this->m_note = ''; //Nota
         $this->m_image = ''; //Imagen
@@ -74,6 +35,45 @@ class ticket_gr extends cform_group {
         $this->getClass("class_tic_ticket_upd")->GetField("tic_anio")->SetDisplayValues(Array("Name"=>"tic_anio", "Label"=>"Año", "Type"=>"int", "IsForDB"=>true, "Order"=>103, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_tipo")->SetDisplayValues(Array("Name"=>"tic_tipo", "Label"=>"Tipo", "Size"=>20, "IsForDB"=>true, "Order"=>104, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_identificador")->SetDisplayValues(Array("Name"=>"tic_identificador", "Label"=>"Identificador", "Size"=>45, "IsForDB"=>true, "Order"=>123, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
+    }
+}
+}
+
+
+if( !class_exists('ubicacion_gr') ) {
+class ubicacion_gr extends cform_group {
+    function __construct($parent) {
+        parent::__construct($parent);
+        $this->m_title = 'Ubicación'; //Titulo del grupo
+        $this->m_order = 1; //Orden de presentacion de este grupo
+        $this->m_id = 'ubicacion'; //Id para los wizards
+        $this->m_note = ''; //Nota
+        $this->m_image = ''; //Imagen
+        $this->m_render_html = 'BLOCK'; //Forma de generar el contenido HTML
+        $this->m_render_pdml = 'PARENT'; //Forma de generar el contenido PDF
+        $this->m_comment = '';// Comentario del formulario
+        $this->m_css_prefix = '';// Prefijo CSS
+
+        //Campos del grupo
+        $this->m_fields[] = 'class_tic_ticket_upd:mapa';
+        $this->m_fields[] = 'class_tic_ticket_upd:tic_lugar';
+        $this->m_fields[] = 'class_tic_ticket_upd:tic_id_cuadra';
+        $this->m_fields[] = 'class_tic_ticket_upd:tic_coordx';
+        $this->m_fields[] = 'class_tic_ticket_upd:tic_coordy';
+        $this->m_fields[] = 'class_tic_ticket_upd:tic_barrio';
+        $this->m_fields[] = 'class_tic_ticket_upd:tic_cgpc';
+
+    }
+
+    public function InitializeInstance() {
+        //SetDisplayValues($attributes) 
+        $this->getClass("class_tic_ticket_upd")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Size"=>50, "Order"=>24, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_lugar")->SetDisplayValues(Array("Name"=>"tic_lugar", "Label"=>"Dirección", "Size"=>1000, "IsForDB"=>true, "Order"=>109, "Presentation"=>"TICKET::DIRECCION", "IsVisible"=>true, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_id_cuadra")->SetDisplayValues(Array("Name"=>"tic_id_cuadra", "Label"=>"x", "Type"=>"int", "IsForDB"=>true, "Order"=>114, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_coordx")->SetDisplayValues(Array("Name"=>"tic_coordx", "Label"=>"x", "Type"=>"double", "IsForDB"=>true, "Order"=>112, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_coordy")->SetDisplayValues(Array("Name"=>"tic_coordy", "Label"=>"y", "Type"=>"double", "IsForDB"=>true, "Order"=>113, "Presentation"=>"TEXT", "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_barrio")->SetDisplayValues(Array("Name"=>"tic_barrio", "Label"=>"Barrio", "Size"=>50, "IsForDB"=>true, "Order"=>110, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_cgpc")->SetDisplayValues(Array("Name"=>"tic_cgpc", "Label"=>"CGPC", "Size"=>20, "IsForDB"=>true, "Order"=>111, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
     }
 }
 }
@@ -111,7 +111,7 @@ class estado_gr extends cform_group {
         $this->getClass("class_tic_ticket_upd")->GetField("tic_tstamp_in")->SetDisplayValues(Array("Name"=>"tic_tstamp_in", "Label"=>"Ingreso ticket", "Type"=>"datetime", "IsForDB"=>true, "Order"=>105, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_tstamp_plazo")->SetDisplayValues(Array("Name"=>"tic_tstamp_plazo", "Label"=>"Plazo estimado", "Type"=>"datetime", "IsForDB"=>true, "Order"=>117, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_tstamp_cierre")->SetDisplayValues(Array("Name"=>"tic_tstamp_cierre", "Label"=>"Cierre ticket", "Type"=>"datetime", "IsForDB"=>true, "Order"=>118, "Presentation"=>"DATETIME", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
-        $this->getClass("class_tic_ticket_upd")->GetField("tic_estado")->SetDisplayValues(Array("Name"=>"tic_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
+        $this->getClass("class_tic_ticket_upd")->GetField("tic_estado")->SetDisplayValues(Array("Name"=>"tic_estado", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"REPORTES::ESTADO_TICKET", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tic_nota_in")->SetDisplayValues(Array("Name"=>"tic_nota_in", "Label"=>"Nota al ingreso", "Size"=>500, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXT", "IsVisible"=>true, "IsReadOnly"=>true, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tmp_accion")->SetDisplayValues(Array("Name"=>"tmp_accion", "Size"=>50, "Order"=>25, "Class"=>"class_tic_ticket_upd"));
         $this->getClass("class_tic_ticket_upd")->GetField("tmp_nuevo_estado")->SetDisplayValues(Array("Name"=>"tmp_nuevo_estado", "Size"=>50, "Order"=>26, "Class"=>"class_tic_ticket_upd"));
@@ -212,8 +212,8 @@ class class_tic_avance_th4 extends ctable_handler {
 
         $this->m_datafields['tic_nro']=1;
         $this->m_datafields['tpr_code']=2;
-        $this->m_datafields['tic_estado_in']=3;
-        $this->m_datafields['tav_tstamp_in']=4;
+        $this->m_datafields['tav_tstamp_in']=3;
+        $this->m_datafields['tic_estado_in']=4;
         $this->m_datafields['use_code_in']=5;
         $this->m_datafields['tic_estado_out']=6;
         $this->m_datafields['tav_tstamp_out']=7;
@@ -221,9 +221,8 @@ class class_tic_avance_th4 extends ctable_handler {
         $this->m_datafields['tav_nota']=9;
         $this->m_datafields['tic_motivo']=10;
 
-        $this->m_columns[1] = new ctable_column(1,'Fecha',array('tic_nro','tpr_code'));
-        $this->m_columns[2] = new ctable_column(2,'Est.Inicial',array('tic_estado_in','tav_tstamp_in','use_code_in'));
-        $this->m_columns[3] = new ctable_column(3,'Est.Final',array('tic_estado_out','tav_tstamp_out','use_code_out'));
+        $this->m_columns[1] = new ctable_column(1,'Fecha',array('tic_nro','tpr_code','tav_tstamp_in'));
+        $this->m_columns[2] = new ctable_column(2,'Est.Inicial',array('tic_estado_in','use_code_in','tic_estado_out','tav_tstamp_out','use_code_out'));
         $this->m_columns[5] = new ctable_column(5,'Nota',array('tav_nota'));
         $this->m_columns[6] = new ctable_column(6,'Motivo',array('tic_motivo'));
     }
@@ -232,8 +231,8 @@ class class_tic_avance_th4 extends ctable_handler {
         $r=array();
         $r[]=$obj->GetField("tic_nro")->getJsIncludes();
         $r[]=$obj->GetField("tpr_code")->getJsIncludes();
-        $r[]=$obj->GetField("tic_estado_in")->getJsIncludes();
         $r[]=$obj->GetField("tav_tstamp_in")->getJsIncludes();
+        $r[]=$obj->GetField("tic_estado_in")->getJsIncludes();
         $r[]=$obj->GetField("use_code_in")->getJsIncludes();
         $r[]=$obj->GetField("tic_estado_out")->getJsIncludes();
         $r[]=$obj->GetField("tav_tstamp_out")->getJsIncludes();
@@ -247,12 +246,12 @@ class class_tic_avance_th4 extends ctable_handler {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
         $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado inicial", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
         $obj->GetField("tav_tstamp_in")->SetDisplayValues(Array("Name"=>"tav_tstamp_in", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATETIME", "IsVisible"=>true));
+        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado inicial", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
         $obj->GetField("use_code_in")->SetDisplayValues(Array("Name"=>"use_code_in", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"USER", "IsVisible"=>true));
-        $obj->GetField("tic_estado_out")->SetDisplayValues(Array("Name"=>"tic_estado_out", "Label"=>"Estado final", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
-        $obj->GetField("tav_tstamp_out")->SetDisplayValues(Array("Name"=>"tav_tstamp_out", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>110, "Presentation"=>"DATETIME", "IsVisible"=>true));
-        $obj->GetField("use_code_out")->SetDisplayValues(Array("Name"=>"use_code_out", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"USER", "IsVisible"=>true));
+        $obj->GetField("tic_estado_out")->SetDisplayValues(Array("Name"=>"tic_estado_out", "Label"=>"Estado final", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::ESTADO_PRESTACION"));
+        $obj->GetField("tav_tstamp_out")->SetDisplayValues(Array("Name"=>"tav_tstamp_out", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>110, "Presentation"=>"DATETIME"));
+        $obj->GetField("use_code_out")->SetDisplayValues(Array("Name"=>"use_code_out", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>111, "Presentation"=>"USER"));
         $obj->GetField("tav_nota")->SetDisplayValues(Array("Name"=>"tav_nota", "Label"=>"Nota", "Size"=>1000, "IsForDB"=>true, "Order"=>107, "Presentation"=>"TEXTAREA", "IsVisible"=>true, "Rows"=>4, "Cols"=>60));
         $obj->GetField("tic_motivo")->SetDisplayValues(Array("Name"=>"tic_motivo", "Label"=>"Motivo", "Size"=>50, "IsForDB"=>true, "Order"=>108, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
@@ -517,8 +516,8 @@ class class_tic_ticket_upd_m extends cclass_maint {
 		$this->m_action[] = new CAction('L','Consulta de tickets','','','tickets.php?last=1&OP=L','','Consulta de tickets','');
 
         //Grupos
-		$this->m_handler[0] = new ubicacion_gr($this);
-		$this->m_handler[1] = new ticket_gr($this);
+		$this->m_handler[0] = new ticket_gr($this);
+		$this->m_handler[1] = new ubicacion_gr($this);
 		$this->m_handler[2] = new estado_gr($this);
 
         //Tablas

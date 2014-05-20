@@ -1,36 +1,47 @@
 function IniciarMapa(id, params) {
-    window[id].obj = new mapa_class();    
+    window[id].obj = new mapa_class();
     window[id].obj.crearMapa("m_" + id);
-//    window[id].obj.MostrarMapa("m_" + id, params);
+    if(typeof OP=="string" && (OP=="V" || OP=="M")) {
+        window[id].obj.MostrarMapa(id,params);
+    }
+    console.log("Creo mapa en "+id+".obj");
 };
 
 function mapa_class() {
-    this.ancho = 457;
-    this.alto = 374;
+    this.ancho = "auto";
+    this.alto = "auto";
     this.id = "";
     this.clase = "";
-    this.params = "";
+    this.params = [];
+    this.mapa = null;
+    this.centro = null;
     
-    this.MostrarMapa = function (id, param_str) {
-        //Recupero los parametros
-        if(typeof id!="undefined") {
-            this.id = id;
+    this.parseParams = function (param_str) {
+        if (this.params.length == 2) {
+            return;
         }
+        
         if(typeof param_str!="undefined") {
             //El campo esta en el formulario principal o sobre una tabla?
             if (param_str!=='') {
                 this.params = param_str.split('|');
+            } 
+        } else {
+            //Los busco en el objeto, pero para eso hace falta el id
+            if (this.id == "") {
+                p4.alert_box("No esta declarado el id del campo mapa.", "Error");
+                return;
+            }
+            
+            if (this.id.substring(0, 3) === "hm_" || this.id.substring(0, 2) === "m_") {
+                // ES UN CAMPO DE UN FORM
+                this.params = eval(this.id.substring(this.id.indexOf("_") + 1) + ".m_params.split('|')");
             } else {
-                if (this.id.substring(0, 3) === "hm_" || this.id.substring(0, 2) === "m_") {
-                    // ES UN CAMPO DE UN FORM
-                    this.params = eval(this.id.substring(this.id.indexOf("_") + 1) + ".m_params.split('|')");
-                } else {
-                    //ES UN CAMPO DENTRO DE UNA TABLA
-                    //del ID deriva la clase y el orden del campo
-                    this.clase = this.id.substring(4, this.id.indexOf("_f"));
-                    var orden = this.id.substring(this.id.indexOf("_f") + 2);
-                    this.params = eval(this.clase + "_" + orden + ".m_params.split('|')");
-                }
+                //ES UN CAMPO DENTRO DE UNA TABLA
+                //del ID deriva la clase y el orden del campo
+                this.clase = this.id.substring(4, this.id.indexOf("_f"));
+                var orden = this.id.substring(this.id.indexOf("_f") + 2);
+                this.params = eval(this.clase + "_" + orden + ".m_params.split('|')");
             }
         }
 
@@ -38,28 +49,41 @@ function mapa_class() {
             p4.alert_box("No estan declarados los campo asociados al mapa.", "Error");
             return;
         }
-
+    };
+    
+    this.MostrarMapa = function (id, param_str) {
+        //Recupero los parametros
+        if(typeof id!="undefined") {
+            this.id = id;
+        }
+        
+        this.parseParams(param_str);
+        
         //Coordenas
         var objx = document.getElementById("m_" + this.params[0]);
         var objy = document.getElementById("m_" + this.params[1]);
 
         if (objx && objy) {
+            if(this.mapa==null) {
+                this.crearMapa3(id);
+            }
+            this.centro = new google.maps.LatLng((objx.value!="" ? objx.value : -37.995114083904),(objy.value!="" ? objy.value : -57.544226218087));
+            this.mapa.setCenter(this.centro);
+            new google.maps.Marker({map: this.mapa, position: this.centro, title: "Ticket"});
+            /* Mapa estatico
             var divmapa = document.getElementById(this.id);
-            var x = (objx.value!="" ? objx.value : -37.995114083904);
-            var y = (objy.value!="" ? objy.value : -57.544226218087);
             if (x !== "" && y !== "" && divmapa) {
                 url = sess_web_path + "/common/mapa.php?x=" + x + "&y=" + y + "&w="+ this.ancho +"&h=" + this.alto + "&r=250";
                 divmapa.innerHTML = '<img src="' + url + '">';
-            }
+            } 
+            */
         }
     };
 
   
 
     this.crearMapa3 = function (id) {
-        //var p = $('#' + id).parent();
-        //$('#' + id).remove();
-        //p.append('<div id="' + id + '"></div>');
+        
         $('#'+id).css({"width":this.ancho+"px","height":this.alto+"px"});
         var mapOptions = {
             zoom: 16,
@@ -115,7 +139,7 @@ function mapa_class() {
         });
 
         mapa.overlayMapTypes.push(SLPLayer);
-
+        this.mapa = mapa;
         return mapa;
     };
 

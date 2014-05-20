@@ -10,7 +10,12 @@ class CDH_TICKET_MAINT extends CDataHandler
     }
 
     function getDialogCambioEstado($p) {
-        $b = '<form class="form-horizontal">';
+        $b = '<div class="modal-header">'.
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'.
+                    '<h3>Cambio de estado</h3>'.
+                '</div>'.
+                '<div class="modal-body">'.
+                    '<form class="form-horizontal">';
     
         error_log("CDH_TICKET_MAINT::getDialogCambioEstado($p)");
 
@@ -102,21 +107,28 @@ class CDH_TICKET_MAINT extends CDataHandler
                     $estados = '';
             }
             
-            $b.= '  <p id="lblPrestacion'.$ix.'" data-prestacion="'.$codigo.'">Prestación: '.$leyenda.' actualmente: <b>'.$actual.'</b></p> 
-                    <div class="control-group"> 
-                        <label class="control-label" for="nvoEstado'.$ix.'">Estado:</label>
-                        <div class="controls"> 
-                            <select id="nvoEstado'.$ix.'">'.$estados.'</select>
+            $b.= '  <p id="lblPrestacion'.$ix.'" data-codigo="'.$prest->tpr_code.'" data-nombre="'.$prest->tpr_description.'" data-estado="'.$actual.'">Prestación: '.$leyenda.'<br>Estado actual: <b>'.$actual.'</b></p> 
+                    
+                    <div class="control-group" > 
+                        <label class="control-label col-xs-3" for="nvoEstado'.$ix.'">Estado:</label>
+                        <div class="col-xs-9"> 
+                            <select class="form-control" id="nvoEstado'.$ix.'">'.$estados.'</select>
                         </div> 
-                    </div> 
-                    <div class="control-group">
-                        <label class="control-label" for="nvoNota'.$ix.'">Nota:</label> 
-                        <div class="controls"> 
-                            <textarea id="nvoNota'.$ix.'" cols="50" rows="5"></textarea>
+                    </div>
+                    
+                    <div class="control-group" style="height:120px;">
+                        <label class="control-label col-xs-3" for="nvoNota'.$ix.'">Nota:</label> 
+                        <div class="col-xs-9"> 
+                            <textarea class="form-control" id="nvoNota'.$ix.'" rows="5"></textarea>
                         </div>
                     </div>';
         }
-        $b.='    </form>';
+        $b.='    </form>'.
+            '</div>'.
+            '<div class="modal-footer">'.
+                '<button class="btn" data-dismiss="modal">Cancelar</button>'.
+                '<button class="btn btn-primary">Confirmar</button>'.
+            '</div>';
 
        return $b;
     }
@@ -130,22 +142,35 @@ class CDH_TICKET_MAINT extends CDataHandler
         $tic->setIdent($p);
         $tic->load();
         
-        $b = '<form class="form-horizontal">';
+        $b = '<div class="modal-header">'.
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'.
+                    '<h3>Asociar a otro ticket</h3>'.
+                '</div>'.
+                '<div class="modal-body">'.
+                    '<form class="form-horizontal">';
+        
         $b.= '  <p id="miTicket">Ticket: '.$tic->tic_identificador.'</p> 
 
                 <div class="control-group"> 
-                    <label class="control-label" for="asociado">Asociar a ticket:</label>
-                    <div class="controls"> 
-                        <input id="asociado" type="text">
+                    <label class="control-label col-xs-3" for="asociado">Asociar a ticket:</label>
+                    <div class="col-xs-9"> 
+                        <input class="form-control" id="asociado" type="text">
                     </div> 
                 </div> 
-                <div class="control-group">
-                    <label class="control-label" for="asocNota">Nota:</label> 
-                    <div class="controls"> 
-                        <textarea id="asocNota" cols="50" rows="5"></textarea>
+                
+                <div class="control-group" style="height:120px;">
+                    <label class="control-label col-xs-3" for="asocNota">Nota:</label> 
+                    <div class="col-xs-9"> 
+                        <textarea id="asocNota" class="form-control" rows="5"></textarea>
                     </div>
                 </div>';        
-        $b.='    </form>';
+        
+        $b.='    </form>'.
+            '</div>'.
+            '<div class="modal-footer">'.
+                '<button class="btn" data-dismiss="modal">Cancelar</button>'.
+                '<button class="btn btn-primary">Confirmar</button>'.
+            '</div>';
 
        return $b;
     }
@@ -153,7 +178,12 @@ class CDH_TICKET_MAINT extends CDataHandler
     function getDialogCambioPrestacion($p) {
         global $primary_db;
         
-        $b = '<form class="form-horizontal">';
+        $b = '<div class="modal-header">'.
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'.
+                    '<h3>Cambiar prestacion</h3>'.
+                '</div>'.
+                '<div class="modal-body">'.
+                    '<form class="form-horizontal">';
     
         error_log("CDH_TICKET_MAINT::getDialogCambioPrestacion($p)");
 
@@ -169,35 +199,41 @@ class CDH_TICKET_MAINT extends CDataHandler
             //Es la ultima rama?
             $tpr_code = $row['tpr_code'];
             $ult = $primary_db->QueryString("select max(length(tpr_code)) from tic_prestaciones where tpr_code like '{$tpr_code}%' and tpr_estado='ACTIVO'");
-            if(strlen($tpr_code)===intval($ult))
-                $prestaciones.='<option value="'.$row['tpr_code'].'"> ('.$row['tpr_code'].') '.$row['tpr_detalle']."\n";
+            if(strlen($tpr_code)===intval($ult)) {
+                $prestaciones.='<option value="'.$row['tpr_code'].'"> ('.$row['tpr_code'].') '.$row['tpr_detalle']."</option>\n";
+            }
         }
         
         //Repetir el bloque por cada prestacion que se pueda modificar
         $ix=0;
         foreach($tic->prestaciones as $prest) {
             $leyenda = $prest->tpr_code.' - '.$prest->tpr_description;
-            $codigo = $prest->tpr_code;
             $ix++;
             
-            $b.= '  <p id="lblPrestacion'.$ix.'" data-prestacion="'.$codigo.'">Prestación: '.$leyenda.'</p> 
+            $b.= 
+               '<p id="lblPrestacion'.$ix.'" data-codigo="'.$prest->tpr_code.'" data-nombre="'.$prest->tpr_description.'">Prestación: '.$leyenda.'</p> 
                 <div class="control-group"> 
-                    <label class="control-label" for="nvaPrestacion'.$ix.'">Nueva prestacion:</label>
-                    <div class="controls"> 
-                        <select id="nvaPrestacion'.$ix.'">'.$prestaciones.'</select>
+                    <label class="control-label col-xs-3" for="nvaPrestacion'.$ix.'">Nueva:</label>
+                    <div class="col-xs-9"> 
+                        <select class="form-control" id="nvaPrestacion'.$ix.'">'.$prestaciones.'</select>
                     </div> 
                 </div> 
-                <div class="control-group">
-                    <label class="control-label" for="nvaNota'.$ix.'">Nota:</label> 
-                    <div class="controls"> 
-                        <textarea id="nvaNota'.$ix.'" cols="50" rows="5"></textarea>
+                
+                <div class="control-group" style="height:120px;">
+                    <label class="control-label col-xs-3" for="nvaNota'.$ix.'">Nota:</label> 
+                    <div class="col-xs-9"> 
+                        <textarea class="form-control" id="nvaNota'.$ix.'" rows="5"></textarea>
                     </div>
                 </div>';
         }
         
-        $b.='    </form>';
+        $b.='    </form>'.
+            '</div>'.
+            '<div class="modal-footer">'.
+                '<button class="btn" data-dismiss="modal">Cancelar</button>'.
+                '<button class="btn btn-primary">Confirmar</button>'.
+            '</div>';
 
        return $b;
     }
 }
-?>

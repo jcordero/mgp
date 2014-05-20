@@ -98,7 +98,7 @@ class domicilio_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("class_tic_ticket")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Type"=>"int", "Order"=>29, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket"));
+        $this->getClass("class_tic_ticket")->GetField("mapa")->SetDisplayValues(Array("Name"=>"mapa", "Label"=>"Ubicación", "Type"=>"int", "Order"=>29, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "ClassParams"=>"tic_coordx|tic_coordy", "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("alternativa")->SetDisplayValues(Array("Name"=>"alternativa", "Label"=>"Alternativa", "Size"=>20, "Order"=>38, "Presentation"=>"TICKET::ALTERNATIVA_GEOREF", "IsVisible"=>true, "Class"=>"class_tic_ticket", "InitialValue"=>"NRO"));
         $this->getClass("class_tic_ticket")->GetField("calle")->SetDisplayValues(Array("Name"=>"calle", "Label"=>"Calle", "Type"=>"int", "Order"=>31, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>60, "Class"=>"class_tic_ticket"));
         $this->getClass("class_tic_ticket")->GetField("calle_nombre")->SetDisplayValues(Array("Name"=>"calle_nombre", "Label"=>"Nombre de la calle", "Size"=>100, "Order"=>30, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"class_tic_ticket"));
