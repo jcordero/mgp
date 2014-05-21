@@ -30,6 +30,10 @@ class identity {
 
                                 <li class="divider"></li>
 
+                                    {{home_pages}}
+                                    
+                                <li class="divider"></li>
+
                                 <li>
                                     <a href="{{url_salir}}">
                                         <i class="icon-off"></i>
@@ -42,13 +46,34 @@ class identity {
     function render(ccontext $context) {
         global $sess;
         $usr = cuser::factoryFromSession();
+        
+        //Determino las homes de este usuario
+        //Lista de grupos
+        $homes = "";
+        foreach(explode(",",$sess->groups) as $grp_name)
+        {
+            $grp_name = strtolower(trim($grp_name));
+            if( substr($grp_name,0,5)=="home_" )
+            {
+                $home = substr($grp_name, 5);
+                $homes .= '<li>
+                                <a href="/mgp/index.php?h='.$grp_name.'">
+                                    <i class="glyphicon glyphicon-home"></i>
+                                    '.$home.'
+                                </a>
+                            </li>';
+            }	
+        }
+        
+        
         $pars = array(
             "{{url_avatar}}"    =>  $usr->getAvatar(),
             "{{alt_avatar}}"    =>  $usr->getUserName(),
             "{{nombre}}"        =>  $usr->getUserName(),
             "{{url_ajustes}}"   =>  $sess->encodeURL(""),
             "{{url_perfil}}"    =>  $sess->encodeURL("/mgp/modules/security/mydata.php?OP=M"),
-            "{{url_salir}}"     =>  $sess->encodeURL("/mgp/modules/security/logout.php")
+            "{{url_salir}}"     =>  $sess->encodeURL("/mgp/modules/security/logout.php"),
+            "{{home_pages}}"    =>  $homes
         );
         $html = str_replace( array_keys($pars), array_values($pars), self::$h);
         $context->add_content("html",$html,true);
