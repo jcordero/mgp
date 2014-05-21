@@ -138,7 +138,7 @@ function boton_buscar()
             if(jdata.url!=='')
             {
                 p4.listo();
-                confirm_box('Es la primera vez que se ingresa este documento. Se pasará a la pantalla de carga de datos personales.', "ATENCION",function(){
+                p4.confirm_box('Es la primera vez que se ingresa este documento. Se pasará a la pantalla de carga de datos personales.', "ATENCION",function(){
                     irA(jdata.url);
                 });
             }

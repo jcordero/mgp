@@ -390,14 +390,14 @@ function marker_click(event) {
         //Codigo y nombre de calle
         $('#m_calle').val('0');
         $('#hm_calle').val(elem.calle);
-        $('#calle .fldl').html(elem.calle);
+        $('#calle p').html(elem.calle);
 
         //Nombre de la calle
         $('#m_calle_nombre').val(elem.calle);
 
         //Altura
         $('#m_callenro').val(elem.altura);
-        $('#callenro .fldl').html(elem.altura);
+        $('#callenro p').html(elem.altura);
     }
 
     //Validacion del campo
