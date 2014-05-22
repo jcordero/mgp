@@ -658,6 +658,7 @@
                 <column title="Prestacion">
                     <field name="tpr_code" presentation="REPORTES::PRESTACIONES" label="Prestacion"/>
                     <field name="tru_code" presentation="RUBRO" label="Rubro"/>
+                    <field name="ttp_cuestionario" presentation="TICKET::CUESTIONARIO" label="Cuestionario"/>
                 </column>     
                 <column title="Dirección">
                     <field name="tic_calle_nombre" presentation="TEXT" label="Calle" isvisible="false"/>

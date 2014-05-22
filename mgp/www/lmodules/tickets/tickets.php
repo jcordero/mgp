@@ -104,6 +104,7 @@ class col3 extends ccolumn
         //Campos de la columna
          $this->m_fields[] = new CField(Array("Name"=>"tpr_code", "Label"=>"Prestacion", "Size"=>20, "IsForDB"=>true, "Order"=>123, "Presentation"=>"REPORTES::PRESTACIONES", "IsNullable"=>false, "IsVisible"=>true));
          $this->m_fields[] = new CField(Array("Name"=>"tru_code", "Label"=>"Rubro", "Type"=>"int", "IsForDB"=>true, "Order"=>124, "Presentation"=>"RUBRO", "IsVisible"=>true));
+         $this->m_fields[] = new CField(Array("Name"=>"ttp_cuestionario", "Label"=>"Cuestionario", "Size"=>3000, "IsForDB"=>true, "Order"=>125, "Presentation"=>"TICKET::CUESTIONARIO", "IsVisible"=>true));
     }
 }
 

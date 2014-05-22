@@ -69,9 +69,9 @@ class class_tic_ticket_hooks extends cclass_maint_hooks
         $content['nroticket'] = $identificador;
         $content['prestacion'] = "$prestacion - $descripcion";
         $content['plazo'] = ISO8601toLocale($this->m_plazo);
+        
         error_log("Se define plazo={$content['plazo']} nroticket={$content['nroticket']} prestacion={$content['prestacion']}");
         return array($content,$res);
     }
     
 }
-?>

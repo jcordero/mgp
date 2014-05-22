@@ -165,7 +165,11 @@ function valida_direccion() {
     }
     var cod_calle = calle.split("|")[0];
     var cod_calle2 = calle2.split("|")[0];
-    $('#m_mapa').parent().append('<div id="progress1" class="progress progress-striped active"><div class="bar" style="width:100%;"></div></div>');
+    $('#m_mapa').parent().append(
+            '<div id="progress1" class="progress progress-striped active">'+
+            '   <div class="progress-bar" style="width:100%;"></div>'+
+            '</div>');
+    
     var params = { 
         'cod_calle':cod_calle,
         'nom_calle':calle_nombre,        

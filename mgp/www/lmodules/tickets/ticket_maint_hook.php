@@ -4,17 +4,13 @@
  * @author jcordero
  *
  */
-error_log('Antes de incluir bean person_status ');
 include_once 'beans/person_status.php';
-error_log('Antes de incluir bean ticket ');
+
 include_once 'beans/ticket.php';
 
-error_log('Antes de declarar clase  class_tic_ticket_upd_hooks');
-class class_tic_ticket_upd_hooks extends cclass_maint_hooks
-{
+class class_tic_ticket_upd_hooks extends cclass_maint_hooks{
 	
-    public function afterLoadDB()
-    {
+    public function afterLoadDB() {
         global $primary_db;
         $res = array();
         $obj = $this->m_data;
@@ -56,11 +52,12 @@ class class_tic_ticket_upd_hooks extends cclass_maint_hooks
                 $lugar.=$obj_lugar->calle_nombre.' '.$obj_lugar->callenro;
             }
             
-            if(isset($obj_lugar->piso) && $obj_lugar->piso!='')
+            if(isset($obj_lugar->piso) && $obj_lugar->piso!=''){
                     $lugar.=" piso: {$obj_lugar->piso}";
- 
-            if(isset($obj_lugar->dpto) && $obj_lugar->dpto!='')
+            }
+            if(isset($obj_lugar->dpto) && $obj_lugar->dpto!=''){
                     $lugar.=" dep: {$obj_lugar->dpto}";
+            }
         }
         
         //Nombre del ciudadano
@@ -83,16 +80,14 @@ class class_tic_ticket_upd_hooks extends cclass_maint_hooks
         }
         
         //Genero contenido para el mensaje de respuesta.
-        $content['ciudadano'] = $ciudadano;
-        $content['plazo'] = $obj->getField("tic_tstamp_plazo")->getValue();
-        $content['lugar'] = $lugar;
-        $content['prestacion'] = $desc_prest;
-        $content['estado'] = $estado;
+        $ct = $this->m_context;
+        $ct->add_content('ciudadano',$ciudadano);
+        $ct->add_content('plazo', $obj->getField("tic_tstamp_plazo")->getValue());
+        $ct->add_content('lugar', $lugar);
+        $ct->add_content('prestacion', $desc_prest);
+        $ct->add_content('estado', $estado);
         
-        $this->m_parent->addContent($content);
         return $res;
     }
     
 }
-
-error_log('Fin de la inclusion del hook');

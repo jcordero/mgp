@@ -673,24 +673,29 @@ function completar_tabla_ani(datos)
  */
 function reiterar(tic_nro) {
     //Muestro el dialogo de reiteracion
-    var h = '<div class="modal hide fade" id="reiteracion_dialog"> \n\
-        <div class="modal-header"> \n\
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> \n\
-          <h3>Reiterar ticket</h3> \n\
-        </div> \n\
-        <div class="modal-body"> \n\
-            <div class="control-group"> \n\
-                <label class="control-label" for="reitNota">Nota</label> \n\
-                <div class="controls"> \n\
-                    <textarea id="reitNota"></textarea> \n\
-                </div> \n\
-            </div> \n\
-        </div> \n\
-        <div class="modal-footer"> \n\
-          <button class="btn" data-dismiss="modal">Cancelar</button> \n\
-          <button class="btn btn-primary">Confirmar</button> \n\
-        </div> \n\
-    </div>';
+    var h = 
+    '<div class="modal fade" id="reiteracion_dialog">'+
+        '<div class="modal-dialog">'+
+            '<div class="modal-content">'+
+                '<div class="modal-header">'+
+                  '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+                  '<h4>Reiterar ticket</h4>'+
+                '</div>'+
+                '<div class="modal-body">'+
+                    '<div class="control-group" style="height: 50px;">'+
+                        '<label class="control-label col-xs-3" for="reitNota">Nota</label>'+
+                        '<div class="col-xs-9">'+
+                            '<textarea class="form-control" id="reitNota"></textarea>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="modal-footer">'+
+                  '<button class="btn" data-dismiss="modal">Cancelar</button>'+
+                  '<button class="btn btn-primary">Confirmar</button>'+
+                '</div>'+
+            '</div>'+
+        '</div>'+
+    '</div>';
     $(document.body).append(h);
     $('#reiteracion_dialog').modal();
     $('#reiteracion_dialog .btn-primary').click(function(){
