@@ -298,23 +298,49 @@ class CDH_CUESTIONARIO extends CDataHandler {
         return $html;
     }
 
-    static function htmlVerCuestionario($tic_nro, $prestacion) {
+    static function htmlVerCuestionario($tic_nro, $prestacion, $modo_texto=false) {
         global $primary_db;
 
         if ($tic_nro === '' || $prestacion === '') {
             return '';
         }
-
-        $h = '<div class="cuestionario">';
+        
+        $h = '';
+        if(!$modo_texto) {
+            $h .= '<div class="cuestionario">';
+        }
         $sql2 = "SELECT tic_nro, tpr_code, tcu_code, tpr_preg, tpr_tipo_preg, tpr_respuesta, tpr_miciudad FROM tic_ticket_cuestionario WHERE tpr_code='{$prestacion}' and tic_nro='{$tic_nro}'";
         $re2 = $primary_db->do_execute($sql2);
         while ($row = $primary_db->_fetch_row($re2)) {
-            $h.='<div class="cuest form-inline">' .
-                    '<span class"preg">' . $row['tpr_preg'] . ':</span> ' .
-                    '<span class="resp">' . $row['tpr_respuesta'] . '</span>' .
-                '</div>';
+            if(!$modo_texto) {
+                $h.='<div class="cuest form-inline">' .
+                        '<span class"preg">' . $row['tpr_preg'] . ':</span> ' .
+                        '<span class="resp">' . $row['tpr_respuesta'] . '</span>' .
+                    '</div>';
+            } else {
+                $h.= $row['tpr_preg'] . ' : ' . $row['tpr_respuesta'] . "\n";
+            }
         }
-        $h.='</div>';
+        if(!$modo_texto) {
+            $h.='</div>';
+        }
         return $h;
+    }
+    
+    function getHelperValue($cn, $val) {
+        $fld = $this->getCfield();
+        $obj_tabla = $fld->getModel(); //modelo (tabla)
+
+        //Busco la prestación en el modelo (estoy en una tabla) tpr_code
+        $tpr_code = '';
+        $tic_nro = -1;
+        if($obj_tabla->checkField('tpr_code')) {
+            $tpr_code = $obj_tabla->getField('tpr_code')->getValue();
+        }
+        
+        if($obj_tabla->checkField('tic_nro')) {
+            $tic_nro = $obj_tabla->getField('tic_nro')->getValue();
+        }
+        return self::htmlVerCuestionario($tic_nro, $tpr_code, true);
     }
 }

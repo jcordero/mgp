@@ -817,9 +817,9 @@ class ticket {
         error_log("ticket::cambiar_estado(\$tpr_code=$tpr_code,\$estado=$estado,\$nota=$nota,\$fecha=$fecha,\$transaction,\$motivo=$motivo)");
         
         //Salvo el ticket
-        if($transaction)
+        if($transaction){
             $primary_db->beginTransaction();
-        
+        }
         //Hay que corregir el codigo de prestacion? (porque le falta un cero delante)
         $lp = strlen($tpr_code);
         if( $lp % 2 !== 0 ) {
@@ -899,9 +899,9 @@ class ticket {
             $this->update();
         }
         
-        if(!$encontrada)
+        if(!$encontrada){
             $this->addError('La prestación pedida no se encuentra en el ticket');
-        
+        }
         if($transaction) {
             if(!$this->getStatus()) {
                 $primary_db->rollbackTransaction();

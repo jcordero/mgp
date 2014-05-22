@@ -8,7 +8,6 @@ class class_tic_ticket_upd_hooks extends cclass_maint_hooks
 {
     //Hago los cambios segun la operacion
     function beforeSaveDB() {
-        global $primary_db, $sess;
         $obj = $this->m_data;
         $err = array();
         

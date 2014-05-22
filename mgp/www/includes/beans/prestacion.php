@@ -349,18 +349,20 @@ class prestacion {
     /**
      * Cambia el estado de la prestacion
      * 
-     * @global type $primary_db
-     * @param type $parent
-     * @param type $nuevo_estado
-     * @param type $nota
+     * @global cdbdata $primary_db
+     * @param ticket $parent
+     * @param string $nuevo_estado
+     * @param string $nota
+     * @param string $motivo
      */
+ 
     function cambiar_estado($parent, $nuevo_estado,$nota,$motivo) {
         global $primary_db;
         $errores = array();
-        
-        if($motivo=="")
+        error_log("prestacion::cambiar_estado(\$parent=ticket,\$nuevo_estado=$nuevo_estado,\$nota=$nota,\$motivo=$motivo)");
+        if($motivo=="") {
             $motivo = 'Cambio de estado'; 
-        
+        }
         //Ajusto el ultimo avance
         $ult_avance = $this->avance[ count($this->avance)-1 ];
         $ult_avance->tav_tstamp_out = DatetoISO8601(); 
@@ -397,9 +399,9 @@ class prestacion {
      * @return string[dias, unidad, modo] 
      */
     static function plazoComponents($tpr_plazo) {
-        if($tpr_plazo=="")
+        if($tpr_plazo==""){
             return array("10", "DAY", "CORRIDOS");
-        
+        }
         $p = explode(' ',$tpr_plazo);
         $plazo = (double) $p[0];
         if(isset($p[1])) {
@@ -641,19 +643,19 @@ class prestacion {
     
     /** Averiguo los organismos que deben ver o procesar este ticket
      * 
-     * @global type $primary_db
-     * @param type $obj (un objeto que contenga los campos tic_coordx, tic_coordy)
-     * @param type $p (objeto prestacion)
-     * @return type
+     * @global cdbdata $primary_db
+     * @param object $prest
+     * @param float $coordx
+     * @param float $coordy
+     * @return object
      */
-
     static function procesarGeoRef($prest, $coordx, $coordy)
     {
         global $primary_db;
         
-        $sql = "select tpg.tpg_usa_gis, tpg.tpg_gis_campo, tpg.tpg_gis_valor, tpg.tor_code, tpg.tto_figura, tpg.tpr_plazo, tor_nombre FROM 
-                    tic_prestaciones_gis tpg JOIN tic_organismos tor ON tpg.tor_code=tor.tor_code
-                    WHERE tpg.tpr_code='{$prest->tpr_code}'";
+        $sql = "select tpg.tpg_usa_gis, tpg.tpg_gis_campo, tpg.tpg_gis_valor, tpg.tor_code, tpg.tto_figura, tpg.tpr_plazo, tor_nombre FROM "
+                    ."tic_prestaciones_gis tpg JOIN tic_organismos tor ON tpg.tor_code=tor.tor_code "
+                    ."WHERE tpg.tpr_code='{$prest->tpr_code}'";
         $re = $primary_db->do_execute($sql);
                     
         while( $row=$primary_db->_fetch_row($re) )
@@ -696,11 +698,12 @@ class prestacion {
     /**
      * Consulta al layer del GIS del MGP (no esta listo el backend)
      * 
-     * @param type $grilla
-     * @param type $coordx
-     * @param type $coordy
+     * @param int $grilla
+     * @param float $lat
+     * @param float $lng
      * @return string
      */
+
     static function consultarGIS($grilla,$lat,$lng)
     {
         $client = new SoapClient("http://gis.mardelplata.gob.ar/webservice/zonificacion.php?wsdl");
@@ -708,13 +711,14 @@ class prestacion {
         try
         {
             $b = $client->zonificacion_latlong($lng,$lat,$grilla);
-            if(isset($b->descripcion))
+            if(isset($b->descripcion)) {
                 $resultado = $b->descripcion;
+            }
             error_log("prestacion::consultarGIS() zonificacion_latlong() ->".print_r($b,true));
         }
         catch (SoapFault $exception)
         {
-            error_log( "direccion.php zonificacion_latlong() ->".$exception );
+            error_log("prestacion::consultarGIS() zonificacion_latlong() ->".$exception );
         }		 
 
         return $resultado;

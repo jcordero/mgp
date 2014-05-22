@@ -24,10 +24,10 @@ class avance {
     /**
      * Crea un nuevo registro de avance
      * 
-     * @global type $primary_db
-     * @global type $sess
-     * @param type $ticket
-     * @param type $tpr_code
+     * @global cdbdata $primary_db
+     * @global csession $sess
+     * @param ticket $ticket
+     * @param string $tpr_code
      */
     function save($ticket, $tpr_code) {
         global $primary_db, $sess;
@@ -36,8 +36,8 @@ class avance {
         $this->tav_code = $primary_db->Sequence('tic_avance');
         
         //Creo un evento en el historial del ticket (tic_avance)
-        $sql4 = "insert into tic_avance (tic_nro  , tpr_code    , tav_code  , tav_tstamp_in    , use_code_in    , tic_estado_in    , tav_nota    , tic_motivo    , tic_estado_out    , tav_tstamp_out    , use_code_out    ) 
-                                 values (:tic_nro:, ':tpr_code:', :tav_code:, ':tav_tstamp_in:', ':use_code_in:', ':tic_estado_in:', ':tav_nota:', ':tic_motivo:', ':tic_estado_out:', ':tav_tstamp_out:', ':use_code_out:')";
+        $sql4 = "insert into tic_avance (tic_nro  , tpr_code    , tav_code  , tav_tstamp_in    , use_code_in    , tic_estado_in    , tav_nota    , tic_motivo    , tic_estado_out    , tav_tstamp_out    , use_code_out    ) "
+                               ."values (:tic_nro:, ':tpr_code:', :tav_code:, ':tav_tstamp_in:', ':use_code_in:', ':tic_estado_in:', ':tav_nota:', ':tic_motivo:', ':tic_estado_out:', ':tav_tstamp_out:', ':use_code_out:')";
         $params4 = array(
             'tic_nro'         => $ticket->getNro(), 
             'tpr_code'        => $tpr_code, 
@@ -57,18 +57,18 @@ class avance {
     /**
      * Actualiza el registro de avance. Completa la parte de salida.
      * 
-     * @global type $primary_db
-     * @global type $sess
-     * @param type $parent
-     * @param type $tpr_code
+     * @global cdbdata $primary_db
+     * @global csession $sess
+     * @param ticket $parent
+     * @param string $tpr_code
      */
     function update($parent, $tpr_code) {
         global $primary_db, $sess;
         $errores = array();
                 
         //Actualizo el evento en el historial del ticket (tic_avance)
-        $sql4 = "update tic_avance set tic_estado_out=':tic_estado_out:', tav_tstamp_out=':tav_tstamp_out:', use_code_out=':use_code_out:'
-                where tic_nro=:tic_nro: AND tpr_code=':tpr_code:' AND tav_code=:tav_code:";
+        $sql4 = "update tic_avance set tic_estado_out=':tic_estado_out:', tav_tstamp_out=':tav_tstamp_out:', use_code_out=':use_code_out:' "
+                ."where tic_nro=:tic_nro: AND tpr_code=':tpr_code:' AND tav_code=:tav_code:";
         $params4 = array(
             'tic_nro'         => $parent->getNro(), 
             'tpr_code'        => $tpr_code, 
@@ -84,10 +84,10 @@ class avance {
     /**
      * Crea un array de eventos, que corresponden al ticket y prestacion indicados
      * 
-     * @global type $primary_db
-     * @param type $tic_nro
-     * @param type $tpr_code
-     * @return \avance
+     * @global cdbdata $primary_db
+     * @param int $tic_nro
+     * @param string $tpr_code
+     * @return \avance[]
      */
     static function factory($tic_nro,$tpr_code) {
         global $primary_db;
@@ -111,4 +111,4 @@ class avance {
     }
 
 }
-?>
+
