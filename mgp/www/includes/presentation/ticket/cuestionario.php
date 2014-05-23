@@ -5,10 +5,12 @@ include_once "common/cdatatypes.php";
 //El cuestionario es armado dinamicamente por el objeto de prestaciones al seleccionar una prestacion
 
 class CDH_CUESTIONARIO extends CDataHandler {
-
+    
     function __construct($parent) {
         parent::__construct($parent);
     }
+    
+    
 
     /**
      * Dibujo el cuestionario
@@ -298,27 +300,44 @@ class CDH_CUESTIONARIO extends CDataHandler {
         return $html;
     }
 
-    static function htmlVerCuestionario($tic_nro, $prestacion, $modo_texto=false) {
+    static function getObjectCuestionario($tic_nro, $prestacion) {
         global $primary_db;
+        $preguntas = array();
 
+        if ($tic_nro === '' || $prestacion === '') {
+            return $preguntas;
+        }
+        
+        $sql2 = "SELECT tic_nro, tpr_code, tcu_code, tpr_preg, tpr_tipo_preg, tpr_respuesta, tpr_miciudad FROM tic_ticket_cuestionario WHERE tpr_code='{$prestacion}' and tic_nro='{$tic_nro}'";
+        $re2 = $primary_db->do_execute($sql2);
+        while ($row = $primary_db->_fetch_row($re2)) {
+            $preguntas[] = (object) array(
+                "pregunta"=>$row['tpr_preg'],
+                "respuesta"=>$row['tpr_respuesta']
+            );
+        }
+
+        return $preguntas;
+    }
+    
+    static function htmlVerCuestionario($tic_nro, $prestacion, $modo_texto=false) {
+      
         if ($tic_nro === '' || $prestacion === '') {
             return '';
         }
-        
+        $oCuest = self::getObjectCuestionario($tic_nro, $prestacion);
         $h = '';
         if(!$modo_texto) {
             $h .= '<div class="cuestionario">';
         }
-        $sql2 = "SELECT tic_nro, tpr_code, tcu_code, tpr_preg, tpr_tipo_preg, tpr_respuesta, tpr_miciudad FROM tic_ticket_cuestionario WHERE tpr_code='{$prestacion}' and tic_nro='{$tic_nro}'";
-        $re2 = $primary_db->do_execute($sql2);
-        while ($row = $primary_db->_fetch_row($re2)) {
+        foreach ($oCuest as $preg) {
             if(!$modo_texto) {
                 $h.='<div class="cuest form-inline">' .
-                        '<span class"preg">' . $row['tpr_preg'] . ':</span> ' .
-                        '<span class="resp">' . $row['tpr_respuesta'] . '</span>' .
+                        '<span class"preg">' . $preg->pregunta . ':</span> ' .
+                        '<span class="resp">' . $preg->respuesta . '</span>' .
                     '</div>';
             } else {
-                $h.= $row['tpr_preg'] . ' : ' . $row['tpr_respuesta'] . "\n";
+                $h.= $preg->pregunta . ' : ' . $preg->respuesta . ";\n";
             }
         }
         if(!$modo_texto) {
