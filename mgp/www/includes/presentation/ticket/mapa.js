@@ -8,8 +8,8 @@ function IniciarMapa(id, params) {
 };
 
 function mapa_class() {
-    this.ancho = "auto";
-    this.alto = "auto";
+    this.ancho = 0;
+    this.alto = 0;
     this.id = "";
     this.clase = "";
     this.params = [];
@@ -83,8 +83,12 @@ function mapa_class() {
   
 
     this.crearMapa3 = function (id) {
-        
-        $('#'+id).css({"width":this.ancho+"px","height":this.alto+"px"});
+        if(this.ancho>0) {
+            $('#'+id).css({"width":this.ancho+"px"});
+        }
+        if(this.alto>0) {
+            $('#'+id).css({"height":this.alto+"px"});
+        }
         var mapOptions = {
             zoom: 16,
             center: new google.maps.LatLng(-38.01696, -57.53720),

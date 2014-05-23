@@ -1,32 +1,50 @@
 $(document).ready(function(){
     //Ajuste del ancho de la direccion
     
-    $("#bloque_datos_personales").after("<div class=\"row\"><div id=\"para_direccion\" class=\"col-sm-7\"></div><div id=\"para_mapa\" class=\"col-sm-5\"></div></div>")
+    $("#bloque_datos_personales").after(
+            "<div class=\"row\">"+
+            "   <div id=\"para_direccion\" class=\"col-xs-6\"></div>"+
+            "   <div id=\"para_mapa\" class=\"col-xs-6\"></div>"+
+            "</div>");
     var blq = $("#bloque_direccion").detach();
     $("#para_direccion").append(blq);
     var mp = $("#m_tmp_mapa").detach();
     $("#para_mapa").append(mp);
     
+    
     //campos extra en las direcciones
-    $('#ciu_dir_calle .fld').append('<div class="fldl"></div>');
-    $('#ciu_dir_nro .fld').append('<div class="fldl"></div>');
-    $('#ciu_dir_piso .fld').append('<div class="fldl"></div>');
-    $('#ciu_dir_dpto .fld').append('<div class="fldl"></div>');
-    $('#ciu_cod_postal .fld').append('<div class="fldl"></div>');
+    $('#m_ciu_dir_calle').after('<p class="form-control-static"></p>');
+    $('#m_ciu_dir_nro').after('<p class="form-control-static"></p>');
+    $('#m_ciu_dir_piso').after('<p class="form-control-static"></p>');
+    $('#m_ciu_dir_dpto').after('<p class="form-control-static"></p>');
+    $('#m_ciu_cod_postal').after('<p class="form-control-static"></p>');
     
     /* Boton de validar la direccion / cambiar direccion */
     if(OP==='N' || OP==='M') {
         $('#contenido_direccion').after(
-            '<div><button class="btn" id="valida_direccion">Validar Dirección</button> <button class="btn hide" id="cambia_direccion">Cambiar Dirección</button></div>');
+            '<div>'+
+            '   <button class="btn" id="valida_direccion">Validar Dirección</button> '+
+            '   <button class="btn" id="cambia_direccion">Cambiar Dirección</button>'+
+            '</div>');
+        $("#cambia_direccion").hide();
     }
+    
+    var mh = Math.floor( $("#para_direccion").height()/256 )*256;
+    var mw = Math.floor( $("#para_mapa").width()/256 )*256;
+
+    $("#para_mapa").height(mh);
+    $("#para_mapa").width(mw);
+    
         
     $('#valida_direccion').click(function(){
-    	var calle = $('#m_ciu_dir_calle').val();
+    	var c = $('#m_ciu_dir_calle').val().split("|");
+        var calle_cod = c[0];
+        var calle_nom = c[1];
     	var altura = $('#m_ciu_dir_nro').val();
     	
-    	if(calle==='') {
+    	if(calle_cod==='') {
             p4.alert_box('Debe completar la calle antes de validar la dirección');
-    	return;
+            return;
     	}
 
     	if(altura==='') {
@@ -35,7 +53,16 @@ $(document).ready(function(){
     	}
 
         //$calle,$calle2,$altura,$luminarias,$alternativa
-        var params = calle + '||' + altura + '||NRO';
+        var params = {
+            'cod_calle':calle_cod,
+            'nom_calle':calle_nom,
+            'cod_calle2':0,
+            'nom_calle2':'',
+            'altura':altura,
+            'gis':0,
+            'alternativa': 'NRO',
+            'prestacion' : ''
+        };
     	new p4.rem_request(this,function(obj,json){
     		var o = JSON.parse(json);
     		//Actualizo los valores
@@ -43,49 +70,45 @@ $(document).ready(function(){
     		$('#m_ciu_coord_y').val(o.longitud);
     		$('#m_ciu_barrio').val(o.barrio);
     		$('#lm_ciu_barrio').html(o.barrio);
-    		$('#m_ciu_dir_calle').val(o.cod_calle);
+    		$('#m_ciu_dir_calle').val(o.cod_calle+"|"+o.calle);
     		$('#hm_ciu_dir_calle').val(o.calle);
-    		
-    		//Cargo el mapa 350 x 250px
-    		/* GoogleMaps
-    		 * $('#m_mapa img').attr('src','http://maps.googleapis.com/maps/api/staticmap?center='+o.longitud+','+o.latitud+'&zoom=17&size=350x250&maptype=roadmap&markers=color:blue%7Clabel:%7C'+o.longitud+','+o.latitud+'&sensor=false');
-    		 * 
-    		 * OpenStreetMap
-    		 * $('#m_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
-    		 */
-    		$('#m_tmp_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + o.latitud + "&y=" + o.longitud + "&w=350&h=250&r=250");
-    		    		
+    		   		    		
+                tmp_mapa.obj.MostrarMapa('m_tmp_mapa');          
     		direccion_validada();
     		
-    	},"TICKET::DIRECCION","validarDireccion", params);
+    	},"TICKET::DIRECCION","validarDireccion", JSON.stringify(params));
     });
 
     $('#cambia_direccion').click(function(){
         //oculto los campos read-only
-        $('#ciu_dir_calle .fldl').hide();
-        $('#ciu_dir_nro .fldl').hide();
-        $('#ciu_dir_piso .fldl').hide();
-        $('#ciu_dir_dpto .fldl').hide();
-        $('#ciu_cod_postal .fldl').hide();
+        $('#ciu_dir_calle p').hide();
+        $('#ciu_dir_nro p').hide();
+        $('#ciu_dir_piso p').hide();
+        $('#ciu_dir_dpto p').hide();
+        $('#ciu_cod_postal p').hide();
 
         //muestro de nuevo los campos del formulario
-        $('#ciu_dir_calle .fldm input').show();
-        $('#ciu_dir_calle .fldm img').show();
-        $('#ciu_dir_nro .fldm input').show();
-        $('#ciu_dir_piso .fld input').show();
-        $('#ciu_dir_dpto .fld input').show();
-        $('#ciu_cod_postal .fld input').show();
+        $('#ciu_dir_calle input').show();
+        $('#ciu_dir_calle span').show();
+        $('#ciu_dir_nro input').show();
+        $('#ciu_dir_piso input').show();
+        $('#ciu_dir_dpto input').show();
+        $('#ciu_cod_postal input').show();
 
         //Cambio los botones
         $('#cambia_direccion').hide();
         $('#valida_direccion').show();
+        
+        //Reset del mapa
+        tmp_mapa.obj.mapa = null;
+        $("#m_tmp_mapa").html('');
     });
 
 
     //Busco el DNI en la base de datos
     if(OP==='N') {
         initDNI('tmp_doc', null);
-        chg_docid(document.getElementById('bm_tmp_doc'));
+        chg_docid(document.getElementById('nm_tmp_doc'));
     }
     
     /* Inicializacion del mapa para ver y modificar */
@@ -94,7 +117,7 @@ $(document).ready(function(){
         var lat = $('#m_ciu_coord_x').val();
     	var lng = $('#m_ciu_coord_y').val();
         if(lat!=='' && lng!=='') {
-            $('#m_tmp_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + lat + "&y=" + lng + "&w=350&h=250&r=250");
+            //$('#m_tmp_mapa img').attr('src',sess_web_path + "/common/mapa.php?x=" + lat + "&y=" + lng + "&w=350&h=250&r=250");
             direccion_validada();
         }
     }
@@ -103,19 +126,19 @@ $(document).ready(function(){
 
 function direccion_validada() {
     //Oculto la calle y altura
-    $('#ciu_dir_calle .fld input').hide();
-    $('#ciu_dir_calle .fld img').hide();
-    $('#ciu_dir_nro .fld input').hide();
-    $('#ciu_dir_piso .fld input').hide();
-    $('#ciu_dir_dpto .fld input').hide();
-    $('#ciu_cod_postal .fld input').hide();
+    $('#ciu_dir_calle input').hide();
+    $('#ciu_dir_calle span').hide();
+    $('#ciu_dir_nro input').hide();
+    $('#ciu_dir_piso input').hide();
+    $('#ciu_dir_dpto input').hide();
+    $('#ciu_cod_postal input').hide();
 
     //Pongo los campos ReadOnly
-    $('#ciu_dir_calle .fldl').html( $('#hm_ciu_dir_calle').val() ).show();
-    $('#ciu_dir_nro .fldl').html(   $('#m_ciu_dir_nro').val() ).show();
-    $('#ciu_dir_piso .fldl').html(  $('#m_ciu_dir_piso').val() ).show();
-    $('#ciu_dir_dpto .fldl').html(  $('#m_ciu_dir_dpto').val() ).show();
-    $('#ciu_cod_postal .fldl').html($('#m_ciu_cod_postal').val() ).show();
+    $('#ciu_dir_calle p').html( $('#hm_ciu_dir_calle').val() ).show();
+    $('#ciu_dir_nro p').html(   $('#m_ciu_dir_nro').val() ).show();
+    $('#ciu_dir_piso p').html(  $('#m_ciu_dir_piso').val() ).show();
+    $('#ciu_dir_dpto p').html(  $('#m_ciu_dir_dpto').val() ).show();
+    $('#ciu_cod_postal p').html($('#m_ciu_cod_postal').val() ).show();
 
     //Cambio los botones
     $('#valida_direccion').hide();

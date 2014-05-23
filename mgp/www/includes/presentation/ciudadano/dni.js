@@ -48,11 +48,11 @@ function initDNI(fld, opt) {
     
     //Nro de doc
     var nro = $('#nm_'+fld).attr('data-selected');
-    nro = (typeof nro=="undefined" || nro=='') ? '' : nro;
+    nro = (typeof nro=="undefined" || nro=='') ? $('#nm_'+fld).val() : nro;
     $('#nm_'+fld).val(nro);
     $('#n'+fld).val(nro);
     
-    //console.log("DNI::initDNI() fld="+fld);
+    console.log("DNI::initDNI() fld="+fld+" doc="+pais+" "+tipo+" "+nro);
 }
 
 function chg_docid(obj) {

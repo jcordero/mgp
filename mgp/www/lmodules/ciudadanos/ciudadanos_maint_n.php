@@ -83,7 +83,7 @@ class direccion_gr extends cform_group {
 
     public function InitializeInstance() {
         //SetDisplayValues($attributes) 
-        $this->getClass("ciu_ciudadanos_n")->GetField("tmp_mapa")->SetDisplayValues(Array("Name"=>"tmp_mapa", "Label"=>"Ubicación", "Size"=>50, "Order"=>35, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"ciu_coord_x|ciu_coord_y", "Class"=>"ciu_ciudadanos_n"));
+        $this->getClass("ciu_ciudadanos_n")->GetField("tmp_mapa")->SetDisplayValues(Array("Name"=>"tmp_mapa", "Size"=>50, "Order"=>35, "Presentation"=>"TICKET::MAPA", "IsVisible"=>true, "IsReadOnly"=>true, "Rows"=>150, "Cols"=>150, "ClassParams"=>"ciu_coord_x|ciu_coord_y", "Class"=>"ciu_ciudadanos_n"));
         $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_calle")->SetDisplayValues(Array("Name"=>"ciu_dir_calle", "Label"=>"Calle", "Size"=>50, "IsForDB"=>true, "Order"=>112, "Presentation"=>"TICKET::CALLE", "IsVisible"=>true, "Cols"=>60, "Class"=>"ciu_ciudadanos_n"));
         $this->getClass("ciu_ciudadanos_n")->GetField("ciu_dir_nro")->SetDisplayValues(Array("Name"=>"ciu_dir_nro", "Label"=>"Altura", "Type"=>"int", "IsForDB"=>true, "Order"=>113, "Presentation"=>"TICKET::ALTURA", "IsVisible"=>true, "Cols"=>5, "Class"=>"ciu_ciudadanos_n"));
         $this->getClass("ciu_ciudadanos_n")->GetField("tmp_calle_nombre")->SetDisplayValues(Array("Name"=>"tmp_calle_nombre", "Label"=>"Nombre de la calle", "Size"=>50, "Order"=>38, "Presentation"=>"TEXT", "IsReadOnly"=>true, "Class"=>"ciu_ciudadanos_n"));

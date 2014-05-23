@@ -23,7 +23,8 @@ class CDH_DIRECCION extends CDataHandler {
           'nom_calle2':calle2_nombre,
           'altura':altura,
           'gis':0,
-          'alternativa':alternativa
+          'alternativa':alternativa (NRO / )
+          'prestacion' : ''
          */
         $o = json_decode($p);
 
@@ -33,6 +34,7 @@ class CDH_DIRECCION extends CDataHandler {
         $client_barrio = new SoapClient("http://gis.mardelplata.gob.ar/webservice/zonificacion.php?wsdl");
         $r = (object) array("lat" => 0, "lng" => 0);
         $b = (object) array("descripcion" => '');
+        $limpieza = array();
         
         if ($o->alternativa == 'NRO') {
             if ($o->cod_calle != '' && $o->altura != '') {
