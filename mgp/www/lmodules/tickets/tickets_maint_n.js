@@ -165,7 +165,7 @@ function valida_direccion() {
     }
     var cod_calle = calle.split("|")[0];
     var cod_calle2 = calle2.split("|")[0];
-    $('#m_mapa').parent().append(
+    $('#valida_direccion').after(
             '<div id="progress1" class="progress progress-striped active">'+
             '   <div class="progress-bar" style="width:100%;"></div>'+
             '</div>');
@@ -192,11 +192,15 @@ function valida_direccion() {
                 $('#m_tic_barrio').val(o.barrio);
                 $('#lm_tic_barrio').html(o.barrio);
 
+                //Calle
+                $('#m_calle').val(o.cod_calle+"|"+o.calle);
+
                 //Nombre de calle
                 $('#m_calle_nombre').val(o.calle);
 
                 //Nombre calle cruza
                 $('#m_calle_nombre2').val(o.calle2);
+                
                 
                 //Seteo mapa centrado en coordenadas
                 mapa.obj.centro = new google.maps.LatLng(o.latitud,o.longitud);
@@ -392,7 +396,7 @@ function marker_click(event) {
         $('#m_tic_coordy').val(elem.lng);
 
         //Codigo y nombre de calle
-        $('#m_calle').val('0');
+        $('#m_calle').val('0'+"|"+elem.calle);
         $('#hm_calle').val(elem.calle);
         $('#calle p').html(elem.calle);
 
