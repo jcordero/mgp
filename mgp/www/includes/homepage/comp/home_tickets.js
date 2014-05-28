@@ -1,6 +1,6 @@
 $(document).ready(function(){
     //Recupero los tickets para los organismos del usuario
-    mostrarPagina(1,"ABIERTOS");
+    mostrarPagina(1,"ABIERTOS","");
     $('#buscador button').on("click",buscar);
 });
                     
@@ -8,11 +8,11 @@ var mostrarPaginaBusy = false;
 var pagnro = 1;
 var filtro = "";
 
-function mostrarPagina(nro,filt) {
-    if(mostrarPaginaBusy)
+function mostrarPagina(nro,filt,strBuscar) {
+    if(mostrarPaginaBusy) {
         return;
+    }
     mostrarPaginaBusy = true;
-
     pagnro = nro;
 
     var b = $("#mis_tickets tbody").html("");
@@ -39,7 +39,7 @@ function mostrarPagina(nro,filt) {
         }
     }
     
-    var params = pagnro+"|"+filtro+"|"+buscar;
+    var params = { pagina:pagnro, filtro:filtro, buscar:strBuscar };
     new p4.rem_request(this,function(obj,json){
         var obj = JSON.parse(json);
         var o = obj.tickets;
@@ -71,7 +71,7 @@ function mostrarPagina(nro,filt) {
         
         renderPaginador(nro,obj.paginas);
         mostrarPaginaBusy = false;
-    },"TICKET::TICKETS","crearPagina",params);    
+    },"TICKET::TICKETS","crearPagina",JSON.stringify(params));    
 }
                     
 function renderDireccion(o) {
@@ -90,7 +90,7 @@ function trabajar(ticket) {
         return;
     trabajarBusy = true;
 
-    new p4.rem_request(this,function(obj,json){
+    new p4.rem_request(this, function(obj, json){
         document.location.href = json;
     },"TICKET::TICKETS","updateTicket",ticket);
 }
@@ -98,36 +98,41 @@ function trabajar(ticket) {
 function renderPaginador(pag,total) {
     var h = '';
     //Tiene boton atras?
-    if(pag>1)
-        h+='<button onclick="mostrarPagina(pagnro-1,filtro)"><<</button>';
+    if(pag>1){
+        h+='<button onclick="mostrarPagina(pagnro-1,filtro,\'\')"><<</button>';
+    }
     
     //Tiene boton primera pagina
-    if(pag>5)
-        h+='<button onclick="mostrarPagina(1,filtro)">1</button> ... ';
-        
+    if(pag>5) {
+        h+='<button onclick="mostrarPagina(1,filtro,\'\')">1</button> ... ';
+    }
+    
     //Botones intermedios (son 5)
     if(pag>=3 && pag<total-2) {
-        for(var j=pag-2;j<=pag+2;j++)
-            h+='<button onclick="mostrarPagina('+j+',filtro)">'+j+'</button>';
-    }
-    else {
-        if(pag<3) {
-            for(var j=1;j<=5 && j<=total;j++)
-                h+='<button onclick="mostrarPagina('+j+',filtro)">'+j+'</button>';
+        for(var j=pag-2;j<=pag+2;j++) {
+            h+='<button onclick="mostrarPagina('+j+',filtro,\'\')">'+j+'</button>';
         }
-        else {
-            for(var j=pag-4;j<=total;j++)
-                h+='<button onclick="mostrarPagina('+j+',filtro)">'+j+'</button>';            
+    } else {
+        if(pag<3) {
+            for(var j=1;j<=5 && j<=total;j++) {
+                h+='<button onclick="mostrarPagina('+j+',filtro,\'\')">'+j+'</button>';
+            }
+        } else {
+            for(var j=pag-4;j<=total;j++) {
+                h+='<button onclick="mostrarPagina('+j+',filtro,\'\')">'+j+'</button>';            
+            }
         }
     }
     
     //tiene boton ultima pagina
-    if(pag+2<total)
-        h+=' ... <button onclick="mostrarPagina('+total+',filtro)">'+total+'</button>';
-        
+    if(pag+2<total) {
+        h+=' ... <button onclick="mostrarPagina('+total+',filtro,\'\')">'+total+'</button>';
+    }
+    
     //Tiene boton adelante?
-    if(total>pag)
-        h+='<button onclick="mostrarPagina(pagnro+1,filtro)">>></button>';
+    if(total>pag) {
+        h+='<button onclick="mostrarPagina(pagnro+1,filtro,\'\')">>></button>';
+    }
     
     $('#navegador').html(h);
 }
@@ -163,6 +168,6 @@ function renderEstado(estado) {
 function buscar() {
     var t = $('#buscador input').val();
     if(t!='') {
-        alert('Buscar: '+t);
+        mostrarPagina(1,filtro,t);
     }
 }

@@ -221,7 +221,7 @@ class class_tic_avance_th4 extends ctable_handler {
         $this->m_datafields['tav_nota']=9;
         $this->m_datafields['tic_motivo']=10;
 
-        $this->m_columns[1] = new ctable_column(1,'Est.Inicial',array('tic_nro','tpr_code','tic_estado_in','tav_tstamp_in','use_code_in','tic_estado_out','tav_tstamp_out','use_code_out'));
+        $this->m_columns[1] = new ctable_column(1,'Estado',array('tic_nro','tpr_code','tic_estado_in','tav_tstamp_in','use_code_in','tic_estado_out','tav_tstamp_out','use_code_out'));
         $this->m_columns[2] = new ctable_column(2,'Nota',array('tav_nota'));
         $this->m_columns[3] = new ctable_column(3,'Motivo',array('tic_motivo'));
     }
@@ -245,7 +245,7 @@ class class_tic_avance_th4 extends ctable_handler {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
         $obj->GetField("tpr_code")->SetDisplayValues(Array("Name"=>"tpr_code", "Size"=>20, "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "IsNullable"=>false));
-        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado inicial", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
+        $obj->GetField("tic_estado_in")->SetDisplayValues(Array("Name"=>"tic_estado_in", "Label"=>"Estado", "Size"=>50, "IsForDB"=>true, "Order"=>106, "Presentation"=>"REPORTES::ESTADO_PRESTACION", "IsVisible"=>true));
         $obj->GetField("tav_tstamp_in")->SetDisplayValues(Array("Name"=>"tav_tstamp_in", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>104, "Presentation"=>"DATETIME", "IsVisible"=>true));
         $obj->GetField("use_code_in")->SetDisplayValues(Array("Name"=>"use_code_in", "Label"=>"Operador", "Size"=>50, "IsForDB"=>true, "Order"=>105, "Presentation"=>"USER", "IsVisible"=>true));
         $obj->GetField("tic_estado_out")->SetDisplayValues(Array("Name"=>"tic_estado_out", "Label"=>"Estado final", "Size"=>50, "IsForDB"=>true, "Order"=>109, "Presentation"=>"REPORTES::ESTADO_PRESTACION"));
@@ -357,7 +357,7 @@ class class_tic_ticket_ciudadano_th6 extends ctable_handler {
         //SetDisplayValues($attributes) 
         $obj->GetField("tic_nro")->SetDisplayValues(Array("Name"=>"tic_nro", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>101, "IsNullable"=>false));
         $obj->GetField("ttc_tstamp")->SetDisplayValues(Array("Name"=>"ttc_tstamp", "Label"=>"Fecha", "Type"=>"datetime", "IsForDB"=>true, "Order"=>103, "Presentation"=>"DATETIME", "IsVisible"=>true));
-        $obj->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Label"=>"Ciudadano", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"CIUDADANO", "IsNullable"=>false, "IsVisible"=>true));
+        $obj->GetField("ciu_code")->SetDisplayValues(Array("Name"=>"ciu_code", "Label"=>"Ciudadano", "Type"=>"int", "IsPK"=>true, "IsForDB"=>true, "Order"=>102, "Presentation"=>"TICKET::CIUDADANO", "IsNullable"=>false, "IsVisible"=>true));
         $obj->GetField("ttc_nota")->SetDisplayValues(Array("Name"=>"ttc_nota", "Label"=>"Nota", "Size"=>1000, "IsForDB"=>true, "Order"=>104, "Presentation"=>"TEXT", "IsVisible"=>true));
     }
 

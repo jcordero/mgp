@@ -27,9 +27,9 @@ class home_tickets {
                     </div>
                             
                     <div class="row">
-                        <div class="col-xs-4"><button id="abiertos" class="btn btn-sm" onclick="mostrarPagina(pagnro,\'ABIERTOS\')"><i class="icon-inbox"></i> Abiertos</button>
-                            &nbsp;<button id="cerrados" class="btn btn-sm" onclick="mostrarPagina(pagnro,\'CERRADOS\')"><i class="icon-ok-sign"></i> Cerrados</button>
-                            &nbsp;<button id="vencidos" class="btn btn-sm" onclick="mostrarPagina(pagnro,\'VENCIDOS\')"><i class="icon-exclamation-sign"></i> Vencidos</button>
+                        <div class="col-xs-4"><button id="abiertos" class="btn btn-sm" onclick="mostrarPagina(pagnro,\'ABIERTOS\',\'\')"><i class="icon-inbox"></i> Abiertos</button>
+                            &nbsp;<button id="cerrados" class="btn btn-sm" onclick="mostrarPagina(pagnro,\'CERRADOS\',\'\')"><i class="icon-ok-sign"></i> Cerrados</button>
+                            &nbsp;<button id="vencidos" class="btn btn-sm" onclick="mostrarPagina(pagnro,\'VENCIDOS\',\'\')"><i class="icon-exclamation-sign"></i> Vencidos</button>
                         </div>
                                 
                         <div class="col-xs-7 col-xs-offset-1">

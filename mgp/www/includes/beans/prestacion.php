@@ -192,14 +192,17 @@ class prestacion {
         foreach($this->avance as $av) {
             $av->save($ticket, $this->tpr_code);
         }
+        
         //Salvo los organismos
         foreach($this->organismos as $org) {
             $org->save($ticket, $this->tpr_code);
         }
+        
         //Salvo el cuestionario
         foreach($this->cuestionario as $preg) {
             $preg->save($ticket, $this->tpr_code);
         }
+        
         //Notifica al event bus
         $eev_task = $primary_db->QueryString("select eev_task from tic_prestaciones where tpr_code='{$this->tpr_code}'");
         if($eev_task!=='') {

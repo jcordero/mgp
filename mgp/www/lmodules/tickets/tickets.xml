@@ -799,11 +799,11 @@
 
             <!-- AVANCE -->
             <table relationclass="" classname="class_tic_avance" title="Avance" add="false" delete="false" update="false">
-                <column title="Est.Inicial" order="1">
+                <column title="Estado" order="1">
                     <field name="tic_nro" isvisible="false"/>
                     <field name="tpr_code" isvisible="false"/>
                 
-                    <field name="tic_estado_in" presentation="REPORTES::ESTADO_PRESTACION" label="Estado inicial"/>
+                    <field name="tic_estado_in" presentation="REPORTES::ESTADO_PRESTACION" label="Estado"/>
                     <field name="tav_tstamp_in" presentation="DATETIME" label="Fecha"/>
                     <field name="use_code_in" presentation="USER" label="Operador"/>
             
@@ -838,7 +838,7 @@
                     <field name="ttc_tstamp" presentation="DATETIME" label="Fecha"/>
                 </column>
                 <column title="Ciudadano" order="2">
-                    <field name="ciu_code" presentation="CIUDADANO" label="Ciudadano"/>
+                    <field name="ciu_code" presentation="TICKET::CIUDADANO" label="Ciudadano"/>
                 </column>
                 <column title="Nota" order="3">
                     <field name="ttc_nota" presentation="TEXT" label="Nota"/>

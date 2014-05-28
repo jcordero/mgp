@@ -951,11 +951,14 @@ class ticket {
         error_log("notificarSolicitantes($template,$prestacion->tpr_code,$nota)");
         foreach($this->solicitantes as $sol) {
             if($sol->ciu_email!='') {
+                
+                //Evento que deja registro del mail enviado en el CRM
                 $traza = $this->getNro()."-".$sol->getCiuCode()."-".strtoupper($template);
                 $ev = new evento_historia();
                 $ev->crearEvento($sol->getCiuCode(), 'Mensaje de actualizacion de '.$this->tic_identificador, $this->tic_nota_in, $this->tic_canal, $traza);
                 $ev->save();
                 
+                //Envio del mail concreto
                 $this->notificarEmail($template, $prestacion, $nota, $sol->ciu_email, $sol->ciu_nombres, $sol->ciu_apellido);
            }
         }

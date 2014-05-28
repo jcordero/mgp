@@ -21,13 +21,13 @@ class CDH_TICKETS extends CDataHandler {
     function crearPagina($par) {
         global $primary_db;
         $ret = array();
-        list($pagina, $filtro, $buscar) = explode('|', $par);
+        $pars = json_decode($par);
 
         //Paginacion
-        if (intval($pagina, 10) == 0) {
-            $pagina = 1;
+        if (intval($pars->pagina, 10) == 0) {
+            $pars->pagina = 1;
         }
-        $p = ($pagina - 1) * 25;
+        $p = ($pars->pagina - 1) * 25;
 
         error_log("TICKET::crearPagina($par) offset=$p");
 
@@ -40,7 +40,7 @@ class CDH_TICKETS extends CDataHandler {
 
         //Filtros
         $sql2 = '';
-        switch ($filtro) {
+        switch ($pars->filtro) {
             case "ABIERTOS":
                 $sql2.= "AND ttp_estado not in ('cerrado','resuelto','rechazado','rechazado indebido','finalizado') ";
                 break;
@@ -48,10 +48,17 @@ class CDH_TICKETS extends CDataHandler {
                 $sql2.= "AND ttp_estado in ('cerrado','resuelto','rechazado','rechazado indebido','finalizado') ";
                 break;
             case "VENCIDOS":
-                $sql2.= "AND tic_tstamp_plazo<now() AND ttp_estado not in ('cerrado','resuelto','rechazado','rechazado indebido','finalizado')";
+                $sql2.= "AND tic_tstamp_plazo<now() AND ttp_estado not in ('cerrado','resuelto','rechazado','rechazado indebido','finalizado') ";
         }
+        
+        //Campo buscar
+        if($pars->buscar != ""){
+            $busc = filter_var($pars->buscar, FILTER_SANITIZE_MAGIC_QUOTES);
+            $sql2.= "AND tic_identificador like '%{$busc}%' ";
+        }
+        
         //Ordenados por fecha, los mas nuevos primero, paginado en la base
-        $sql3 = "order by tic_tstamp_in desc limit {$p},25";
+        $sql3 = " order by tic_tstamp_in desc limit {$p},25";
 
         $rs = $primary_db->do_execute($sql . $sql2 . $sql3);
         while ($row = $primary_db->_fetch_row($rs)) {
