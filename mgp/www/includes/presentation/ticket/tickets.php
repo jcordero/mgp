@@ -123,7 +123,7 @@ class CDH_TICKETS extends CDataHandler {
 
                     //Busco el codigo en la base
                     $tor_code = $primary_db->QueryString("SELECT tor_code FROM tic_organismos WHERE tor_sigla='$id'");
-                    $organismos .= ($organismos == '' ? '' : ',') . $tor_code;
+                    $organismos .= ($organismos == '' ? '' : ',') . intval($tor_code);
                     $siglas .= ($siglas == '' ? '' : ',') . $id;
                 }
             }
