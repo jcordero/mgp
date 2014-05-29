@@ -28,5 +28,5 @@ define("PHP_CMD","/usr/bin/php -c /opt/local/etc/php54/php.ini -d include_path=.
 define("MICIUDAD_RUBRO",325);
 define("DEBUG",		true);
 define("DEFAULT_SMTP",1);
-//Fin de la configuracion
-?>
+
+define("DEBUG_EMAIL","jorge.cordero@commsys.com.ar");

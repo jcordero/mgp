@@ -12,17 +12,21 @@ ini_set("error_log",'/Users/jcordero/plataforma4_sites/mgp_git/mgp/log/api_integ
 error_log("\n------------------ INICIO PROCESO API MiCiudad-----------------------\n");
 
 $metodo = $_SERVER['REQUEST_METHOD'];   // GET, PUT 
+$secret = "CommSys";
 
 if($metodo=='PUT') {
     $post_vars = null;
-    parse_str(file_get_contents("php://input"),$post_vars);
+    $stream = file_get_contents("php://input");
+    if($stream) {
+        $post_vars = json_decode($stream);
     
-    $numeroSolicitud = $post_vars['numeroSolicitud']; 
-    $estado = $post_vars['estado'];
-    $estadoNombre = $post_vars['estadoNombre'];
-    $fecha = $post_vars['fecha'];
-    
+        $numeroSolicitud = $post_vars->numeroSolicitud; 
+        $estado = $post_vars->estado;
+        $estadoNombre = $post_vars->estadoNombre;
+        $fecha = $post_vars->fecha;
+    }
     error_log("Recibi operacion: numeroSolicitud=$numeroSolicitud estado=$estado estadoNombre=$estadoNombre fecha=$fecha");
+    error_log("Raw: ".print_r($post_vars,true));
     
     header('HTTP/1.0 201 Status');
     echo json_encode(array("id" => $estado),JSON_UNESCAPED_UNICODE);

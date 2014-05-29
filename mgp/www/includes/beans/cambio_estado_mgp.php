@@ -79,6 +79,10 @@ class cambio_estado_mgp {
                 return "VEHICULO";
             case "08":
                 return "TRANSPORTE";
+            case "09":
+                return "BROMATOLOGIA";
+            case "10":
+                return "INSCRIPCIONES";    
             default:
                 return "DESCONOCIDO";
         }

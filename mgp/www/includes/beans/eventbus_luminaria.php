@@ -24,6 +24,12 @@ class eventbus_luminaria {
             $t->setNro($d->ticket);
             $t->load('todo');
             
+            //Obtengo la direccion y corrigo la calle
+            $dir = $t->tic_lugar;
+            $dir->calle  = intval($dir->calle);
+            $dir->calle2 = intval($dir->calle2);
+            echo "tic_lugar = ".print_r($dir,true)."\n";
+            
             //URL del web service destinatario
             $url = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'luminaria.endpoint_url',"") );
             //$url.= strtolower( '/'.$t->tic_tipo.'/'.$t->getAnioTicket().'/'.$t->getNroTicket() );
@@ -40,8 +46,9 @@ class eventbus_luminaria {
             //Envio el mensaje
             $ret = $this->put($url, $data);
             
-            if($ret!=200)
+            if($ret!=200) {
                 $msg = "Error #{$ret} del endpoint {$url}";
+            }
         }
         
         //Cuando se hace un cambio de estado, no se debe hacer nada

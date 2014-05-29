@@ -28,14 +28,21 @@ class eventbus_miciudad {
             $t = new ticket();
             $t->setNro($d->ticket);
             $t->load('basico');
+      
+               //Obtengo la direccion y corrigo la calle
+            $dir = $t->tic_lugar;
+            $dir->calle  = intval($dir->calle);
+            $dir->calle2 = intval($dir->calle2);
+            echo "tic_lugar = ".print_r($dir,true)."\n";
             
             //URL del web service destinatario
             $url = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'miciudad.endpoint_url',"") );
             $api_key = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'miciudad.apikey',"") );
             $api_secret = $primary_db->DesFiltrado( CSession::getParameter($primary_db,'miciudad.secret',"") );
             
-            if($url==='')
+            if($url==='') {
                 return 'ERROR no esta declarado el parametro miciudad.endpoint_url';
+            }
             
             //Cual es la prestacion que dispara el mensaje?
             $tpr_code = $d->prestacion;
@@ -65,7 +72,7 @@ class eventbus_miciudad {
                     //Si responde con {"detalle":"estado \/ visibleCiudadano son datos requeridos"} o algo asi es que esta mal
                     if($ret==='' || $this->last_response==='') {
                         $msg = "Error (sin respuesta) del endpoint {$url}";
-                    }else {
+                    } else {
                         $ret_obj = json_decode($this->last_response);
                         if(isset($ret_obj)) {
                             if (isset($ret_obj->detalle)) {
