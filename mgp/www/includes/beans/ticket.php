@@ -158,9 +158,9 @@ class ticket {
      */
     function getErrorString() {
         $ret = '';
-        foreach ($this->errors as $err)
+        foreach ($this->errors as $err){
             $ret.=($ret === '' ? '' : '; ') . $err;
-
+        }
         return $ret;
     }
 
@@ -272,7 +272,7 @@ class ticket {
      */
     static protected function generaCodigoTicket($tipo, $anio) {
         global $primary_db;
-        //return $primary_db->Sequence("$tipo-$anio");
+        //return $primary_db->Sequence("$tipo-$anio"); //se prefiere una sola secuencia para todos los tipos
         return $primary_db->Sequence("RECLAMO-$anio");
     }
 
@@ -292,17 +292,17 @@ class ticket {
         global $primary_db, $sess;
         $errores = array();
 
-        if ($media == '')
+        if ($media == ''){
             return '';
-
+        }
         //Decodifico la foto
         $f = base64_decode($media);
 
         //Verifico que es una foto...
         //Datos de la foto
-        if ($f_name === '')
+        if ($f_name === ''){
             $f_name = "foto_movil.jpg";
-
+        }
         //Nombre en el storage
         $ext = pathinfo($f_name, PATHINFO_EXTENSION);
         $f_storage = md5($f_name . rand()) . '.' . $ext;
@@ -312,9 +312,9 @@ class ticket {
         file_put_contents($f_path . $f_storage, $f);
 
         //Nota
-        if ($nota === '')
+        if ($nota === ''){
             $nota = 'Foto tomada con el móvil';
-
+        }
         //La relaciono al ticket (doc_documents)
         $doc_code = 'ticket:' . $tic_nro;
         $sql1 = "insert into doc_documents (doc_code    , doc_storage    , doc_name    , doc_tstamp, doc_mime    , doc_size    , acl_code, use_code    , doc_extension, doc_version, doc_note    , doc_deleted, doc_public) 
@@ -332,10 +332,11 @@ class ticket {
         );
         $primary_db->do_execute($sql1, $errores, $params1);
 
-        if (count($errores) == 0)
+        if (count($errores) == 0){
             return '';
-        else
+        } else {
             return 'Error al salvar la foto';
+        }
     }
 
     /**
@@ -770,11 +771,11 @@ class ticket {
         $nota = (isset($avance->tav_nota) ? $avance->tav_nota : '');
         $motivo = (isset($avance->tic_motivo) ? $avance->tic_motivo : '');
 
-        if ($tpr_code !== '' && $nuevo_estado !== '')
+        if ($tpr_code !== '' && $nuevo_estado !== '') {
             $this->cambiar_estado($tpr_code, $nuevo_estado, $nota, $fecha, false, $motivo);
-        else
+        } else {
             $this->addError('Es obligatorio indicar la prestacion y el estado');
-
+        }
         //Agrego los archivos (si el cambio de estado fue OK)
         if ($this->getStatus()) {
 
@@ -788,10 +789,11 @@ class ticket {
                     $tipo = (isset($arch->tipo) ? $arch->tipo : 'image/jpeg');
                     $publico = (isset($arch->publico) ? $arch->publico : 'SI');
 
-                    if ($media != '')
+                    if ($media != '') {
                         self::addPhotoBase64($this->tic_nro, $media, $nombre, $nota, $tipo, $publico);
-                    else
+                    } else {
                         $this->addError('Ha solicitado agregar un archivo vacío');
+                    }
                 }
             } else {
                 $this->addError("La propiedad archivos debe ser un array.");
@@ -943,8 +945,9 @@ class ticket {
             $ev->save();
         }
 
-        if (count($errores) > 0)
+        if (count($errores) > 0) {
             $this->errors = array_merge($this->errors, $errores);
+        }
     }
 
     /**
