@@ -903,7 +903,7 @@ class ticket {
                 }
             }
 
-            //Grabo los cambios (solo la parte del ticket
+            //Grabo los cambios (solo la parte del ticket)
             $this->update();
         }
 

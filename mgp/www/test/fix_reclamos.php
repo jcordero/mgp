@@ -48,8 +48,8 @@ echo "</table>";
 
 
 $mal_fecha = array();
-$rs = $primary_db->do_execute("select tic.tic_nro, tic_tstamp_cierre,fecha,estado from tic_ticket tic join tmp_reclamos tre on tic.tic_nro=tre.tic_nro where tic_tstamp_cierre <> fecha");
-while( $row=$primary_db->_fetch_row($rs) ) {
+$rs2 = $primary_db->do_execute("select tic.tic_nro, tic_tstamp_cierre,fecha,estado from tic_ticket tic join tmp_reclamos tre on tic.tic_nro=tre.tic_nro where tic_tstamp_cierre <> fecha");
+while( $row=$primary_db->_fetch_row($rs2) ) {
     $tic = (object) array(
         "tic_nro"       =>  $row["tic_nro"],
         "fecha_cierre"  =>  $row["tic_tstamp_cierre"],

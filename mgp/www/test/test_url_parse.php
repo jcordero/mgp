@@ -1,8 +1,6 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/* Obtener una key para identificar la pagina llamada sin importar si la URL es completa, parcial o relativa
+ * 
  */
 
 function getKeyFromURL($url) {
@@ -14,12 +12,11 @@ function getKeyFromURL($url) {
 }
 
 $url = 'http://misitio.com/module/pagina.php?do=SADADSADAJHER7&next=caca';
-echo '<br>URL='.$url.' key='.  getKeyFromURL($url);
+echo '<hr>URL='.$url.'<br/> key='.  getKeyFromURL($url);
 
 $url = '/module/pagina.php?do=SADADSADAJHER7&next=caca';
-echo '<br>URL='.$url.' key='.  getKeyFromURL($url);
+echo '<hr>URL='.$url.'<br/> key='.  getKeyFromURL($url);
 
 $url = 'pagina.php?do=SADADSADAJHER7&next=caca';
-echo '<br>URL='.$url.' key='.  getKeyFromURL($url);
+echo '<br>URL='.$url.'<br/> key='.  getKeyFromURL($url);
 
-?>
